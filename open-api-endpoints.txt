@@ -1,0 +1,5664 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/api/videoders/{kodu}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getByKodu",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "deleteByKodu",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/rol/{id}": {
+            "get": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "getRolById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "updateRol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RolRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "deleteRol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/kullanici/{tcKimlikNo}": {
+            "put": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "updateKullanici",
+                "parameters": [
+                    {
+                        "name": "tcKimlikNo",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KullaniciRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "deleteKullanici",
+                "parameters": [
+                    {
+                        "name": "tcKimlikNo",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller/{id}": {
+            "get": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "getKullaniciRolById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "updateKullaniciRol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KullaniciRolRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "deleteKullaniciRol",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/kategori/{id}": {
+            "get": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "getById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KategoriResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "update_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KategoriRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KategoriResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/islemturu/{id}": {
+            "get": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "getById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "update_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IslemTuruRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "delete_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/dersturu/{id}": {
+            "get": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "getById_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "update_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersTuruRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "delete_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/dersseviyesi/{id}": {
+            "get": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "getById_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "update_4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersSeviyesiRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "delete_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/dersniteligi/{id}": {
+            "get": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "getById_4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "update_5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersNiteligiRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "delete_4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/dersdurumu/{id}": {
+            "get": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "getById_5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "update_6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersDurumuRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "delete_5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/ders/{id}": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getById_6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "update_7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "delete_6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth-controller"
+                ],
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videodersonkosul": {
+            "post": {
+                "tags": [
+                    "video-ders-on-kosul-controller"
+                ],
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersOnKosulRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersOnKosulResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "video-ders-on-kosul-controller"
+                ],
+                "operationId": "delete_7",
+                "parameters": [
+                    {
+                        "name": "videoDersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "onKosulDersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/videoderskonu": {
+            "post": {
+                "tags": [
+                    "video-ders-konu-controller"
+                ],
+                "operationId": "create_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersKonuRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersKonuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "video-ders-konu-controller"
+                ],
+                "operationId": "delete_8",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "bolumNumara",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/videoderskategori": {
+            "post": {
+                "tags": [
+                    "video-ders-kategori-controller"
+                ],
+                "operationId": "create_2",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersKategoriRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersKategoriResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "video-ders-kategori-controller"
+                ],
+                "operationId": "delete_9",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "kategoriId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/videodersislemkayit": {
+            "post": {
+                "tags": [
+                    "video-ders-islem-kayit-controller"
+                ],
+                "operationId": "create_3",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersIslemKayitRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersIslemKayitResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders": {
+            "post": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "create_4",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VideoDersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sozlesmevideoders": {
+            "post": {
+                "tags": [
+                    "sozlesme-video-ders-controller"
+                ],
+                "operationId": "create_5",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SozlesmeVideoDersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SozlesmeVideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "sozlesme-video-ders-controller"
+                ],
+                "operationId": "delete_10",
+                "parameters": [
+                    {
+                        "name": "sozlesmeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/soruvideoderskonu": {
+            "post": {
+                "tags": [
+                    "soru-video-ders-konu-controller"
+                ],
+                "operationId": "create_6",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SoruVideoDersKonuRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SoruVideoDersKonuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "soru-video-ders-konu-controller"
+                ],
+                "operationId": "delete_11",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "konuId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "soruId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/rol": {
+            "get": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "getAllRoller",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RolResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "createRol",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RolRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projevideoders": {
+            "post": {
+                "tags": [
+                    "proje-video-ders-controller"
+                ],
+                "operationId": "create_7",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProjeVideoDersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjeVideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "proje-video-ders-controller"
+                ],
+                "operationId": "delete_12",
+                "parameters": [
+                    {
+                        "name": "projeId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/paydasvideoders": {
+            "post": {
+                "tags": [
+                    "paydas-video-ders-controller"
+                ],
+                "operationId": "create_8",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PaydasVideoDersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaydasVideoDersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "paydas-video-ders-controller"
+                ],
+                "operationId": "delete_13",
+                "parameters": [
+                    {
+                        "name": "paydasId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "dersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/kullanici": {
+            "get": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "getAllKullanicilar",
+                "parameters": [
+                    {
+                        "name": "ad",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "soyad",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "createKullanici",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KullaniciRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller": {
+            "get": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "getAllKullaniciRolleri",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "createKullaniciRol",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KullaniciRolRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller/batch": {
+            "post": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "createKullaniciRoller",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/KullaniciRolRequestDTO"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kategori": {
+            "get": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "getAll",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KategoriResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "create_9",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KategoriRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KategoriResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/islemturu": {
+            "get": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "getAll_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "create_10",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IslemTuruRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersturu": {
+            "get": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "getAll_2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "create_11",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersTuruRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersseviyesi": {
+            "get": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "getAll_3",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "create_12",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersSeviyesiRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersniteligi": {
+            "get": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "getAll_4",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "create_13",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersNiteligiRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersdurumu": {
+            "get": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "getAll_5",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "create_14",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersDurumuRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ders": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getAll_6",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "create_15",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DersRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videodersonkosul/exists": {
+            "get": {
+                "tags": [
+                    "video-ders-on-kosul-controller"
+                ],
+                "operationId": "exists",
+                "parameters": [
+                    {
+                        "name": "videoDersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "onKosulDersId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videodersonkosul/by-ders/{videoDersId}": {
+            "get": {
+                "tags": [
+                    "video-ders-on-kosul-controller"
+                ],
+                "operationId": "getAllByVideoDersId",
+                "parameters": [
+                    {
+                        "name": "videoDersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOnKosulResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoderskonu/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "video-ders-konu-controller"
+                ],
+                "operationId": "getAllByDersId",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersKonuResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoderskategori/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "video-ders-kategori-controller"
+                ],
+                "operationId": "getAllByDersId_1",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersKategoriResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videodersislemkayit/{id}": {
+            "get": {
+                "tags": [
+                    "video-ders-islem-kayit-controller"
+                ],
+                "operationId": "getById_7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VideoDersIslemKayitResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "video-ders-islem-kayit-controller"
+                ],
+                "operationId": "delete_14",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/videodersislemkayit/byVideoDers/{videoDersId}": {
+            "get": {
+                "tags": [
+                    "video-ders-islem-kayit-controller"
+                ],
+                "operationId": "getByVideoDersId",
+                "parameters": [
+                    {
+                        "name": "videoDersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersIslemKayitResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videodersislemkayit/byIslemYapanKullanici/{islemYapanKullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-islem-kayit-controller"
+                ],
+                "operationId": "getByIslemYapanKullaniciId",
+                "parameters": [
+                    {
+                        "name": "islemYapanKullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersIslemKayitResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-video-duzenleyici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByVideoDuzenleyici",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-turu/{turuKodu}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByTuru",
+                "parameters": [
+                    {
+                        "name": "turuKodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-proje-yoneticisi/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByProjeYoneticisi",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-paydas/{paydasId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByPaydas",
+                "parameters": [
+                    {
+                        "name": "paydasId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-onay-durumu/{onayDurumu}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByOnayDurumu",
+                "parameters": [
+                    {
+                        "name": "onayDurumu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-odeme-kaynak/{odemeKaynak}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByOdemeKaynak",
+                "parameters": [
+                    {
+                        "name": "odemeKaynak",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-medya-sorumlu/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByMedyaSorumlu",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-materyal-gelistirici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByMateryalGelistirici",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-lms-sorumlu/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByLmsSorumlu",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-kontrol-eden/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByKontrolEden",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-icerik-yoneticisi/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByIcerikYoneticisi",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-grafik-duzenleyici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByGrafikDuzenleyici",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-durum/{durumKodu}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByDurum",
+                "parameters": [
+                    {
+                        "name": "durumKodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videoders/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "video-ders-controller"
+                ],
+                "operationId": "getAllByAdi",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/VideoDersOzetDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sozlesmevideoders/by-sozlesme/{sozlesmeId}": {
+            "get": {
+                "tags": [
+                    "sozlesme-video-ders-controller"
+                ],
+                "operationId": "getAllBySozlesmeId",
+                "parameters": [
+                    {
+                        "name": "sozlesmeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SozlesmeVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sozlesmevideoders/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "sozlesme-video-ders-controller"
+                ],
+                "operationId": "getAllByDersId_2",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SozlesmeVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/soruvideoderskonu/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "soru-video-ders-konu-controller"
+                ],
+                "operationId": "getAllByDersId_3",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SoruVideoDersKonuResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rol/by-rol-kodu/{rolKodu}": {
+            "get": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "getRolByRolKodu",
+                "parameters": [
+                    {
+                        "name": "rolKodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rol/by-rol-adi/{rolAdi}": {
+            "get": {
+                "tags": [
+                    "rol-controller"
+                ],
+                "operationId": "getRolByRolAdi",
+                "parameters": [
+                    {
+                        "name": "rolAdi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projevideoders/by-proje/{projeId}": {
+            "get": {
+                "tags": [
+                    "proje-video-ders-controller"
+                ],
+                "operationId": "getAllByProjeId",
+                "parameters": [
+                    {
+                        "name": "projeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProjeVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/projevideoders/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "proje-video-ders-controller"
+                ],
+                "operationId": "getAllByDersId_4",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProjeVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/paydasvideoders/by-paydas/{paydasId}": {
+            "get": {
+                "tags": [
+                    "paydas-video-ders-controller"
+                ],
+                "operationId": "getAllByPaydasId",
+                "parameters": [
+                    {
+                        "name": "paydasId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PaydasVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/paydasvideoders/by-ders/{dersId}": {
+            "get": {
+                "tags": [
+                    "paydas-video-ders-controller"
+                ],
+                "operationId": "getAllByDersId_5",
+                "parameters": [
+                    {
+                        "name": "dersId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PaydasVideoDersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici/{id}": {
+            "get": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "getKullaniciById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici/by-tc-kimlik-no/{tcKimlikNo}": {
+            "get": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "getKullaniciByTcKimlikNo",
+                "parameters": [
+                    {
+                        "name": "tcKimlikNo",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici/by-kullanici-adi/{kullaniciAdi}": {
+            "get": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "getKullaniciByKullaniciAdi",
+                "parameters": [
+                    {
+                        "name": "kullaniciAdi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici/by-ad-soyad": {
+            "get": {
+                "tags": [
+                    "kullanici-controller"
+                ],
+                "operationId": "getKullanicilarByAdAndSoyad",
+                "parameters": [
+                    {
+                        "name": "ad",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "soyad",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KullaniciResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller/exists": {
+            "get": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "existsByKullaniciIdAndRolId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "rolId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller/by-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "getRollerByKullaniciId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kullanici-roller/by-kullanici-and-rol": {
+            "get": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "getKullaniciRolByKullaniciIdAndRolId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "rolId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KullaniciRolResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "kullanici-rol-controller"
+                ],
+                "operationId": "deleteKullaniciRolByKullaniciIdAndRolId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "rolId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/kategori/by-ust-kategori/{ustKategoriKodu}": {
+            "get": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "getAllByUstKategoriKodu",
+                "parameters": [
+                    {
+                        "name": "ustKategoriKodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KategoriResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kategori/by-kategori-kodu/{kod}": {
+            "get": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "getByKodu_1",
+                "parameters": [
+                    {
+                        "name": "kod",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KategoriResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/kategori/by-kategori-adi/{kategoriAdi}": {
+            "get": {
+                "tags": [
+                    "kategori-controller"
+                ],
+                "operationId": "getAllByKategoriAdi",
+                "parameters": [
+                    {
+                        "name": "kategoriAdi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/KategoriResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/islemturu/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "getByKodu_2",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/islemturu/by-ekleyen-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "getAllByEkleyenKullaniciId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/islemturu/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "islem-turu-controller"
+                ],
+                "operationId": "getByAdi",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IslemTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersturu/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "getByKodu_3",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersturu/by-ekleyen-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "getAllByEkleyenKullaniciId_1",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersturu/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "ders-turu-controller"
+                ],
+                "operationId": "getByAdi_1",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersTuruResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersseviyesi/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "getByKodu_4",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersseviyesi/by-ekleyen-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "getAllByEkleyenKullaniciId_2",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersseviyesi/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "ders-seviyesi-controller"
+                ],
+                "operationId": "getByAdi_2",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersniteligi/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "getByKodu_5",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersniteligi/by-ekleyen-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "getAllByEkleyenKullaniciId_3",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersniteligi/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "ders-niteligi-controller"
+                ],
+                "operationId": "getByAdi_3",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersdurumu/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "getByKodu_6",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersdurumu/by-ekleyen-kullanici/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "getAllByEkleyenKullaniciId_4",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dersdurumu/by-ders-tipi/{dersTipi}": {
+            "get": {
+                "tags": [
+                    "ders-durumu-controller"
+                ],
+                "operationId": "getByDersTipi",
+                "parameters": [
+                    {
+                        "name": "dersTipi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ders/by-onay-durumu/{onayDurumu}": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getAllByOnayDurumu_1",
+                "parameters": [
+                    {
+                        "name": "onayDurumu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ders/by-kodu/{kodu}": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getByKodu_7",
+                "parameters": [
+                    {
+                        "name": "kodu",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ders/by-icerik-yoneticisi/{kullaniciId}": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getAllByIcerikYoneticisiId",
+                "parameters": [
+                    {
+                        "name": "kullaniciId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DersResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ders/by-adi/{adi}": {
+            "get": {
+                "tags": [
+                    "ders-controller"
+                ],
+                "operationId": "getByAdi_4",
+                "parameters": [
+                    {
+                        "name": "adi",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DersResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "VideoDersRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "tahminiDersSuresi": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "tahminiDersTeslimTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "baslamaTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dersTeslimTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "amaci": {
+                        "type": "string"
+                    },
+                    "turuKodu": {
+                        "type": "string"
+                    },
+                    "seviyesiKodu": {
+                        "type": "string"
+                    },
+                    "niteligiKodu": {
+                        "type": "string"
+                    },
+                    "hedefKitleEgitimSeviye": {
+                        "type": "number"
+                    },
+                    "ilgiAlaninaGoreHedefKitle": {
+                        "type": "string"
+                    },
+                    "kullanilacakProgramlar": {
+                        "type": "string"
+                    },
+                    "kazanimlar": {
+                        "type": "string"
+                    },
+                    "sikcaSorulanSorular": {
+                        "type": "string"
+                    },
+                    "dersOzeti": {
+                        "type": "string"
+                    },
+                    "dersCekimYontemi": {
+                        "type": "number"
+                    },
+                    "portalAdresi": {
+                        "type": "string"
+                    },
+                    "onayDurumu": {
+                        "type": "string"
+                    },
+                    "paydasId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "odemeKaynak": {
+                        "type": "string"
+                    },
+                    "birimUcret": {
+                        "type": "number"
+                    },
+                    "toplamUcret": {
+                        "type": "number"
+                    },
+                    "durumKodu": {
+                        "type": "string"
+                    },
+                    "icerikYoneticisiId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projeYoneticisiId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materyalGelistiriciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kontrolEdenId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "grafikDuzenleyiciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "videoDuzenleyiciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lmsSorumluId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "medyaSorumluId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersKodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersDurumu": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "dersTipi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullanici": {
+                        "$ref": "#/components/schemas/Kullanici"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "dersTipi",
+                    "kodu"
+                ]
+            },
+            "DersDurumuResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "dersTipi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "DersNiteligiResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "DersOzetDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "durumKodu": {
+                        "type": "string"
+                    },
+                    "durumu": {
+                        "$ref": "#/components/schemas/DersDurumu"
+                    }
+                }
+            },
+            "DersSeviyesiResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "DersTuruResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Kullanici": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciAdi": {
+                        "type": "string"
+                    },
+                    "sifre": {
+                        "type": "string"
+                    },
+                    "ad": {
+                        "type": "string"
+                    },
+                    "soyad": {
+                        "type": "string"
+                    },
+                    "tcKimlikNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dogumTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "cinsiyet": {
+                        "type": "string"
+                    },
+                    "telefon": {
+                        "type": "string"
+                    },
+                    "getePosta": {
+                        "type": "string"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullanici": {},
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciRolleri": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KullaniciRol"
+                        },
+                        "uniqueItems": true
+                    }
+                }
+            },
+            "KullaniciRol": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullanici": {
+                        "$ref": "#/components/schemas/Kullanici"
+                    },
+                    "rol": {
+                        "$ref": "#/components/schemas/Rol"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullanici": {},
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "Rol": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullanici": {},
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciRolleri": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/KullaniciRol"
+                        },
+                        "uniqueItems": true
+                    }
+                }
+            },
+            "VideoDersResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ders": {
+                        "$ref": "#/components/schemas/DersOzetDTO"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "tahminiDersSuresi": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "tahminiDersTeslimTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "baslamaTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dersTeslimTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "amaci": {
+                        "type": "string"
+                    },
+                    "turu": {
+                        "$ref": "#/components/schemas/DersTuruResponseDTO"
+                    },
+                    "seviyesi": {
+                        "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                    },
+                    "niteligi": {
+                        "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                    },
+                    "hedefKitleEgitimSeviye": {
+                        "type": "number"
+                    },
+                    "ilgiAlaninaGoreHedefKitle": {
+                        "type": "string"
+                    },
+                    "kullanilacakProgramlar": {
+                        "type": "string"
+                    },
+                    "kazanimlar": {
+                        "type": "string"
+                    },
+                    "sikcaSorulanSorular": {
+                        "type": "string"
+                    },
+                    "dersOzeti": {
+                        "type": "string"
+                    },
+                    "dersCekimYontemi": {
+                        "type": "number"
+                    },
+                    "portalAdresi": {
+                        "type": "string"
+                    },
+                    "onayDurumu": {
+                        "type": "string"
+                    },
+                    "odemeKaynak": {
+                        "type": "string"
+                    },
+                    "birimUcret": {
+                        "type": "number"
+                    },
+                    "toplamUcret": {
+                        "type": "number"
+                    },
+                    "dersDurumu": {
+                        "$ref": "#/components/schemas/DersDurumuResponseDTO"
+                    },
+                    "icerikYoneticisiID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projeYoneticisiID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "materyalGelistiriciID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kontrolEdenID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "grafikDuzenleyiciID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "videoDuzenleyiciID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "lmsSorumluID": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "medyaSorumluID": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "RolRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string",
+                        "maxLength": 5,
+                        "minLength": 0
+                    },
+                    "adi": {
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 0
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "adi",
+                    "aktifMi",
+                    "kodu"
+                ]
+            },
+            "RolResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "KullaniciRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kullaniciAdi": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "sifre": {
+                        "type": "string",
+                        "maxLength": 16,
+                        "minLength": 8
+                    },
+                    "ad": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "soyad": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 0
+                    },
+                    "tcKimlikNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dogumTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "cinsiyet": {
+                        "type": "string",
+                        "maxLength": 5,
+                        "minLength": 0
+                    },
+                    "telefon": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 0
+                    },
+                    "getePosta": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 150,
+                        "minLength": 0
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "ad",
+                    "kullaniciAdi",
+                    "sifre",
+                    "soyad"
+                ]
+            },
+            "KullaniciResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciAdi": {
+                        "type": "string"
+                    },
+                    "ad": {
+                        "type": "string"
+                    },
+                    "soyad": {
+                        "type": "string"
+                    },
+                    "tcKimlikNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dogumTarihi": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "cinsiyet": {
+                        "type": "string"
+                    },
+                    "telefon": {
+                        "type": "string"
+                    },
+                    "getePosta": {
+                        "type": "string"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "KullaniciRolRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "rolId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "required": [
+                    "aktifMi",
+                    "kullaniciId",
+                    "rolId"
+                ]
+            },
+            "KullaniciRolResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "rolId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aktifMi": {
+                        "type": "boolean"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "KategoriRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "kategoriAdi": {
+                        "type": "string"
+                    },
+                    "aciklama": {
+                        "type": "string"
+                    },
+                    "ustKategoriId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "KategoriResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "aciklama": {
+                        "type": "string"
+                    },
+                    "ustKategoriId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "IslemTuruRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "IslemTuruResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "DersTuruRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersSeviyesiRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersNiteligiRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersDurumuRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "kodu": {
+                        "type": "string"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "dersTipi": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "icerikSurum": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "tahminiDersSuresi": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "amaci": {
+                        "type": "string"
+                    },
+                    "turuKodu": {
+                        "type": "string"
+                    },
+                    "seviyesiKodu": {
+                        "type": "string"
+                    },
+                    "niteligiKodu": {
+                        "type": "string"
+                    },
+                    "hedefKitleEgitimSeviye": {
+                        "type": "number"
+                    },
+                    "ilgiAlaninaGoreHedefKitle": {
+                        "type": "string"
+                    },
+                    "kullanilacakProgramlar": {
+                        "type": "string"
+                    },
+                    "kazanimlar": {
+                        "type": "string"
+                    },
+                    "sikcaSorulanSorular": {
+                        "type": "string"
+                    },
+                    "dersOzeti": {
+                        "type": "string"
+                    },
+                    "onayDurumu": {
+                        "type": "string"
+                    },
+                    "icerikYoneticisiId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "DersResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "icerikSurum": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "tahminiDersSuresi": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "amaci": {
+                        "type": "string"
+                    },
+                    "turu": {
+                        "$ref": "#/components/schemas/DersTuruResponseDTO"
+                    },
+                    "seviyesi": {
+                        "$ref": "#/components/schemas/DersSeviyesiResponseDTO"
+                    },
+                    "niteligi": {
+                        "$ref": "#/components/schemas/DersNiteligiResponseDTO"
+                    },
+                    "hedefKitleEgitimSeviye": {
+                        "type": "number"
+                    },
+                    "ilgiAlaninaGoreHedefKitle": {
+                        "type": "string"
+                    },
+                    "kullanilacakProgramlar": {
+                        "type": "string"
+                    },
+                    "kazanimlar": {
+                        "type": "string"
+                    },
+                    "sikcaSorulanSorular": {
+                        "type": "string"
+                    },
+                    "dersOzeti": {
+                        "type": "string"
+                    },
+                    "onayDurumu": {
+                        "type": "string"
+                    },
+                    "icerikYoneticisi": {
+                        "$ref": "#/components/schemas/KullaniciOzetDTO"
+                    }
+                }
+            },
+            "KullaniciOzetDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kullaniciAdi": {
+                        "type": "string"
+                    },
+                    "ad": {
+                        "type": "string"
+                    },
+                    "soyad": {
+                        "type": "string"
+                    },
+                    "tcKimlikNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "VideoDersOnKosulRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "videoDersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "onKosulDersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "VideoDersOnKosulResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "videoDersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "onKosulDersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "VideoDersKonuRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bolumNumara": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bolumAdi": {
+                        "type": "string"
+                    },
+                    "konuId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "konuSiraNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "VideoDersKonuResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bolumNumara": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bolumAdi": {
+                        "type": "string"
+                    },
+                    "konuId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "konuSiraNo": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "VideoDersKategoriRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kategoriId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "VideoDersKategoriResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kategoriId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "VideoDersIslemKayitRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "islemTuruKodu": {
+                        "type": "string"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aciklama": {
+                        "type": "string"
+                    },
+                    "islemYapanKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "VideoDersIslemKayitResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "islemTuruKodu": {
+                        "type": "string"
+                    },
+                    "videoDersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "aciklama": {
+                        "type": "string"
+                    },
+                    "islemYapanKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "islemTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SozlesmeVideoDersRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "sozlesmeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SozlesmeVideoDersResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "sozlesmeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "SoruVideoDersKonuRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "konuId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "soruId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SoruVideoDersKonuResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "konuId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "soruId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ProjeVideoDersRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "projeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ProjeVideoDersResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "projeId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "PaydasVideoDersRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "paydasId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PaydasVideoDersResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "paydasId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dersId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ekleyenKullaniciId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "eklemeTarihi": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "VideoDersOzetDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kodu": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "adi": {
+                        "type": "string"
+                    },
+                    "durumKodu": {
+                        "type": "string"
+                    },
+                    "durumu": {
+                        "$ref": "#/components/schemas/DersDurumu"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,143 @@
+<form class="kullanici-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label for="ad" class="form-label">Ad *</label>
+      <input id="ad" type="text" class="form-control" formControlName="ad" />
+      @if (isInvalid('ad')) {
+        <div class="text-danger small">
+          @if (hasError('ad', 'required')) {
+            <span>Ad zorunludur.</span>
+          }
+          @if (hasError('ad', 'maxlength')) {
+            <span>En fazla 100 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+    <div class="col-md-6">
+      <label for="soyad" class="form-label">Soyad *</label>
+      <input id="soyad" type="text" class="form-control" formControlName="soyad" />
+      @if (isInvalid('soyad')) {
+        <div class="text-danger small">
+          @if (hasError('soyad', 'required')) {
+            <span>Soyad zorunludur.</span>
+          }
+          @if (hasError('soyad', 'maxlength')) {
+            <span>En fazla 100 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="col-md-6">
+      <label for="kullaniciAdi" class="form-label">Kullanıcı Adı *</label>
+      <input id="kullaniciAdi" type="text" class="form-control" formControlName="kullaniciAdi" />
+      @if (isInvalid('kullaniciAdi')) {
+        <div class="text-danger small">
+          @if (hasError('kullaniciAdi', 'required')) {
+            <span>Kullanıcı adı zorunludur.</span>
+          }
+          @if (hasError('kullaniciAdi', 'maxlength')) {
+            <span>En fazla 100 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+    <div class="col-md-6">
+      <label for="sifre" class="form-label">Şifre *</label>
+      <input
+        id="sifre"
+        type="password"
+        class="form-control"
+        formControlName="sifre"
+        autocomplete="new-password"
+      />
+      @if (isInvalid('sifre')) {
+        <div class="text-danger small">
+          @if (hasError('sifre', 'required')) {
+            <span>Şifre zorunludur.</span>
+          }
+          @if (hasError('sifre', 'minlength')) {
+            <span>En az 8 karakter olmalıdır.</span>
+          }
+          @if (hasError('sifre', 'maxlength')) {
+            <span>En fazla 16 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="col-md-6">
+      <label for="tcKimlikNo" class="form-label">TC Kimlik No</label>
+      <input
+        id="tcKimlikNo"
+        type="number"
+        class="form-control"
+        formControlName="tcKimlikNo"
+        inputmode="numeric"
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="dogumTarihi" class="form-label">Doğum Tarihi</label>
+      <input id="dogumTarihi" type="date" class="form-control" formControlName="dogumTarihi" />
+    </div>
+
+    <div class="col-md-6">
+      <label for="cinsiyet" class="form-label">Cinsiyet</label>
+      <input id="cinsiyet" type="text" class="form-control" formControlName="cinsiyet" />
+      @if (isInvalid('cinsiyet')) {
+        <div class="text-danger small">
+          @if (hasError('cinsiyet', 'maxlength')) {
+            <span>En fazla 5 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+    <div class="col-md-6">
+      <label for="telefon" class="form-label">Telefon</label>
+      <input id="telefon" type="tel" class="form-control" formControlName="telefon" />
+      @if (isInvalid('telefon')) {
+        <div class="text-danger small">
+          @if (hasError('telefon', 'maxlength')) {
+            <span>En fazla 20 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="col-md-6">
+      <label for="getePosta" class="form-label">E-posta</label>
+      <input id="getePosta" type="email" class="form-control" formControlName="getePosta" />
+      @if (isInvalid('getePosta')) {
+        <div class="text-danger small">
+          @if (hasError('getePosta', 'email')) {
+            <span>Geçerli bir e-posta giriniz.</span>
+          }
+          @if (hasError('getePosta', 'maxlength')) {
+            <span>En fazla 150 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+    <div class="col-md-6">
+      <label for="version" class="form-label">Versiyon</label>
+      <input id="version" type="number" class="form-control" formControlName="version" />
+    </div>
+
+    <div class="col-md-6">
+      <label for="ekleyenKullaniciId" class="form-label">Ekleyen Kullanıcı ID</label>
+      <input id="ekleyenKullaniciId" type="number" class="form-control" formControlName="ekleyenKullaniciId" />
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+      <div class="form-check">
+        <input id="aktifMi" type="checkbox" class="form-check-input" formControlName="aktifMi" />
+        <label class="form-check-label" for="aktifMi">Aktif</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 text-end">
+    <button type="submit" class="btn btn-success" [disabled]="form.invalid">Kaydet</button>
+  </div>
+</form>

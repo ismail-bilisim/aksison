@@ -1,0 +1,15 @@
+@if (loading) {
+  <div class="alert alert-info">Yükleniyor...</div>
+}
+
+@if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+}
+
+@if (kullanici) {
+  <h3>Kullanıcıyı Düzenle</h3>
+} @else {
+  <h3>Yeni Kullanıcı Ekle</h3>
+}
+
+<app-kullanici-form [initialData]="kullanici" (save)="onSave($event)"></app-kullanici-form>

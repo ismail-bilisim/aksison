@@ -1,0 +1,76 @@
+@if (loading) {
+<p class="text-muted">Yükleniyor...</p>
+} @else if (error) {
+<div class="alert alert-danger">{{ error }}</div>
+} @else if (videoders) {
+<div class="card p-4 shadow-sm">
+    <h3>{{ videoders.adi }}</h3>
+    <p><strong>Kodu:</strong> {{ videoders.kodu }}</p>
+    <p><strong>Amacı:</strong> {{ videoders.amaci }}</p>
+    <p><strong>Ders Özeti:</strong> {{ videoders.dersOzeti }}</p>
+    <p><strong>Kazanimlar:</strong> {{ videoders.kazanimlar }}</p>
+    <p><strong>Sıkça Sorulan Sorular:</strong> {{ videoders.sikcaSorulanSorular }}</p>
+
+    <hr />
+
+    <h5>🧭 Ders Bilgileri</h5>
+    @if (videoders.ders) {
+    <ul>
+        <li><strong>Ders Kodu:</strong> {{ videoders.ders.kodu }}</li>
+        <li><strong>Ders Adı:</strong> {{ videoders.ders.adi }}</li>
+        <li><strong>Durum:</strong> {{ videoders.ders.durumu?.adi }}</li>
+    </ul>
+    }
+
+    <h5>📚 Tür / Seviye / Nitelik</h5>
+    <ul>
+        <li><strong>Tür:</strong> {{ videoders.turu?.adi }} ({{ videoders.turu?.kodu }})</li>
+        <li><strong>Seviye:</strong> {{ videoders.seviyesi?.adi }} ({{ videoders.seviyesi?.kodu }})</li>
+        <li><strong>Nitelik:</strong> {{ videoders.niteligi?.adi }} ({{ videoders.niteligi?.kodu }})</li>
+    </ul>
+
+    <h5>👥 Sorumlular</h5>
+    <ul>
+        <li><strong>İçerik Yöneticisi ID:</strong> {{ videoders.icerikYoneticisiID }}</li>
+        <li><strong>Proje Yöneticisi ID:</strong> {{ videoders.projeYoneticisiID }}</li>
+        <li><strong>Materyal Geliştirici ID:</strong> {{ videoders.materyalGelistiriciID }}</li>
+        <li><strong>Kontrol Eden ID:</strong> {{ videoders.kontrolEdenID }}</li>
+        <li><strong>Grafik Düzenleyici ID:</strong> {{ videoders.grafikDuzenleyiciID }}</li>
+        <li><strong>Video Düzenleyici ID:</strong> {{ videoders.videoDuzenleyiciID }}</li>
+        <li><strong>LMS Sorumlu ID:</strong> {{ videoders.lmsSorumluID }}</li>
+        <li><strong>Medya Sorumlu ID:</strong> {{ videoders.medyaSorumluID }}</li>
+    </ul>
+
+    <h5>💰 Ücret Bilgisi</h5>
+    <ul>
+        <li><strong>Ödeme Kaynağı:</strong> {{ videoders.odemeKaynak }}</li>
+        <li><strong>Birim Ücret:</strong> {{ videoders.birimUcret }}</li>
+        <li><strong>Toplam Ücret:</strong> {{ videoders.toplamUcret }}</li>
+    </ul>
+
+    <h5>🕒 Tarihler</h5>
+    <ul>
+        <li><strong>Tahmini Ders Süresi:</strong> {{ videoders.tahminiDersSuresi }} dk</li>
+        <li><strong>Tahmini Teslim Tarihi:</strong> {{ videoders.tahminiDersTeslimTarihi }}</li>
+        <li><strong>Başlama Tarihi:</strong> {{ videoders.baslamaTarihi }}</li>
+        <li><strong>Ders Teslim Tarihi:</strong> {{ videoders.dersTeslimTarihi }}</li>
+    </ul>
+
+    <h5>🧾 Diğer Bilgiler</h5>
+    <ul>
+        <li><strong>Onay Durumu:</strong> {{ videoders.onayDurumu }}</li>
+        <li><strong>Durum Kodu:</strong> {{ videoders.dersDurumu?.kodu }}</li>
+        <li><strong>Portal Adresi:</strong> {{ videoders.portalAdresi }}</li>
+        <li><strong>Ders Çekim Yöntemi:</strong> {{ videoders.dersCekimYontemi }}</li>
+        <li><strong>Hedef Kitle Eğitim Seviyesi:</strong> {{ videoders.hedefKitleEgitimSeviye }}</li>
+        <li><strong>İlgi Alanına Göre Hedef Kitle:</strong> {{ videoders.ilgiAlaninaGoreHedefKitle }}</li>
+        <li><strong>Kullanılacak Programlar:</strong> {{ videoders.kullanilacakProgramlar }}</li>
+    </ul>
+
+    <div class="text-end mt-3">
+        <a routerLink="/videoders" class="btn btn-outline-secondary">← Listeye Dön</a>
+    </div>
+</div>
+} @else {
+<p class="text-muted">Kayıt bulunamadı.</p>
+}

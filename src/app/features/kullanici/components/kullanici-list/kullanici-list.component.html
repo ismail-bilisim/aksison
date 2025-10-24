@@ -1,0 +1,35 @@
+@if (kullanicilar?.length) {
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Kullanıcı Adı</th>
+        <th>E-posta</th>
+        <th>TC Kimlik No</th>
+        <th>Durum</th>
+        <th>Ekleme Tarihi</th>
+        <th class="text-end">İşlemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (k of kullanicilar; track trackById) {
+        <tr>
+          <td>{{ k.ad }}</td>
+          <td>{{ k.soyad }}</td>
+          <td>{{ k.kullaniciAdi }}</td>
+          <td>{{ k.getePosta || '—' }}</td>
+          <td>{{ k.tcKimlikNo || '—' }}</td>
+          <td>{{ k.aktifMi ? 'Aktif' : 'Pasif' }}</td>
+          <td>{{ k.eklemeTarihi ? (k.eklemeTarihi | date: 'dd.MM.yyyy HH:mm') : '—' }}</td>
+          <td class="text-end">
+            <button (click)="onEdit(k)" class="btn btn-sm btn-primary me-2">Düzenle</button>
+            <button (click)="onDelete(k.id!)" class="btn btn-sm btn-danger" [disabled]="!k.id">Sil</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <div class="alert alert-light m-0" role="status">Kayıt bulunamadı.</div>
+}

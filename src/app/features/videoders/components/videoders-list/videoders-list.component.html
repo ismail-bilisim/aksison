@@ -1,0 +1,29 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kodu</th>
+            <th>Adı</th>
+            <th>Durum</th>
+            <th>Onay Durumu</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (v of videodersler; track v.kodu) {
+        <tr >
+            <td>{{ v.kodu }}</td>
+            <td>{{ v.adi }}</td>
+            <td>{{ v.durumKodu }}</td>
+            <td>{{ v.onayDurumu }}</td>
+            <td>
+                <button (click)="onEdit(v)" class="btn btn-sm btn-primary">Düzenle</button>
+                <button (click)="onDelete(v.kodu!)" class="btn btn-sm btn-danger">Sil</button>
+            </td>
+        </tr>
+        } @empty {
+        <tr>
+            <td colspan="2" class="text-center">Kayıt bulunamadı.</td>
+        </tr>
+        }
+    </tbody>
+</table>

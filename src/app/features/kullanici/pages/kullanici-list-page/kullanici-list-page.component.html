@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Kullanıcılar</h3>
+  <button class="btn btn-primary" [routerLink]="['/kullanicilar/new']">Yeni Kullanıcı</button>
+</div>
+
+@if (loading) {
+  <div class="alert alert-info">Yükleniyor...</div>
+}
+
+@if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+}
+
+@if (kullanicilar?.length) {
+  <app-kullanici-list
+    [kullanicilar]="kullanicilar"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+  ></app-kullanici-list>
+} @else {
+  <div class="alert alert-light" role="status">Kayıt bulunamadı.</div>
+}

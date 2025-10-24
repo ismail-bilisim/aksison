@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label>Adı</label>
+        <input formControlName="adi" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Amacı</label>
+        <textarea formControlName="amaci" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label>Ders Özeti</label>
+        <textarea formControlName="dersOzeti" class="form-control"></textarea>
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid">Kaydet</button>
+    </div>
+</form>

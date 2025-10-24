@@ -1,0 +1,7 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Video Dersler</h3>
+    <button class="btn btn-primary" [routerLink]="['/videoders/new']">Yeni Video Ders</button>
+</div>
+
+<app-videoders-list [videodersler]="videodersler" (edit)="onEdit($event)" (delete)="onDelete($event)">
+</app-videoders-list>

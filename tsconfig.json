@@ -4,6 +4,13 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "baseUrl": "./", //relative importlara gerek kalmaz. 'src/app/core/...' seklinde import yapilabilir. 
+    // TS6 da kalkacak. Görmezden gel.
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -16,7 +23,8 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    // "ignoreDeprecations": "6.0" //
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
