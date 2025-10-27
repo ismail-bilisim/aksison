@@ -15,11 +15,34 @@ import { CommonModule } from '@angular/common';
 
 export class VideodersListPageComponent implements OnInit {
   videodersler: VideoDers[] = [];
+  loading = false;
+  error?: string;
 
-  constructor(private service: VideodersService, private router: Router) { }
+  constructor(private service: VideodersService, private router: Router) {
+    console.log('VideodersListPageComponent - Constructor çalıştı');
+  }
 
   ngOnInit() {
-    this.service.getAll().subscribe((res) => (this.videodersler = res));
+    console.log('VideodersListPageComponent - ngOnInit çalıştı');
+    this.loadVideoDersler();
+  }
+
+  loadVideoDersler() {
+    this.loading = true;
+    this.error = undefined;
+    
+    this.service.getAll().subscribe({
+      next: (res) => {
+        this.videodersler = res;
+        this.loading = false;
+        console.log('Video dersler yüklendi:', res);
+      },
+      error: (err) => {
+        console.error('Video dersler yüklenirken hata:', err);
+        this.error = err?.error?.message || err?.message || 'Video dersler yüklenirken hata oluştu.';
+        this.loading = false;
+      }
+    });
   }
 
   onEdit(v: VideoDers) {
@@ -28,7 +51,13 @@ export class VideodersListPageComponent implements OnInit {
 
   onDelete(kodu: number) {
     if (confirm('Bu video dersi silmek istediğinize emin misiniz?')) {
-      this.service.delete(kodu).subscribe(() => this.ngOnInit());
+      this.service.delete(kodu).subscribe({
+        next: () => this.loadVideoDersler(),
+        error: (err) => {
+          console.error('Silme hatası:', err);
+          this.error = err?.error?.message || err?.message || 'Video ders silinirken hata oluştu.';
+        }
+      });
     }
   }
 }

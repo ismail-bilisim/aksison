@@ -15,6 +15,14 @@ export const routes: Routes = [
 
         children: [
             { path: '', component: HomeComponent },
+            { 
+                path: 'kullanici', 
+                loadChildren: () => import('./features/kullanici/kullanici-route').then(m => m.KULLANICI_ROUTES)
+            },
+            { 
+                path: 'videoders', 
+                loadChildren: () => import('./features/videoders/videoders-route').then(m => m.VIDEODERS_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },

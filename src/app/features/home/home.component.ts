@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { VideodersListComponent } from "src/app/features/videoders/components/videoders-list/videoders-list.component";
 
 @Component({
   selector: 'app-home',
-  imports: [VideodersListComponent],
+  standalone: true,
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Kullanici } from 'src/app/core/models/kullanici';
 
 @Component({
   selector: 'app-kullanici-detail',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './kullanici-detail.component.html',
   styleUrl: './kullanici-detail.component.css',
 })
@@ -22,4 +24,5 @@ export class KullaniciDetailComponent {
     return this.kullanici.aktifMi ? 'Aktif' : 'Pasif';
   }
 }
+
 

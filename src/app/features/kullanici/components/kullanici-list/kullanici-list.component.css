@@ -1,0 +1,21 @@
+/* Kullanici List Component Styles */
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+/* Make buttons more compact on small screens */
+@media (max-width: 768px) {
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .btn-sm i {
+    font-size: 0.875rem;
+  }
+}

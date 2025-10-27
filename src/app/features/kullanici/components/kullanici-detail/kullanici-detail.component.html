@@ -1,81 +1,83 @@
-<div *ngIf="kullanici; else emptyState" class="kullanici-detail card card-body p-3">
-  <div class="mb-3">
-    <h5 class="mb-1">{{ fullName || 'Kullanıcı' }}</h5>
-    <small class="text-muted">Kullanıcı ID: {{ kullanici?.id || '—' }}</small>
+@if (kullanici) {
+  <div class="kullanici-detail card card-body p-4">
+    <div class="mb-4">
+      <h5 class="mb-1">{{ fullName || 'Kullanıcı' }}</h5>
+      <small class="text-muted">Kullanıcı ID: {{ kullanici.id || '—' }}</small>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Kullanıcı Adı</span>
+          <span class="value">{{ kullanici.kullaniciAdi || '—' }}</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">TC Kimlik No</span>
+          <span class="value">{{ kullanici.tcKimlikNo || '—' }}</span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">E-posta</span>
+          <span class="value">{{ kullanici.ePosta || '—' }}</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Telefon</span>
+          <span class="value">{{ kullanici.telefon || '—' }}</span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Cinsiyet</span>
+          <span class="value">{{ kullanici.cinsiyet || '—' }}</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Doğum Tarihi</span>
+          <span class="value">
+            {{ kullanici.dogumTarihi ? (kullanici.dogumTarihi | date: 'dd.MM.yyyy') : '—' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Durum</span>
+          <span [class]="kullanici.aktifMi ? 'badge bg-success' : 'badge bg-secondary'">
+            {{ statusLabel }}
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Versiyon</span>
+          <span class="value">{{ kullanici.version ?? '—' }}</span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Ekleyen Kullanıcı ID</span>
+          <span class="value">{{ kullanici.ekleyenKullaniciId || '—' }}</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-field">
+          <span class="label fw-bold text-muted d-block mb-1">Ekleme Tarihi</span>
+          <span class="value">
+            {{ kullanici.eklemeTarihi ? (kullanici.eklemeTarihi | date: 'dd.MM.yyyy HH:mm') : '—' }}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="row g-3">
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Kullanıcı Adı</span>
-        <span class="value">{{ kullanici?.kullaniciAdi || '—' }}</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">TC Kimlik No</span>
-        <span class="value">{{ kullanici?.tcKimlikNo || '—' }}</span>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">E-posta</span>
-        <span class="value">{{ kullanici?.getePosta || '—' }}</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Telefon</span>
-        <span class="value">{{ kullanici?.telefon || '—' }}</span>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Cinsiyet</span>
-        <span class="value">{{ kullanici?.cinsiyet || '—' }}</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Doğum Tarihi</span>
-        <span class="value">
-          {{ kullanici?.dogumTarihi ? (kullanici?.dogumTarihi | date: 'dd.MM.yyyy') : '—' }}
-        </span>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Durum</span>
-        <span class="value">{{ statusLabel }}</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Versiyon</span>
-        <span class="value">{{ kullanici?.version ?? '—' }}</span>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Ekleyen Kullanıcı ID</span>
-        <span class="value">{{ kullanici?.ekleyenKullaniciId || '—' }}</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="detail-field">
-        <span class="label">Ekleme Tarihi</span>
-        <span class="value">
-          {{ kullanici?.eklemeTarihi ? (kullanici?.eklemeTarihi | date: 'dd.MM.yyyy HH:mm') : '—' }}
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<ng-template #emptyState>
+} @else {
   <p class="text-muted m-0">Kullanıcı bilgisi seçilmedi.</p>
-</ng-template>
+}

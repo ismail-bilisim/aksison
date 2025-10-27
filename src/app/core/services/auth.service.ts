@@ -41,6 +41,11 @@ export class AuthService {
     }
   }
 
+  getUserId(): number | null {
+    const info = this.getUserInfo();
+    return info?.userId || info?.id || info?.sub || null;
+  }
+
   getUserRoles(): string[] {
     const info = this.getUserInfo();
     return info?.roles || info?.authorities || [];

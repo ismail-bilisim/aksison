@@ -1,7 +1,22 @@
 <div class="app-shell d-flex flex-column min-vh-100">
-  <app-header />
-  <main class="app-shell__content flex-grow-1">
-    <router-outlet />
-  </main>
-  <app-footer />
+  <!-- Header -->
+  <app-header (sidebarToggle)="toggleSidebar()" />
+  
+  <!-- Main Content Area -->
+  <div class="d-flex flex-grow-1">
+    <!-- Sidebar Navigation -->
+    <app-nav [isOpen]="isSidebarOpen" (sidebarClose)="toggleSidebar()" />
+    
+    <!-- Content Area -->
+    <main class="flex-grow-1 p-4 bg-white" 
+          [class.ms-lg-0]="true" 
+          style="margin-left: 0;">
+      <div class="container-fluid bg-light shadow-sm p-4">
+        <router-outlet />
+      </div>
+    </main>
+  </div>
+  
+  <!-- Footer -->
+  <app-footer class="mt-auto" />
 </div>

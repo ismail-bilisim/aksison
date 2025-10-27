@@ -1,0 +1,31 @@
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Materyal Geliştiricisine Göre Video Dersler</h2>
+    <button class="btn btn-secondary" routerLink="/videoders">
+      <i class="bi bi-arrow-left"></i> Geri
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="alert alert-info">Yükleniyor...</div>
+  }
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  @if (!loading) {
+    <div class="card">
+      <div class="card-body">
+        <p class="text-muted mb-3">
+          <strong>Materyal Geliştirici ID:</strong> {{ materyalGelistiriciId }}
+        </p>
+        <app-videoders-list 
+          [videodersler]="videodersler" 
+          (edit)="onEdit($event)" 
+          (delete)="onDelete($event)">
+        </app-videoders-list>
+      </div>
+    </div>
+  }
+</div>

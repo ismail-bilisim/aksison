@@ -44,7 +44,7 @@
       }
     </div>
     <div class="col-md-6">
-      <label for="sifre" class="form-label">Şifre *</label>
+      <label for="sifre" class="form-label">Şifre @if (!isEditMode) {*}</label>
       <input
         id="sifre"
         type="password"
@@ -106,27 +106,18 @@
     </div>
 
     <div class="col-md-6">
-      <label for="getePosta" class="form-label">E-posta</label>
-      <input id="getePosta" type="email" class="form-control" formControlName="getePosta" />
-      @if (isInvalid('getePosta')) {
+      <label for="ePosta" class="form-label">E-posta</label>
+      <input id="ePosta" type="email" class="form-control" formControlName="ePosta" />
+      @if (isInvalid('ePosta')) {
         <div class="text-danger small">
-          @if (hasError('getePosta', 'email')) {
+          @if (hasError('ePosta', 'email')) {
             <span>Geçerli bir e-posta giriniz.</span>
           }
-          @if (hasError('getePosta', 'maxlength')) {
+          @if (hasError('ePosta', 'maxlength')) {
             <span>En fazla 150 karakter olabilir.</span>
           }
         </div>
       }
-    </div>
-    <div class="col-md-6">
-      <label for="version" class="form-label">Versiyon</label>
-      <input id="version" type="number" class="form-control" formControlName="version" />
-    </div>
-
-    <div class="col-md-6">
-      <label for="ekleyenKullaniciId" class="form-label">Ekleyen Kullanıcı ID</label>
-      <input id="ekleyenKullaniciId" type="number" class="form-control" formControlName="ekleyenKullaniciId" />
     </div>
 
     <div class="col-md-6 d-flex align-items-end">

@@ -3,5 +3,27 @@
     <button class="btn btn-primary" [routerLink]="['/videoders/new']">Yeni Video Ders</button>
 </div>
 
-<app-videoders-list [videodersler]="videodersler" (edit)="onEdit($event)" (delete)="onDelete($event)">
-</app-videoders-list>
+<div class="mb-3">
+    <div class="btn-group" role="group">
+        <button class="btn btn-outline-secondary" [routerLink]="['/videoders']">Tüm Dersler</button>
+        <button class="btn btn-outline-info" [routerLink]="['/videoders/by-proje-yoneticisi']">
+            Proje Yöneticisine Göre
+        </button>
+        <button class="btn btn-outline-warning" [routerLink]="['/videoders/by-materyal-gelistirici']">
+            Materyal Geliştiricisine Göre
+        </button>
+    </div>
+</div>
+
+@if (loading) {
+    <div class="alert alert-info">Yükleniyor...</div>
+}
+
+@if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+}
+
+@if (!loading) {
+    <app-videoders-list [videodersler]="videodersler" (edit)="onEdit($event)" (delete)="onDelete($event)">
+    </app-videoders-list>
+}

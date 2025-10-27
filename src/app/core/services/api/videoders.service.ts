@@ -18,6 +18,14 @@ export class VideodersService {
     return this.http.get<VideoDers>(`${this.apiUrl}/${kodu}`);
   }
 
+  getByProjeYoneticisi(kullaniciId: number): Observable<VideoDers[]> {
+    return this.http.get<VideoDers[]>(`${this.apiUrl}/by-proje-yoneticisi/${kullaniciId}`);
+  }
+
+  getByMateryalGelistirici(kullaniciId: number): Observable<VideoDers[]> {
+    return this.http.get<VideoDers[]>(`${this.apiUrl}/by-materyal-gelistirici/${kullaniciId}`);
+  }
+
   create(videoDers: VideoDers): Observable<VideoDers> {
     return this.http.post<VideoDers>(this.apiUrl, videoDers);
   }
