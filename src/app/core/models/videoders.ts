@@ -1,12 +1,5 @@
-import { DersTuru } from './ders-turu';
-import { DersSeviyesi } from './ders-seviyesi';
-import { DersNiteligi } from './ders-niteligi';
-import { DersDurumu } from './ders-durumu';
-import { DersOzet } from './ders-ozet';
-
 export interface VideoDers {
     id?: number;
-    version?: number;
     kodu?: number;
     adi: string;
     tahminiDersSuresi?: number;
@@ -14,18 +7,9 @@ export interface VideoDers {
     baslamaTarihi?: string;
     dersTeslimTarihi?: string;
     amaci?: string;
-
-    // 🔹 Eksik alanı ekliyoruz:
-    durumKodu?: string;
-
-    // 🔹 İlişkili DTO'lar
-    ders?: DersOzet;
-    turu?: DersTuru;
-    seviyesi?: DersSeviyesi;
-    niteligi?: DersNiteligi;
-    dersDurumu?: DersDurumu;
-
-    // 🔹 Diğer alanlar...
+    turuKodu?: string;
+    seviyesiKodu?: string;
+    niteligiKodu?: string;
     hedefKitleEgitimSeviye?: number;
     ilgiAlaninaGoreHedefKitle?: string;
     kullanilacakProgramlar?: string;
@@ -35,15 +19,19 @@ export interface VideoDers {
     dersCekimYontemi?: number;
     portalAdresi?: string;
     onayDurumu?: string;
+    paydasId?: number;
     odemeKaynak?: string;
     birimUcret?: number;
     toplamUcret?: number;
-    icerikYoneticisiID?: number;
-    projeYoneticisiID?: number;
-    materyalGelistiriciID?: number;
-    kontrolEdenID?: number;
-    grafikDuzenleyiciID?: number;
-    videoDuzenleyiciID?: number;
-    lmsSorumluID?: number;
-    medyaSorumluID?: number;
+    durumKodu?: string;
+    icerikYoneticisiId?: number;
+    projeYoneticisiId?: number;
+    materyalGelistiriciId?: number;
+    kontrolEdenId?: number;
+    grafikDuzenleyiciId?: number;
+    videoDuzenleyiciId?: number;
+    lmsSorumluId?: number;
+    medyaSorumluId?: number;
+    dersKodu?: number;
 }
+

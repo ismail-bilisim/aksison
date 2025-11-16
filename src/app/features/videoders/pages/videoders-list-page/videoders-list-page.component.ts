@@ -1,63 +1,119 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
-import { VideoDers } from 'src/app/core/models/videoders';
-import { Router,RouterLink } from '@angular/router';
-import { VideodersListComponent} from 'src/app/features/videoders/components/videoders-list/videoders-list.component';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
+import { VideodersListComponent } from '../../components/videoders-list/videoders-list.component';
 import { CommonModule } from '@angular/common';
-
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-videoders-list-page',
-  imports: [CommonModule, VideodersListComponent, RouterLink],
+  standalone: true,
+  imports: [CommonModule, VideodersListComponent],
   templateUrl: './videoders-list-page.component.html',
   styleUrl: './videoders-list-page.component.css'
 })
-
-export class VideodersListPageComponent implements OnInit {
+export class VideodersListPageComponent implements OnInit, OnDestroy {
   videodersler: VideoDers[] = [];
-  loading = false;
-  error?: string;
+  durum?: string;
+  pageTitle = 'Video Dersler';
+  private routeSubscription?: Subscription;
 
-  constructor(private service: VideodersService, private router: Router) {
-    console.log('VideodersListPageComponent - Constructor çalıştı');
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private service: VideodersService
+  ) {}
 
   ngOnInit() {
-    console.log('VideodersListPageComponent - ngOnInit çalıştı');
-    this.loadVideoDersler();
-  }
-
-  loadVideoDersler() {
-    this.loading = true;
-    this.error = undefined;
-    
-    this.service.getAll().subscribe({
-      next: (res) => {
-        this.videodersler = res;
-        this.loading = false;
-        console.log('Video dersler yüklendi:', res);
-      },
-      error: (err) => {
-        console.error('Video dersler yüklenirken hata:', err);
-        this.error = err?.error?.message || err?.message || 'Video dersler yüklenirken hata oluştu.';
-        this.loading = false;
+    // Subscribe to route parameter changes
+    this.routeSubscription = this.route.paramMap.subscribe(params => {
+      this.durum = params.get('durum') || undefined;
+      
+      if (this.durum) {
+        this.setPageTitle(this.durum);
+        this.loadByDurum(this.durum);
+      } else {
+        this.pageTitle = 'Video Dersler';
+        this.loadAll();
       }
     });
   }
 
-  onEdit(v: VideoDers) {
-    this.router.navigate(['/videoders/edit', v.kodu]);
+  ngOnDestroy() {
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
+  }
+
+  private setPageTitle(durum: string) {
+    switch (durum) {
+      case 'aktif':
+        this.pageTitle = 'Aktif Video Dersler';
+        break;
+      case 'plann':
+        this.pageTitle = 'Planlanan Video Dersler';
+        break;
+      case 'anlas':
+        this.pageTitle = 'Anlaşılan Video Dersler';
+        break;
+      case 'cekim':
+        this.pageTitle = 'Çekimdeki Video Dersler';
+        break;
+      case 'teslim':
+        this.pageTitle = 'Teslim Alınan Video Dersler';
+        break;
+      case 'odeme':
+        this.pageTitle = 'Ödeme Aşamasındaki Video Dersler';
+        break;
+      case 'iptal':
+        this.pageTitle = 'İptal Edilen Video Dersler';
+        break;
+      case 'tamam':
+        this.pageTitle = 'Tamamlanan Video Dersler';
+        break;
+      // default:
+      //   this.pageTitle = 'Video Dersler';
+    }
+  }
+
+  private loadAll() {
+    this.service.getAll().subscribe(videodersler => {
+      this.videodersler = videodersler;
+    });
+  }
+
+  private loadByDurum(durum: string) {
+    this.service.getByDurum(durum).subscribe(videodersler => {
+      this.videodersler = videodersler;
+    });
+  }
+
+  onEdit(videoders: VideoDers) {
+    if (videoders.kodu) {
+      this.router.navigate(['/videoders/edit', videoders.kodu]);
+    }
+  }
+
+  onViewDetail(videoders: VideoDers) {
+    if (videoders.kodu) {
+      this.router.navigate(['/videoders/detail', videoders.kodu]);
+    }
   }
 
   onDelete(kodu: number) {
-    if (confirm('Bu video dersi silmek istediğinize emin misiniz?')) {
-      this.service.delete(kodu).subscribe({
-        next: () => this.loadVideoDersler(),
-        error: (err) => {
-          console.error('Silme hatası:', err);
-          this.error = err?.error?.message || err?.message || 'Video ders silinirken hata oluştu.';
+    if (confirm('Bu video dersi silmek istediğinizden emin misiniz?')) {
+      this.service.delete(kodu).subscribe(() => {
+        if (this.durum) {
+          this.loadByDurum(this.durum);
+        } else {
+          this.loadAll();
         }
       });
     }
+  }
+
+  onNewVideoders() {
+    this.router.navigate(['/videoders/new']);
   }
 }

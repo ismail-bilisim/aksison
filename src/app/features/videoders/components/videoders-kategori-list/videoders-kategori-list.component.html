@@ -1,0 +1,20 @@
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kategori ID</th>
+                <th>Ekleyen</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of items; track item.id) {
+            <tr>
+                <td>{{ item.kategoriId }}</td>
+                <td>{{ item.ekleyenKullaniciId }}</td>
+                <td>{{ item.eklemeTarihi | date }}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

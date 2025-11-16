@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
-import { VideoDers } from 'src/app/core/models/videoders';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
 
 @Component({
   selector: 'app-videoders-detail',
@@ -11,7 +11,7 @@ import { VideoDers } from 'src/app/core/models/videoders';
   templateUrl: './videoders-detail.component.html',
 })
 export class VideodersDetailComponent implements OnInit {
-  videoders?: VideoDers;
+  @Input() videoders?: VideoDers;
   loading = true;
   error?: string;
 

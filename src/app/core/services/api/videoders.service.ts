@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { VideoDers } from 'src/app/core/models/videoders';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
 
 @Injectable({ providedIn: 'root' })
 export class VideodersService {
@@ -24,6 +24,10 @@ export class VideodersService {
 
   getByMateryalGelistirici(kullaniciId: number): Observable<VideoDers[]> {
     return this.http.get<VideoDers[]>(`${this.apiUrl}/by-materyal-gelistirici/${kullaniciId}`);
+  }
+
+  getByDurum(durum: string): Observable<VideoDers[]> {
+    return this.http.get<VideoDers[]>(`${this.apiUrl}/by-durum/${durum}`);
   }
 
   create(videoDers: VideoDers): Observable<VideoDers> {

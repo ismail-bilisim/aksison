@@ -5,5 +5,5 @@ export interface DersOzet {
   kodu?: number;
   adi?: string;
   durumKodu?: string;
-  durumu?: DersDurumu; // 🔹 Eksik olan alan
+  durumu?: DersDurumu; // Eksik olan alan
 }

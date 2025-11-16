@@ -1,0 +1,77 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Video Ders Detayı</h2>
+                <div>
+                    <button class="btn btn-primary" (click)="onEdit(videoders!)" [disabled]="!videoders">
+                        <i class="bi bi-pencil me-1"></i>
+                        Düzenle
+                    </button>
+                </div>
+            </div>
+
+            @if (loading) {
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Yükleniyor...</span>
+                </div>
+            </div>
+            } @else if (videoders) {
+            <app-videoders-detail [videoders]="videoders"></app-videoders-detail>
+
+            <app-videoders-onkosul-list [dersId]="videoders.id!"></app-videoders-onkosul-list>
+
+            <app-videoders-konu-list [dersId]="videoders.id!"></app-videoders-konu-list>
+                            
+                            <!-- İlişkili Varlıklar -->
+            <div class="mt-4">
+                <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+                    <li [ngbNavItem]="'kategoriler'">
+                        <button ngbNavLink>Kategoriler</button>
+                        <ng-template ngbNavContent>
+                            <app-videoders-kategori-list [dersId]="videoders.id!"></app-videoders-kategori-list>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="'projeler'">
+                        <button ngbNavLink>Projeler</button>
+                        <ng-template ngbNavContent>
+                            <app-videoders-proje-list [dersId]="videoders.id!"></app-videoders-proje-list>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="'paydaslar'">
+                        <button ngbNavLink>Paydaşlar</button>
+                        <ng-template ngbNavContent>
+                            <app-videoders-paydas-list [dersId]="videoders.id!"></app-videoders-paydas-list>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="'sozlesmeler'">
+                        <button ngbNavLink>Sözleşmeler</button>
+                        <ng-template ngbNavContent>
+                            <app-videoders-sozlesme-list [dersId]="videoders.id!"></app-videoders-sozlesme-list>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="'sorular'">
+                        <button ngbNavLink>Sorular</button>
+                        <ng-template ngbNavContent>
+                            <!-- Sorular içeriği -->
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="'islemler'">
+                        <button ngbNavLink>İşlem Kayıtları</button>
+                        <ng-template ngbNavContent>
+                            <app-videoders-islem-kayit-list [dersId]="videoders.id!"></app-videoders-islem-kayit-list>
+                        </ng-template>
+                    </li>
+                </ul>
+
+                <div [ngbNavOutlet]="nav" class="mt-3"></div>
+            </div>
+            } @else {
+            <div class="alert alert-warning">
+                Video ders bulunamadı.
+            </div>
+            }
+        </div>
+    </div>
+</div>

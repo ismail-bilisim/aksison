@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
-import { VideoDers } from 'src/app/core/models/videoders';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
 import { VideodersFormComponent } from "src/app/features/videoders/components/videoders-form/videoders-form.component";
 
 @Component({

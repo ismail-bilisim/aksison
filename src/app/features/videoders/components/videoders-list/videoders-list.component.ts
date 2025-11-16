@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { VideoDers } from 'src/app/core/models/videoders';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
 
 @Component({
   selector: 'app-videoders-list',
@@ -12,6 +12,7 @@ export class VideodersListComponent {
   @Input() videodersler: VideoDers[] = [];
   @Output() edit = new EventEmitter<VideoDers>();
   @Output() delete = new EventEmitter<number>();
+  @Output() viewDetail = new EventEmitter<VideoDers>();
 
   onEdit(v: VideoDers) {
     this.edit.emit(v);
@@ -19,5 +20,9 @@ export class VideodersListComponent {
 
   onDelete(kodu: number) {
     this.delete.emit(kodu);
+  }
+
+  onViewDetail(v: VideoDers) {
+    this.viewDetail.emit(v);
   }
 }

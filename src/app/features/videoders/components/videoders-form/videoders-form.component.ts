@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
-import { VideoDers } from 'src/app/core/models/videoders';
+import { VideoDers } from 'src/app/core/models/videoders-detay';
 
 @Component({
   selector: 'app-videoders-form',
