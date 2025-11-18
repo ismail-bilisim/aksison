@@ -22,11 +22,14 @@
 
             <app-videoders-onkosul-list [dersId]="videoders.id!"></app-videoders-onkosul-list>
 
-            <app-videoders-konu-list [dersId]="videoders.id!"></app-videoders-konu-list>
-                            
                             <!-- İlişkili Varlıklar -->
             <div class="mt-4">
                 <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+                    <li [ngbNavItem]="'konular'">
+                        <button ngbNavLink>Konular</button>
+                        <ng-template ngbNavContent>
+                        </ng-template>
+                    </li>
                     <li [ngbNavItem]="'kategoriler'">
                         <button ngbNavLink>Kategoriler</button>
                         <ng-template ngbNavContent>

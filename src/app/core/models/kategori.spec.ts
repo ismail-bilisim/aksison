@@ -1,4 +1,4 @@
-import { Kategori } from './kategori';
+import { KategoriOzet } from './kategori';
 
 describe('Kategori', () => {
   it('should create an instance', () => {
