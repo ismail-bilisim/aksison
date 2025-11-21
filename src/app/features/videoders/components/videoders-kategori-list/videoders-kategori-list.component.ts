@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { DersKategori } from '../../../../core/models/ders-kategori';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
 import { KategoriService } from '../../../../core/services/api/kategori.service';
@@ -9,7 +9,7 @@ import { Kategori} from '../../../../core/models/kategori';
 @Component({
   selector: 'app-videoders-kategori-list',
   standalone: true,
-  imports: [CommonModule, NgbModalModule],
+  imports: [CommonModule, NgbModalModule, NgbDropdownModule],
   templateUrl: './videoders-kategori-list.component.html',
   styleUrls: ['./videoders-kategori-list.component.css']
 })

@@ -1,0 +1,62 @@
+@if (videoders) {
+<div class="row g-2">
+    @if (videoders.icerikYoneticisiId) {
+    <div class="col-md-6">
+        <span class="badge bg-primary w-100 text-start">
+            <i class="bi bi-person-badge me-2"></i>İçerik Yöneticisi: {{ videoders.icerikYoneticisiId }}
+        </span>
+    </div>
+    }
+    @if (videoders.projeYoneticisiId) {
+    <div class="col-md-6">
+        <span class="badge bg-primary w-100 text-start">
+            <i class="bi bi-briefcase me-2"></i>Proje Yöneticisi: {{ videoders.projeYoneticisiId }}
+        </span>
+    </div>
+    }
+    @if (videoders.materyalGelistiriciId) {
+    <div class="col-md-6">
+        <span class="badge bg-secondary w-100 text-start">
+            <i class="bi bi-file-earmark-text me-2"></i>Materyal Geliştirici: {{ videoders.materyalGelistiriciId }}
+        </span>
+    </div>
+    }
+    @if (videoders.kontrolEdenId) {
+    <div class="col-md-6">
+        <span class="badge bg-secondary w-100 text-start">
+            <i class="bi bi-check-circle me-2"></i>Kontrol Eden: {{ videoders.kontrolEdenId }}
+        </span>
+    </div>
+    }
+    @if (videoders.grafikDuzenleyiciId) {
+    <div class="col-md-6">
+        <span class="badge bg-info w-100 text-start">
+            <i class="bi bi-palette me-2"></i>Grafik Düzenleyici: {{ videoders.grafikDuzenleyiciId }}
+        </span>
+    </div>
+    }
+    @if (videoders.videoDuzenleyiciId) {
+    <div class="col-md-6">
+        <span class="badge bg-info w-100 text-start">
+            <i class="bi bi-film me-2"></i>Video Düzenleyici: {{ videoders.videoDuzenleyiciId }}
+        </span>
+    </div>
+    }
+    @if (videoders.lmsSorumluId) {
+    <div class="col-md-6">
+        <span class="badge bg-success w-100 text-start">
+            <i class="bi bi-laptop me-2"></i>LMS Sorumlu: {{ videoders.lmsSorumluId }}
+        </span>
+    </div>
+    }
+    @if (videoders.medyaSorumluId) {
+    <div class="col-md-6">
+        <span class="badge bg-success w-100 text-start">
+            <i class="bi bi-cloud-upload me-2"></i>Medya Sorumlu: {{ videoders.medyaSorumluId }}
+        </span>
+    </div>
+    }
+</div>
+} @else {
+<p class="text-muted">Sorumlu bilgisi bulunamadı.</p>
+}

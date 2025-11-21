@@ -1,0 +1,24 @@
+@if (videoders) {
+<div class="row g-3">
+    @if (videoders.odemeKaynak) {
+    <div class="col-md-4">
+        <strong>Ödeme Kaynağı:</strong>
+        <p class="text-muted">{{ videoders.odemeKaynak }}</p>
+    </div>
+    }
+    @if (videoders.birimUcret) {
+    <div class="col-md-4">
+        <strong>Birim Ücret:</strong>
+        <p class="text-success fw-bold">{{ videoders.birimUcret }} ₺</p>
+    </div>
+    }
+    @if (videoders.toplamUcret) {
+    <div class="col-md-4">
+        <strong>Toplam Ücret:</strong>
+        <p class="text-success fw-bold">{{ videoders.toplamUcret }} ₺</p>
+    </div>
+    }
+</div>
+} @else {
+<p class="text-muted">Ücret bilgisi bulunamadı.</p>
+}

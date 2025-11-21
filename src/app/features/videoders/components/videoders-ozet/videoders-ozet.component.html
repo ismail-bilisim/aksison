@@ -1,0 +1,10 @@
+@if (videoders && videoders.dersOzeti) {
+<div class="mb-3">
+    <h6 class="text-primary"><i class="bi bi-file-text me-2"></i>Ders Özeti</h6>
+    <p class="text-muted">{{ videoders.dersOzeti }}</p>
+</div>
+} @else {
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Ders özeti bulunmamaktadır.
+</div>
+}

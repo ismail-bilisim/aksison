@@ -18,11 +18,100 @@
                 </div>
             </div>
             } @else if (videoders) {
-            <app-videoders-detail [videoders]="videoders"></app-videoders-detail>
+            
+            <!-- Ana Başlık Kartı -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-camera-video me-2"></i>{{ videoders.adi }}
+                    </h4>
+                </div>
+            </div>
 
-            <app-videoders-onkosul-list [dersId]="videoders.id!"></app-videoders-onkosul-list>
+            <!-- Ana Accordion -->
+            <div ngbAccordion [closeOthers]="true">
+                <!-- Temel Bilgiler -->
+                <div ngbAccordionItem [collapsed]="false">
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <i class="bi bi-info-square me-2"></i>Temel Bilgiler
+                        </button>
+                    </h2>
+                    <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                            <ng-template>
+                                <app-videoders-temel [videoders]="videoders"></app-videoders-temel>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- İlişkili Varlıklar -->
+                <!-- Ders Özeti -->
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <i class="bi bi-file-text me-2"></i>Ders Özeti
+                        </button>
+                    </h2>
+                    <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                            <ng-template>
+                                <app-videoders-ozet [videoders]="videoders"></app-videoders-ozet>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sorumlular -->
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <i class="bi bi-people me-2"></i>Sorumlular
+                        </button>
+                    </h2>
+                    <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                            <ng-template>
+                                <app-videoders-sorumlular [videoders]="videoders"></app-videoders-sorumlular>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ücret Bilgisi -->
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <i class="bi bi-currency-dollar me-2"></i>Ücret Bilgisi
+                        </button>
+                    </h2>
+                    <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                            <ng-template>
+                                <app-videoders-ucret [videoders]="videoders"></app-videoders-ucret>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ön Koşullar -->
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <i class="bi bi-list-check me-2"></i>Ön Koşullar
+                        </button>
+                    </h2>
+                    <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                            <ng-template>
+                                <app-videoders-onkosul-list [dersId]="videoders.id!"></app-videoders-onkosul-list>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İlişkili Varlıklar -->
             <div class="mt-4">
                 <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
                     <li [ngbNavItem]="'konular'">

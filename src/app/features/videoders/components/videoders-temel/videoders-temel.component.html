@@ -1,0 +1,212 @@
+@if (videoders) {
+<div class="row mb-3">
+    <div class="col-md-6">
+        <span class="badge bg-secondary">ID: {{ videoders.id }}</span>
+        <span class="badge bg-info ms-2">Kod: {{ videoders.kodu }}</span>
+    </div>
+    <div class="col-md-6 text-end">
+        @if (videoders.onayDurumu) {
+        <span class="badge bg-success">{{ videoders.onayDurumu }}</span>
+        }
+    </div>
+</div>
+
+@if (videoders.amaci) {
+<div class="mb-3">
+    <h6 class="text-primary"><i class="bi bi-bullseye me-2"></i>Ders Amacı</h6>
+    <p class="text-muted">{{ videoders.amaci }}</p>
+</div>
+}
+
+@if (videoders.kazanimlar) {
+<div class="mb-3">
+    <h6 class="text-primary"><i class="bi bi-trophy me-2"></i>Kazanımlar</h6>
+    <p class="text-muted">{{ videoders.kazanimlar }}</p>
+</div>
+}
+
+@if (videoders.sikcaSorulanSorular) {
+<div class="mb-3">
+    <h6 class="text-primary"><i class="bi bi-question-circle me-2"></i>Sıkça Sorulan Sorular</h6>
+    <p class="text-muted">{{ videoders.sikcaSorulanSorular }}</p>
+</div>
+}
+
+<hr class="my-4" />
+
+<!-- Sub-sections -->
+<div class="row g-4">
+    <!-- Ders Bilgileri -->
+    @if (videoders.ders) {
+    <div class="col-12">
+        <h6 class="text-primary"><i class="bi bi-book me-2"></i>Ders Bilgileri</h6>
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <strong>Ders Kodu:</strong> {{ videoders.ders.kodu }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Ders Adı:</strong> {{ videoders.ders.adi }}
+                    </div>
+                    @if (videoders.ders.durumu) {
+                    <div class="col-md-6">
+                        <strong>Durum:</strong>
+                        <span class="badge bg-info ms-2">{{ videoders.ders.durumu.adi }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Tür / Seviye / Nitelik -->
+    <div class="col-12">
+        <h6 class="text-primary"><i class="bi bi-diagram-3 me-2"></i>Tür / Seviye / Nitelik</h6>
+        <div class="row g-3">
+            @if (videoders.turu) {
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Tür</h6>
+                        <p class="card-text">{{ videoders.turu.adi }}</p>
+                        <small class="text-muted">{{ videoders.turu.kodu }}</small>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (videoders.seviyesi) {
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Seviye</h6>
+                        <p class="card-text">{{ videoders.seviyesi.adi }}</p>
+                        <small class="text-muted">{{ videoders.seviyesi.kodu }}</small>
+                    </div>
+                </div>
+            </div>
+            }
+            @if (videoders.niteligi) {
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Nitelik</h6>
+                        <p class="card-text">{{ videoders.niteligi.adi }}</p>
+                        <small class="text-muted">{{ videoders.niteligi.kodu }}</small>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Tarihler -->
+    <div class="col-12">
+        <h6 class="text-primary"><i class="bi bi-calendar-event me-2"></i>Tarihler ve Süreler</h6>
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row g-3">
+                    @if (videoders.tahminiDersSuresi) {
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock-history text-primary me-2"></i>
+                            <div>
+                                <small class="text-muted d-block">Tahmini Ders Süresi</small>
+                                <strong>{{ videoders.tahminiDersSuresi }} dakika</strong>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (videoders.tahminiDersTeslimTarihi) {
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar-check text-warning me-2"></i>
+                            <div>
+                                <small class="text-muted d-block">Tahmini Teslim Tarihi</small>
+                                <strong>{{ videoders.tahminiDersTeslimTarihi | date:'dd/MM/yyyy' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (videoders.baslamaTarihi) {
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-play-circle text-success me-2"></i>
+                            <div>
+                                <small class="text-muted d-block">Başlama Tarihi</small>
+                                <strong>{{ videoders.baslamaTarihi | date:'dd/MM/yyyy' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (videoders.dersTeslimTarihi) {
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <div>
+                                <small class="text-muted d-block">Ders Teslim Tarihi</small>
+                                <strong>{{ videoders.dersTeslimTarihi | date:'dd/MM/yyyy' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diğer Bilgiler -->
+    <div class="col-12">
+        <h6 class="text-primary"><i class="bi bi-info-circle me-2"></i>Diğer Bilgiler</h6>
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="row g-3">
+                    @if (videoders.dersDurumu) {
+                    <div class="col-md-6">
+                        <strong>Durum Kodu:</strong>
+                        <span class="badge bg-secondary ms-2">{{ videoders.dersDurumu.kodu }}</span>
+                    </div>
+                    }
+                    @if (videoders.portalAdresi) {
+                    <div class="col-md-12">
+                        <strong>Portal Adresi:</strong>
+                        <a [href]="videoders.portalAdresi" target="_blank" class="ms-2">
+                            <i class="bi bi-link-45deg"></i> {{ videoders.portalAdresi }}
+                        </a>
+                    </div>
+                    }
+                    @if (videoders.dersCekimYontemi) {
+                    <div class="col-md-6">
+                        <strong>Ders Çekim Yöntemi:</strong>
+                        <p class="text-muted mb-0">{{ videoders.dersCekimYontemi }}</p>
+                    </div>
+                    }
+                    @if (videoders.hedefKitleEgitimSeviye) {
+                    <div class="col-md-6">
+                        <strong>Hedef Kitle Eğitim Seviyesi:</strong>
+                        <p class="text-muted mb-0">{{ videoders.hedefKitleEgitimSeviye }}</p>
+                    </div>
+                    }
+                    @if (videoders.ilgiAlaninaGoreHedefKitle) {
+                    <div class="col-md-12">
+                        <strong>İlgi Alanına Göre Hedef Kitle:</strong>
+                        <p class="text-muted mb-0">{{ videoders.ilgiAlaninaGoreHedefKitle }}</p>
+                    </div>
+                    }
+                    @if (videoders.kullanilacakProgramlar) {
+                    <div class="col-md-12">
+                        <strong>Kullanılacak Programlar:</strong>
+                        <p class="text-muted mb-0">{{ videoders.kullanilacakProgramlar }}</p>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+} @else {
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Ders bilgisi yükleniyor...
+</div>
+}

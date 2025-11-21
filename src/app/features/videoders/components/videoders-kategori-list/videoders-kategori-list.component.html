@@ -1,8 +1,8 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5>Kategoriler</h5>
-    <button class="btn btn-success btn-sm" (click)="onAdd()">
-        <i class="bi bi-plus me-1"></i>
-        Kategori Ekle
+    <button class="btn btn-outline-primary btn-sm" (click)="onAdd()">
+        <i class="bi bi-plus"></i>
+        Ekle
     </button>
 </div>
 
@@ -26,23 +26,12 @@
                         <i class="bi bi-tag me-2"></i>
                         {{ item.adi }}
                     </h6>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
-                                type="button" 
-                                data-bs-toggle="dropdown">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <button class="dropdown-item text-danger" 
-                                        (click)="onDelete(item)" 
-                                        [disabled]="deleting">
-                                    <i class="bi bi-trash me-2"></i>
-                                    Kaldır
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                            <button class="dropdown-item text-danger text-end" 
+                                    (click)="onDelete(item)" 
+                                    [disabled]="deleting">
+                                <i class="bi bi-trash me-2"></i>
+                                Kaldır
+                            </button>
                 </div>
                 <div class="mt-auto">
                     <small class="text-muted">
