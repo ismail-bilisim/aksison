@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { VideoDers } from 'src/app/core/models/videoders-detay';
 
 @Component({
   selector: 'app-videoders-list',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './videoders-list.component.html',
   styleUrl: './videoders-list.component.css'
 })
-
 export class VideodersListComponent {
   @Input() videodersler: VideoDers[] = [];
   @Output() edit = new EventEmitter<VideoDers>();

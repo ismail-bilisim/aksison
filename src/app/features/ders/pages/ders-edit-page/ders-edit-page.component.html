@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ isEditMode ? 'Ders Düzenle' : 'Yeni Ders' }}</h2>
+    <button class="btn btn-secondary" (click)="onCancel()">
+      <i class="bi bi-x-circle me-2"></i>İptal
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <app-ders-form 
+        [initialData]="ders"
+        (save)="onSave($event)">
+      </app-ders-form>
+    </div>
+  </div>
+</div>

@@ -73,6 +73,114 @@
       </a>
     </li>
 
+
+    Dersler
+    <li class="nav-item mb-1">
+      <div>
+        <a (click)="toggleSubmenu('Dersler')"
+           class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-play-circle me-2"></i>
+            Dersler
+          </span>
+          <i [class]="'bi ' + (isExpanded('Dersler') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Dersler')) {
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+              <a routerLink="/ders" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Tüm Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/new" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-plus-circle me-2"></i>
+                Yeni Ders
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-kategori/aktif" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-calendar-event me-2"></i>
+                Aktif Dersler
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/plann" 
+                 routerLinkActive="active"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-calendar-event me-2"></i>
+                Planlanan Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/anlas" 
+                 routerLinkActive="active"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Anlaşılan Dersler
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/cekim" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Çekimdeki Dersler
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/teslm" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Teslim Alınan Dersler
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/odeme" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Ödeme Aşamasındaki Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/iptal" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                İptal Edilen Dersler
+              </a>
+            </li>
+            
+            <li class="nav-item">
+              <a routerLink="/ders/by-durum/tamam" routerLinkActive="active" (click)="closeSidebar()"
+                class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Tamamlanan Dersler
+              </a>
+            </li>
+
+            
+          </ul>
+        }
+      </div>
+    </li>
+
+
     <!-- Video Dersler -->
     <li class="nav-item mb-1">
       <div>

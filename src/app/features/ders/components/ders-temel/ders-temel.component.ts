@@ -1,0 +1,14 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Ders } from 'src/app/core/models/ders';
+
+@Component({
+  selector: 'app-ders-temel',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './ders-temel.component.html',
+  styleUrls: ['./ders-temel.component.css']
+})
+export class DersTemelComponent {
+  @Input() ders?: Ders;
+}

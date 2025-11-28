@@ -1,0 +1,76 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label">Adı *</label>
+        <input formControlName="adi" class="form-control" />
+        @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
+            <div class="text-danger">Ders adı zorunludur.</div>
+        }
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Amacı</label>
+        <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Ders Türü Kodu</label>
+            <input formControlName="turuKodu" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Seviye Kodu</label>
+            <input formControlName="seviyesiKodu" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Nitelik Kodu</label>
+            <input formControlName="niteligiKodu" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Tahmini Ders Süresi (dk)</label>
+            <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Onay Durumu</label>
+            <input formControlName="onayDurumu" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
+        <input type="number" formControlName="hedefKitleEgitimSeviye" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
+        <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Kullanılacak Programlar</label>
+        <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Kazanımlar</label>
+        <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Sıkça Sorulan Sorular</label>
+        <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ders Özeti</label>
+        <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success" [disabled]="form.invalid">
+            Kaydet
+        </button>
+    </div>
+</form>

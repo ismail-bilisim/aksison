@@ -1,5 +1,6 @@
 export interface VideoDers {
     id?: number;
+    version?: number;
     kodu?: number;
     adi: string;
     tahminiDersSuresi?: number;

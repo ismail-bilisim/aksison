@@ -23,6 +23,10 @@ export const routes: Routes = [
                 path: 'videoders', 
                 loadChildren: () => import('./features/videoders/videoders-route').then(m => m.VIDEODERS_ROUTES)
             },
+            { 
+                path: 'ders', 
+                loadChildren: () => import('./features/ders/ders-route').then(m => m.DERS_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },

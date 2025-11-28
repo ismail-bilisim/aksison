@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Ders Detayı</h2>
+    <div>
+      @if (ders) {
+        <button class="btn btn-primary me-2" (click)="onEdit(ders)">
+          <i class="bi bi-pencil me-2"></i>Düzenle
+        </button>
+      }
+      <button class="btn btn-secondary" (click)="onBack()">
+        <i class="bi bi-arrow-left me-2"></i>Geri
+      </button>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="text-center p-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>
+  } @else if (ders) {
+    <!-- Tabs Navigation -->
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-3">
+      <li [ngbNavItem]="'temel'">
+        <button ngbNavLink>Temel Bilgiler</button>
+        <ng-template ngbNavContent>
+          <app-ders-temel [ders]="ders"></app-ders-temel>
+        </ng-template>
+      </li>
+      
+      <li [ngbNavItem]="'ozet'">
+        <button ngbNavLink>Ders Özeti ve Detaylar</button>
+        <ng-template ngbNavContent>
+          <app-ders-ozet [ders]="ders"></app-ders-ozet>
+        </ng-template>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div [ngbNavOutlet]="nav" class="mt-3"></div>
+  } @else {
+    <div class="alert alert-warning">
+      Ders bulunamadı.
+    </div>
+  }
+</div>
