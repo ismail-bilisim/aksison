@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbNavModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideoDers } from '../../../../core/models/videoders';
+import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { VideodersTemelComponent } from '../../components/videoders-temel/videoders-temel.component';
 import { VideodersSorumlularComponent } from '../../components/videoders-sorumlular/videoders-sorumlular.component';
@@ -37,7 +37,7 @@ import { VideodersOzetComponent } from '../../components/videoders-ozet/videoder
   styleUrls: ['./videoders-detail-page.component.css']
 })
 export class VideodersDetailPageComponent implements OnInit {
-  videoders?: VideoDers;
+  videoders?: VideoDersResponse;
   loading = false;
   activeTab = 'kategoriler';
 
@@ -48,19 +48,19 @@ export class VideodersDetailPageComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       console.log('Route params:', params);
-      const kodu = this.route.snapshot.paramMap.get('kodu');
-      if (kodu && !isNaN(+kodu)) {
-        this.loadVideoders(+kodu);
-        console.log('Loading videoders with Kodu from params:', kodu);
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id && !isNaN(+id)) {
+        this.loadVideoders(+id);
+        console.log('Loading videoders with Kodu from params:', id);
       } else {
         // Try to get ID from snapshot as fallback
-        const snapshotKodu = this.route.snapshot.paramMap.get('kodu');
-        console.log('Trying snapshot Kodu:', snapshotKodu);
+        const snapshotId = this.route.snapshot.paramMap.get('id');
+        console.log('Trying snapshot ID:', snapshotId);
 
-        if (snapshotKodu && !isNaN(+snapshotKodu)) {
-          this.loadVideoders(+snapshotKodu);
+        if (snapshotId && !isNaN(+snapshotId)) {
+          this.loadVideoders(+snapshotId);
         } else {
-          console.error('No valid Kodu found in route params or snapshot');
+          console.error('No valid ID found in route params or snapshot');
           console.log('Full route snapshot:', this.route.snapshot);
           this.loading = false;
         }
@@ -68,12 +68,12 @@ export class VideodersDetailPageComponent implements OnInit {
     });
   }
 
-  loadVideoders(kodu: number): void {
-    console.log('Loading videoders with ID:', kodu);
+  loadVideoders(id: number): void {
+    console.log('Loading videoders with ID:', id);
     this.loading = true;
     this.videoders = undefined;
 
-    this.videodersService.getByKodu(kodu).subscribe({
+    this.videodersService.getById(id).subscribe({
       next: (data) => {
         console.log('VideodersDetailPageComponent - Loaded videoders:', data);
         this.videoders = data;
@@ -87,9 +87,9 @@ export class VideodersDetailPageComponent implements OnInit {
     });
   }
 
-  onEdit(videoders: VideoDers): void {
-    if (videoders && videoders.id) {
-      this.router.navigate(['/videoders/edit', videoders.id]);
+  onEdit(videodersId: number): void {
+    if (videodersId) {
+      this.router.navigate(['/videoders/edit', videodersId]);
     }
   }
 }

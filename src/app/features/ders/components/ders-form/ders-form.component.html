@@ -14,16 +14,49 @@
     
     <div class="row">
         <div class="col-md-4 mb-3">
-            <label class="form-label">Ders Türü Kodu</label>
-            <input formControlName="turuKodu" class="form-control" />
+            <label class="form-label">Ders Türü *</label>
+            <select formControlName="turuKodu" class="form-select">
+                <option value="">Seçiniz</option>
+                @if (loadingDersTuru) {
+                    <option disabled>Yükleniyor...</option>
+                }
+                @for (tur of dersTurleri; track tur.kodu) {
+                    <option [value]="tur.kodu">{{ tur.adi }}</option>
+                }
+            </select>
+            @if (form.get('turuKodu')?.invalid && form.get('turuKodu')?.touched) {
+                <div class="text-danger">Ders türü zorunludur.</div>
+            }
         </div>
         <div class="col-md-4 mb-3">
-            <label class="form-label">Seviye Kodu</label>
-            <input formControlName="seviyesiKodu" class="form-control" />
+            <label class="form-label">Seviyesi *</label>
+            <select formControlName="seviyesiKodu" class="form-select">
+                <option value="">Seçiniz</option>
+                @if (loadingDersSeviyesi) {
+                    <option disabled>Yükleniyor...</option>
+                }
+                @for (sev of dersSeviyeleri; track sev.kodu) {
+                    <option [value]="sev.kodu">{{ sev.adi }}</option>
+                }
+            </select>
+            @if (form.get('seviyesiKodu')?.invalid && form.get('seviyesiKodu')?.touched) {
+                <div class="text-danger">Seviye kodu zorunludur.</div>
+            }
         </div>
         <div class="col-md-4 mb-3">
-            <label class="form-label">Nitelik Kodu</label>
-            <input formControlName="niteligiKodu" class="form-control" />
+            <label class="form-label">Nitelik Kodu *</label>
+            <select formControlName="niteligiKodu" class="form-select">
+                <option value="">Seçiniz</option>
+                @if (loadingDersNiteligi) {
+                    <option disabled>Yükleniyor...</option>
+                }
+                @for (nit of dersNitelikleri; track nit.kodu) {
+                    <option [value]="nit.kodu">{{ nit.adi }}</option>
+                }
+            </select>
+            @if (form.get('niteligiKodu')?.invalid && form.get('niteligiKodu')?.touched) {
+                <div class="text-danger">Nitelik kodu zorunludur.</div>
+            }
         </div>
     </div>
 
@@ -31,10 +64,6 @@
         <div class="col-md-6 mb-3">
             <label class="form-label">Tahmini Ders Süresi (dk)</label>
             <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Onay Durumu</label>
-            <input formControlName="onayDurumu" class="form-control" />
         </div>
     </div>
 

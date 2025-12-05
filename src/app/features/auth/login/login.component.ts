@@ -37,15 +37,37 @@ export class LoginComponent {
     this.loading = true;
     this.error = undefined;
 
+    console.log('Login isteği gönderiliyor:', this.form.value.username);
+
     this.http
-      .post<{ token: string }>(`${environment.authUrl}/login`, this.form.value)
+      .post<any>(`${environment.authUrl}/login`, this.form.value)
       .subscribe({
         next: (res) => {
-          this.auth.login(res.token);
-          this.router.navigate(['/']); // login sonrası anasayfaya yönlendir
+          console.log('Login response:', res);
+          
+          // Token'ı farklı yerlerde olabilir: token, access_token, accessToken
+          const token = res.access_token || res.token || res.accessToken;
+          
+          if (token) {
+            this.auth.login(token);
+            this.router.navigate(['/']);
+          } else {
+            console.error('Token bulunamadı:', res);
+            this.error = 'Giriş başarısız - token alınamadı';
+          }
+          this.loading = false;
         },
-        error: () => {
-          this.error = 'Kullanıcı adı veya şifre hatalı';
+        error: (err) => {
+          console.error('Login hatası:', err);
+
+          if (err.status === 0) {
+            this.error = 'Sunucuya bağlanılamadı. Lütfen ağ bağlantınızı veya sunucuyu kontrol edin.';
+          } else if (err.status === 401) {
+            this.error = 'Kullanıcı adı veya şifre hatalı';
+          } else {
+            this.error = err.error?.message || 'Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.';
+          }
+
           this.loading = false;
         },
       });

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ROLE_ACCESS_MAP, ActionType, ResourceType } from '../config/authorization.config';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly TOKEN_KEY = 'access_token';
+  private readonly TOKEN_KEY = 'access_token'; // 'token' yerine 'access_token'
+
+  constructor(private router: Router) {}
 
   login(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
@@ -18,8 +21,16 @@ export class AuthService {
     return !!token && !this.isTokenExpired(token);
   }
 
-  logout(): void {
+  logout(redirect: boolean = true): void {
+    this.clearStoredSession();
+    if (redirect) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  private clearStoredSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('user');
   }
 
   private isTokenExpired(token: string): boolean {

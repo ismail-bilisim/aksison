@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
-import { VideoDers } from 'src/app/core/models/videoders-detay';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { VideodersListComponent } from '../../components/videoders-list/videoders-list.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -14,9 +14,11 @@ import { Subscription } from 'rxjs';
   styleUrl: './videoders-list-page.component.css'
 })
 export class VideodersListPageComponent implements OnInit, OnDestroy {
-  videodersler: VideoDers[] = [];
+  videodersler: DersOzet[] = [];
   durum?: string;
   pageTitle = 'Video Dersler';
+  loading = false;
+  error?: string;
   private routeSubscription?: Subscription;
 
   constructor(
@@ -31,10 +33,10 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
       this.durum = params.get('durum') || undefined;
       
       if (this.durum) {
-        this.setPageTitle(this.durum);
+        // this.setPageTitle(this.durum);
         this.loadByDurum(this.durum);
       } else {
-        this.pageTitle = 'Video Dersler';
+        this.pageTitle = 'Tüm Video Derslerr';
         this.loadAll();
       }
     });
@@ -72,46 +74,84 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
       case 'tamam':
         this.pageTitle = 'Tamamlanan Video Dersler';
         break;
+      // case 'hepsi':
+      //   this.pageTitle = 'Tüm Video Dersler';
+      //   break;
       // default:
       //   this.pageTitle = 'Video Dersler';
     }
   }
 
   private loadAll() {
-    this.service.getAll().subscribe(videodersler => {
-      this.videodersler = videodersler;
+    this.loading = true;
+    this.error = undefined;
+    this.videodersler = [];
+
+    this.service.getAllOzet().subscribe({
+      next: (videodersler) => {
+        this.videodersler = videodersler;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Video dersler yüklenemedi:', err);
+        this.error = 'Video dersler yüklenirken bir hata oluştu.';
+        this.videodersler = [];
+        this.loading = false;
+      }
     });
   }
 
   private loadByDurum(durum: string) {
-    this.service.getByDurum(durum).subscribe(videodersler => {
-      this.videodersler = videodersler;
+    this.loading = true;
+    this.error = undefined;
+    this.videodersler = [];
+
+    this.service.getByDurum(durum).subscribe({
+      next: (videodersler) => {
+        this.videodersler = videodersler;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Video dersler yüklenemedi:', err);
+        this.error = 'Video dersler yüklenirken bir hata oluştu.';
+        this.videodersler = [];
+        this.loading = false;
+      }
     });
   }
 
-  onEdit(videoders: VideoDers) {
-    if (videoders.kodu) {
-      this.router.navigate(['/videoders/edit', videoders.kodu]);
+  onEdit(id: number) {
+    if (id) {
+      this.router.navigate(['/videoders/edit', id]);
     }
   }
 
-  onViewDetail(videoders: VideoDers) {
-    if (videoders.kodu) {
-      this.router.navigate(['/videoders/detail', videoders.kodu]);
+  onViewDetail(id: number) {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
     }
   }
 
-  onDelete(kodu: number) {
-    if (confirm('Bu video dersi silmek istediğinizden emin misiniz?')) {
-      this.service.delete(kodu).subscribe(() => {
-        if (this.durum) {
-          this.loadByDurum(this.durum);
-        } else {
-          this.loadAll();
+  onDelete(id: number) {
+    if (id && confirm('Bu video dersi silmek istediğinizden emin misiniz? '+id)) {
+      this.loading = true;
+      this.service.delete(id).subscribe({
+        next: () => {
+          if (this.durum) {
+            this.loadByDurum(this.durum);
+          } else {
+            this.loadAll();
+          }
+        },
+        error: (err) => {
+          console.error('Silme işlemi başarısız. id:' + id, err);
+          this.error = 'Video ders silinemedi. id:'+ id;
+          this.loading = false;
         }
       });
     }
   }
+
 
   onNewVideoders() {
     this.router.navigate(['/videoders/new']);

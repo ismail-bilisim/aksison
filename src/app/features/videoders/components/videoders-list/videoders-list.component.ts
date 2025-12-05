@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VideoDers } from 'src/app/core/models/videoders-detay';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 
 @Component({
   selector: 'app-videoders-list',
@@ -10,20 +10,20 @@ import { VideoDers } from 'src/app/core/models/videoders-detay';
   styleUrl: './videoders-list.component.css'
 })
 export class VideodersListComponent {
-  @Input() videodersler: VideoDers[] = [];
-  @Output() edit = new EventEmitter<VideoDers>();
+  @Input() videodersler: DersOzet[] = [];
+  @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
-  @Output() viewDetail = new EventEmitter<VideoDers>();
+  @Output() viewDetail = new EventEmitter<number>();
 
-  onEdit(v: VideoDers) {
-    this.edit.emit(v);
+  onEdit(id: number) {
+    this.edit.emit(id);
   }
 
-  onDelete(kodu: number) {
-    this.delete.emit(kodu);
+  onDelete(id: number) {
+    this.delete.emit(id);
   }
 
-  onViewDetail(v: VideoDers) {
-    this.viewDetail.emit(v);
+  onViewDetail(id: number) {
+    this.viewDetail.emit(id);
   }
 }

@@ -6,6 +6,9 @@ import { Ders } from 'src/app/core/models/ders';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { DersTemelComponent } from '../../components/ders-temel/ders-temel.component';
 import { DersOzetComponent } from '../../components/ders-ozet/ders-ozet.component';
+import { DersKonuListComponent } from '../../components/ders-konu-list/ders-konu-list.component';
+import { DersVideodersListComponent } from '../../components/ders-videoders-list/ders-videoders-list.component';
+import { DersKategoriListComponent } from '../../components/ders-kategori-list/ders-kategori-list.component';
 
 @Component({
   selector: 'app-ders-detail-page',
@@ -15,7 +18,10 @@ import { DersOzetComponent } from '../../components/ders-ozet/ders-ozet.componen
     NgbNavModule,
     NgbAccordionModule,
     DersTemelComponent,
-    DersOzetComponent
+    DersOzetComponent,
+    DersKonuListComponent,
+    DersVideodersListComponent,
+    DersKategoriListComponent
   ],
   templateUrl: './ders-detail-page.component.html',
   styleUrls: ['./ders-detail-page.component.css']

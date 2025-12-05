@@ -1,62 +1,101 @@
-@if (videoders) {
+@if (loading) {
+<div class="text-center py-3">
+    <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+</div>
+}
+
+@if (error) {
+<div class="alert alert-danger py-2">
+    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+</div>
+}
+
+@if (sorumlular && !loading) {
 <div class="row g-2">
-    @if (videoders.icerikYoneticisiId) {
+    @if (sorumlular.icerikYoneticisi) {
     <div class="col-md-6">
-        <span class="badge bg-primary w-100 text-start">
-            <i class="bi bi-person-badge me-2"></i>İçerik Yöneticisi: {{ videoders.icerikYoneticisiId }}
-        </span>
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-person-badge me-2"></i> İçerik Yöneticisi:
+        </span>        
+        <i class="text-dark">{{ sorumlular.icerikYoneticisi.ad + ' ' + sorumlular.icerikYoneticisi.soyad }}</i>
+
     </div>
     }
-    @if (videoders.projeYoneticisiId) {
+    @if (sorumlular.projeYoneticisi) {
     <div class="col-md-6">
-        <span class="badge bg-primary w-100 text-start">
-            <i class="bi bi-briefcase me-2"></i>Proje Yöneticisi: {{ videoders.projeYoneticisiId }}
+        <span class="text-start py-2 text-primary">
+            <i class="bi bi-briefcase me-2"></i>Proje Yöneticisi: 
         </span>
+        <i class="text-dark">{{ sorumlular.projeYoneticisi.ad + ' ' + sorumlular.projeYoneticisi.soyad }}</i>
     </div>
     }
-    @if (videoders.materyalGelistiriciId) {
+    @if (sorumlular.materyalGelistirici) {
     <div class="col-md-6">
-        <span class="badge bg-secondary w-100 text-start">
-            <i class="bi bi-file-earmark-text me-2"></i>Materyal Geliştirici: {{ videoders.materyalGelistiriciId }}
+            <span class="text-start py-2  text-primary">
+            <i class="bi bi-file-earmark-text me-2"></i>Materyal Geliştirici:
         </span>
+        <i class="">{{ sorumlular.materyalGelistirici.ad + ' ' + sorumlular.materyalGelistirici.soyad }}</i>
     </div>
     }
-    @if (videoders.kontrolEdenId) {
+    @if (sorumlular.kontrolEden) {
     <div class="col-md-6">
-        <span class="badge bg-secondary w-100 text-start">
-            <i class="bi bi-check-circle me-2"></i>Kontrol Eden: {{ videoders.kontrolEdenId }}
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-check-circle me-2"></i>Kontrol Eden: 
         </span>
+        <i class="text-dark">{{ sorumlular.kontrolEden.ad + ' ' + sorumlular.kontrolEden.soyad }}</i>
     </div>
     }
-    @if (videoders.grafikDuzenleyiciId) {
+    @if (sorumlular.grafikDuzenleyici) {
     <div class="col-md-6">
-        <span class="badge bg-info w-100 text-start">
-            <i class="bi bi-palette me-2"></i>Grafik Düzenleyici: {{ videoders.grafikDuzenleyiciId }}
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-palette me-2"></i>Grafik Düzenleyici: 
         </span>
+        <i class="">{{ sorumlular.grafikDuzenleyici.ad + ' ' + sorumlular.grafikDuzenleyici.soyad }}</i>    
     </div>
     }
-    @if (videoders.videoDuzenleyiciId) {
+    @if (sorumlular.videoDuzenleyici) {
     <div class="col-md-6">
-        <span class="badge bg-info w-100 text-start">
-            <i class="bi bi-film me-2"></i>Video Düzenleyici: {{ videoders.videoDuzenleyiciId }}
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-film me-2"></i>Video Düzenleyici: 
         </span>
+        <i class="">{{ sorumlular.videoDuzenleyici.ad + ' ' + sorumlular.videoDuzenleyici.soyad }}</i>
     </div>
     }
-    @if (videoders.lmsSorumluId) {
+    @if (sorumlular.lmsSorumlu) {
     <div class="col-md-6">
-        <span class="badge bg-success w-100 text-start">
-            <i class="bi bi-laptop me-2"></i>LMS Sorumlu: {{ videoders.lmsSorumluId }}
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-laptop me-2"></i>LMS Sorumlu: 
         </span>
+        <i class="">{{ sorumlular.lmsSorumlu.ad + ' ' + sorumlular.lmsSorumlu.soyad }}</i>
     </div>
     }
-    @if (videoders.medyaSorumluId) {
+    @if (sorumlular.medyaSorumlu) {
     <div class="col-md-6">
-        <span class="badge bg-success w-100 text-start">
-            <i class="bi bi-cloud-upload me-2"></i>Medya Sorumlu: {{ videoders.medyaSorumluId }}
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-cloud-upload me-2"></i>Medya Sorumlu: 
         </span>
+        <i class="">{{ sorumlular.medyaSorumlu.ad + ' ' + sorumlular.medyaSorumlu.soyad }}</i>
+    </div>
+    }
+    @if (sorumlular.ekleyen) {
+    <div class="col-md-6">
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-person-plus me-2"></i>Ekleyen: 
+        </span>
+        <i class="">{{ sorumlular.ekleyen.ad + ' ' + sorumlular.ekleyen.soyad }}</i>
+    </div>
+    }
+    @if (sorumlular.guncelleyen) {
+    <div class="col-md-6">
+        <span class="text-start py-2  text-primary">
+            <i class="bi bi-person-gear me-2"></i>Güncelleyen: 
+        </span>
+        <i class="">{{ sorumlular.guncelleyen.ad + ' ' + sorumlular.guncelleyen.soyad }}</i>
     </div>
     }
 </div>
-} @else {
-<p class="text-muted">Sorumlu bilgisi bulunamadı.</p>
+} @else if (!loading && !error) {
+<p class="text-muted mb-0">Sorumlu bilgisi bulunamadı.</p>
 }

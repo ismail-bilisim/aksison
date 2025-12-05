@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideoDers } from '../../../../core/models/videoders';
+import { VideoDersResponse } from '../../../../core/models/videoders-response';
 
 @Component({
   selector: 'app-videoders-ucret',
@@ -11,5 +11,5 @@ import { VideoDers } from '../../../../core/models/videoders';
   styleUrls: ['./videoders-ucret.component.css']
 })
 export class VideodersUcretComponent {
-  @Input() videoders?: VideoDers;
+  @Input() videoders?:  VideoDersResponse;
 }

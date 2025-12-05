@@ -2,19 +2,37 @@
   <div class="row">
     <div class="col">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>{{ pageTitle }}</h2>
-        <button class="btn btn-primary" (click)="onNewVideoders()">
+        <h5>{{ pageTitle }}</h5>
+        <button class="btn btn-primary" (click)="onNewVideoders()" [disabled]="loading">
           <i class="bi bi-plus-circle me-1"></i>
           Yeni Video Ders
         </button>
       </div>
-      
-      <app-videoders-list 
-        [videodersler]="videodersler"
-        (edit)="onEdit($event)"
-        (delete)="onDelete($event)"
-        (viewDetail)="onViewDetail($event)">
-      </app-videoders-list>
+
+      @if (loading) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+          </div>
+          <p class="mt-3 text-muted">Yükleniyor...</p>
+        </div>
+      }
+
+      @if (error) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ error }}
+        </div>
+      }
+
+      @if (!loading && !error) {
+        <app-videoders-list 
+          [videodersler]="videodersler"
+          (edit)="onEdit($event)"
+          (delete)="onDelete($event)"
+          (viewDetail)="onViewDetail($event)">
+        </app-videoders-list>
+      }
     </div>
   </div>
 </div>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppVideodersKategoriListComponent } from './videoders-kategori-list.component';
+import { VideodersKategoriListComponent } from './videoders-kategori-list.component';
 
-describe('AppVideodersKategoriListComponent', () => {
-  let component: AppVideodersKategoriListComponent;
-  let fixture: ComponentFixture<AppVideodersKategoriListComponent>;
+describe('VideodersKategoriListComponent', () => {
+  let component: VideodersKategoriListComponent;
+  let fixture: ComponentFixture<VideodersKategoriListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppVideodersKategoriListComponent]
+      imports: [VideodersKategoriListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AppVideodersKategoriListComponent);
+    fixture = TestBed.createComponent(VideodersKategoriListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

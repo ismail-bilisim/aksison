@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { VideoDers } from 'src/app/core/models/videoders-detay';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
+import { VideoDersResponse } from '../../models/videoders-response';
+import { VideoDersRequest } from '../../models/videoders-request';
+import { VideodersSorumlular } from '../../models/videoders-sorumlular';
 
 @Injectable({ providedIn: 'root' })
 export class VideodersService {
@@ -11,14 +13,33 @@ export class VideodersService {
 
   constructor(private http: HttpClient) { }
 
-  // GET All
-  getAll(): Observable<VideoDers[]> {
-    return this.http.get<VideoDers[]>(this.apiUrl);
+  // GET All  Ozet
+  getAllOzet(): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/all-ozet`);
+  }
+
+    // POST - Create
+  create(videoDers: VideoDersRequest): Observable<VideoDersResponse> {
+    return this.http.post<VideoDersResponse>(this.apiUrl, videoDers);
+  }
+
+  // PUT - Update
+  update(id: number, videoDers: VideoDersRequest): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}`, videoDers);
+  }
+
+  // DELETE
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getById(id: number): Observable<VideoDersResponse> {
+    return this.http.get<VideoDersResponse>(`${this.apiUrl}/${id}`);
   }
 
   // GET by Kodu
-  getByKodu(kodu: number): Observable<VideoDers> {
-    return this.http.get<VideoDers>(`${this.apiUrl}/${kodu}`);
+  getByKodu(kod: number): Observable<VideoDersResponse> {
+    return this.http.get<VideoDersResponse>(`${this.apiUrl}/by-kod/${kod}`);
   }
 
   // GET by Adi
@@ -27,8 +48,8 @@ export class VideodersService {
   }
 
   // GET by Durum
-  getAllByDurum(durumKodu: string): Observable<VideoDers[]> {
-    return this.http.get<VideoDers[]>(`${this.apiUrl}/by-durum/${durumKodu}`);
+  getAllByDurum(durumKodu: string): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-durum/${durumKodu}`);
   }
 
   // GET by Onay Durumu
@@ -91,23 +112,14 @@ export class VideodersService {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-paydas/${paydasId}`);
   }
 
-  // POST - Create
-  create(videoDers: VideoDers): Observable<VideoDers> {
-    return this.http.post<VideoDers>(this.apiUrl, videoDers);
+  // GET Sorumlular by ID
+  getSorumlular(id: number): Observable<VideodersSorumlular> {
+    return this.http.get<VideodersSorumlular>(`${this.apiUrl}/${id}/sorumlular`);
   }
 
-  // PUT - Update
-  update(kodu: number, videoDers: VideoDers): Observable<VideoDers> {
-    return this.http.put<VideoDers>(`${this.apiUrl}/${kodu}`, videoDers);
-  }
-
-  // DELETE
-  delete(kodu: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${kodu}`);
-  }
 
   // Backward compatibility methods
-  getByDurum(durum: string): Observable<VideoDers[]> {
+  getByDurum(durum: string): Observable<DersOzet[]> {
     return this.getAllByDurum(durum);
   }
 

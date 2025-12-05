@@ -1,47 +1,104 @@
 <div class="container-fluid">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Ders Detayı</h2>
-    <div>
-      @if (ders) {
-        <button class="btn btn-primary me-2" (click)="onEdit(ders)">
-          <i class="bi bi-pencil me-2"></i>Düzenle
-        </button>
+  <div class="row">
+    <div class="col">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5>Ders Detayı</h5>
+        <div>
+          @if (ders) {
+            <button class="btn btn-primary me-2" (click)="onEdit(ders)">
+              <i class="bi bi-pencil me-1"></i>
+              Düzenle
+            </button>
+          }
+          <button class="btn btn-secondary" (click)="onBack()">
+            <i class="bi bi-arrow-left me-1"></i>
+            Geri
+          </button>
+        </div>
+      </div>
+
+      @if (loading) {
+        <div class="text-center p-5">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+          </div>
+        </div>
+      } @else if (ders) {
+
+        <!-- Ana Başlık Kartı -->
+        <div class="card shadow-sm mb-3">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+              <i class="bi bi-journal-bookmark me-2"></i>{{ ders.adi }}
+            </h4>
+          </div>
+        </div>
+
+        <!-- Ana Accordion -->
+        <div ngbAccordion [closeOthers]="true">
+          <!-- Temel Bilgiler -->
+          <div ngbAccordionItem [collapsed]="false">
+            <h5 ngbAccordionHeader>
+              <button ngbAccordionButton>
+                <i class="bi bi-info-square me-2"></i>Temel Bilgiler
+              </button>
+            </h5>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ng-template>
+                  <app-ders-temel [ders]="ders"></app-ders-temel>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ders Özeti ve Detaylar -->
+          <div ngbAccordionItem>
+            <h5 ngbAccordionHeader>
+              <button ngbAccordionButton>
+                <i class="bi bi-file-text me-2"></i>Ders Özeti ve Detaylar
+              </button>
+            </h5>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody>
+                <ng-template>
+                  <app-ders-ozet [ders]="ders"></app-ders-ozet>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- İlişkili Varlıklar -->
+        <div class="mt-4">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+            <li [ngbNavItem]="'konular'">
+              <button ngbNavLink>Konular</button>
+              <ng-template ngbNavContent>
+                <app-ders-konu-list [dersId]="ders.id!"></app-ders-konu-list>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="'kategoriler'">
+              <button ngbNavLink>Kategoriler</button>
+              <ng-template ngbNavContent>
+                <app-ders-kategori-list [dersId]="ders.id!"></app-ders-kategori-list>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="'videodersler'">
+              <button ngbNavLink>Video Dersler</button>
+              <ng-template ngbNavContent>
+                <app-ders-videoders-list [dersId]="ders.id!"></app-ders-videoders-list>
+              </ng-template>
+            </li>
+          </ul>
+
+          <div [ngbNavOutlet]="nav" class="mt-3"></div>
+        </div>
+      } @else {
+        <div class="alert alert-warning">
+          Ders bulunamadı.
+        </div>
       }
-      <button class="btn btn-secondary" (click)="onBack()">
-        <i class="bi bi-arrow-left me-2"></i>Geri
-      </button>
     </div>
   </div>
-
-  @if (loading) {
-    <div class="text-center p-5">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Yükleniyor...</span>
-      </div>
-    </div>
-  } @else if (ders) {
-    <!-- Tabs Navigation -->
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-3">
-      <li [ngbNavItem]="'temel'">
-        <button ngbNavLink>Temel Bilgiler</button>
-        <ng-template ngbNavContent>
-          <app-ders-temel [ders]="ders"></app-ders-temel>
-        </ng-template>
-      </li>
-      
-      <li [ngbNavItem]="'ozet'">
-        <button ngbNavLink>Ders Özeti ve Detaylar</button>
-        <ng-template ngbNavContent>
-          <app-ders-ozet [ders]="ders"></app-ders-ozet>
-        </ng-template>
-      </li>
-    </ul>
-
-    <!-- Tab Content -->
-    <div [ngbNavOutlet]="nav" class="mt-3"></div>
-  } @else {
-    <div class="alert alert-warning">
-      Ders bulunamadı.
-    </div>
-  }
 </div>

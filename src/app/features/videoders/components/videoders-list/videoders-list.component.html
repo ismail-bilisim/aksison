@@ -4,12 +4,6 @@
             <tr>
                 <th>Kodu</th>
                 <th>Adı</th>
-                <th>Durum</th>
-                <th>Onay Durumu</th>
-                <th>Başlama Tarihi</th>
-                <th>Ders Süresi</th>
-                <th>Birim Ücret</th>
-                <th>Ödeme Kaynak</th>
                 <th class="text-center">İşlemler</th>
             </tr>
         </thead>
@@ -18,48 +12,19 @@
             <tr class="table-row-hover">
                 <td><strong>{{ v.kodu }}</strong></td>
                 <td>{{ v.adi }}</td>
-                <td>
-                    @if (v.durumKodu) {
-                        <span class="badge bg-info">{{ v.durumKodu }}</span>
-                    } @else {
-                        <span class="text-muted">-</span>
-                    }
-                </td>
-                <td>
-                    @if (v.onayDurumu) {
-                        <span class="badge" 
-                              [class.bg-success]="v.onayDurumu === 'onaylanmis'"
-                              [class.bg-warning]="v.onayDurumu === 'beklemede'"
-                              [class.bg-danger]="v.onayDurumu === 'reddedilmis'">
-                            {{ v.onayDurumu }}
-                        </span>
-                    } @else {
-                        <span class="text-muted">-</span>
-                    }
-                </td>
-                <td>{{ v.baslamaTarihi || '-' }}</td>
-                <td>{{ v.tahminiDersSuresi ? v.tahminiDersSuresi + ' dk' : '-' }}</td>
-                <td>
-                    @if (v.birimUcret) {
-                        {{ v.birimUcret | number:'1.2-2' }} ₺
-                    } @else {
-                        <span class="text-muted">-</span>
-                    }
-                </td>
-                <td>{{ v.odemeKaynak || '-' }}</td>
                 <td class="text-center">
                     <div class="btn-group" role="group">
-                        <button (click)="onViewDetail(v)" 
+                        <button (click)="onViewDetail(v.id!)" 
                                 class="btn btn-sm btn-info text-white" 
                                 title="Detay">
                             <i class="bi bi-eye"></i>
                         </button>
-                        <button (click)="onEdit(v)" 
+                        <button (click)="onEdit(v.id!)" 
                                 class="btn btn-sm btn-primary" 
                                 title="Düzenle">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button (click)="onDelete(v.kodu!)" 
+                        <button (click)="onDelete(v.id!)" 
                                 class="btn btn-sm btn-danger" 
                                 title="Sil">
                             <i class="bi bi-trash"></i>

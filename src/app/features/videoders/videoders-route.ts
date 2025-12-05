@@ -5,8 +5,9 @@ import { VideodersListPageComponent } from './pages/videoders-list-page/videoder
 
 export const VIDEODERS_ROUTES: Routes = [
   { path: '', component: VideodersListPageComponent },
+  { path: 'all-ozet', component: VideodersListPageComponent },
   { path: 'new', component: VideodersEditPageComponent },
   { path: 'by-durum/:durum', component: VideodersListPageComponent },
-  { path: 'edit/:kodu', component: VideodersEditPageComponent },
-  { path: 'detail/:kodu', component: VideodersDetailPageComponent },
+  { path: 'edit/:id', component: VideodersEditPageComponent },
+  { path: 'detail/:id', component: VideodersDetailPageComponent },
 ];

@@ -1,5 +1,8 @@
 export interface DersTuru {
   id?: number;
-  kodu?: string;
-  adi?: string;
+  version?: number;
+  kodu: string;
+  adi: string;
+  ekleyenKullaniciId?: number;
+  eklemeTarihi?: string;
 }

@@ -1,16 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <!-- Temel Bilgiler -->
     <div class="card mb-3">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-">
             <h6 class="mb-0">Temel Bilgiler</h6>
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Ders Kodu</label>
-                    <input type="number" formControlName="kodu" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-12 mb-3">
                     <label class="form-label">Adı *</label>
                     <input formControlName="adi" class="form-control" />
                     @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
@@ -33,37 +29,62 @@
 
     <!-- Ders Detayları -->
     <div class="card mb-3">
-        <div class="card-header bg-info text-white">
+        <div class="card-header bg-primary text-white">
             <h6 class="mb-0">Ders Detayları</h6>
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Ders Türü Kodu</label>
-                    <input formControlName="turuKodu" class="form-control" />
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Ders Türü</label>
+                    <select formControlName="turuKodu" class="form-select">
+                        <option value="">Seçiniz</option>
+                        @if (loadingDersTuru) {
+                            <option disabled>Yükleniyor...</option>
+                        }
+                        @for (tur of dersTurleri; track tur.kodu) {
+                            <option [value]="tur.kodu">{{ tur.adi }}</option>
+                        }
+                    </select>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Seviye Kodu</label>
-                    <input formControlName="seviyesiKodu" class="form-control" />
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Seviye</label>
+                    <select formControlName="seviyesiKodu" class="form-select">
+                        <option value="">Seçiniz</option>
+                        @if (loadingDersSeviyesi) {
+                            <option disabled>Yükleniyor...</option>
+                        }
+                        @for (sev of dersSeviyeleri; track sev.kodu) {
+                            <option [value]="sev.kodu">{{ sev.adi }}</option>
+                        }
+                    </select>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Nitelik Kodu</label>
-                    <input formControlName="niteligiKodu" class="form-control" />
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Nitelik</label>
+                    <select formControlName="niteligiKodu" class="form-select">
+                        <option value="">Seçiniz</option>
+                        @if (loadingDersNiteligi) {
+                            <option disabled>Yükleniyor...</option>
+                        }
+                        @for (nit of dersNitelikleri; track nit.kodu) {
+                            <option [value]="nit.kodu">{{ nit.adi }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Durum Kodu</label>
+                    <select formControlName="durumKodu" class="form-select">
+                        <option value="">Seçiniz</option>
+                        @for (durum of dersDurumlari; track durum.kodu) {
+                            <option [value]="durum.kodu">{{ durum.adi }}</option>
+                        }
+                    </select>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label class="form-label">Durum Kodu</label>
-                    <input formControlName="durumKodu" class="form-control" />
-                </div>
-                <div class="col-md-4 mb-3">
                     <label class="form-label">Onay Durumu</label>
                     <input formControlName="onayDurumu" class="form-control" />
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Ödeme Kaynak</label>
-                    <input formControlName="odemeKaynak" class="form-control" />
                 </div>
             </div>
         </div>
@@ -71,7 +92,7 @@
 
     <!-- Tarih ve Süre Bilgileri -->
     <div class="card mb-3">
-        <div class="card-header bg-success text-white">
+        <div class="card-header bg-primary text-white">
             <h6 class="mb-0">Tarih ve Süre Bilgileri</h6>
         </div>
         <div class="card-body">
@@ -105,7 +126,7 @@
 
     <!-- Hedef Kitle ve İçerik -->
     <div class="card mb-3">
-        <div class="card-header bg-warning text-dark">
+        <div class="card-header bg-primary text-white">
             <h6 class="mb-0">Hedef Kitle ve İçerik Bilgileri</h6>
         </div>
         <div class="card-body">
@@ -143,7 +164,7 @@
 
     <!-- Finansal Bilgiler -->
     <div class="card mb-3">
-        <div class="card-header bg-secondary text-white">
+        <div class="card-header bg-primary text-white">
             <h6 class="mb-0">Finansal Bilgiler</h6>
         </div>
         <div class="card-body">
@@ -160,68 +181,9 @@
                     <label class="form-label">Toplam Ücret</label>
                     <input type="number" step="0.01" formControlName="toplamUcret" class="form-control" />
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sorumlu Personel -->
-    <div class="card mb-3">
-        <div class="card-header bg-dark text-white">
-            <h6 class="mb-0">Sorumlu Personel</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">İçerik Yöneticisi ID</label>
-                    <input type="number" formControlName="icerikYoneticisiId" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Proje Yöneticisi ID</label>
-                    <input type="number" formControlName="projeYoneticisiId" class="form-control" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Materyal Geliştirici ID</label>
-                    <input type="number" formControlName="materyalGelistiriciId" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Kontrol Eden ID</label>
-                    <input type="number" formControlName="kontrolEdenId" class="form-control" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Grafik Düzenleyici ID</label>
-                    <input type="number" formControlName="grafikDuzenleyiciId" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Video Düzenleyici ID</label>
-                    <input type="number" formControlName="videoDuzenleyiciId" class="form-control" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">LMS Sorumlu ID</label>
-                    <input type="number" formControlName="lmsSorumluId" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Medya Sorumlu ID</label>
-                    <input type="number" formControlName="medyaSorumluId" class="form-control" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Ders Kodu (İlişkili)</label>
-                    <input type="number" formControlName="dersKodu" class="form-control" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Versiyon</label>
-                    <input type="number" formControlName="version" class="form-control" readonly />
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Ödeme Kaynak</label>
+                    <input formControlName="odemeKaynak" class="form-control" />
                 </div>
             </div>
         </div>

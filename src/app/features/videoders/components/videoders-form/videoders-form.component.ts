@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
-import { VideoDers } from 'src/app/core/models/videoders-detay';
+import { VideoDersRequest } from 'src/app/core/models/videoders-request';
+import { DersTuru } from 'src/app/core/models/ders-turu';
+import { DersSeviyesi } from 'src/app/core/models/ders-seviyesi';
+import { DersNiteligi } from 'src/app/core/models/ders-niteligi';
+import { DersTuruService } from 'src/app/core/services/api/ders-turu.service';
+import { DersSeviyesiService } from 'src/app/core/services/api/ders-seviyesi.service';
+import { DersNiteligiService } from 'src/app/core/services/api/ders-niteligi.service';
 
 @Component({
   selector: 'app-videoders-form',
@@ -10,17 +16,35 @@ import { VideoDers } from 'src/app/core/models/videoders-detay';
   templateUrl: './videoders-form.component.html',
   styleUrl: './videoders-form.component.css'
 })
-export class VideodersFormComponent implements OnInit {
-  @Input() initialData?: VideoDers;
-  @Output() save = new EventEmitter<VideoDers>();
+export class VideodersFormComponent implements OnInit, OnChanges {
+  @Input() initialData?: VideoDersRequest;
+  @Output() save = new EventEmitter<VideoDersRequest>();
 
   form: FormGroup;
+  dersTurleri: DersTuru[] = [];
+  loadingDersTuru = false;
 
-  constructor(private fb: FormBuilder) {
+  dersSeviyeleri: DersSeviyesi[] = [];
+  loadingDersSeviyesi = false;
+
+  dersNitelikleri: DersNiteligi[] = [];
+  loadingDersNiteligi = false;
+
+  // Basit sabit durum listesi; gerekirse servisten doldurulabilir
+  dersDurumlari = [
+    { kodu: 'YENI', adi: 'Yeni' },
+    { kodu: 'DEVAM', adi: 'Devam Ediyor' },
+    { kodu: 'TAMAM', adi: 'Tamamlandı' }
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private dersTuruService: DersTuruService,
+    private dersSeviyesiService: DersSeviyesiService,
+    private dersNiteligiService: DersNiteligiService
+  ) {
     this.form = this.fb.group({
-      kodu: [''],
       adi: ['', Validators.required],
-      version: [''],
       tahminiDersSuresi: [''],
       tahminiDersTeslimTarihi: [''],
       baslamaTarihi: [''],
@@ -43,22 +67,66 @@ export class VideodersFormComponent implements OnInit {
       birimUcret: [''],
       toplamUcret: [''],
       durumKodu: [''],
-      icerikYoneticisiId: [''],
-      projeYoneticisiId: [''],
-      materyalGelistiriciId: [''],
-      kontrolEdenId: [''],
-      grafikDuzenleyiciId: [''],
-      videoDuzenleyiciId: [''],
-      lmsSorumluId: [''],
-      medyaSorumluId: [''],
       dersKodu: ['']
     });
   }
 
   ngOnInit() {
+    this.loadDersTurleri();
+    this.loadDersSeviyeleri();
+    this.loadDersNitelikleri();
+
     if (this.initialData) {
       this.form.patchValue(this.initialData);
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['initialData'] && changes['initialData'].currentValue) {
+      this.form.patchValue(changes['initialData'].currentValue);
+    }
+  }
+
+  private loadDersTurleri() {
+    this.loadingDersTuru = true;
+    this.dersTuruService.getAll().subscribe({
+      next: (data) => {
+        this.dersTurleri = data;
+        this.loadingDersTuru = false;
+      },
+      error: (err) => {
+        console.error('Ders türleri yüklenemedi:', err);
+        this.loadingDersTuru = false;
+      }
+    });
+  }
+
+  private loadDersSeviyeleri() {
+    this.loadingDersSeviyesi = true;
+    this.dersSeviyesiService.getAll().subscribe({
+      next: (data) => {
+        this.dersSeviyeleri = data;
+        this.loadingDersSeviyesi = false;
+      },
+      error: (err) => {
+        console.error('Ders seviyeleri yüklenemedi:', err);
+        this.loadingDersSeviyesi = false;
+      }
+    });
+  }
+
+  private loadDersNitelikleri() {
+    this.loadingDersNiteligi = true;
+    this.dersNiteligiService.getAll().subscribe({
+      next: (data) => {
+        this.dersNitelikleri = data;
+        this.loadingDersNiteligi = false;
+      },
+      error: (err) => {
+        console.error('Ders nitelikleri yüklenemedi:', err);
+        this.loadingDersNiteligi = false;
+      }
+    });
   }
 
   onSubmit() {

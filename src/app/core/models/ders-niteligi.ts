@@ -1,5 +1,8 @@
 export interface DersNiteligi {
   id?: number;
-  kodu?: string;
-  adi?: string;
+  version?: number;
+  kodu: string;
+  adi: string;
+  ekleyenKullaniciId?: number;
+  eklemeTarihi?: string;
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VideoDers } from '../../../../core/models/videoders';
+import { VideoDersResponse } from '../../../../core/models/videoders-response';
 
 @Component({
   selector: 'app-videoders-ozet',
@@ -10,5 +10,5 @@ import { VideoDers } from '../../../../core/models/videoders';
   styleUrls: ['./videoders-ozet.component.css']
 })
 export class VideodersOzetComponent {
-  @Input() videoders?: VideoDers;
+  @Input() videoders?: VideoDersResponse;
 }
