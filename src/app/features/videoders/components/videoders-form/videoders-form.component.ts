@@ -5,9 +5,11 @@ import { VideoDersRequest } from 'src/app/core/models/videoders-request';
 import { DersTuru } from 'src/app/core/models/ders-turu';
 import { DersSeviyesi } from 'src/app/core/models/ders-seviyesi';
 import { DersNiteligi } from 'src/app/core/models/ders-niteligi';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { DersTuruService } from 'src/app/core/services/api/ders-turu.service';
 import { DersSeviyesiService } from 'src/app/core/services/api/ders-seviyesi.service';
 import { DersNiteligiService } from 'src/app/core/services/api/ders-niteligi.service';
+import { DersService } from 'src/app/core/services/api/ders.service';
 
 @Component({
   selector: 'app-videoders-form',
@@ -21,6 +23,9 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   @Output() save = new EventEmitter<VideoDersRequest>();
 
   form: FormGroup;
+  dersler: DersOzet[] = [];
+  loadingDers = false;
+
   dersTurleri: DersTuru[] = [];
   loadingDersTuru = false;
 
@@ -30,20 +35,15 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   dersNitelikleri: DersNiteligi[] = [];
   loadingDersNiteligi = false;
 
-  // Basit sabit durum listesi; gerekirse servisten doldurulabilir
-  dersDurumlari = [
-    { kodu: 'YENI', adi: 'Yeni' },
-    { kodu: 'DEVAM', adi: 'Devam Ediyor' },
-    { kodu: 'TAMAM', adi: 'Tamamlandı' }
-  ];
-
   constructor(
     private fb: FormBuilder,
+    private dersService: DersService,
     private dersTuruService: DersTuruService,
     private dersSeviyesiService: DersSeviyesiService,
     private dersNiteligiService: DersNiteligiService
   ) {
     this.form = this.fb.group({
+      dersId: [''],
       adi: ['', Validators.required],
       tahminiDersSuresi: [''],
       tahminiDersTeslimTarihi: [''],
@@ -65,16 +65,22 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       paydasId: [''],
       odemeKaynak: [''],
       birimUcret: [''],
-      toplamUcret: [''],
-      durumKodu: [''],
-      dersKodu: ['']
+      toplamUcret: ['']
     });
   }
 
   ngOnInit() {
+    this.loadDersler();
     this.loadDersTurleri();
     this.loadDersSeviyeleri();
     this.loadDersNitelikleri();
+
+    // Ders seçimi değiştiğinde ders detaylarını yükle
+    this.form.get('dersId')?.valueChanges.subscribe(dersId => {
+      if (dersId) {
+        this.loadDersDetay(dersId);
+      }
+    });
 
     if (this.initialData) {
       this.form.patchValue(this.initialData);
@@ -85,6 +91,20 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     if (changes['initialData'] && changes['initialData'].currentValue) {
       this.form.patchValue(changes['initialData'].currentValue);
     }
+  }
+
+  private loadDersler() {
+    this.loadingDers = true;
+    this.dersService.getAllOzet().subscribe({
+      next: (data) => {
+        this.dersler = data;
+        this.loadingDers = false;
+      },
+      error: (err) => {
+        console.error('Dersler yüklenemedi:', err);
+        this.loadingDers = false;
+      }
+    });
   }
 
   private loadDersTurleri() {
@@ -125,6 +145,46 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       error: (err) => {
         console.error('Ders nitelikleri yüklenemedi:', err);
         this.loadingDersNiteligi = false;
+      }
+    });
+  }
+
+  private loadDersDetay(dersId: number) {
+    this.dersService.getById(dersId).subscribe({
+      next: (ders) => {
+        const patch: Partial<VideoDersRequest> = {};
+
+        if (ders.adi) patch.adi = ders.adi;
+        if (ders.amaci) patch.amaci = ders.amaci;
+        if (ders.dersOzeti) patch.dersOzeti = ders.dersOzeti;
+        const turuKodu = ders.turu?.kodu ?? ders.turuKodu;
+        if (turuKodu) patch.turuKodu = turuKodu;
+        const seviyesiKodu = ders.seviyesi?.kodu ?? ders.seviyesiKodu;
+        if (seviyesiKodu) patch.seviyesiKodu = seviyesiKodu;
+        const niteligiKodu = ders.niteligi?.kodu ?? ders.niteligiKodu;
+        if (niteligiKodu) patch.niteligiKodu = niteligiKodu;
+        if (ders.hedefKitleEgitimSeviye !== undefined) {
+          patch.hedefKitleEgitimSeviye = ders.hedefKitleEgitimSeviye;
+        }
+        if (ders.ilgiAlaninaGoreHedefKitle) {
+          patch.ilgiAlaninaGoreHedefKitle = ders.ilgiAlaninaGoreHedefKitle;
+        }
+        if (ders.kullanilacakProgramlar) {
+          patch.kullanilacakProgramlar = ders.kullanilacakProgramlar;
+        }
+        if (ders.kazanimlar) {
+          patch.kazanimlar = ders.kazanimlar;
+        }
+        if (ders.sikcaSorulanSorular) {
+          patch.sikcaSorulanSorular = ders.sikcaSorulanSorular;
+        }
+
+        if (Object.keys(patch).length) {
+          this.form.patchValue(patch);
+        }
+      },
+      error: (err) => {
+        console.error('Ders detayı yüklenemedi:', err);
       }
     });
   }

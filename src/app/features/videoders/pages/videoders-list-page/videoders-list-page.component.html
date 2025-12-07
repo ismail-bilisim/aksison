@@ -2,7 +2,10 @@
   <div class="row">
     <div class="col">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5>{{ pageTitle }}</h5>
+        <div class="d-flex align-items-center gap-3">
+          <h5 class="mb-0">{{ pageTitle }}</h5>
+          <span class="badge bg-primary">{{ videodersler.length }}</span>
+        </div>
         <button class="btn btn-primary" (click)="onNewVideoders()" [disabled]="loading">
           <i class="bi bi-plus-circle me-1"></i>
           Yeni Video Ders

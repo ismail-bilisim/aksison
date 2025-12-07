@@ -19,4 +19,7 @@ export interface Ders {
   icerikYoneticisiId?: number;
   eklemeTarihi?: string;
   guncellemeTarihi?: string;
+  turu?: import('./ders-turu').DersTuru;
+  seviyesi?: import('./ders-seviyesi').DersSeviyesi;
+  niteligi?: import('./ders-niteligi').DersNiteligi;
 }

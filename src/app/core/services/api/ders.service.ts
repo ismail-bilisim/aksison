@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Ders } from 'src/app/core/models/ders';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 
 @Injectable({ providedIn: 'root' })
 export class DersService {
@@ -12,6 +13,10 @@ export class DersService {
 
   getAll(): Observable<Ders[]> {
     return this.http.get<Ders[]>(this.apiUrl);
+  }
+
+  getAllOzet(): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/all-ozet`);
   }
 
   getById(id: number): Observable<Ders> {
