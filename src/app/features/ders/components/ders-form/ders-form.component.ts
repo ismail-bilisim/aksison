@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Ders } from 'src/app/core/models/ders';
+import { DersRequest } from 'src/app/core/models/ders-request';
+import { DersResponse } from 'src/app/core/models/ders-response';
 import { DersTuru } from 'src/app/core/models/ders-turu';
 import { DersTuruService } from 'src/app/core/services/api/ders-turu.service';
 import { CommonModule } from '@angular/common';
@@ -17,8 +18,8 @@ import { DersNiteligiService } from 'src/app/core/services/api/ders-niteligi.ser
   styleUrl: './ders-form.component.css'
 })
 export class DersFormComponent implements OnInit {
-  @Input() initialData?: Ders;
-  @Output() save = new EventEmitter<Ders>();
+  @Input() initialData?: DersResponse;
+  @Output() save = new EventEmitter<DersRequest>();
 
   form: FormGroup;
   dersTurleri: DersTuru[] = [];
@@ -59,7 +60,21 @@ export class DersFormComponent implements OnInit {
     this.loadDersNitelikleri();
 
     if (this.initialData) {
-      this.form.patchValue(this.initialData);
+      this.form.patchValue({
+        adi: this.initialData.adi,
+        amaci: this.initialData.amaci,
+        turuKodu: this.initialData.turu?.kodu,
+        seviyesiKodu: this.initialData.seviyesi?.kodu,
+        niteligiKodu: this.initialData.niteligi?.kodu,
+        tahminiDersSuresi: this.initialData.tahminiDersSuresi,
+        dersOzeti: this.initialData.dersOzeti,
+        onayDurumu: this.initialData.onayDurumu,
+        hedefKitleEgitimSeviye: this.initialData.hedefKitleEgitimSeviye,
+        ilgiAlaninaGoreHedefKitle: this.initialData.ilgiAlaninaGoreHedefKitle,
+        kullanilacakProgramlar: this.initialData.kullanilacakProgramlar,
+        kazanimlar: this.initialData.kazanimlar,
+        sikcaSorulanSorular: this.initialData.sikcaSorulanSorular
+      });
     }
   }
 
@@ -107,7 +122,7 @@ export class DersFormComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.save.emit(this.form.value);
+      this.save.emit(this.form.value as DersRequest);
     }
   }
 }

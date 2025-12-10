@@ -6,7 +6,7 @@ import { DersListPageComponent } from './pages/ders-list-page/ders-list-page.com
 export const DERS_ROUTES: Routes = [
   { path: '', component: DersListPageComponent },
   { path: 'new', component: DersEditPageComponent },
-  { path: 'by-onay-durumu/:onayDurumu', component: DersListPageComponent },
+  { path: 'by-onay/:onayDurumu', component: DersListPageComponent },
   { path: 'edit/:id', component: DersEditPageComponent },
   { path: 'detail/:id', component: DersDetailPageComponent },
 ];

@@ -43,12 +43,11 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     private dersNiteligiService: DersNiteligiService
   ) {
     this.form = this.fb.group({
-      dersId: [''],
+      dersId: ['', Validators.required],
       adi: ['', Validators.required],
       tahminiDersSuresi: [''],
       tahminiDersTeslimTarihi: [''],
       baslamaTarihi: [''],
-      dersTeslimTarihi: [''],
       amaci: [''],
       turuKodu: [''],
       seviyesiKodu: [''],
@@ -61,8 +60,6 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       dersOzeti: [''],
       dersCekimYontemi: [''],
       portalAdresi: [''],
-      onayDurumu: [''],
-      paydasId: [''],
       odemeKaynak: [''],
       birimUcret: [''],
       toplamUcret: ['']
@@ -75,22 +72,26 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     this.loadDersSeviyeleri();
     this.loadDersNitelikleri();
 
-    // Ders seçimi değiştiğinde ders detaylarını yükle
     this.form.get('dersId')?.valueChanges.subscribe(dersId => {
       if (dersId) {
         this.loadDersDetay(dersId);
       }
     });
 
-    if (this.initialData) {
-      this.form.patchValue(this.initialData);
-    }
+    this.patchForm(this.initialData);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['initialData'] && changes['initialData'].currentValue) {
-      this.form.patchValue(changes['initialData'].currentValue);
+      this.patchForm(changes['initialData'].currentValue);
     }
+  }
+
+  private patchForm(data?: VideoDersRequest) {
+    if (!data) {
+      return;
+    }
+    this.form.patchValue(data, { emitEvent: false });
   }
 
   private loadDersler() {
@@ -154,14 +155,15 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       next: (ders) => {
         const patch: Partial<VideoDersRequest> = {};
 
+        console.log('Yüklenen Ders detayı:', ders);
         if (ders.adi) patch.adi = ders.adi;
         if (ders.amaci) patch.amaci = ders.amaci;
         if (ders.dersOzeti) patch.dersOzeti = ders.dersOzeti;
-        const turuKodu = ders.turu?.kodu ?? ders.turuKodu;
+        const turuKodu = ders.turu?.kodu;
         if (turuKodu) patch.turuKodu = turuKodu;
-        const seviyesiKodu = ders.seviyesi?.kodu ?? ders.seviyesiKodu;
+        const seviyesiKodu = ders.seviyesi?.kodu;
         if (seviyesiKodu) patch.seviyesiKodu = seviyesiKodu;
-        const niteligiKodu = ders.niteligi?.kodu ?? ders.niteligiKodu;
+        const niteligiKodu = ders.niteligi?.kodu;
         if (niteligiKodu) patch.niteligiKodu = niteligiKodu;
         if (ders.hedefKitleEgitimSeviye !== undefined) {
           patch.hedefKitleEgitimSeviye = ders.hedefKitleEgitimSeviye;

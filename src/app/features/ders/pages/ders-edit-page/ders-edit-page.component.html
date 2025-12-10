@@ -8,10 +8,12 @@
 
   <div class="card">
     <div class="card-body">
-      <app-ders-form 
-        [initialData]="ders"
-        (save)="onSave($event)">
-      </app-ders-form>
+      @if (ders || !isEditMode) {
+        <app-ders-form
+          [initialData]="ders"
+          (save)="onSave($event)">
+        </app-ders-form>
+      }
     </div>
   </div>
 </div>

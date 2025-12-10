@@ -1,1 +1,3 @@
-/* Ders List Component Styles */
+.table-row-hover:hover {
+    background-color: #f8f9fa;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DersService } from 'src/app/core/services/api/ders.service';
-import { Ders } from 'src/app/core/models/ders';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { DersListComponent } from '../../components/ders-list/ders-list.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './ders-list-page.component.css'
 })
 export class DersListPageComponent implements OnInit, OnDestroy {
-  dersler: Ders[] = [];
+  dersler: DersOzet[] = [];
   onayDurumu?: string;
   pageTitle = 'Dersler';
   private routeSubscription?: Subscription;
@@ -48,14 +48,17 @@ export class DersListPageComponent implements OnInit, OnDestroy {
 
   private setPageTitle(onayDurumu: string) {
     switch (onayDurumu) {
-      case 'onaylanmis':
-        this.pageTitle = 'Onaylanmış Dersler';
+      case 'ons':
+        this.pageTitle = 'Onaya Sunulan Yeni Dersler';
         break;
-      case 'beklemede':
-        this.pageTitle = 'Onay Bekleyen Dersler';
+      case 'red':
+        this.pageTitle = 'Red Edilen Dersler';
         break;
-      case 'reddedilmis':
-        this.pageTitle = 'Reddedilen Dersler';
+      case 'ony':
+        this.pageTitle = 'Onaylanan Dersler';
+        break;
+      case 'tas':
+        this.pageTitle = 'Taslak Dersler';
         break;
       default:
         this.pageTitle = 'Dersler';
@@ -74,15 +77,15 @@ export class DersListPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEdit(ders: Ders) {
-    if (ders.id) {
-      this.router.navigate(['/ders/edit', ders.id]);
+  onEdit(dersId: number) {
+    if (dersId) {
+      this.router.navigate(['/ders/edit', dersId]);
     }
   }
 
-  onViewDetail(ders: Ders) {
-    if (ders.id) {
-      this.router.navigate(['/ders/detail', ders.id]);
+  onViewDetail(dersId: number) {
+    if (dersId) {
+      this.router.navigate(['/ders/detail', dersId]);
     }
   }
 

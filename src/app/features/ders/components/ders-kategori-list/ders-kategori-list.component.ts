@@ -5,6 +5,7 @@ import { DersKategori } from '../../../../core/models/ders-kategori';
 import { DersKategoriService } from '../../../../core/services/api/ders-kategori.service';
 import { KategoriService } from '../../../../core/services/api/kategori.service';
 import { Kategori } from '../../../../core/models/kategori';
+import { ToastService } from 'src/app/core/services/api/toast.service';
 
 @Component({
   selector: 'app-ders-kategori-list',
@@ -14,6 +15,9 @@ import { Kategori } from '../../../../core/models/kategori';
   styleUrls: ['./ders-kategori-list.component.css']
 })
 export class DersKategoriListComponent implements OnInit {
+
+  private toastService = inject(ToastService);
+
   @Input() dersId!: number;
   @ViewChild('kategoriModal') kategoriModalTemplate!: TemplateRef<any>;
   items: DersKategori[] = [];
@@ -73,7 +77,7 @@ export class DersKategoriListComponent implements OnInit {
         },
         error: (error) => {
           console.error('Kategori silinirken hata:', error);
-          alert('Kategori silinirken bir hata oluştu.');
+          this.toastService.error('Kategori silinirken bir hata oluştu.');
           this.deleting = false;
         }
       });
@@ -101,7 +105,7 @@ export class DersKategoriListComponent implements OnInit {
       error: (error) => {
         console.error('Kategoriler yüklenirken hata:', error);
         this.modalLoading = false;
-        alert('Kategoriler yüklenirken bir hata oluştu.');
+        this.toastService.error('Kategoriler yüklenirken bir hata oluştu.');
       }
     });
   }
@@ -142,7 +146,7 @@ export class DersKategoriListComponent implements OnInit {
       this.modalService.dismissAll();
     }).catch(error => {
       console.error('Kategoriler eklenirken hata:', error);
-      alert('Kategoriler eklenirken bir hata oluştu.');
+      this.toastService.error('Kategoriler eklenirken bir hata oluştu.');
       this.adding = false;
     });
   }

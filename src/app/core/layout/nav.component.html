@@ -89,6 +89,46 @@
         @if (isExpanded('Dersler')) {
           <ul class="nav flex-column ms-3">
             <li class="nav-item">
+              <a routerLink="/ders/by-onay/tas" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Taslak Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-onay/ons" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Onay Bekleyen Yeni Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-onay/red" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Reddedilen Dersler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/ders/by-onay/ony" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Onaylanan Dersler
+              </a>
+            </li>
+            <li class="nav-item">
               <a routerLink="/ders" 
                  routerLinkActive="active"
                  [routerLinkActiveOptions]="{exact: true}"

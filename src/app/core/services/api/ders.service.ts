@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { Ders } from 'src/app/core/models/ders';
+import { DersRequest } from 'src/app/core/models/ders-request';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
+import { DersResponse } from '../../models/ders-response';
 
 @Injectable({ providedIn: 'root' })
 export class DersService {
@@ -11,43 +12,57 @@ export class DersService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Ders[]> {
-    return this.http.get<Ders[]>(this.apiUrl);
+  getAll(): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(this.apiUrl);
   }
 
   getAllOzet(): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/all-ozet`);
   }
 
-  getById(id: number): Observable<Ders> {
-    return this.http.get<Ders>(`${this.apiUrl}/${id}`);
+  getById(id: number): Observable<DersResponse> {
+    return this.http.get<DersResponse>(`${this.apiUrl}/${id}`);
   }
 
-  getByKodu(kodu: number): Observable<Ders> {
-    return this.http.get<Ders>(`${this.apiUrl}/by-kodu/${kodu}`);
+  getByKodu(kodu: number): Observable<DersResponse> {
+    return this.http.get<DersResponse>(`${this.apiUrl}/by-kodu/${kodu}`);
   }
 
-  getByAdi(adi: string): Observable<Ders> {
-    return this.http.get<Ders>(`${this.apiUrl}/by-adi/${adi}`);
+  getByAdi(adi: string): Observable<DersResponse> {
+    return this.http.get<DersResponse>(`${this.apiUrl}/by-adi/${adi}`);
   }
 
-  getByOnayDurumu(onayDurumu: string): Observable<Ders[]> {
-    return this.http.get<Ders[]>(`${this.apiUrl}/by-onay-durumu/${onayDurumu}`);
+  getByOnayDurumu(onayDurumu: string): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-onay/${onayDurumu}`);
   }
 
-  getByIcerikYoneticisi(kullaniciId: number): Observable<Ders[]> {
-    return this.http.get<Ders[]>(`${this.apiUrl}/by-icerik-yoneticisi/${kullaniciId}`);
+  getByIcerikYoneticisi(kullaniciId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-icerik-yoneticisi/${kullaniciId}`);
   }
 
-  create(ders: Ders): Observable<Ders> {
-    return this.http.post<Ders>(this.apiUrl, ders);
+  create(ders: DersRequest): Observable<DersResponse> {
+    return this.http.post<DersResponse>(this.apiUrl, ders);
   }
 
-  update(id: number, ders: Ders): Observable<Ders> {
-    return this.http.put<Ders>(`${this.apiUrl}/${id}`, ders);
+  update(id: number, ders: DersRequest): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}`, ders);
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  //TODO: onays sonrasi donen deger ile birsey yapilacak mi yoksa id le yeniden sorgulama ve yonlendirme yeterli mi?
+  icerikOnayinaSun(id: number): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  }
+
+  icerikOnayla(id: number, onayNotu?: string): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, onayNotu || null);
+  }
+
+  icerikReddet(id: number, redNedeni?: string): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, redNedeni || null);
+  }
+
 }

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ToastContainerComponent } from './core/components/toast-container/toast-container.component';
 
 @Component({
   selector: 'app-root',
   standalone: true, // Compenent tek başına NgModule bağlı olmadan çalışabilir.
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastContainerComponent],
   // templateUrl: './app.component.html',
-  template: `<router-outlet />`, // inline template ile sadeleştirme
+  templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {

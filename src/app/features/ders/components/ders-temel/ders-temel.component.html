@@ -1,5 +1,5 @@
 @if (ders) {
-  <div class="card">
+  <div class="card mb-3">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0">Temel Bilgiler</h5>
     </div>
@@ -36,15 +36,15 @@
       <div class="row mb-3">
         <div class="col-md-4">
           <strong>Ders Türü Kodu:</strong>
-          <p>{{ ders.turuKodu || 'Belirtilmemiş' }}</p>
+          <p>{{ ders.turu?.adi || 'Belirtilmemiş' }}</p>
         </div>
         <div class="col-md-4">
           <strong>Seviye Kodu:</strong>
-          <p>{{ ders.seviyesiKodu || 'Belirtilmemiş' }}</p>
+          <p>{{ ders.seviyesi?.adi || 'Belirtilmemiş' }}</p>
         </div>
         <div class="col-md-4">
           <strong>Nitelik Kodu:</strong>
-          <p>{{ ders.niteligiKodu || 'Belirtilmemiş' }}</p>
+          <p>{{ ders.niteligi?.adi || 'Belirtilmemiş' }}</p>
         </div>
       </div>
 
@@ -53,6 +53,43 @@
           <strong>Onay Durumu:</strong>
           <p>{{ ders.onayDurumu || 'Belirtilmemiş' }}</p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">Ders Özeti ve Detaylar</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <strong>Hedef Kitle Eğitim Seviyesi:</strong>
+        <p>{{ ders.hedefKitleEgitimSeviye || 'Belirtilmemiş' }}</p>
+      </div>
+
+      <div class="mb-3">
+        <strong>İlgi Alanına Göre Hedef Kitle:</strong>
+        <p>{{ ders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</p>
+      </div>
+
+      <div class="mb-3">
+        <strong>Kullanılacak Programlar:</strong>
+        <p>{{ ders.kullanilacakProgramlar || 'Belirtilmemiş' }}</p>
+      </div>
+
+      <div class="mb-3">
+        <strong>Kazanımlar:</strong>
+        <p class="text-pre-wrap">{{ ders.kazanimlar || 'Belirtilmemiş' }}</p>
+      </div>
+
+      <div class="mb-3">
+        <strong>Sıkça Sorulan Sorular:</strong>
+        <p class="text-pre-wrap">{{ ders.sikcaSorulanSorular || 'Belirtilmemiş' }}</p>
+      </div>
+
+      <div class="mb-3">
+        <strong>Ders Özeti:</strong>
+        <p class="text-pre-wrap">{{ ders.dersOzeti || 'Belirtilmemiş' }}</p>
       </div>
     </div>
   </div>

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DersService } from 'src/app/core/services/api/ders.service';
-import { Ders } from 'src/app/core/models/ders';
+import { DersRequest } from 'src/app/core/models/ders-request';
+import { DersResponse } from 'src/app/core/models/ders-response';
 import { DersFormComponent } from "src/app/features/ders/components/ders-form/ders-form.component";
+import { ErrorHandler } from 'src/app/core/utils/error-handler';
+import { ToastService } from 'src/app/core/services/api/toast.service';
 
 @Component({
   selector: 'app-ders-edit-page',
@@ -12,7 +15,9 @@ import { DersFormComponent } from "src/app/features/ders/components/ders-form/de
   styleUrl: './ders-edit-page.component.css'
 })
 export class DersEditPageComponent implements OnInit {
-  ders?: Ders;
+  private toastService = inject(ToastService);
+
+  ders?: DersResponse;
   isEditMode = false;
 
   constructor(
@@ -25,19 +30,43 @@ export class DersEditPageComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
-      this.service.getById(+id).subscribe((res) => (this.ders = res));
+      this.service.getById(+id).subscribe({
+        next: (res) => {
+          this.ders = res;
+          console.log("Yüklenen ders: ", this.ders);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadDers');
+          this.toastService.error('Ders yükleme hatası: ' + ErrorHandler.extractErrorMessage(error));
+          this.router.navigate(['/ders']);
+        }
+      });
     }
   }
 
-  onSave(ders: Ders) {
+  onSave(dersRequest: DersRequest) {
     if (this.ders?.id) {
-      this.service.update(this.ders.id, ders).subscribe(() => 
-        this.router.navigate(['/ders'])
-      );
+      this.service.update(this.ders.id, dersRequest).subscribe({
+        next: () => {
+          this.toastService.success('Ders başarıyla güncellendi.');
+          this.router.navigate(['/ders']);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'updateDers');
+          this.toastService.error('Güncelleme hatası: ' + ErrorHandler.extractErrorMessage(error));
+        }
+      });
     } else {
-      this.service.create(ders).subscribe(() => 
-        this.router.navigate(['/ders'])
-      );
+      this.service.create(dersRequest).subscribe({
+        next: () => {
+          this.toastService.success('Ders başarıyla oluşturuldu.');
+          this.router.navigate(['/ders']);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'createDers');
+          this.toastService.error('Kaydetme hatası: ' + ErrorHandler.extractErrorMessage(error));
+        }
+      });
     }
   }
 

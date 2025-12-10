@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { NgbNavModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
+import { ToastService } from '../../../../core/services/api/toast.service';
+import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { VideodersTemelComponent } from '../../components/videoders-temel/videoders-temel.component';
 import { VideodersSorumlularComponent } from '../../components/videoders-sorumlular/videoders-sorumlular.component';
 import { VideodersUcretComponent } from '../../components/videoders-ucret/videoders-ucret.component';
@@ -44,6 +46,7 @@ export class VideodersDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private videodersService = inject(VideodersService);
+  private toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -80,9 +83,9 @@ export class VideodersDetailPageComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading videoders:', error);
+        ErrorHandler.logError(error, 'loadVideoders');
         this.loading = false;
-        alert('Video ders yüklenirken bir hata oluştu: ' + (error.message || 'Bilinmeyen hata'));
+        this.toastService.error(ErrorHandler.extractErrorMessage(error));
       }
     });
   }

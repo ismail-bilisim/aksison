@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Ders } from 'src/app/core/models/ders';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 
 @Component({
   selector: 'app-ders-list',
@@ -8,20 +8,20 @@ import { Ders } from 'src/app/core/models/ders';
   styleUrl: './ders-list.component.css'
 })
 export class DersListComponent {
-  @Input() dersler: Ders[] = [];
-  @Output() edit = new EventEmitter<Ders>();
+  @Input() dersler: DersOzet[] = [];
+  @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
-  @Output() viewDetail = new EventEmitter<Ders>();
+  @Output() viewDetail = new EventEmitter<number>();
 
-  onEdit(ders: Ders) {
-    this.edit.emit(ders);
+  onEdit(dersId: number) {
+    this.edit.emit(dersId);
   }
 
   onDelete(id: number) {
     this.delete.emit(id);
   }
 
-  onViewDetail(ders: Ders) {
-    this.viewDetail.emit(ders);
+  onViewDetail(dersId: number) {
+    this.viewDetail.emit(dersId);
   }
 }

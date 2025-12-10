@@ -5,6 +5,8 @@ import { DersKategori } from '../../../../core/models/ders-kategori';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
 import { KategoriService } from '../../../../core/services/api/kategori.service';
 import { Kategori} from '../../../../core/models/kategori';
+import { ToastService } from '../../../../core/services/api/toast.service';
+import { ErrorHandler } from '../../../../core/utils/error-handler';
 
 @Component({
   selector: 'app-videoders-kategori-list',
@@ -29,6 +31,7 @@ export class VideodersKategoriListComponent implements OnInit {
   private videodersKategoriService = inject(VideodersKategoriService);
   private kategoriService = inject(KategoriService);
   private modalService = inject(NgbModal);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     if (this.dersId) {
@@ -46,7 +49,8 @@ export class VideodersKategoriListComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Kategori özet yüklenirken hata:', error);
+          ErrorHandler.logError(error, 'loadKategoriOzet');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.loading = false;
         }
       });
@@ -69,11 +73,12 @@ export class VideodersKategoriListComponent implements OnInit {
       .subscribe({
         next: () => {
           this.items = this.items.filter(i => (i.id || i.kategoriId) !== kategoriId);
+          this.toastService.success('Kategori başarıyla kaldırıldı.');
           this.deleting = false;
         },
         error: (error) => {
-          console.error('Kategori silinirken hata:', error);
-          alert('Kategori silinirken bir hata oluştu.');
+          ErrorHandler.logError(error, 'deleteKategori');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.deleting = false;
         }
       });
@@ -99,9 +104,9 @@ export class VideodersKategoriListComponent implements OnInit {
         this.openKategoriModal();
       },
       error: (error) => {
-        console.error('Kategoriler yüklenirken hata:', error);
+        ErrorHandler.logError(error, 'loadAvailableKategoriler');
         this.modalLoading = false;
-        alert('Kategoriler yüklenirken bir hata oluştu.');
+        this.toastService.error(ErrorHandler.extractErrorMessage(error));
       }
     });
   }
@@ -137,12 +142,13 @@ export class VideodersKategoriListComponent implements OnInit {
 
     // Tüm istekleri paralel olarak gönder
     Promise.all(requests.map(req => req.toPromise())).then(() => {
+      this.toastService.success('Kategoriler başarıyla eklendi.');
       this.loadKategoriOzet();
       this.adding = false;
       this.modalService.dismissAll();
     }).catch(error => {
-      console.error('Kategoriler eklenirken hata:', error);
-      alert('Kategoriler eklenirken bir hata oluştu.');
+      ErrorHandler.logError(error, 'addSelectedKategoriler');
+      this.toastService.error(ErrorHandler.extractErrorMessage(error));
       this.adding = false;
     });
   }
