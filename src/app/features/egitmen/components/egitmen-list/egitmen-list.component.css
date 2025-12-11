@@ -1,0 +1,5 @@
+/* Add custom styles here if needed */
+.table-row-hover:hover {
+  cursor: pointer;
+  background-color: #f8f9fa;
+}

@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { HomeComponent } from './features/home/home.component';
@@ -26,6 +25,10 @@ export const routes: Routes = [
             { 
                 path: 'ders', 
                 loadChildren: () => import('./features/ders/ders-route').then(m => m.DERS_ROUTES)
+            },
+            {
+                path: 'kategori',
+                loadChildren: () => import('./features/kategori/kategori-route').then(m => m.KATEGORI_ROUTES)
             },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],

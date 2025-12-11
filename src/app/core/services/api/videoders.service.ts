@@ -130,5 +130,11 @@ export class VideodersService {
   getByMateryalGelistirici(kullaniciId: number): Observable<DersOzet[]> {
     return this.getAllByMateryalGelistirici(kullaniciId);
   }
+
+  getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
+    const params = { ids: kategoriIds.join(',') };
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
+  }
 }
+
 

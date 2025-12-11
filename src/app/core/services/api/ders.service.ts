@@ -65,4 +65,9 @@ export class DersService {
     return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, redNedeni || null);
   }
 
+  getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
+    const params = { ids: kategoriIds.join(',') };
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
+  }
+
 }

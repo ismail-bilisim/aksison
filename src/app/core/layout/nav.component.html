@@ -273,13 +273,41 @@
 
     <!-- Kategoriler -->
     <li class="nav-item mb-1">
-      <a routerLink="/kategori" 
-         routerLinkActive="active"
-         (click)="closeSidebar()"
-         class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-        <i class="bi bi-tags me-2"></i>
-        Kategoriler
-      </a>
+      <div>
+        <a (click)="toggleSubmenu('Kategoriler')"
+           class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-tags me-2"></i>
+            Kategoriler
+          </span>
+          <i [class]="'bi ' + (isExpanded('Kategoriler') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Kategoriler')) {
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+              <a routerLink="/kategori" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Tüm Kategoriler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/kategori/suzgec" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-funnel-fill me-2"></i>
+                Kategorik Süzgeç
+              </a>
+            </li>
+          </ul>
+        }
+      </div>
     </li>
 
   </ul>

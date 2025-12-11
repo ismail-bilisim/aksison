@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Kategori } from '../../models/kategori';
+import { KategoriOzet } from '../../models/kategori-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class KategoriService {
 
   getAll(): Observable<Kategori[]> {
     return this.http.get<Kategori[]>(this.apiUrl);
+  }
+
+  getAllOzet(): Observable<KategoriOzet[]> {
+    return this.http.get<KategoriOzet[]>(`${this.apiUrl}/ozet`);
   }
 
   getById(id: number): Observable<Kategori> {

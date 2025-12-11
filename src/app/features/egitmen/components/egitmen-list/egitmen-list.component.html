@@ -1,0 +1,35 @@
+@if (loading) {
+  <div class="d-flex justify-content-center align-items-center p-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+} @else {
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>Kod</th>
+        <th>Ünvan</th>
+        <th>Kullanıcı Adı</th>
+        <th>Ad Soyad</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (egitmen of egitmenler; track egitmen.id) {
+        <tr>
+          <td>{{ egitmen.kod }}</td>
+          <td>{{ egitmen.unvan || '-' }}</td>
+          <td>{{ egitmen.kullanici?.ad || '-' }}</td>
+          <td>{{ (egitmen.kullanici?.ad || '') + ' ' + (egitmen.kullanici?.soyad || '') }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="text-center text-muted py-4">
+            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+            Kayıt bulunamadı.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
