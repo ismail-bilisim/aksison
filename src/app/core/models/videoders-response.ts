@@ -3,6 +3,8 @@ import { DersTuruOzet } from './ders-turu-ozet';
 import { DersSeviyesiOzet } from './ders-seviyesi-ozet';
 import { DersNiteligiOzet } from './ders-niteligi-ozet';
 import { DersDurumuOzet } from './ders-durumu-ozet';
+import { DersCekimYontemiOzet } from './ders-cekim-yontemi-ozet';
+import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet';
 
 export interface VideoDersResponse {
   id: number;
@@ -18,13 +20,13 @@ export interface VideoDersResponse {
   turu: DersTuruOzet | null;
   seviyesi: DersSeviyesiOzet | null;
   niteligi: DersNiteligiOzet | null;
-  hedefKitleEgitimSeviye: number | null;
+  hedefKitleEgitimSeviye: HedefKitleEgitimSeviyesiOzet | null;
   ilgiAlaninaGoreHedefKitle: string | null;
   kullanilacakProgramlar: string | null;
   kazanimlar: string | null;
   sikcaSorulanSorular: string | null;
   dersOzeti: string | null;
-  dersCekimYontemi: number | null;
+  dersCekimYontemi: DersCekimYontemiOzet | null;
   portalAdresi: string | null;
   onayDurumu: string | null;
   odemeKaynak: string | null;

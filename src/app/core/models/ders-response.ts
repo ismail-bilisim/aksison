@@ -20,7 +20,7 @@ export interface DersResponse {
   kazanimlar?: string;
   sikcaSorulanSorular?: string;
   dersOzeti?: string;
-  onayDurumu?: string;
+  onayDurumu: string | null;
   icerikYoneticisiId?: number;
   eklemeTarihi: string;
   guncellemeTarihi: string;

@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5>Alt Kategoriler</h5>
+</div>
+
+@if (loading) {
+  <div class="text-center p-3">
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+} @else if (altKategoriler.length === 0) {
+  <div class="alert alert-info text-center">
+    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+    <p class="mb-0">Bu kategoriye ait alt kategori bulunmamaktadır.</p>
+  </div>
+} @else {
+  <div class="row">
+    @for (altKategori of altKategoriler; track altKategori.id) {
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100 shadow-sm hover-card" style="cursor: pointer;" 
+             (click)="navigateToKategori(altKategori.id)">
+          <div class="card-body">
+            <h6 class="card-title text-primary">
+              <i class="bi bi-tag-fill me-2"></i>
+              {{ altKategori.adi }}
+            </h6>
+            <p class="card-text text-muted small mb-2">
+              <i class="bi bi-hash me-1"></i>Kod: {{ altKategori.kodu || 'N/A' }}
+            </p>
+            @if (altKategori.aciklama) {
+              <p class="card-text small text-truncate">
+                {{ altKategori.aciklama }}
+              </p>
+            }
+          </div>
+          <div class="card-footer bg-transparent border-top-0">
+            <small class="text-muted">
+              <i class="bi bi-arrow-right-circle me-1"></i>
+              Detayları görüntüle
+            </small>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

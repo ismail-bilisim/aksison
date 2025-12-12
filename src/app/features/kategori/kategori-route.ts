@@ -12,5 +12,11 @@ export const KATEGORI_ROUTES: Routes = [
         loadComponent: () =>
             import('./pages/kategori-filter-page/kategori-filter-page.component')
                 .then(m => m.KategoriFilterPageComponent)
+    },
+    {
+        path: 'detail/:id',
+        loadComponent: () =>
+            import('./pages/kategori-detail-page/kategori-detail-page.component')
+                .then(m => m.KategoriDetailPageComponent)
     }
 ];

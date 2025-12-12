@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5>Dersler</h5>
+</div>
+
+@if (loading) {
+  <div class="text-center p-3">
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+} @else if (dersler.length === 0) {
+  <div class="alert alert-info text-center">
+    <i class="bi bi-journal-x fs-3 d-block mb-2"></i>
+    <p class="mb-0">Bu kategoriye ait ders bulunmamaktadır.</p>
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Ders Kodu</th>
+          <th>Ders Adı</th>
+          <th>İşlem</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ders of dersler; track ders.id) {
+          <tr>
+            <td>{{ ders.kodu }}</td>
+            <td>{{ ders.adi }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" 
+                      (click)="navigateToDers(ders.id)">
+                <i class="bi bi-eye me-1"></i>
+                Görüntüle
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

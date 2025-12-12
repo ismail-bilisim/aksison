@@ -30,17 +30,18 @@
                 <tr>
                   <th>Kod</th>
                   <th>Adı</th>
+                  <th>Açıklama</th>
                 </tr>
               </thead>
               <tbody>
                 @for (kategori of kategoriler; track kategori.id) {
-                  <tr>
+                  <tr class="clickable-row" (click)="onKategoriClick(kategori.id)">
                     <td>{{ kategori.kodu }}</td>
                     <td>{{ kategori.adi }}</td>
-                  </tr>
+                    <td>-</td>
                 } @empty {
                   <tr>
-                    <td colspan="3" class="text-center text-muted py-4">
+                    <td colspan="2" class="text-center text-muted py-4">
                       <i class="bi bi-inbox fs-3 d-block mb-2"></i>
                       Kayıt bulunamadı.
                     </td>

@@ -9,13 +9,13 @@ export interface VideoDersRequest {
   turuKodu?: string;
   seviyesiKodu?: string;
   niteligiKodu?: string;
-  hedefKitleEgitimSeviye?: number; // BigDecimal -> number
+  hedefKitleEgitimSeviyeKodu?: string; 
   ilgiAlaninaGoreHedefKitle?: string;
   kullanilacakProgramlar?: string;
   kazanimlar?: string;
   sikcaSorulanSorular?: string;
   dersOzeti?: string;
-  dersCekimYontemi?: number;       // BigDecimal -> number
+  dersCekimYontemKodu?: string;       // 
   portalAdresi?: string;
   onayDurumu?: string;
   paydasId?: number;

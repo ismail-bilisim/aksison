@@ -10,10 +10,12 @@ import { DersOzet } from 'src/app/core/models/ders-ozet';
   styleUrl: './videoders-list.component.css'
 })
 export class VideodersListComponent {
+
   @Input() videodersler: DersOzet[] = [];
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
   @Output() viewDetail = new EventEmitter<number>();
+
 
   onEdit(id: number) {
     this.edit.emit(id);
@@ -26,4 +28,5 @@ export class VideodersListComponent {
   onViewDetail(id: number) {
     this.viewDetail.emit(id);
   }
+
 }

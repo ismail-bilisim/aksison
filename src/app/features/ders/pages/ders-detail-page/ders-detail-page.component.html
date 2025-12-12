@@ -43,31 +43,10 @@
         </div>
       } @else if (ders) {
 
-        <!-- Ana Başlık Kartı -->
-        <div class="card shadow-sm mb-3">
-          <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">
-              <i class="bi bi-journal-bookmark me-2"></i>{{ ders.adi }}
-            </h5>
-          </div>
-        </div>
-
-        <!-- Ana Accordion -->
-        <div ngbAccordion [closeOthers]="true">
-          <!-- Temel Bilgiler -->
-          <div ngbAccordionItem [collapsed]="false">
-            <h5 ngbAccordionHeader>
-              <button ngbAccordionButton>
-                <i class="bi bi-info-square me-2"></i>Temel Bilgiler
-              </button>
-            </h5>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ng-template>
-                  <app-ders-temel [ders]="ders"></app-ders-temel>
-                </ng-template>
-              </div>
-            </div>
+        <!-- Temel Bilgiler -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <app-ders-temel [ders]="ders"></app-ders-temel>
           </div>
         </div>
 

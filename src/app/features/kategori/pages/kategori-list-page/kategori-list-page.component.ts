@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
@@ -14,6 +15,7 @@ import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 export class KategoriListPageComponent implements OnInit {
   private kategoriService = inject(KategoriService);
   private toastService = inject(ToastService);
+  private router = inject(Router);
 
   kategoriler: KategoriOzet[] = [];
   loading = false;
@@ -38,5 +40,11 @@ export class KategoriListPageComponent implements OnInit {
 
   onRefresh(): void {
     this.loadKategoriler();
+  }
+
+  onKategoriClick(id?: number): void {
+    if (id) {
+      this.router.navigate(['/kategori/detail', id]);
+    }
   }
 }

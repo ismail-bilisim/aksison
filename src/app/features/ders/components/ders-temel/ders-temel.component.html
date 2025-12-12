@@ -1,96 +1,113 @@
 @if (ders) {
-  <div class="card mb-3">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Temel Bilgiler</h5>
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <strong>Ders Kodu:</strong>
-          <p>{{ ders.kodu }}</p>
-        </div>
-        <div class="col-md-6">
-          <strong>Ders Adı:</strong>
-          <p>{{ ders.adi }}</p>
+  <!-- Ders Başlık ve Durum -->
+  <div class="ders-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+      <div class="flex-grow-1">
+        <h4 class="mb-2">{{ ders.adi }}</h4>
+        <div class="text-muted">
+          <i class="bi bi-hash me-1"></i>
+          <span class="fw-medium">Ders Kodu:</span> {{ ders.kodu }}
         </div>
       </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <strong>İçerik Sürüm:</strong>
-          <p>{{ ders.icerikSurum || 'Belirtilmemiş' }}</p>
-        </div>
-        <div class="col-md-6">
-          <strong>Tahmini Ders Süresi:</strong>
-          <p>{{ ders.tahminiDersSuresi }} dakika</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <strong>Amacı:</strong>
-          <p>{{ ders.amaci || 'Belirtilmemiş' }}</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <strong>Ders Türü Kodu:</strong>
-          <p>{{ ders.turu?.adi || 'Belirtilmemiş' }}</p>
-        </div>
-        <div class="col-md-4">
-          <strong>Seviye Kodu:</strong>
-          <p>{{ ders.seviyesi?.adi || 'Belirtilmemiş' }}</p>
-        </div>
-        <div class="col-md-4">
-          <strong>Nitelik Kodu:</strong>
-          <p>{{ ders.niteligi?.adi || 'Belirtilmemiş' }}</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <strong>Onay Durumu:</strong>
-          <p>{{ ders.onayDurumu || 'Belirtilmemiş' }}</p>
-        </div>
+      <div>
+        <span class="badge {{ getOnayDurumuBadge() }} badge-lg">
+          <i class="{{ getOnayDurumuIcon() }} me-1"></i>
+          {{ getOnayDurumuText() }}
+        </span>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header bg-info text-white">
-      <h5 class="mb-0">Ders Özeti ve Detaylar</h5>
-    </div>
-    <div class="card-body">
-      <div class="mb-3">
-        <strong>Hedef Kitle Eğitim Seviyesi:</strong>
-        <p>{{ ders.hedefKitleEgitimSeviye || 'Belirtilmemiş' }}</p>
+  <!-- Temel Bilgiler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-info-circle me-2"></i>Temel Bilgiler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>İçerik Sürüm</dt>
+        <dd>{{ ders.icerikSurum || 'Belirtilmemiş' }}</dd>
       </div>
-
-      <div class="mb-3">
-        <strong>İlgi Alanına Göre Hedef Kitle:</strong>
-        <p>{{ ders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</p>
+      <div class="info-item">
+        <dt>Tahmini Ders Süresi</dt>
+        <dd>
+          <i class="bi bi-clock me-1"></i>
+          {{ ders.tahminiDersSuresi ? ders.tahminiDersSuresi + ' dakika' : 'Belirtilmemiş' }}
+        </dd>
       </div>
-
-      <div class="mb-3">
-        <strong>Kullanılacak Programlar:</strong>
-        <p>{{ ders.kullanilacakProgramlar || 'Belirtilmemiş' }}</p>
+      <div class="info-item">
+        <dt>Ders Türü</dt>
+        <dd>{{ ders.turu?.adi || 'Belirtilmemiş' }}</dd>
       </div>
-
-      <div class="mb-3">
-        <strong>Kazanımlar:</strong>
-        <p class="text-pre-wrap">{{ ders.kazanimlar || 'Belirtilmemiş' }}</p>
+      <div class="info-item">
+        <dt>Seviye</dt>
+        <dd>{{ ders.seviyesi?.adi || 'Belirtilmemiş' }}</dd>
       </div>
-
-      <div class="mb-3">
-        <strong>Sıkça Sorulan Sorular:</strong>
-        <p class="text-pre-wrap">{{ ders.sikcaSorulanSorular || 'Belirtilmemiş' }}</p>
+      <div class="info-item">
+        <dt>Nitelik</dt>
+        <dd>{{ ders.niteligi?.adi || 'Belirtilmemiş' }}</dd>
       </div>
-
-      <div class="mb-3">
-        <strong>Ders Özeti:</strong>
-        <p class="text-pre-wrap">{{ ders.dersOzeti || 'Belirtilmemiş' }}</p>
+      <div class="info-item">
+        <dt>Hedef Kitle Eğitim Seviyesi</dt>
+        <dd>{{ ders.hedefKitleEgitimSeviye || 'Belirtilmemiş' }}</dd>
       </div>
     </div>
   </div>
+
+  <!-- Amaç -->
+  @if (ders.amaci) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-bullseye me-2"></i>Ders Amacı
+      </h6>
+      <p class="text-content">{{ ders.amaci }}</p>
+    </div>
+  }
+
+  <!-- Hedef Kitle ve Programlar -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-people me-2"></i>Hedef Kitle ve Araçlar
+    </h6>
+    <div class="info-list">
+      <div class="info-item-block">
+        <dt>İlgi Alanına Göre Hedef Kitle</dt>
+        <dd>{{ ders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item-block">
+        <dt>Kullanılacak Programlar</dt>
+        <dd>{{ ders.kullanilacakProgramlar || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kazanımlar -->
+  @if (ders.kazanimlar) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-award me-2"></i>Kazanımlar
+      </h6>
+      <p class="text-content text-pre-wrap">{{ ders.kazanimlar }}</p>
+    </div>
+  }
+
+  <!-- Ders Özeti -->
+  @if (ders.dersOzeti) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-journal-text me-2"></i>Ders Özeti
+      </h6>
+      <p class="text-content text-pre-wrap">{{ ders.dersOzeti }}</p>
+    </div>
+  }
+
+  <!-- Sıkça Sorulan Sorular -->
+  @if (ders.sikcaSorulanSorular) {
+    <div class="info-section">
+      <h6 class="section-title">
+        <i class="bi bi-question-circle me-2"></i>Sıkça Sorulan Sorular
+      </h6>
+      <p class="text-content text-pre-wrap">{{ ders.sikcaSorulanSorular }}</p>
+    </div>
+  }
 }

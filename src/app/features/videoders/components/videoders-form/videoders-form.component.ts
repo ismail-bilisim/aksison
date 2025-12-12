@@ -10,6 +10,10 @@ import { DersTuruService } from 'src/app/core/services/api/ders-turu.service';
 import { DersSeviyesiService } from 'src/app/core/services/api/ders-seviyesi.service';
 import { DersNiteligiService } from 'src/app/core/services/api/ders-niteligi.service';
 import { DersService } from 'src/app/core/services/api/ders.service';
+import { HedefKitleEgitimSeviyesiService } from 'src/app/core/services/api/hedef-kitle-egitim-seviyesi.service';
+import { DersCekimYontemiService } from 'src/app/core/services/api/ders-cekim-yontemi.service';
+import { HedefKitleEgitimSeviyesiResponse } from 'src/app/core/models/hedef-kitle-egitim-seviyesi-response';
+import { DersCekimYontemiResponse } from 'src/app/core/models/ders-cekim-yontemi-response';
 
 @Component({
   selector: 'app-videoders-form',
@@ -35,12 +39,20 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   dersNitelikleri: DersNiteligi[] = [];
   loadingDersNiteligi = false;
 
+  hedefKitleEgitimSeviyeleri: HedefKitleEgitimSeviyesiResponse[] = [];
+  loadingHedefKitleEgitimSeviyesi = false;
+
+  dersCekimYontemleri: DersCekimYontemiResponse[] = [];
+  loadingDersCekimYontemi = false;
+
   constructor(
     private fb: FormBuilder,
     private dersService: DersService,
     private dersTuruService: DersTuruService,
     private dersSeviyesiService: DersSeviyesiService,
-    private dersNiteligiService: DersNiteligiService
+    private dersNiteligiService: DersNiteligiService,
+    private hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService,
+    private dersCekimYontemiService: DersCekimYontemiService
   ) {
     this.form = this.fb.group({
       dersId: ['', Validators.required],
@@ -52,13 +64,13 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       turuKodu: [''],
       seviyesiKodu: [''],
       niteligiKodu: [''],
-      hedefKitleEgitimSeviye: [''],
+      hedefKitleEgitimSeviyeKodu: [''],
       ilgiAlaninaGoreHedefKitle: [''],
       kullanilacakProgramlar: [''],
       kazanimlar: [''],
       sikcaSorulanSorular: [''],
       dersOzeti: [''],
-      dersCekimYontemi: [''],
+      dersCekimYontemiKodu: [''],
       portalAdresi: [''],
       odemeKaynak: [''],
       birimUcret: [''],
@@ -71,6 +83,8 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     this.loadDersTurleri();
     this.loadDersSeviyeleri();
     this.loadDersNitelikleri();
+    this.loadHedefKitleEgitimSeviyeleri();
+    this.loadDersCekimYontemleri();
 
     this.form.get('dersId')?.valueChanges.subscribe(dersId => {
       if (dersId) {
@@ -150,6 +164,34 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     });
   }
 
+  private loadHedefKitleEgitimSeviyeleri() {
+    this.loadingHedefKitleEgitimSeviyesi = true;
+    this.hedefKitleEgitimSeviyesiService.getAll().subscribe({
+      next: (data) => {
+        this.hedefKitleEgitimSeviyeleri = data;
+        this.loadingHedefKitleEgitimSeviyesi = false;
+      },
+      error: (err) => {
+        console.error('Hedef kitle eğitim seviyeleri yüklenemedi:', err);
+        this.loadingHedefKitleEgitimSeviyesi = false;
+      }
+    });
+  }
+
+  private loadDersCekimYontemleri() {
+    this.loadingDersCekimYontemi = true;
+    this.dersCekimYontemiService.getAll().subscribe({
+      next: (data) => {
+        this.dersCekimYontemleri = data;
+        this.loadingDersCekimYontemi = false;
+      },
+      error: (err) => {
+        console.error('Ders çekim yöntemleri yüklenemedi:', err);
+        this.loadingDersCekimYontemi = false;
+      }
+    });
+  }
+
   private loadDersDetay(dersId: number) {
     this.dersService.getById(dersId).subscribe({
       next: (ders) => {
@@ -166,7 +208,7 @@ export class VideodersFormComponent implements OnInit, OnChanges {
         const niteligiKodu = ders.niteligi?.kodu;
         if (niteligiKodu) patch.niteligiKodu = niteligiKodu;
         if (ders.hedefKitleEgitimSeviye !== undefined) {
-          patch.hedefKitleEgitimSeviye = ders.hedefKitleEgitimSeviye;
+          patch.hedefKitleEgitimSeviyeKodu = String(ders.hedefKitleEgitimSeviye);
         }
         if (ders.ilgiAlaninaGoreHedefKitle) {
           patch.ilgiAlaninaGoreHedefKitle = ders.ilgiAlaninaGoreHedefKitle;

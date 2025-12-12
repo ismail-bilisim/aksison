@@ -25,6 +25,10 @@ export class KategoriService {
     return this.http.get<Kategori>(`${this.apiUrl}/${id}`);
   }
 
+  getAltKategoriler(id: number): Observable<Kategori[]> {
+    return this.http.get<Kategori[]>(`${this.apiUrl}/${id}/alt-kategoriler`);
+  }
+
   create(kategori: Partial<Kategori>): Observable<Kategori> {
     return this.http.post<Kategori>(this.apiUrl, kategori);
   }

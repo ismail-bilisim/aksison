@@ -9,12 +9,14 @@ import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { EgitmenOzet } from 'src/app/core/models/egitmen-ozet';
 import { DersListComponent } from 'src/app/features/ders/components/ders-list/ders-list.component';
+import { VideodersListComponent } from 'src/app/features/videoders/components/videoders-list/videoders-list.component'; 
 import { EgitmenListComponent } from 'src/app/features/egitmen/components/egitmen-list/egitmen-list.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-kategori-filter-page',
   standalone: true,
-  imports: [CommonModule, DersListComponent, EgitmenListComponent],
+  imports: [CommonModule, DersListComponent, VideodersListComponent, EgitmenListComponent],
   templateUrl: './kategori-filter-page.component.html',
   styleUrl: './kategori-filter-page.component.css'
 })
@@ -24,6 +26,8 @@ export class KategoriFilterPageComponent implements OnInit {
   private videoDersService = inject(VideodersService);
   private egitmenService = inject(EgitmenService);
   private toastService = inject(ToastService);
+
+  private router = inject(Router);
 
   // Kategori state
   kategoriler: KategoriOzet[] = [];
@@ -202,5 +206,18 @@ export class KategoriFilterPageComponent implements OnInit {
 
   getKategoriColorClass(index: number): string {
     return this.kategoriColorClasses[index % this.kategoriColorClasses.length];
+  }
+
+  onViewDersDetail(id: number) {
+    if (id) {
+      this.router.navigate(['/ders/detail', id]);
+    }
+  }
+
+
+  onViewVideodersDetail(id: number) {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
   }
 }
