@@ -5,6 +5,7 @@ import { DersNiteligiOzet } from './ders-niteligi-ozet';
 import { DersDurumuOzet } from './ders-durumu-ozet';
 import { DersCekimYontemiOzet } from './ders-cekim-yontemi-ozet';
 import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet';
+import { OdemeKaynakOzet } from './odeme-kaynak-ozet';
 
 export interface VideoDersResponse {
   id: number;
@@ -29,7 +30,7 @@ export interface VideoDersResponse {
   dersCekimYontemi: DersCekimYontemiOzet | null;
   portalAdresi: string | null;
   onayDurumu: string | null;
-  odemeKaynak: string | null;
+  odemeKaynak: OdemeKaynakOzet | null;
   birimUcret: number | null;
   toplamUcret: number | null;
   dersDurumu: DersDurumuOzet | null;

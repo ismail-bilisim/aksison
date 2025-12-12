@@ -96,7 +96,7 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
       dersCekimYontemKodu: response.dersCekimYontemi?.kodu ?? undefined,
       portalAdresi: response.portalAdresi ?? undefined,
       onayDurumu: response.onayDurumu ?? undefined,
-      odemeKaynak: response.odemeKaynak ?? undefined,
+      odemeKaynakKodu: response.odemeKaynak?.kodu ?? undefined,
       birimUcret: response.birimUcret ?? undefined,
       toplamUcret: response.toplamUcret ?? undefined,
       durumKodu: response.dersDurumu?.kodu ?? undefined,

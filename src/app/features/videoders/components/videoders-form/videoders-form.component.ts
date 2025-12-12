@@ -14,6 +14,8 @@ import { HedefKitleEgitimSeviyesiService } from 'src/app/core/services/api/hedef
 import { DersCekimYontemiService } from 'src/app/core/services/api/ders-cekim-yontemi.service';
 import { HedefKitleEgitimSeviyesiResponse } from 'src/app/core/models/hedef-kitle-egitim-seviyesi-response';
 import { DersCekimYontemiResponse } from 'src/app/core/models/ders-cekim-yontemi-response';
+import { OdemeKaynak} from 'src/app/core/models/odeme-kaynak';
+import {OdemeKaynakService} from 'src/app/core/services/api/odeme-kaynak.service'
 
 @Component({
   selector: 'app-videoders-form',
@@ -45,6 +47,9 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   dersCekimYontemleri: DersCekimYontemiResponse[] = [];
   loadingDersCekimYontemi = false;
 
+  odemeKaynaklari: OdemeKaynak[] = [];
+  loadingOdemeKaynak = false;
+
   constructor(
     private fb: FormBuilder,
     private dersService: DersService,
@@ -52,7 +57,8 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     private dersSeviyesiService: DersSeviyesiService,
     private dersNiteligiService: DersNiteligiService,
     private hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService,
-    private dersCekimYontemiService: DersCekimYontemiService
+    private dersCekimYontemiService: DersCekimYontemiService,
+    private odemeKaynakService: OdemeKaynakService
   ) {
     this.form = this.fb.group({
       dersId: ['', Validators.required],
@@ -70,9 +76,9 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       kazanimlar: [''],
       sikcaSorulanSorular: [''],
       dersOzeti: [''],
-      dersCekimYontemiKodu: [''],
+      dersCekimYontemKodu: [''],
       portalAdresi: [''],
-      odemeKaynak: [''],
+      odemeKaynakKodu: [''],
       birimUcret: [''],
       toplamUcret: ['']
     });
@@ -85,6 +91,7 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     this.loadDersNitelikleri();
     this.loadHedefKitleEgitimSeviyeleri();
     this.loadDersCekimYontemleri();
+    this.loadOdemeKaynaklari();
 
     this.form.get('dersId')?.valueChanges.subscribe(dersId => {
       if (dersId) {
@@ -167,7 +174,7 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   private loadHedefKitleEgitimSeviyeleri() {
     this.loadingHedefKitleEgitimSeviyesi = true;
     this.hedefKitleEgitimSeviyesiService.getAll().subscribe({
-      next: (data: HedefKitleEgitimSeviyesiResponse[]) => {
+      next: (data) => {
         this.hedefKitleEgitimSeviyeleri = data;
         this.loadingHedefKitleEgitimSeviyesi = false;
       },
@@ -181,7 +188,7 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   private loadDersCekimYontemleri() {
     this.loadingDersCekimYontemi = true;
     this.dersCekimYontemiService.getAll().subscribe({
-      next: (data: DersCekimYontemiResponse[]) => {
+      next: (data) => {
         this.dersCekimYontemleri = data;
         this.loadingDersCekimYontemi = false;
       },
@@ -191,6 +198,21 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       }
     });
   }
+
+  private loadOdemeKaynaklari() {
+    this.loadingOdemeKaynak = true;
+    this.odemeKaynakService.getAll().subscribe({
+      next: (data) => {
+        this.odemeKaynaklari = data;
+        this.loadingOdemeKaynak = false;
+      },
+      error: (err: any) => {
+        console.error('Ödeme kaynakları yüklenemedi:', err);
+        this.loadingOdemeKaynak = false;
+      }
+    });
+  }
+
 
   private loadDersDetay(dersId: number) {
     this.dersService.getById(dersId).subscribe({
@@ -222,6 +244,9 @@ export class VideodersFormComponent implements OnInit, OnChanges {
         if (ders.sikcaSorulanSorular) {
           patch.sikcaSorulanSorular = ders.sikcaSorulanSorular;
         }
+
+        const kaynakKodu = ders.odemeKaynak?.kodu;
+        if (kaynakKodu) patch.odemeKaynakKodu = kaynakKodu;
 
         if (Object.keys(patch).length) {
           this.form.patchValue(patch);

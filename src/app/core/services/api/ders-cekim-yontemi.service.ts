@@ -8,7 +8,7 @@ import { DersCekimYontemiResponse } from '../../models/ders-cekim-yontemi-respon
   providedIn: 'root'
 })
 export class DersCekimYontemiService {
-  private baseUrl = ${environment.apiUrl}/ders-cekim-yontemleri;
+  private baseUrl = `${environment.apiUrl}/ders-cekim-yontemleri`;
 
   constructor(private http: HttpClient) {}
 
@@ -17,10 +17,10 @@ export class DersCekimYontemiService {
   }
 
   getById(id: number): Observable<DersCekimYontemiResponse> {
-    return this.http.get<DersCekimYontemiResponse>(${this.baseUrl}/);
+    return this.http.get<DersCekimYontemiResponse>(`${this.baseUrl}/${id}`);
   }
 
   getByKodu(kodu: string): Observable<DersCekimYontemiResponse> {
-    return this.http.get<DersCekimYontemiResponse>(${this.baseUrl}/kodu/);
+    return this.http.get<DersCekimYontemiResponse>(`${this.baseUrl}/kodu/${kodu}`);
   }
 }

@@ -19,7 +19,7 @@ export interface VideoDersRequest {
   portalAdresi?: string;
   onayDurumu?: string;
   paydasId?: number;
-  odemeKaynak?: string;
+  odemeKaynakKodu?: string;
   birimUcret?: number;             // BigDecimal -> number
   toplamUcret?: number;            // BigDecimal -> number
   durumKodu?: string;
