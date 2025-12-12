@@ -167,11 +167,11 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   private loadHedefKitleEgitimSeviyeleri() {
     this.loadingHedefKitleEgitimSeviyesi = true;
     this.hedefKitleEgitimSeviyesiService.getAll().subscribe({
-      next: (data) => {
+      next: (data: HedefKitleEgitimSeviyesiResponse[]) => {
         this.hedefKitleEgitimSeviyeleri = data;
         this.loadingHedefKitleEgitimSeviyesi = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Hedef kitle eğitim seviyeleri yüklenemedi:', err);
         this.loadingHedefKitleEgitimSeviyesi = false;
       }
@@ -181,11 +181,11 @@ export class VideodersFormComponent implements OnInit, OnChanges {
   private loadDersCekimYontemleri() {
     this.loadingDersCekimYontemi = true;
     this.dersCekimYontemiService.getAll().subscribe({
-      next: (data) => {
+      next: (data: DersCekimYontemiResponse[]) => {
         this.dersCekimYontemleri = data;
         this.loadingDersCekimYontemi = false;
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Ders çekim yöntemleri yüklenemedi:', err);
         this.loadingDersCekimYontemi = false;
       }
