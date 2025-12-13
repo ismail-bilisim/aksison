@@ -4,37 +4,22 @@
             <tr>
                 <th>Kodu</th>
                 <th>Adı</th>
-                <th class="text-center">İşlemler</th>
             </tr>
         </thead>
         <tbody>
             @for (v of videodersler; track v.kodu) {
-            <tr class="table-row-hover">
+            <tr class="table-row-hover clickable-row"
+                role="button"
+                tabindex="0"
+                (click)="onRowClick(v.id!)"
+                (keydown.enter)="onRowClick(v.id!)"
+                title="Detayları görüntülemek için tıklayın">
                 <td><strong>{{ v.kodu }}</strong></td>
                 <td>{{ v.adi }}</td>
-                <td class="text-center">
-                    <div class="btn-group" role="group">
-                        <button (click)="onViewDetail(v.id!)" 
-                                class="btn btn-sm btn-info text-white" 
-                                title="Detay">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button (click)="onEdit(v.id!)" 
-                                class="btn btn-sm btn-primary" 
-                                title="Düzenle">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button (click)="onDelete(v.id!)" 
-                                class="btn btn-sm btn-danger" 
-                                title="Sil">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </td>
             </tr>
             } @empty {
             <tr>
-                <td colspan="9" class="text-center py-4">
+                <td colspan="2" class="text-center py-4">
                     <div class="text-muted">
                         <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                         Kayıt bulunamadı.

@@ -1,25 +1,29 @@
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
         <tr>
             <th>Kodu</th>
             <th>Adı</th>
-            <th>İşlem</th>
         </tr>
     </thead>
     <tbody>
         @for (ders of dersler; track ders.id) {
-        <tr class="table-row-hover">
-            <td>{{ ders.kodu }}</td>
+        <tr class="table-row-hover clickable-row"
+            role="button"
+            tabindex="0"
+            (click)="onRowClick(ders.id!)"
+            (keydown.enter)="onRowClick(ders.id!)"
+            title="Detayları görüntülemek için tıklayın">
+            <td><strong>{{ ders.kodu }}</strong></td>
             <td>{{ ders.adi }}</td>
-            <td style="cursor: pointer;">
-                <button (click)="onViewDetail(ders.id!)" class="btn btn-sm btn-primary me-1">Detay</button>
-                <button (click)="onEdit(ders.id!)" class="btn btn-sm btn-primary me-1">Düzenle</button>
-                <button (click)="onDelete(ders.id!)" class="btn btn-sm btn-danger">Sil</button>
-            </td>
         </tr>
         } @empty {
         <tr>
-            <td colspan="6" class="text-center">Kayıt bulunamadı.</td>
+            <td colspan="2" class="text-center py-4">
+                <div class="text-muted">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    Kayıt bulunamadı.
+                </div>
+            </td>
         </tr>
         }
     </tbody>

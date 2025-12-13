@@ -1,105 +1,131 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-        <label class="form-label">Adı *</label>
-        <input formControlName="adi" class="form-control" />
-        @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
-            <div class="text-danger">Ders adı zorunludur.</div>
-        }
-    </div>
-    
-    <div class="mb-3">
-        <label class="form-label">Amacı</label>
-        <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Ders Türü *</label>
-            <select formControlName="turuKodu" class="form-select">
-                <option value="">Seçiniz</option>
-                @if (loadingDersTuru) {
-                    <option disabled>Yükleniyor...</option>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="videoders-form">
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-card-text me-2"></i>Temel Bilgiler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Adı *</label>
+                <input formControlName="adi" class="form-control" [class.is-invalid]="form.get('adi')?.invalid && form.get('adi')?.touched" />
+                @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
+                    <div class="text-danger small mt-1">Ders adı zorunludur.</div>
                 }
-                @for (tur of dersTurleri; track tur.kodu) {
-                    <option [value]="tur.kodu">{{ tur.adi }}</option>
-                }
-            </select>
-            @if (form.get('turuKodu')?.invalid && form.get('turuKodu')?.touched) {
-                <div class="text-danger">Ders türü zorunludur.</div>
-            }
-        </div>
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Seviyesi *</label>
-            <select formControlName="seviyesiKodu" class="form-select">
-                <option value="">Seçiniz</option>
-                @if (loadingDersSeviyesi) {
-                    <option disabled>Yükleniyor...</option>
-                }
-                @for (sev of dersSeviyeleri; track sev.kodu) {
-                    <option [value]="sev.kodu">{{ sev.adi }}</option>
-                }
-            </select>
-            @if (form.get('seviyesiKodu')?.invalid && form.get('seviyesiKodu')?.touched) {
-                <div class="text-danger">Seviye kodu zorunludur.</div>
-            }
-        </div>
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Nitelik Kodu *</label>
-            <select formControlName="niteligiKodu" class="form-select">
-                <option value="">Seçiniz</option>
-                @if (loadingDersNiteligi) {
-                    <option disabled>Yükleniyor...</option>
-                }
-                @for (nit of dersNitelikleri; track nit.kodu) {
-                    <option [value]="nit.kodu">{{ nit.adi }}</option>
-                }
-            </select>
-            @if (form.get('niteligiKodu')?.invalid && form.get('niteligiKodu')?.touched) {
-                <div class="text-danger">Nitelik kodu zorunludur.</div>
-            }
+            </div>
+            <div class="col-12">
+                <label class="form-label">Amacı</label>
+                <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Ders Özeti</label>
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Tahmini Ders Süresi (dk)</label>
-            <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-diagram-3 me-2"></i>Sınıflandırma ve Özellikler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Ders Türü *</label>
+                <select formControlName="turuKodu" class="form-select" [class.is-invalid]="form.get('turuKodu')?.invalid && form.get('turuKodu')?.touched">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersTuru) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (tur of dersTurleri; track tur.kodu) {
+                        <option [value]="tur.kodu">{{ tur.adi }}</option>
+                    }
+                </select>
+                @if (form.get('turuKodu')?.invalid && form.get('turuKodu')?.touched) {
+                    <div class="text-danger small mt-1">Ders türü zorunludur.</div>
+                }
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Seviyesi *</label>
+                <select formControlName="seviyesiKodu" class="form-select" [class.is-invalid]="form.get('seviyesiKodu')?.invalid && form.get('seviyesiKodu')?.touched">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersSeviyesi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (sev of dersSeviyeleri; track sev.kodu) {
+                        <option [value]="sev.kodu">{{ sev.adi }}</option>
+                    }
+                </select>
+                @if (form.get('seviyesiKodu')?.invalid && form.get('seviyesiKodu')?.touched) {
+                    <div class="text-danger small mt-1">Seviye kodu zorunludur.</div>
+                }
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nitelik Kodu *</label>
+                <select formControlName="niteligiKodu" class="form-select" [class.is-invalid]="form.get('niteligiKodu')?.invalid && form.get('niteligiKodu')?.touched">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersNiteligi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (nit of dersNitelikleri; track nit.kodu) {
+                        <option [value]="nit.kodu">{{ nit.adi }}</option>
+                    }
+                </select>
+                @if (form.get('niteligiKodu')?.invalid && form.get('niteligiKodu')?.touched) {
+                    <div class="text-danger small mt-1">Nitelik kodu zorunludur.</div>
+                }
+            </div>
         </div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
-        <input type="number" formControlName="hedefKitleEgitimSeviye" class="form-control" />
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-calendar-event me-2"></i>Tarihler ve Süreler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Tahmini Ders Süresi (dk)</label>
+                <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
-        <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-people me-2"></i>Hedef Kitle ve İçerik
+        </h6>
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
+                <select formControlName="hedefKitleEgitimSeviye" class="form-select">
+                    <option [ngValue]="null">Seçiniz</option>
+                    @if (loadingHedefKitleEgitimSeviyesi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (seviye of hedefKitleEgitimSeviyeleri; track seviye.id) {
+                        <option [ngValue]="seviye.id">{{ seviye.adi }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
+                <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Kullanılacak Programlar</label>
+                <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Kazanımlar</label>
+                <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Sıkça Sorulan Sorular</label>
+                <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Kullanılacak Programlar</label>
-        <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Kazanımlar</label>
-        <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Sıkça Sorulan Sorular</label>
-        <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Ders Özeti</label>
-        <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
-    </div>
-
-    <div class="text-end">
-        <button type="submit" class="btn btn-success" [disabled]="form.invalid">
-            Kaydet
+    <div class="form-actions text-end">
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid">
+            <i class="bi bi-save me-2"></i>Kaydet
         </button>
     </div>
 </form>

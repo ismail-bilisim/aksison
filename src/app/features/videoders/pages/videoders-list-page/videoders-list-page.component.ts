@@ -126,12 +126,6 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  onViewDetail(id: number) {
-    if (id) {
-      this.router.navigate(['/videoders/detail', id]);
-    }
-  }
-
   onDelete(id: number) {
     if (id && confirm('Bu video dersi silmek istediğinizden emin misiniz? '+id)) {
       this.loading = true;

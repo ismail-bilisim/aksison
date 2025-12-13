@@ -1,11 +1,30 @@
 /* Video Ders List Component Styling */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+}
+
 .table-hover tbody tr:hover {
     background-color: #f8f9fa;
-    cursor: pointer;
 }
 
 .table-row-hover {
     transition: background-color 0.2s ease-in-out;
+}
+
+.clickable-row:hover {
+    background-color: #e9ecef;
+    transform: scale(1.001);
+}
+
+.clickable-row:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: -2px;
+    background-color: #e7f1ff;
+}
+
+.clickable-row:active {
+    transform: scale(0.999);
 }
 
 .badge {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
 
 @Component({
@@ -14,8 +15,8 @@ export class VideodersListComponent {
   @Input() videodersler: DersOzet[] = [];
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
-  @Output() viewDetail = new EventEmitter<number>();
 
+  constructor(private router: Router) {}
 
   onEdit(id: number) {
     this.edit.emit(id);
@@ -25,8 +26,10 @@ export class VideodersListComponent {
     this.delete.emit(id);
   }
 
-  onViewDetail(id: number) {
-    this.viewDetail.emit(id);
+  onRowClick(id: number) {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
   }
 
 }

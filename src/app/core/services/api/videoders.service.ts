@@ -135,6 +135,11 @@ export class VideodersService {
     const params = { ids: kategoriIds.join(',') };
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
   }
+
+  // GET by Ders ID - for listing video lessons related to a parent course
+  getByDersId(dersId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-ders/${dersId}`);
+  }
 }
 
 

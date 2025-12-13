@@ -1,1 +1,57 @@
 /* Ders Form Component Styles */
+
+.videoders-form {
+	display: block;
+}
+
+.form-label {
+	font-weight: 500;
+	margin-bottom: 0.5rem;
+	color: #495057;
+}
+
+.form-control:focus,
+.form-select:focus {
+	border-color: #80bdff;
+	box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+textarea.form-control {
+	resize: vertical;
+	min-height: 80px;
+}
+
+.text-danger {
+	font-size: 0.875rem;
+}
+
+.info-section {
+	padding: 1.25rem;
+	background-color: #f8f9fa;
+	border-radius: 0.5rem;
+	border-left: 4px solid #0d6efd;
+}
+
+.section-title {
+	color: #495057;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	display: flex;
+	align-items: center;
+	font-size: 1rem;
+}
+
+.section-title i {
+	color: #0d6efd;
+}
+
+.form-actions {
+	border-top: 1px solid #e9ecef;
+	padding-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+	.info-section {
+		padding: 1rem;
+	}
+}

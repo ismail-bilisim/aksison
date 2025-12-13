@@ -83,12 +83,6 @@ export class DersListPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  onViewDetail(dersId: number) {
-    if (dersId) {
-      this.router.navigate(['/ders/detail', dersId]);
-    }
-  }
-
   onDelete(id: number) {
     if (confirm('Bu dersi silmek istediğinizden emin misiniz?')) {
       this.service.delete(id).subscribe(() => {

@@ -207,17 +207,4 @@ export class KategoriFilterPageComponent implements OnInit {
   getKategoriColorClass(index: number): string {
     return this.kategoriColorClasses[index % this.kategoriColorClasses.length];
   }
-
-  onViewDersDetail(id: number) {
-    if (id) {
-      this.router.navigate(['/ders/detail', id]);
-    }
-  }
-
-
-  onViewVideodersDetail(id: number) {
-    if (id) {
-      this.router.navigate(['/videoders/detail', id]);
-    }
-  }
 }

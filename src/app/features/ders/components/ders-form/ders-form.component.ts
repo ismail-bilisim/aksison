@@ -9,6 +9,8 @@ import { DersSeviyesi } from 'src/app/core/models/ders-seviyesi';
 import { DersSeviyesiService } from 'src/app/core/services/api/ders-seviyesi.service';
 import { DersNiteligi } from 'src/app/core/models/ders-niteligi';
 import { DersNiteligiService } from 'src/app/core/services/api/ders-niteligi.service';
+import { HedefKitleEgitimSeviyesiResponse } from 'src/app/core/models/hedef-kitle-egitim-seviyesi-response';
+import { HedefKitleEgitimSeviyesiService } from 'src/app/core/services/api/hedef-kitle-egitim-seviyesi.service';
 
 @Component({
   selector: 'app-ders-form',
@@ -30,12 +32,15 @@ export class DersFormComponent implements OnInit {
 
   dersNitelikleri: DersNiteligi[] = [];
   loadingDersNiteligi = false;
+  hedefKitleEgitimSeviyeleri: HedefKitleEgitimSeviyesiResponse[] = [];
+  loadingHedefKitleEgitimSeviyesi = false;
 
   constructor(
     private fb: FormBuilder,
     private dersTuruService: DersTuruService,
     private dersSeviyesiService: DersSeviyesiService,
-    private dersNiteligiService: DersNiteligiService
+    private dersNiteligiService: DersNiteligiService,
+    private hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService
   ) {
     this.form = this.fb.group({
       adi: ['', Validators.required],
@@ -46,7 +51,7 @@ export class DersFormComponent implements OnInit {
       tahminiDersSuresi: [''],
       dersOzeti: [''],
       onayDurumu: [''],
-      hedefKitleEgitimSeviye: [''],
+      hedefKitleEgitimSeviyeKodu: [''],
       ilgiAlaninaGoreHedefKitle: [''],
       kullanilacakProgramlar: [''],
       kazanimlar: [''],
@@ -58,6 +63,7 @@ export class DersFormComponent implements OnInit {
     this.loadDersTurleri();
     this.loadDersSeviyeleri();
     this.loadDersNitelikleri();
+    this.loadHedefKitleEgitimSeviyeleri();
 
     if (this.initialData) {
       this.form.patchValue({
@@ -69,7 +75,9 @@ export class DersFormComponent implements OnInit {
         tahminiDersSuresi: this.initialData.tahminiDersSuresi,
         dersOzeti: this.initialData.dersOzeti,
         onayDurumu: this.initialData.onayDurumu,
-        hedefKitleEgitimSeviye: this.initialData.hedefKitleEgitimSeviye,
+        hedefKitleEgitimSeviyeKodu: this.initialData.hedefKitleEgitimSeviye !== undefined && this.initialData.hedefKitleEgitimSeviye !== null
+          ? String(this.initialData.hedefKitleEgitimSeviye)
+          : undefined,
         ilgiAlaninaGoreHedefKitle: this.initialData.ilgiAlaninaGoreHedefKitle,
         kullanilacakProgramlar: this.initialData.kullanilacakProgramlar,
         kazanimlar: this.initialData.kazanimlar,
@@ -116,6 +124,20 @@ export class DersFormComponent implements OnInit {
       error: (err) => {
         console.error('Ders nitelikleri yüklenemedi:', err);
         this.loadingDersNiteligi = false;
+      }
+    });
+  }
+
+  private loadHedefKitleEgitimSeviyeleri() {
+    this.loadingHedefKitleEgitimSeviyesi = true;
+    this.hedefKitleEgitimSeviyesiService.getAll().subscribe({
+      next: (data) => {
+        this.hedefKitleEgitimSeviyeleri = data;
+        this.loadingHedefKitleEgitimSeviyesi = false;
+      },
+      error: (err) => {
+        console.error('Hedef kitle eğitim seviyeleri yüklenemedi:', err);
+        this.loadingHedefKitleEgitimSeviyesi = false;
       }
     });
   }
