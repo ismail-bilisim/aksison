@@ -7,9 +7,9 @@ import { DersIslemKayit } from '../../models/ders-islem-kayit';
 @Injectable({ providedIn: 'root' })
 export class DersIslemKayitService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/dersislemkayit`;
+  private apiUrl = `${environment.apiUrl}/ders-islemkayit`;
 
   getByDersId(dersId: number): Observable<DersIslemKayit[]> {
-    return this.http.get<DersIslemKayit[]>(`${this.apiUrl}/byDers/${dersId}`);
+    return this.http.get<DersIslemKayit[]>(`${this.apiUrl}/by-ders/${dersId}`);
   }
 }

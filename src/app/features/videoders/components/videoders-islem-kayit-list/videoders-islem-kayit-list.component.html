@@ -1,1 +1,42 @@
-<p>videoders-islem-kayit-list works!</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5>İşlem Kayıtları</h5>
+</div>
+
+@if (loading) {
+  <div class="text-center p-3">
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+}
+
+@if (!loading && items.length === 0) {
+  <div class="alert alert-info">
+    Henüz işlem kaydı bulunmamaktadır.
+  </div>
+}
+
+@if (!loading && items.length > 0) {
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>İşlem Türü</th>
+          <th>Açıklama</th>
+          <th>İşlem Yapan</th>
+          <th>İşlem Tarihi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items; track item.id) {
+          <tr>
+            <td>{{ item.islemTuru?.adi }}</td>
+            <td>{{ item.aciklama }}</td>
+            <td>{{ item.islemYapanKullanici?.ad }} {{ item.islemYapanKullanici?.soyad }}</td>
+            <td>{{ item.islemTarihi | date:'dd.MM.yyyy HH:mm' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
