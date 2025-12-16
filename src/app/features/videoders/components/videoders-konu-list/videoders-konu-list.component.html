@@ -1,1 +1,95 @@
-<p>videoders-konu-list works!</p>
+<div class="videoders-konu-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Video ders konuları yükleniyor...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state alert alert-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    {{ error }}
+  </div>
+
+  <!-- Sections and Topics -->
+  <div *ngIf="!isLoading && !error" class="bolum-groups">
+    <div *ngFor="let bolumGroup of bolumGroups" class="bolum-section">
+      <!-- Section Header -->
+      <div class="bolum-header">
+        <h4 class="bolum-title">
+          <i class="bi bi-camera-video"></i>
+          Bölüm {{ bolumGroup.bolumNumara }}: {{ bolumGroup.bolumAdi }}
+        </h4>
+        <div class="bolum-actions">
+          <span class="topic-count badge bg-light text-dark">
+            {{ bolumGroup.konular.length }} video
+          </span>
+          <button 
+            class="btn btn-sm btn-outline-light"
+            (click)="rebalanceBolum(bolumGroup)"
+            title="Yeniden dengele">
+            <i class="bi bi-arrow-repeat"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Topics List with Drag & Drop -->
+      <div 
+        cdkDropList
+        [cdkDropListData]="bolumGroup.konular"
+        (cdkDropListDropped)="onDrop($event, bolumGroup)"
+        class="konu-list">
+        
+        <div 
+          *ngFor="let konu of bolumGroup.konular; let i = index"
+          cdkDrag
+          class="konu-item">
+          
+          <!-- Drag Handle -->
+          <div class="drag-handle" cdkDragHandle>
+            <i class="bi bi-grip-vertical"></i>
+          </div>
+
+          <!-- Topic Content -->
+          <div class="konu-content">
+            <div class="konu-info">
+              <span class="konu-order">{{ i + 1 }}</span>
+              <div class="konu-details">
+                <span class="konu-title">Video Konu ID: {{ konu.konuId }}</span>
+                <small class="konu-meta text-muted">
+                  <i class="bi bi-play-circle"></i> Video İçerik
+                </small>
+              </div>
+            </div>
+            <div class="konu-position">
+              <small class="text-muted">
+                Pozisyon: {{ konu.konuSiraNo }}
+              </small>
+            </div>
+          </div>
+
+          <!-- Drag Preview -->
+          <div *cdkDragPreview class="konu-drag-preview">
+            <i class="bi bi-camera-video"></i>
+            <span>Video Konu ID: {{ konu.konuId }}</span>
+          </div>
+
+          <!-- Placeholder while dragging -->
+          <div *cdkDragPlaceholder class="konu-placeholder"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="bolumGroup.konular.length === 0" class="empty-state">
+          <i class="bi bi-camera-video-off"></i>
+          <p>Bu bölümde henüz video konu bulunmuyor</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Sections State -->
+    <div *ngIf="bolumGroups.length === 0" class="no-sections-state">
+      <i class="bi bi-folder-x"></i>
+      <p>Bu video ders için henüz bölüm ve konu eklenmemiş</p>
+    </div>
+  </div>
+</div>

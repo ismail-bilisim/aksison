@@ -1,1 +1,248 @@
-<p>ders-konu-list works!</p>
+<div class="ders-konu-container">
+  <!-- Add New Section Button -->
+  <div class="mb-3">
+    <button class="btn btn-primary" (click)="onAddBolum()">
+      <i class="bi bi-plus-circle me-2"></i>Yeni Bölüm Ekle
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Konular yükleniyor...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state alert alert-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    {{ error }}
+  </div>
+
+  <!-- Sections and Topics -->
+  <div *ngIf="!isLoading && !error" class="bolum-groups">
+    <div *ngFor="let bolumGroup of bolumGroups" class="bolum-section">
+      <!-- Section Header -->
+      <div class="bolum-header">
+        <h4 class="bolum-title">
+          <i class="bi bi-folder"></i>
+          Bölüm {{ bolumGroup.bolumNumara }}: {{ bolumGroup.bolumAdi }}
+        </h4>
+        <div class="bolum-actions">
+          <span class="topic-count badge bg-secondary">
+            {{ bolumGroup.konular.length }} konu
+          </span>
+          <button 
+            class="btn btn-sm btn-success me-1"
+            (click)="onAddKonu(bolumGroup)"
+            title="Bu bölüme yeni konu ekle">
+            <i class="bi bi-plus"></i> Yeni Konu Ekle
+          </button>
+          <button 
+            class="btn btn-sm btn-outline-secondary"
+            (click)="rebalanceBolum(bolumGroup)"
+            title="Yeniden dengele">
+            <i class="bi bi-arrow-repeat"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Topics List with Drag & Drop -->
+      <div 
+        cdkDropList
+        [cdkDropListData]="bolumGroup.konular"
+        (cdkDropListDropped)="onDrop($event, bolumGroup)"
+        class="konu-list">
+        
+        <div 
+          *ngFor="let konu of bolumGroup.konular; let i = index"
+          cdkDrag
+          class="konu-item-wrapper">
+
+          <div class="konu-item">
+            <!-- Drag Handle -->
+            <div class="konu-drag-handle" cdkDragHandle>
+              <i class="bi bi-grip-vertical"></i>
+            </div>
+            
+            <!-- Topic Content -->
+            <div class="konu-content">
+              <div class="konu-info">
+                <span class="konu-order">{{ i + 1 }}.</span>
+                <span class="konu-title">{{ konu.konu.baslik }}</span>
+              </div>
+              <div class="konu-meta">
+                <small class="text-muted" title="Pozisyon ID">
+                  Pos: {{ konu.konuSiraNo }}
+                </small>
+              </div>
+              <div class="konu-actions">
+                <button 
+                  class="btn btn-sm btn-outline-primary me-1"
+                  (click)="onEditKonu(konu)"
+                  title="Düzenle">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="onDeleteKonu(konu)"
+                  title="Sil">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insert Button -->
+          <div class="insert-konu-action">
+            <button 
+              class="btn btn-sm btn-link insert-btn"
+              (click)="onAddKonu(bolumGroup, konu)"
+              title="Araya yeni konu ekle">
+              <i class="bi bi-plus-circle-dotted"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="bolumGroup.konular.length === 0" class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <p>Bu bölümde henüz konu bulunmuyor</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="bolumGroups.length === 0 && !isLoading" class="no-sections-state">
+      <i class="bi bi-folder-x"></i>
+      <p>Bu ders için henüz bölüm ve konu eklenmemiş</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Konu Modal -->
+<ng-template #konuModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-{{ isEditMode ? 'pencil' : (isNewBolum ? 'folder-plus' : 'plus-circle') }} me-2"></i>
+      {{ isEditMode ? 'Konu Düzenle' : (isNewBolum ? 'Yeni Bölüm Ekle' : 'Yeni Konu Ekle') }}
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" [disabled]="submitting"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="konuForm" novalidate>
+      <div class="row g-3">
+        <!-- Bolum Adi -->
+        <div class="col-12">
+          <label class="form-label">Bölüm Adı *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            formControlName="bolumAdi"
+            [class.is-invalid]="konuForm.get('bolumAdi')?.invalid && konuForm.get('bolumAdi')?.touched">
+          <div *ngIf="konuForm.get('bolumAdi')?.invalid && konuForm.get('bolumAdi')?.touched" class="invalid-feedback">
+            Bölüm adı gerekli
+          </div>
+        </div>
+
+        <!-- Konu Details - Only show for konu operations, not for new bolum -->
+        <div class="col-12" formGroupName="konu" *ngIf="!isNewBolum">
+          <hr class="my-3">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Konu Başlığı *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                formControlName="baslik"
+                [class.is-invalid]="konuForm.get('konu.baslik')?.invalid && konuForm.get('konu.baslik')?.touched">
+              <div *ngIf="konuForm.get('konu.baslik')?.invalid && konuForm.get('konu.baslik')?.touched" class="invalid-feedback">
+                Konu başlığı gerekli
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Konu Açıklaması</label>
+              <textarea 
+                class="form-control" 
+                rows="3"
+                formControlName="aciklama"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Konu Sira No - Field removed from the form -->
+        
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()" [disabled]="submitting">
+      <i class="bi bi-x-lg me-1"></i>İptal
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSaveKonu()" [disabled]="submitting || konuForm.invalid">
+      <i class="bi bi-check-circle me-1"></i>Kaydet
+    </button>
+  </div>
+</ng-template>
+
+<!-- Add Bolum Modal -->
+<ng-template #bolumModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <i class="bi bi-folder-plus me-2"></i>
+      Yeni Bölüm Ekle
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" [disabled]="submitting"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="bolumForm" novalidate>
+      <div class="row g-3">
+        <!-- Bolum Adi -->
+        <div class="col-12">
+          <label class="form-label">Bölüm Adı *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            formControlName="bolumAdi"
+            [class.is-invalid]="bolumForm.get('bolumAdi')?.invalid && bolumForm.get('bolumAdi')?.touched">
+          <div *ngIf="bolumForm.get('bolumAdi')?.invalid && bolumForm.get('bolumAdi')?.touched" class="invalid-feedback">
+            Bölüm adı gerekli
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()" [disabled]="submitting">
+      <i class="bi bi-x-lg me-1"></i>İptal
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSaveBolum()" [disabled]="submitting || bolumForm.invalid">
+      <i class="bi bi-check-circle me-1"></i>Kaydet
+    </button>
+  </div>
+</ng-template>
+
+<!-- Delete Confirmation Modal -->
+<ng-template #deleteModal let-modal>
+  <div class="modal-header bg-danger text-white">
+    <h5 class="modal-title">
+      <i class="bi bi-trash me-2"></i>Konu Sil
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()" [disabled]="submitting"></button>
+  </div>
+  <div class="modal-body">
+    <p class="mb-3">
+      <strong>{{ selectedKonu?.konu?.baslik }}</strong> başlıklı konuyu silmek istediğinizden emin misiniz?
+    </p>
+    <p class="text-muted small">
+      <i class="bi bi-exclamation-triangle me-1"></i>
+      Bu işlem geri alınamaz.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()" [disabled]="submitting">
+      <i class="bi bi-x-lg me-1"></i>İptal
+    </button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="submitting">
+      <i class="bi bi-trash me-1"></i>Sil
+    </button>
+  </div>
+</ng-template>
