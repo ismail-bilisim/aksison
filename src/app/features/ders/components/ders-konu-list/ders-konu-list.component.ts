@@ -54,13 +54,25 @@ export class DersKonuListComponent implements OnInit {
   private loadBolumlar(): void {
     this.dersBolumService.getAllByDersIdOrdered(this.dersId).subscribe({
       next: (data) => {
+        console.log("Ders Bölümleri Yüklendi:", data);
         this.bolumlar = data;
-      },
+        this.bolumlar.forEach(bolum => {
+
+          this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id).subscribe({
+            next: (konular) => {
+              bolum.bolum.bolumKonular = konular;
+              console.log("Bölüm Konuları Yüklendi:", konular);
+            }
+          });
+
+        });      },
       error: (error) => {
         console.error('Error loading bolumlar:', error);
         this.toastService.error('Bölümler yüklenirken hata oluştu');
       }
     });
+
+
   }
 
   // BOLUM OPERATIONS

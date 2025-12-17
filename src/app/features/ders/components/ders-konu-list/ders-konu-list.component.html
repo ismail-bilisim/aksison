@@ -67,7 +67,7 @@
           <!-- Iterate Through Konular -->
           <div *ngFor="let konu of bolum.bolum.bolumKonular; let j = index" class="konu-item-wrapper">
             <div class="konu-item">
-              <div class="konu-number">{{j + 1}}.</div>
+              <div class="konu-number">{{i+"."+ (j + 1)}}.</div>
               <div class="konu-content">
                 <div class="konu-title">{{konu.konu.baslik}}</div>
                 <div *ngIf="konu.konu.aciklama" class="konu-description">
@@ -91,7 +91,9 @@
                 <i class="bi bi-plus-circle"></i>
               </button>
             </div>
-          </div>
+
+          </div> <!-- End ngFor -->
+
         </div>
       </div>
 
@@ -103,7 +105,9 @@
           <i class="bi bi-plus-circle"></i>
         </button>
       </div>
+
     </div>
+
   </div>
 </div>
 
