@@ -1,5 +1,5 @@
 export interface DersKategori {
-    id?: number;
+    id: number;
     kategoriId?: number;
     kodu?: string;
     adi?: string;

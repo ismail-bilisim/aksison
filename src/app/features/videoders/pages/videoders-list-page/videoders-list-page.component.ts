@@ -36,7 +36,7 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
         // this.setPageTitle(this.durum);
         this.loadByDurum(this.durum);
       } else {
-        this.pageTitle = 'Tüm Video Derslerr';
+        this.pageTitle = 'Tüm Video Dersler';
         this.loadAll();
       }
     });

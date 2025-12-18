@@ -1,131 +1,193 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { VideoDersKonuService } from '../../../../core/services/videoders-konu.service';
-import { VideoDersKonu, VideoBolumGroup } from '../../../../core/models/videoders-konu';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum.service';
+import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
+import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
+import { ToastService } from '../../../../core/services/api/toast.service';
 
 @Component({
   selector: 'app-videoders-konu-list',
   standalone: true,
-  imports: [CommonModule, DragDropModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModalModule],
   templateUrl: './videoders-konu-list.component.html',
   styleUrl: './videoders-konu-list.component.css'
 })
 export class VideodersKonuListComponent implements OnInit {
   @Input() dersId!: number;
 
-  private videoDersKonuService = inject(VideoDersKonuService);
+  @ViewChild('bolumModal') bolumModal!: TemplateRef<any>;
+  @ViewChild('konuModal') konuModal!: TemplateRef<any>;
 
-  bolumGroups: VideoBolumGroup[] = [];
-  isLoading = false;
-  error: string | null = null;
+  private videodersBolumService = inject(VideodersBolumService);
+  private bolumKonuService = inject(BolumKonuService);
+  private modalService = inject(NgbModal);
+  private fb = inject(FormBuilder);
+  private toastService = inject(ToastService);
+
+  bolumlar: DersBolumResponse[] = [];
+  bolumForm!: FormGroup;
+  konuForm!: FormGroup;
+  
+  // For tracking where to insert new items
+  currentBolumInsertPosition: { after: number | null; before: number | null } = { after: null, before: null };
+  currentKonuInsertPosition: { bolumId: number; after: number | null; before: number | null } | null = null;
 
   ngOnInit(): void {
-    if (this.dersId) {
-      this.loadKonular();
+    this.initializeForms();
+    this.loadBolumlar();
+  }
+
+  private initializeForms(): void {
+    this.bolumForm = this.fb.group({
+      baslik: ['', [Validators.required, Validators.maxLength(255)]],
+      aciklama: ['', Validators.maxLength(1000)]
+    });
+
+    this.konuForm = this.fb.group({
+      baslik: ['', [Validators.required, Validators.maxLength(255)]],
+      aciklama: ['', Validators.maxLength(1000)]
+    });
+  }
+
+  private loadBolumlar(): void {
+    this.videodersBolumService.getAllByDersIdOrdered(this.dersId).subscribe({
+      next: (data) => {
+        console.log("Ders Bölümleri Yüklendi:", data);
+        this.bolumlar = data;
+        this.bolumlar.forEach(bolum => {
+
+          this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id).subscribe({
+            next: (konular) => {
+              bolum.bolum.bolumKonular = konular;
+              console.log("Bölüm Konuları Yüklendi:", konular);
+            }
+          });
+
+        });      },
+      error: (error) => {
+        console.error('Error loading bolumlar:', error);
+        this.toastService.error('Bölümler yüklenirken hata oluştu');
+      }
+    });
+
+
+  }
+
+  // BOLUM OPERATIONS
+
+  openBolumModal(after: number | null = null, before: number | null = null): void {
+    this.currentBolumInsertPosition = { after, before };
+    this.bolumForm.reset();
+    this.modalService.open(this.bolumModal, { centered: true });
+  }
+
+  saveBolum(): void {
+    if (this.bolumForm.invalid) {
+      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
+      return;
     }
-  }
 
-  loadKonular(): void {
-    this.isLoading = true;
-    this.error = null;
+    const request: DersBolumRequest = {
+      dersId: this.dersId,
+      bolum: this.bolumForm.value,
+      oncekiSiraNo: this.currentBolumInsertPosition.after,
+      sonrakiSiraNo: this.currentBolumInsertPosition.before
+    };
 
-    this.videoDersKonuService.getAllByDersIdOrdered(this.dersId).subscribe({
-      next: (konular) => {
-        this.bolumGroups = this.groupByBolum(konular);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.error = 'Konular yüklenirken hata oluştu';
-        this.isLoading = false;
-        console.error('Error loading konular:', err);
-      }
-    });
-  }
-
-  /**
-   * Group topics by bolumNumara and sort
-   */
-  private groupByBolum(konular: VideoDersKonu[]): VideoBolumGroup[] {
-    const groupMap = new Map<number, VideoBolumGroup>();
-
-    konular.forEach(konu => {
-      if (!groupMap.has(konu.bolumNumara)) {
-        groupMap.set(konu.bolumNumara, {
-          bolumNumara: konu.bolumNumara,
-          bolumAdi: konu.bolumAdi,
-          konular: []
-        });
-      }
-      groupMap.get(konu.bolumNumara)!.konular.push(konu);
-    });
-
-    // Convert to array and sort by bolumNumara
-    return Array.from(groupMap.values()).sort((a, b) => a.bolumNumara - b.bolumNumara);
-  }
-
-  /**
-   * Handle drag and drop reordering
-   */
-  onDrop(event: CdkDragDrop<VideoDersKonu[]>, bolumGroup: VideoBolumGroup): void {
-    if (event.previousIndex === event.currentIndex) {
-      return; // No change
-    }
-
-    const movedKonu = bolumGroup.konular[event.previousIndex];
-    const previousKonu = event.currentIndex > 0 ? bolumGroup.konular[event.currentIndex - 1] : null;
-    const nextKonu = event.currentIndex < bolumGroup.konular.length - 1 
-      ? bolumGroup.konular[event.currentIndex + 1] 
-      : null;
-
-    // Calculate new position
-    const afterPosition = event.currentIndex === 0 ? undefined : previousKonu?.konuSiraNo;
-    const beforePosition = nextKonu?.konuSiraNo;
-
-    this.videoDersKonuService.calculateInsertPosition(
-      this.dersId,
-      bolumGroup.bolumNumara,
-      afterPosition,
-      beforePosition
-    ).subscribe({
-      next: (newPosition) => {
-        // Move item in UI optimistically
-        moveItemInArray(bolumGroup.konular, event.previousIndex, event.currentIndex);
-        
-        // Update position on server
-        this.videoDersKonuService.moveKonu(movedKonu.id, newPosition).subscribe({
-          next: () => {
-            // Update local position
-            movedKonu.konuSiraNo = newPosition;
-          },
-          error: (err) => {
-            console.error('Error moving konu:', err);
-            // Revert UI change on error
-            moveItemInArray(bolumGroup.konular, event.currentIndex, event.previousIndex);
-            this.error = 'Konu taşınırken hata oluştu';
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error calculating position:', err);
-        this.error = 'Pozisyon hesaplanırken hata oluştu';
-      }
-    });
-  }
-
-  /**
-   * Trigger manual rebalancing for a section
-   */
-  rebalanceBolum(bolumGroup: VideoBolumGroup): void {
-    this.videoDersKonuService.rebalanceKonular(this.dersId, bolumGroup.bolumNumara).subscribe({
+    this.videodersBolumService.create(request).subscribe({
       next: () => {
-        // Reload to get updated positions
-        this.loadKonular();
+        this.toastService.success('Bölüm başarıyla eklendi.');
+        this.loadBolumlar();
+        this.modalService.dismissAll();
       },
-      error: (err) => {
-        console.error('Error rebalancing:', err);
-        this.error = 'Yeniden dengeleme sırasında hata oluştu';
+      error: (error) => {
+        this.toastService.error('Bölüm eklenirken hata oluştu.');
+        console.error('Error creating bolum:', error);
       }
     });
+  }
+
+  deleteBolum(dersBolumId: number): void {
+    if (!confirm('Bu bölümü silmek istediğinizden emin misiniz? Bölüme ait tüm konular da silinecektir.')) {
+      return;
+    }
+
+    this.videodersBolumService.delete(dersBolumId).subscribe({
+      next: () => {
+        this.toastService.success('Bölüm başarıyla silindi.');
+        this.loadBolumlar();
+      },
+      error: (error) => {
+        this.toastService.error('Bölüm silinirken hata oluştu.');
+        console.error('Error deleting bolum:', error);
+      }
+    });
+  }
+
+  // KONU OPERATIONS
+
+  openKonuModal(bolumId: number, after: number | null = null, before: number | null = null): void {
+    this.currentKonuInsertPosition = { bolumId, after, before };
+    this.konuForm.reset();
+    this.modalService.open(this.konuModal, { centered: true });
+  }
+
+  saveKonu(): void {
+    if (this.konuForm.invalid || !this.currentKonuInsertPosition) {
+      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
+      return;
+    }
+
+    const request: BolumKonuRequest = {
+      bolumId: this.currentKonuInsertPosition.bolumId,
+      konu: this.konuForm.value,
+      oncekiSiraNo: this.currentKonuInsertPosition.after,
+      sonrakiSiraNo: this.currentKonuInsertPosition.before
+    };
+
+    this.bolumKonuService.create(request).subscribe({
+      next: () => {
+        this.toastService.success('Konu başarıyla eklendi.');
+        this.loadBolumlar();
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        this.toastService.error('Konu eklenirken hata oluştu.');
+        console.error('Error creating konu:', error);
+      }
+    });
+  }
+
+  deleteKonu(bolumKonuId: number): void {
+    if (!confirm('Bu konuyu silmek istediğinizden emin misiniz?')) {
+      return;
+    }
+
+    this.bolumKonuService.delete(bolumKonuId).subscribe({
+      next: () => {
+        this.toastService.success('Konu başarıyla silindi.');
+        this.loadBolumlar();
+      },
+      error: (error) => {
+        this.toastService.error('Konu silinirken hata oluştu.');
+        console.error('Error deleting konu:', error);
+      }
+    });
+  }
+
+  // HELPER METHODS
+
+  getBolumSiraNo(index: number): number | null {
+    return this.bolumlar[index]?.bolumSiraNo || null;
+  }
+
+  getKonuSiraNo(bolum: DersBolumResponse, index: number): number | null {
+    return bolum.bolum.bolumKonular?.[index]?.konuSiraNo || null;
+  }
+
+  hasKonular(bolum: DersBolumResponse): boolean {
+    return (bolum.bolum.bolumKonular?.length || 0) > 0;
   }
 }

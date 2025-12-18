@@ -1,0 +1,12 @@
+.card {
+  border-radius: 8px;
+}
+
+.form-control-plaintext {
+  font-weight: 500;
+  color: #212529;
+}
+
+.card-header {
+  border-radius: 8px 8px 0 0;
+}

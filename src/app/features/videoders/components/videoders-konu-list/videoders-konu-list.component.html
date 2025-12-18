@@ -1,95 +1,168 @@
-<div class="videoders-konu-container">
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <div class="spinner"></div>
-    <p>Video ders konuları yükleniyor...</p>
+<div>videoders-konu list works</div>
+
+<div class="ders-bolum-list">
+  <!-- Empty State: No Bolumlar -->
+  <div *ngIf="bolumlar.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="bi bi-list"></i>
+    </div>
+    <p class="empty-text">Bu derse henüz bölüm eklenmemiş</p>
+    <button class="btn btn-primary" (click)="openBolumModal()">
+      <i class="bi bi-plus-circle me-2"></i>Bölüm Ekle
+    </button>
   </div>
 
-  <!-- Error State -->
-  <div *ngIf="error" class="error-state alert alert-danger">
-    <i class="bi bi-exclamation-triangle"></i>
-    {{ error }}
-  </div>
+  <!-- Bolumlar List -->
+  <div *ngIf="bolumlar.length > 0">
+    <!-- Add Bolum at Start -->
+    <div class="add-item-container">
+      <button class="btn btn-sm btn-outline-primary add-item-btn" 
+              (click)="openBolumModal(null, getBolumSiraNo(0))"
+              title="Başa bölüm ekle">
+        <i class="bi bi-plus-circle"></i>
+      </button>
+    </div>
 
-  <!-- Sections and Topics -->
-  <div *ngIf="!isLoading && !error" class="bolum-groups">
-    <div *ngFor="let bolumGroup of bolumGroups" class="bolum-section">
-      <!-- Section Header -->
+    <!-- Iterate Through Bolumlar -->
+    <div *ngFor="let bolum of bolumlar; let i = index" class="bolum-container">
+      <!-- Bolum Header -->
       <div class="bolum-header">
-        <h4 class="bolum-title">
-          <i class="bi bi-camera-video"></i>
-          Bölüm {{ bolumGroup.bolumNumara }}: {{ bolumGroup.bolumAdi }}
-        </h4>
+        <div class="bolum-info">
+          <div class="bolum-number">Bölüm {{i + 1}}</div>
+          <div class="bolum-title">
+            <strong>{{bolum.bolum.baslik}}</strong>
+            <span *ngIf="bolum.bolum.aciklama" class="bolum-description">
+              {{bolum.bolum.aciklama}}
+            </span>
+          </div>
+        </div>
         <div class="bolum-actions">
-          <span class="topic-count badge bg-light text-dark">
-            {{ bolumGroup.konular.length }} video
-          </span>
-          <button 
-            class="btn btn-sm btn-outline-light"
-            (click)="rebalanceBolum(bolumGroup)"
-            title="Yeniden dengele">
-            <i class="bi bi-arrow-repeat"></i>
+          <button class="btn btn-sm btn-outline-danger" 
+                  (click)="deleteBolum(bolum.id)"
+                  title="Bölümü sil">
+            <i class="bi bi-trash"></i>
+          </button>
+            <button class="btn btn-sm btn-outline-primary add-item-btn" 
+                    (click)="openBolumModal(getBolumSiraNo(i), getBolumSiraNo(i + 1))"
+                    title="Araya bölüm ekle">
+            <i class="bi bi-plus-circle"></i>
+        </button>
+        </div>
+      </div>
+
+      <!-- Konular Section -->
+      <div class="konular-section">
+        <!-- Empty State: No Konular in this Bolum -->
+        <div *ngIf="!hasKonular(bolum)" class="empty-konu-state">
+          <p class="text-muted mb-2">Bu bölümde henüz konu yok</p>
+          <button class="btn btn-sm btn-success" (click)="openKonuModal(bolum.bolum.id)">
+            <i class="bi bi-plus-circle me-1"></i>Konu Ekle
           </button>
         </div>
-      </div>
 
-      <!-- Topics List with Drag & Drop -->
-      <div 
-        cdkDropList
-        [cdkDropListData]="bolumGroup.konular"
-        (cdkDropListDropped)="onDrop($event, bolumGroup)"
-        class="konu-list">
-        
-        <div 
-          *ngFor="let konu of bolumGroup.konular; let i = index"
-          cdkDrag
-          class="konu-item">
-          
-          <!-- Drag Handle -->
-          <div class="drag-handle" cdkDragHandle>
-            <i class="bi bi-grip-vertical"></i>
+        <!-- Konular List -->
+        <div *ngIf="hasKonular(bolum)">
+          <!-- Add Konu at Start -->
+          <div class="add-konu-container">
+            <button class="btn btn-sm btn-outline-primary add-konu-btn" 
+                    (click)="openKonuModal(bolum.bolum.id, null, getKonuSiraNo(bolum, 0))"
+                    title="Başa konu ekle">
+              <i class="bi bi-plus-circle"></i>
+            </button>
           </div>
 
-          <!-- Topic Content -->
-          <div class="konu-content">
-            <div class="konu-info">
-              <span class="konu-order">{{ i + 1 }}</span>
-              <div class="konu-details">
-                <span class="konu-title">Video Konu ID: {{ konu.konuId }}</span>
-                <small class="konu-meta text-muted">
-                  <i class="bi bi-play-circle"></i> Video İçerik
-                </small>
+          <!-- Iterate Through Konular -->
+          <div *ngFor="let konu of bolum.bolum.bolumKonular; let j = index" class="konu-item-wrapper">
+            <div class="konu-item">
+              <div class="konu-number">{{i+1+"."+ (j + 1)}}.</div>
+              <div class="konu-content">
+                <div class="konu-title">{{konu.konu.baslik}}</div>
+                <div *ngIf="konu.konu.aciklama" class="konu-description">
+                  {{konu.konu.aciklama}}
+                </div>
+              </div>
+              <div class="konu-actions">
+                <button class="btn btn-sm btn-outline-danger" 
+                        (click)="deleteKonu(konu.id)"
+                        title="Konuyu sil">
+                  <i class="bi bi-trash"></i>
+                </button>
+              <button class="btn btn-sm btn-outline-primary add-konu-btn" 
+                      (click)="openKonuModal(bolum.bolum.id, getKonuSiraNo(bolum, j), getKonuSiraNo(bolum, j + 1))"
+                      title="Araya konu ekle">
+                <i class="bi bi-plus-circle"></i>
+              </button>
               </div>
             </div>
-            <div class="konu-position">
-              <small class="text-muted">
-                Pozisyon: {{ konu.konuSiraNo }}
-              </small>
-            </div>
-          </div>
 
-          <!-- Drag Preview -->
-          <div *cdkDragPreview class="konu-drag-preview">
-            <i class="bi bi-camera-video"></i>
-            <span>Video Konu ID: {{ konu.konuId }}</span>
-          </div>
 
-          <!-- Placeholder while dragging -->
-          <div *cdkDragPlaceholder class="konu-placeholder"></div>
+          </div> <!-- End ngFor -->
+
         </div>
+      </div> <!-- End Konular Section -->
 
-        <!-- Empty State -->
-        <div *ngIf="bolumGroup.konular.length === 0" class="empty-state">
-          <i class="bi bi-camera-video-off"></i>
-          <p>Bu bölümde henüz video konu bulunmuyor</p>
-        </div>
-      </div>
+
     </div>
 
-    <!-- No Sections State -->
-    <div *ngIf="bolumGroups.length === 0" class="no-sections-state">
-      <i class="bi bi-folder-x"></i>
-      <p>Bu video ders için henüz bölüm ve konu eklenmemiş</p>
-    </div>
   </div>
 </div>
+
+<!-- Bolum Modal -->
+<ng-template #bolumModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Bölüm Ekle</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="bolumForm">
+      <div class="mb-3">
+        <label for="bolumBaslik" class="form-label">Başlık <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="bolumBaslik" formControlName="baslik"
+               [class.is-invalid]="bolumForm.get('baslik')?.invalid && bolumForm.get('baslik')?.touched">
+        <div class="invalid-feedback" *ngIf="bolumForm.get('baslik')?.errors?.['required']">
+          Başlık zorunludur
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="bolumAciklama" class="form-label">Açıklama</label>
+        <textarea class="form-control" id="bolumAciklama" formControlName="aciklama" rows="3"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-primary" (click)="saveBolum()" [disabled]="bolumForm.invalid">
+      Kaydet
+    </button>
+  </div>
+</ng-template>
+
+<!-- Konu Modal -->
+<ng-template #konuModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Konu Ekle</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="konuForm">
+      <div class="mb-3">
+        <label for="konuBaslik" class="form-label">Başlık <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="konuBaslik" formControlName="baslik"
+               [class.is-invalid]="konuForm.get('baslik')?.invalid && konuForm.get('baslik')?.touched">
+        <div class="invalid-feedback" *ngIf="konuForm.get('baslik')?.errors?.['required']">
+          Başlık zorunludur
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="konuAciklama" class="form-label">Açıklama</label>
+        <textarea class="form-control" id="konuAciklama" formControlName="aciklama" rows="3"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-success" (click)="saveKonu()" [disabled]="konuForm.invalid">
+      Kaydet
+    </button>
+  </div>
+</ng-template>

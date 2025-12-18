@@ -84,7 +84,9 @@
               <li [ngbNavItem]="'konular'">
                 <button ngbNavLink>Konular</button>
                 <ng-template ngbNavContent>
-                  <!-- Konular içeriği -->
+                      
+                  <app-videoders-konu-list [dersId]="videoders.id!"></app-videoders-konu-list>
+
                 </ng-template>
               </li>
               <li [ngbNavItem]="'kategoriler'">

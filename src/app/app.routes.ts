@@ -30,6 +30,10 @@ export const routes: Routes = [
                 path: 'kategori',
                 loadChildren: () => import('./features/kategori/kategori-route').then(m => m.KATEGORI_ROUTES)
             },
+            {
+                path: 'paydas',
+                loadChildren: () => import('./features/paydas/paydas-route').then(m => m.PAYDAS_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },

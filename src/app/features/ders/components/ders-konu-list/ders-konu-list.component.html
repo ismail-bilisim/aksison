@@ -2,7 +2,7 @@
   <!-- Empty State: No Bolumlar -->
   <div *ngIf="bolumlar.length === 0" class="empty-state">
     <div class="empty-icon">
-      <i class="bi bi-folder-x"></i>
+      <i class="bi bi-list"></i>
     </div>
     <p class="empty-text">Bu derse henüz bölüm eklenmemiş</p>
     <button class="btn btn-primary" (click)="openBolumModal()">
@@ -40,6 +40,11 @@
                   title="Bölümü sil">
             <i class="bi bi-trash"></i>
           </button>
+            <button class="btn btn-sm btn-outline-primary add-item-btn" 
+                    (click)="openBolumModal(getBolumSiraNo(i), getBolumSiraNo(i + 1))"
+                    title="Araya bölüm ekle">
+            <i class="bi bi-plus-circle"></i>
+        </button>
         </div>
       </div>
 
@@ -57,7 +62,7 @@
         <div *ngIf="hasKonular(bolum)">
           <!-- Add Konu at Start -->
           <div class="add-konu-container">
-            <button class="btn btn-sm btn-outline-success add-konu-btn" 
+            <button class="btn btn-sm btn-outline-primary add-konu-btn" 
                     (click)="openKonuModal(bolum.bolum.id, null, getKonuSiraNo(bolum, 0))"
                     title="Başa konu ekle">
               <i class="bi bi-plus-circle"></i>
@@ -67,7 +72,7 @@
           <!-- Iterate Through Konular -->
           <div *ngFor="let konu of bolum.bolum.bolumKonular; let j = index" class="konu-item-wrapper">
             <div class="konu-item">
-              <div class="konu-number">{{i+"."+ (j + 1)}}.</div>
+              <div class="konu-number">{{i+1+"."+ (j + 1)}}.</div>
               <div class="konu-content">
                 <div class="konu-title">{{konu.konu.baslik}}</div>
                 <div *ngIf="konu.konu.aciklama" class="konu-description">
@@ -80,31 +85,20 @@
                         title="Konuyu sil">
                   <i class="bi bi-trash"></i>
                 </button>
-              </div>
-            </div>
-
-            <!-- Add Konu Between Items -->
-            <div class="add-konu-container">
-              <button class="btn btn-sm btn-outline-success add-konu-btn" 
+              <button class="btn btn-sm btn-outline-primary add-konu-btn" 
                       (click)="openKonuModal(bolum.bolum.id, getKonuSiraNo(bolum, j), getKonuSiraNo(bolum, j + 1))"
                       title="Araya konu ekle">
                 <i class="bi bi-plus-circle"></i>
               </button>
+              </div>
             </div>
+
 
           </div> <!-- End ngFor -->
 
         </div>
-      </div>
+      </div> <!-- End Konular Section -->
 
-      <!-- Add Bolum Between Items -->
-      <div class="add-item-container">
-        <button class="btn btn-sm btn-outline-primary add-item-btn" 
-                (click)="openBolumModal(getBolumSiraNo(i), getBolumSiraNo(i + 1))"
-                title="Araya bölüm ekle">
-          <i class="bi bi-plus-circle"></i>
-        </button>
-      </div>
 
     </div>
 

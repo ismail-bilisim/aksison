@@ -7,6 +7,7 @@ import { VideodersService } from '../../../../core/services/api/videoders.servic
 import { ToastService } from '../../../../core/services/api/toast.service';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { VideodersTemelComponent } from '../../components/videoders-temel/videoders-temel.component';
+import { VideodersKonuListComponent } from '../../components/videoders-konu-list/videoders-konu-list.component';
 import { VideodersSorumlularComponent } from '../../components/videoders-sorumlular/videoders-sorumlular.component';
 import { VideodersUcretComponent } from '../../components/videoders-ucret/videoders-ucret.component';
 import { VideodersOnkosulListComponent } from '../../components/videoders-onkosul-list/videoders-onkosul-list.component';
@@ -25,6 +26,7 @@ import { VideodersOzetComponent } from '../../components/videoders-ozet/videoder
     NgbNavModule,
     NgbAccordionModule,
     VideodersTemelComponent,
+    VideodersKonuListComponent,
     VideodersSorumlularComponent,
     VideodersUcretComponent,
     VideodersOzetComponent,

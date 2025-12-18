@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModal, NgbModalModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 import { DersKategori } from '../../../../core/models/ders-kategori';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
 import { KategoriService } from '../../../../core/services/api/kategori.service';
@@ -32,6 +33,7 @@ export class VideodersKategoriListComponent implements OnInit {
   private kategoriService = inject(KategoriService);
   private modalService = inject(NgbModal);
   private toastService = inject(ToastService);
+  private router = inject(Router);
 
   ngOnInit() {
     if (this.dersId) {
@@ -151,5 +153,9 @@ export class VideodersKategoriListComponent implements OnInit {
       this.toastService.error(ErrorHandler.extractErrorMessage(error));
       this.adding = false;
     });
+  }
+
+  navigateToKategori(kategoriId: number) {
+    this.router.navigate(['/kategori', 'detail', kategoriId]);
   }
 }
