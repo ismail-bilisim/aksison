@@ -1,0 +1,126 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="paydas-form">
+  <div class="row g-3">
+    
+    <!-- Paydaş Adı -->
+    <div class="col-md-6">
+      <label for="adi" class="form-label">Paydaş Adı <span class="text-danger">*</span></label>
+      <input 
+        id="adi" 
+        type="text" 
+        class="form-control" 
+        formControlName="adi"
+        [class.is-invalid]="isInvalid('adi')"
+        placeholder="Paydaş adını giriniz" />
+      @if (isInvalid('adi')) {
+        <div class="invalid-feedback">
+          @if (hasError('adi', 'required')) {
+            <span>Paydaş adı zorunludur.</span>
+          }
+          @if (hasError('adi', 'maxlength')) {
+            <span>En fazla 100 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Temsilci -->
+    <div class="col-md-6">
+      <label for="temsilci" class="form-label">Temsilci <span class="text-danger">*</span></label>
+      <input 
+        id="temsilci" 
+        type="text" 
+        class="form-control" 
+        formControlName="temsilci"
+        [class.is-invalid]="isInvalid('temsilci')"
+        placeholder="Temsilci adını giriniz" />
+      @if (isInvalid('temsilci')) {
+        <div class="invalid-feedback">
+          @if (hasError('temsilci', 'required')) {
+            <span>Temsilci zorunludur.</span>
+          }
+          @if (hasError('temsilci', 'maxlength')) {
+            <span>En fazla 255 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Telefon -->
+    <div class="col-md-6">
+      <label for="telefon" class="form-label">Telefon</label>
+      <input 
+        id="telefon" 
+        type="tel" 
+        class="form-control" 
+        formControlName="telefon"
+        [class.is-invalid]="isInvalid('telefon')"
+        placeholder="Telefon numarasını giriniz" />
+      @if (isInvalid('telefon')) {
+        <div class="invalid-feedback">
+          @if (hasError('telefon', 'maxlength')) {
+            <span>En fazla 20 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- E-Posta -->
+    <div class="col-md-6">
+      <label for="eposta" class="form-label">E-Posta</label>
+      <input 
+        id="eposta" 
+        type="email" 
+        class="form-control" 
+        formControlName="eposta"
+        [class.is-invalid]="isInvalid('eposta')"
+        placeholder="E-posta adresini giriniz" />
+      @if (isInvalid('eposta')) {
+        <div class="invalid-feedback">
+          @if (hasError('eposta', 'email')) {
+            <span>Geçerli bir e-posta adresi giriniz.</span>
+          }
+          @if (hasError('eposta', 'maxlength')) {
+            <span>En fazla 150 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Adres -->
+    <div class="col-12">
+      <label for="adres" class="form-label">Adres</label>
+      <textarea 
+        id="adres" 
+        class="form-control" 
+        formControlName="adres"
+        [class.is-invalid]="isInvalid('adres')"
+        rows="3"
+        placeholder="Adres bilgisini giriniz"></textarea>
+      @if (isInvalid('adres')) {
+        <div class="invalid-feedback">
+          @if (hasError('adres', 'maxlength')) {
+            <span>En fazla 500 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Form Buttons -->
+    <div class="col-12">
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          <i class="bi bi-x-circle me-1"></i>İptal
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSaving">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          } @else {
+            <i class="bi bi-check-circle me-1"></i>
+          }
+          {{ isEditMode ? 'Güncelle' : 'Kaydet' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</form>

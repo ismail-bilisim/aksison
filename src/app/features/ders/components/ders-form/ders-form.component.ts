@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DersRequest } from 'src/app/core/models/ders-request';
 import { DersResponse } from 'src/app/core/models/ders-response';
+import { debounceTime, startWith } from 'rxjs';
 import { DersTuru } from 'src/app/core/models/ders-turu';
 import { DersTuruService } from 'src/app/core/services/api/ders-turu.service';
 import { CommonModule } from '@angular/common';
@@ -21,7 +22,10 @@ import { HedefKitleEgitimSeviyesiService } from 'src/app/core/services/api/hedef
 })
 export class DersFormComponent implements OnInit {
   @Input() initialData?: DersResponse;
+  @Input() isSaving = false;
   @Output() save = new EventEmitter<DersRequest>();
+  @Output() formCancel = new EventEmitter<void>();
+  @Output() formDirtyChange = new EventEmitter<boolean>();
 
   form: FormGroup;
   dersTurleri: DersTuru[] = [];
@@ -36,11 +40,11 @@ export class DersFormComponent implements OnInit {
   loadingHedefKitleEgitimSeviyesi = false;
 
   constructor(
-    private fb: FormBuilder,
-    private dersTuruService: DersTuruService,
-    private dersSeviyesiService: DersSeviyesiService,
-    private dersNiteligiService: DersNiteligiService,
-    private hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService
+    private readonly fb: FormBuilder,
+    private readonly dersTuruService: DersTuruService,
+    private readonly dersSeviyesiService: DersSeviyesiService,
+    private readonly dersNiteligiService: DersNiteligiService,
+    private readonly hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService
   ) {
     this.form = this.fb.group({
       adi: ['', Validators.required],
@@ -64,6 +68,14 @@ export class DersFormComponent implements OnInit {
     this.loadDersSeviyeleri();
     this.loadDersNitelikleri();
     this.loadHedefKitleEgitimSeviyeleri();
+
+    // Track form dirty state and emit changes
+    this.form.statusChanges.pipe(
+      startWith(this.form.status),
+      debounceTime(100)
+    ).subscribe(() => {
+      this.formDirtyChange.emit(this.form.dirty);
+    });
 
     if (this.initialData) {
       this.form.patchValue({
@@ -146,5 +158,9 @@ export class DersFormComponent implements OnInit {
     if (this.form.valid) {
       this.save.emit(this.form.value as DersRequest);
     }
+  }
+
+  onCancel() {
+    this.formCancel.emit();
   }
 }

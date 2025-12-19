@@ -1,10 +1,15 @@
+/* Video Ders List Component Styling */
 .clickable-row {
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 }
 
-.table-row-hover:hover {
+.table-hover tbody tr:hover {
     background-color: #f8f9fa;
+}
+
+.table-row-hover {
+    transition: background-color 0.2s ease-in-out;
 }
 
 .clickable-row:hover {
@@ -20,4 +25,35 @@
 
 .clickable-row:active {
     transform: scale(0.999);
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.35em 0.65em;
+}
+
+.btn-group .btn {
+    margin: 0;
+}
+
+.btn-group .btn i {
+    font-size: 0.875rem;
+}
+
+.table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table-responsive {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fs-1 {
+    font-size: 3rem !important;
 }

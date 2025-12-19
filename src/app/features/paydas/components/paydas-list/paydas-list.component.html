@@ -1,0 +1,35 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Paydaş Adı</th>
+        <th>Temsilci</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (paydas of paydaslar; track paydas.id) {
+      <tr class="table-row-hover clickable-row"
+          role="button"
+          tabindex="0"
+          (click)="onPaydasClick(paydas.id)"
+          (keydown.enter)="onPaydasClick(paydas.id)"
+          title="Detayları görüntülemek için tıklayın">
+        <td>
+          <i class="bi bi-building me-2 text-primary"></i>
+          <strong>{{ paydas.adi }}</strong>
+        </td>
+        <td>{{ paydas.temsilci || '-' }}</td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="2" class="text-center py-4">
+          <div class="text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Kayıt bulunamadı.
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

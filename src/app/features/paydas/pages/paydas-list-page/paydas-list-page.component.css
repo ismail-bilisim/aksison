@@ -1,0 +1,7 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover td {
+  background-color: rgba(13, 110, 253, 0.05);
+}

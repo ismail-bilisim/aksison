@@ -1,9 +1,13 @@
 <div class="container-fluid">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5>{{ isEditMode ? 'Ders Düzenle' : 'Yeni Ders' }}</h5>
-    <button class="btn btn-secondary" (click)="onCancel()">
-      <i class="bi bi-x-circle me-2"></i>İptal
-    </button>
+    <div class="d-flex align-items-center gap-3">
+      <h5 class="mb-0">{{ isEditMode ? 'Ders Düzenle' : 'Yeni Ders' }}</h5>
+      @if (formDirty && !isSaving) {
+        <span class="badge bg-warning text-dark badge-unsaved">
+          <i class="bi bi-exclamation-circle me-1"></i>Kaydedilmemiş Değişiklikler
+        </span>
+      }
+    </div>
   </div>
 
   <div class="card">
@@ -11,7 +15,10 @@
       @if (ders || !isEditMode) {
         <app-ders-form
           [initialData]="ders"
-          (save)="onSave($event)">
+          [isSaving]="isSaving"
+          (save)="onSave($event)"
+          (formCancel)="onCancel()"
+          (formDirtyChange)="onFormDirtyChange($event)">
         </app-ders-form>
       }
     </div>
