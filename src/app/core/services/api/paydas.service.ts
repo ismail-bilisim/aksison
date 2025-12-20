@@ -41,5 +41,15 @@ export class PaydasService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  
+  icerikOnayinaSun(id: number): Observable<PaydasResponse> {
+    return this.http.put<PaydasResponse>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  }
+
+  icerikOnayla(id: number, onayNotu?: string): Observable<PaydasResponse> {
+    return this.http.put<PaydasResponse>(`${this.apiUrl}/${id}/icerik-onayla`, {});
+  }
+
+  icerikReddet(id: number, redNedeni?: string): Observable<PaydasResponse> {
+    return this.http.put<PaydasResponse>(`${this.apiUrl}/${id}/icerik-reddet`, {});
+  }
 }

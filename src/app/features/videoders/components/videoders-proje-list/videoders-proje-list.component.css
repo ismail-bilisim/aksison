@@ -1,0 +1,34 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.card {
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.proje-info {
+  font-size: 0.9rem;
+}
+
+.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.form-check {
+  width: 100%;
+}
+
+.form-check-label {
+  width: 100%;
+  cursor: pointer;
+  padding-left: 0.5rem;
+}

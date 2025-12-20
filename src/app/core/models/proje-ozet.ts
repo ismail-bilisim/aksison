@@ -3,4 +3,5 @@ export interface ProjeOzet {
   projeAdi: string;
   baslangicTarihi: string;
   bitisTarihi: string;
+  onayDurumu: string;
 }

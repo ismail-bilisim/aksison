@@ -377,6 +377,73 @@
       </div>
     </li> <!-- Paydas Sonu -->
 
+    <!-- Projeler -->
+    <li class="nav-item mb-1">
+      <div>
+        <a (click)="toggleSubmenu('Projeler')"
+          class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-folder me-2"></i>
+            Projeler
+          </span>
+          <i [class]="'bi ' + (isExpanded('Projeler') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Projeler')) {
+        <ul class="nav flex-column ms-3">
+
+            <li class="nav-item">
+              <a routerLink="/proje/by-onay/tas" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark me-2"></i>
+                Taslak Projeler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/proje/by-onay/ons" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark me-2"></i>
+                Onay Bekleyen Projeler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/proje/by-onay/red" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark me-2"></i>
+                Reddedilen Projeler
+              </a>
+            </li>
+
+          
+          <li class="nav-item">
+            <a routerLink="/proje" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-list-ul me-2"></i>
+              Tüm Projeler
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/proje/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()"
+              class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-plus-circle me-2"></i>
+              Yeni Proje
+            </a>
+          </li>
+
+        </ul>
+        }
+      </div>
+    </li> <!-- Proje Sonu -->
+
 
   </ul>
 

@@ -1,0 +1,81 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="proje-form">
+  <div class="row g-3">
+    
+    <!-- Proje Adı -->
+    <div class="col-md-12">
+      <label for="projeAdi" class="form-label">Proje Adı <span class="text-danger">*</span></label>
+      <input 
+        id="projeAdi" 
+        type="text" 
+        class="form-control" 
+        formControlName="projeAdi"
+        [class.is-invalid]="isInvalid('projeAdi')"
+        placeholder="Proje adını giriniz" />
+      @if (isInvalid('projeAdi')) {
+        <div class="invalid-feedback">
+          @if (hasError('projeAdi', 'required')) {
+            <span>Proje adı zorunludur.</span>
+          }
+          @if (hasError('projeAdi', 'maxlength')) {
+            <span>En fazla 255 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Başlangıç Tarihi -->
+    <div class="col-md-6">
+      <label for="baslangicTarihi" class="form-label">Başlangıç Tarihi <span class="text-danger">*</span></label>
+      <input 
+        id="baslangicTarihi" 
+        type="date" 
+        class="form-control" 
+        formControlName="baslangicTarihi"
+        [class.is-invalid]="isInvalid('baslangicTarihi') || hasFormError('dateRange')" />
+      @if (isInvalid('baslangicTarihi')) {
+        <div class="invalid-feedback">
+          @if (hasError('baslangicTarihi', 'required')) {
+            <span>Başlangıç tarihi zorunludur.</span>
+          }
+        </div>
+      }
+    </div>
+
+
+    <!-- Açıklama -->
+    <div class="col-12">
+      <label for="aciklama" class="form-label">Açıklama</label>
+      <textarea 
+        id="aciklama" 
+        class="form-control" 
+        formControlName="aciklama"
+        [class.is-invalid]="isInvalid('aciklama')"
+        rows="3"
+        placeholder="Proje açıklamasını giriniz"></textarea>
+      @if (isInvalid('aciklama')) {
+        <div class="invalid-feedback">
+          @if (hasError('aciklama', 'maxlength')) {
+            <span>En fazla 500 karakter olabilir.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Form Actions -->
+    <div class="col-12">
+      <div class="d-flex gap-2 justify-content-end">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSaving">
+          <i class="bi bi-x-circle me-1"></i>İptal
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSaving">
+          @if (isSaving) {
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          } @else {
+            <i class="bi bi-save me-1"></i>
+          }
+          {{ isEditMode ? 'Güncelle' : 'Kaydet' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

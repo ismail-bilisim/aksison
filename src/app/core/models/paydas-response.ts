@@ -8,6 +8,7 @@ export interface PaydasResponse {
   telefon?: string;
   eposta?: string;
   adres?: string;
+  onayDurumu: string;
   ekleyenKullanici?: KullaniciOzet;
   eklemeTarihi?: string;
 }

@@ -2,11 +2,11 @@
   <div class="row">
     <div class="col">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5>Paydaş Detayı</h5>
+        <h5>Proje Detayı</h5>
         <div>
-          @if (paydas) {
+          @if (proje) {
             <!-- Onay Durumu: Taslak ise Onaya Sun butonu -->
-            @if (paydas.onayDurumu === 'tas') {
+            @if (proje.onayDurumu === 'tas') {
               <button 
                 class="btn btn-info me-2" 
                 (click)="icerikOnayinaSun()"
@@ -17,7 +17,7 @@
             }
             
             <!-- Onay Durumu: Onay Bekliyor ise Onayla/Reddet butonları -->
-            @if (paydas.onayDurumu === 'ons') {
+            @if (proje.onayDurumu === 'ons') {
               <button 
                 class="btn btn-success me-2" 
                 (click)="icerikOnayla()"
@@ -50,62 +50,36 @@
             <span class="visually-hidden">Yükleniyor...</span>
           </div>
         </div>
-      } @else if (paydas) {
+      } @else if (proje) {
         
-        <!-- Paydaş Bilgileri Kartı -->
+        <!-- Proje Bilgileri Kartı -->
         <div class="card shadow-sm">
           <div class="card-header bg-primary text-white">
             <h5 class="mb-0">
-              <i class="bi bi-building me-2"></i>{{ paydas.adi }}
+              <i class="bi bi-folder me-2"></i>{{ proje.projeAdi }}
             </h5>
           </div>
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">
-                <h6 class="text-muted mb-3">İletişim Bilgileri</h6>
+                <h6 class="text-muted mb-3">Proje Bilgileri</h6>
                 
                 <div class="mb-3">
                   <label class="form-label text-muted">
-                    <i class="bi bi-person me-2"></i>Temsilci
-                  </label>
-                  <p class="form-control-plaintext">{{ paydas.temsilci || '-' }}</p>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label text-muted">
-                    <i class="bi bi-telephone me-2"></i>Telefon
+                    <i class="bi bi-calendar-event me-2"></i>Başlangıç Tarihi
                   </label>
                   <p class="form-control-plaintext">
-                    @if (paydas.telefon) {
-                      <a [href]="'tel:' + paydas.telefon">{{ paydas.telefon }}</a>
-                    } @else {
-                      -
-                    }
+                    {{ (proje.baslangicTarihi | date:'dd.MM.yyyy') || '-' }}
                   </p>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label text-muted">
-                    <i class="bi bi-envelope me-2"></i>E-Posta
+                    <i class="bi bi-calendar-check me-2"></i>Bitiş Tarihi
                   </label>
                   <p class="form-control-plaintext">
-                    @if (paydas.eposta) {
-                      <a [href]="'mailto:' + paydas.eposta">{{ paydas.eposta }}</a>
-                    } @else {
-                      -
-                    }
+                    {{ (proje.bitisTarihi | date:'dd.MM.yyyy') || '-' }}
                   </p>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <h6 class="text-muted mb-3">Adres Bilgileri</h6>
-                
-                <div class="mb-3">
-                  <label class="form-label text-muted">
-                    <i class="bi bi-geo-alt me-2"></i>Adres
-                  </label>
-                  <p class="form-control-plaintext">{{ paydas.adres || '-' }}</p>
                 </div>
 
                 <div class="mb-3">
@@ -113,41 +87,53 @@
                     <i class="bi bi-flag me-2"></i>Onay Durumu
                   </label>
                   <p class="form-control-plaintext">
-                    <span class="badge" [ngClass]="getOnayDurumuBadgeClass(paydas.onayDurumu)">
-                      {{ getOnayDurumuText(paydas.onayDurumu) }}
+                    <span class="badge" [ngClass]="getOnayDurumuBadgeClass(proje.onayDurumu)">
+                      {{ getOnayDurumuText(proje.onayDurumu) }}
                     </span>
                   </p>
                 </div>
+              </div>
 
-                @if (paydas.ekleyenKullanici) {
+              <div class="col-md-6">
+                <h6 class="text-muted mb-3">İşlem Bilgileri</h6>
+                
+                @if (proje.ekleyenKullanici) {
                   <div class="mb-3">
                     <label class="form-label text-muted">
                       <i class="bi bi-person-plus me-2"></i>Ekleyen Kullanıcı
                     </label>
                     <p class="form-control-plaintext">
-                      {{ paydas.ekleyenKullanici.ad }} {{ paydas.ekleyenKullanici.soyad }}
+                      {{ proje.ekleyenKullanici.ad }} {{ proje.ekleyenKullanici.soyad }}
                     </p>
                   </div>
                 }
 
-                @if (paydas.eklemeTarihi) {
+                @if (proje.eklemeTarihi) {
                   <div class="mb-3">
                     <label class="form-label text-muted">
                       <i class="bi bi-calendar me-2"></i>Eklenme Tarihi
                     </label>
                     <p class="form-control-plaintext">
-                      {{ paydas.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+                      {{ proje.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
                     </p>
                   </div>
                 }
               </div>
+
+              @if (proje.aciklama) {
+                <div class="col-12">
+                  <hr>
+                  <h6 class="text-muted mb-3">Açıklama</h6>
+                  <p class="form-control-plaintext">{{ proje.aciklama }}</p>
+                </div>
+              }
             </div>
           </div>
         </div>
 
       } @else {
         <div class="alert alert-warning mt-3">
-          Paydaş bulunamadı.
+          Proje bulunamadı.
         </div>
       }
     </div>

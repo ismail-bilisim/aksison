@@ -1,34 +1,34 @@
 import { Component, inject, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { PaydasFormComponent } from "../../components/paydas-form/paydas-form.component";
-import { PaydasService } from '../../../../core/services/api/paydas.service';
+import { ProjeFormComponent } from "../../components/proje-form/proje-form.component";
+import { ProjeService } from '../../../../core/services/api/proje.service';
 import { ToastService } from '../../../../core/services/api/toast.service';
-import { PaydasRequest } from '../../../../core/models/paydas-request';
-import { PaydasResponse } from '../../../../core/models/paydas-response';
+import { ProjeRequest } from '../../../../core/models/proje-request';
+import { ProjeResponse } from '../../../../core/models/proje-response';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { CanComponentDeactivate } from '../../../../core/guards/unsaved-changes.guard';
 
 @Component({
-  selector: 'app-paydas-edit-page',
+  selector: 'app-proje-edit-page',
   standalone: true,
-  imports: [CommonModule, PaydasFormComponent],
-  templateUrl: './paydas-edit-page.component.html',
-  styleUrl: './paydas-edit-page.component.css'
+  imports: [CommonModule, ProjeFormComponent],
+  templateUrl: './proje-edit-page.component.html',
+  styleUrl: './proje-edit-page.component.css'
 })
-export class PaydasEditPageComponent implements OnInit, CanComponentDeactivate {
+export class ProjeEditPageComponent implements OnInit, CanComponentDeactivate {
   private readonly toastService = inject(ToastService);
 
-  @ViewChild(PaydasFormComponent) formComponent?: PaydasFormComponent;
+  @ViewChild(ProjeFormComponent) formComponent?: ProjeFormComponent;
 
-  paydas?: PaydasResponse;
+  proje?: ProjeResponse;
   isEditMode = false;
   isSaving = false;
   formDirty = false;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly service: PaydasService,
+    private readonly service: ProjeService,
     private readonly router: Router
   ) { }
 
@@ -38,47 +38,47 @@ export class PaydasEditPageComponent implements OnInit, CanComponentDeactivate {
       this.isEditMode = true;
       this.service.getById(+id).subscribe({
         next: (res) => {
-          this.paydas = res;
-          console.log("Yüklenen paydaş: ", this.paydas);
+          this.proje = res;
+          console.log("Yüklenen proje: ", this.proje);
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'loadPaydas');
-          this.toastService.error('Paydaş yükleme hatası: ' + ErrorHandler.extractErrorMessage(error));
-          this.router.navigate(['/paydas']);
+          ErrorHandler.logError(error, 'loadProje');
+          this.toastService.error('Proje yükleme hatası: ' + ErrorHandler.extractErrorMessage(error));
+          this.router.navigate(['/proje']);
         }
       });
     }
   }
 
-  onSave(paydasRequest: PaydasRequest) {
+  onSave(projeRequest: ProjeRequest) {
     if (this.isSaving) return;
 
     this.isSaving = true;
 
-    if (this.paydas?.id) {
-      this.service.update(this.paydas.id, paydasRequest).subscribe({
+    if (this.proje?.id) {
+      this.service.update(this.proje.id, projeRequest).subscribe({
         next: (response) => {
           this.isSaving = false;
-          this.toastService.success('Paydaş başarıyla güncellendi.');
+          this.toastService.success('Proje başarıyla güncellendi.');
           this.isSaving = true;
-          this.router.navigate(['/paydas', response.id]);
+          this.router.navigate(['/proje', response.id]);
         },
         error: (error) => {
           this.isSaving = false;
-          ErrorHandler.logError(error, 'updatePaydas');
+          ErrorHandler.logError(error, 'updateProje');
           this.toastService.error('Güncelleme hatası: ' + ErrorHandler.extractErrorMessage(error));
         }
       });
     } else {
-      this.service.create(paydasRequest).subscribe({
+      this.service.create(projeRequest).subscribe({
         next: (response) => {
-          this.toastService.success('Paydaş başarıyla oluşturuldu.');
+          this.toastService.success('Proje başarıyla oluşturuldu.');
           this.isSaving = true;
-          this.router.navigate(['/paydas', response.id]);
+          this.router.navigate(['/proje', response.id]);
         },
         error: (error) => {
           this.isSaving = false;
-          ErrorHandler.logError(error, 'createPaydas');
+          ErrorHandler.logError(error, 'createProje');
           this.toastService.error('Kaydetme hatası: ' + ErrorHandler.extractErrorMessage(error));
         }
       });

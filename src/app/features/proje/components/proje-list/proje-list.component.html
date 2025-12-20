@@ -1,0 +1,43 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Proje Adı</th>
+        <th>Başlangıç Tarihi</th>
+        <th>Bitiş Tarihi</th>
+        <th>Onay Durumu</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (proje of projeler; track proje.id) {
+      <tr class="table-row-hover clickable-row"
+          role="button"
+          tabindex="0"
+          (click)="onProjeClick(proje.id)"
+          (keydown.enter)="onProjeClick(proje.id)"
+          title="Detayları görüntülemek için tıklayın">
+        <td>
+          <i class="bi bi-folder me-2 text-primary"></i>
+          <strong>{{ proje.projeAdi }}</strong>
+        </td>
+        <td>{{ proje.baslangicTarihi | date:'dd.MM.yyyy' }}</td>
+        <td>{{ proje.bitisTarihi | date:'dd.MM.yyyy' }}</td>
+        <td>
+          <span class="badge" [ngClass]="getOnayDurumuBadgeClass(proje.onayDurumu)">
+            {{ getOnayDurumuText(proje.onayDurumu) }}
+          </span>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="4" class="text-center py-4">
+          <div class="text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Kayıt bulunamadı.
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

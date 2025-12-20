@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <h5 class="mb-0">{{ isEditMode ? 'Proje Düzenle' : 'Yeni Proje' }}</h5>
+      @if (formDirty && !isSaving) {
+        <span class="badge bg-warning text-dark badge-unsaved">
+          <i class="bi bi-exclamation-circle me-1"></i>Kaydedilmemiş Değişiklikler
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      @if (proje || !isEditMode) {
+        <app-proje-form
+          [initialData]="proje"
+          [isSaving]="isSaving"
+          (save)="onSave($event)"
+          (formDirtyChange)="onFormDirtyChange($event)">
+        </app-proje-form>
+      }
+    </div>
+  </div>
+</div>

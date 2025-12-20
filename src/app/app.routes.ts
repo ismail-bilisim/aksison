@@ -34,6 +34,10 @@ export const routes: Routes = [
                 path: 'paydas',
                 loadChildren: () => import('./features/paydas/paydas-route').then(m => m.PAYDAS_ROUTES)
             },
+            {
+                path: 'proje',
+                loadChildren: () => import('./features/proje/proje-route').then(m => m.PROJE_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },
