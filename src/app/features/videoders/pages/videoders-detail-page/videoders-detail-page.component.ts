@@ -17,6 +17,7 @@ import { VideodersPaydasListComponent } from '../../components/videoders-paydas-
 import { VideodersSozlesmeListComponent } from '../../components/videoders-sozlesme-list/videoders-sozlesme-list.component';
 import { VideodersIslemKayitListComponent } from '../../components/videoders-islem-kayit-list/videoders-islem-kayit-list.component';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
+import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -35,8 +36,9 @@ import { VideodersOzetComponent } from '../../components/videoders-ozet/videoder
     VideodersProjeListComponent,
     VideodersPaydasListComponent,
     VideodersSozlesmeListComponent,
-    VideodersIslemKayitListComponent
-  ],
+    VideodersIslemKayitListComponent,
+    VideodersSoruListComponent
+],
   templateUrl: './videoders-detail-page.component.html',
   styleUrls: ['./videoders-detail-page.component.css']
 })

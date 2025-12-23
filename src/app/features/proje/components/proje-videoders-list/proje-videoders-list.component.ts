@@ -11,7 +11,7 @@ import { NgbModal, NgbModalModule, NgbNavModule } from '@ng-bootstrap/ng-bootstr
 @Component({
   selector: 'app-proje-videoders-list',
   standalone: true,
-  imports: [CommonModule, NgbModalModule, NgbNavModule, ProjeVideodersListComponent],
+  imports: [CommonModule, NgbModalModule, NgbNavModule],
   templateUrl: './proje-videoders-list.component.html',
   styleUrl: './proje-videoders-list.component.css'
 })

@@ -89,6 +89,15 @@
 
                 </ng-template>
               </li>
+
+              <!-- Sorular içeriği -->
+               <li [ngbNavItem]="'sorular'">
+                <button ngbNavLink>Sorular</button>
+                <ng-template ngbNavContent>
+                  <app-videoders-soru-list [dersId]="videoders.id" ></app-videoders-soru-list>
+                </ng-template>
+              </li>
+
               <li [ngbNavItem]="'kategoriler'">
                 <button ngbNavLink>Kategoriler</button>
                 <ng-template ngbNavContent>
@@ -111,12 +120,6 @@
                 <button ngbNavLink>Sözleşmeler</button>
                 <ng-template ngbNavContent>
                   <app-videoders-sozlesme-list [dersId]="videoders.id!"></app-videoders-sozlesme-list>
-                </ng-template>
-              </li>
-              <li [ngbNavItem]="'sorular'">
-                <button ngbNavLink>Sorular</button>
-                <ng-template ngbNavContent>
-                  <!-- Sorular içeriği -->
                 </ng-template>
               </li>
               <li [ngbNavItem]="'islemler'">

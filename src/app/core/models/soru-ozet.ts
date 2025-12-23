@@ -1,7 +1,5 @@
 export interface SoruOzet {
   id: number;
-  version: number;
-  soruTipi: number;
+  soruTipi: string;
   soruMetni: string;
-  zorlukDerecesi: number;
 }
