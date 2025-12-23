@@ -1,0 +1,60 @@
+<!-- File: aksison/src/app/features/proje/components/proje-videoders-list/proje-videoders-list.component.html -->
+<div class="video-ders-list-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="text-muted small">Bu proje ile ilişkilendirilmiş video dersler aşağıda listelenmektedir.</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  @if (loading) {
+    <div class="text-center py-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+      <p class="mt-2 text-muted">Video dersler yükleniyor...</p>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (!loading && errorMessage) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading && !errorMessage && videodersler.length === 0) {
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle me-2"></i>
+      Bu projeye ait video ders bulunamadı.
+    </div>
+  }
+
+  <!-- Table -->
+  @if (!loading && !errorMessage && videodersler.length > 0) {
+    <div class="table-responsive">
+      <table class="table table-hover table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Kodu</th>
+            <th>Adı</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (videoders of videodersler; track videoders.id) {
+            <tr class="table-row-hover clickable-row"
+                role="button"
+                tabindex="0"
+                (click)="onRowClick(videoders.id!)"
+                (keydown.enter)="onRowClick(videoders.id!)"
+                title="Detayları görüntülemek için tıklayın">
+              <td><strong>{{ videoders.kodu }}</strong></td>
+              <td>{{ videoders.adi }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+

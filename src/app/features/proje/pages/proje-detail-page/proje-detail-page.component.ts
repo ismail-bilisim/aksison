@@ -2,16 +2,17 @@ import { Component, OnInit, inject, ViewChild, TemplateRef } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjeService } from '../../../../core/services/api/proje.service';
 import { ProjeResponse } from '../../../../core/models/proje-response';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { ToastService } from '../../../../core/services/api/toast.service';
+import { ProjeVideodersListComponent } from '../../components/proje-videoders-list/proje-videoders-list.component';
 
 @Component({
   selector: 'app-proje-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule],
+  imports: [CommonModule, FormsModule, NgbNavModule, NgbModalModule, ProjeVideodersListComponent],
   templateUrl: './proje-detail-page.component.html',
   styleUrls: ['./proje-detail-page.component.css']
 })
@@ -25,6 +26,7 @@ export class ProjeDetailPageComponent implements OnInit {
   proje?: ProjeResponse;
   loading = false;
   submitting = false;
+  activeTab = 'bilgiler';
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;

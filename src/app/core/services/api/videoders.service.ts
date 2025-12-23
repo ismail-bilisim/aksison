@@ -140,6 +140,18 @@ export class VideodersService {
   getByDersId(dersId: number): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-ders/${dersId}`);
   }
+
+  // GET by Proje ID - for listing video lessons related to a project
+  getByProjeId(projeId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${projeId}`);
+  }
+
+  // GET by Paudas ID - for listing video lessons related to a paydas
+  getByPaydasId(paydasId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${paydasId}`);
+  }
+
+
 }
 
 

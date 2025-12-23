@@ -4,8 +4,6 @@
       <tr>
         <th>Proje Adı</th>
         <th>Başlangıç Tarihi</th>
-        <th>Bitiş Tarihi</th>
-        <th>Onay Durumu</th>
       </tr>
     </thead>
     <tbody>
@@ -21,12 +19,6 @@
           <strong>{{ proje.projeAdi }}</strong>
         </td>
         <td>{{ proje.baslangicTarihi | date:'dd.MM.yyyy' }}</td>
-        <td>{{ proje.bitisTarihi | date:'dd.MM.yyyy' }}</td>
-        <td>
-          <span class="badge" [ngClass]="getOnayDurumuBadgeClass(proje.onayDurumu)">
-            {{ getOnayDurumuText(proje.onayDurumu) }}
-          </span>
-        </td>
       </tr>
       } @empty {
       <tr>

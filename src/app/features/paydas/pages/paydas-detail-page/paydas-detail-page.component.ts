@@ -2,17 +2,18 @@ import { Component, OnInit, inject, ViewChild, TemplateRef } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaydasService } from '../../../../core/services/api/paydas.service';
 import { PaydasResponse } from '../../../../core/models/paydas-response';
 import { PaydasRequest } from '../../../../core/models/paydas-request';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { ToastService } from '../../../../core/services/api/toast.service';
+import { PaydasVideodersListComponent } from '../../components/paydas-videoders-list/paydas-videoders-list.component';
 
 @Component({
   selector: 'app-paydas-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule],
+  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, PaydasVideodersListComponent],
   templateUrl: './paydas-detail-page.component.html',
   styleUrls: ['./paydas-detail-page.component.css']
 })
@@ -28,6 +29,7 @@ export class PaydasDetailPageComponent implements OnInit {
   editMode = false;
   saving = false;
   submitting = false;
+  activeTab = 'bilgiler';
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;

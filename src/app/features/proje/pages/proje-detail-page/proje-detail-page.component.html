@@ -129,6 +129,29 @@
               }
             </div>
           </div>
+        </div> <!-- Proje Bilgileri Kartı -->
+
+
+        <!-- Tabs for additional info -->
+        <div class="mt-4">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+            <li [ngbNavItem]="'bilgiler'">
+              <button ngbNavLink>Bilgiler</button>
+              <ng-template ngbNavContent>
+                <div class="p-3 text-muted">
+                  Temel bilgiler yukarıda gösterilmektedir.
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="'videodersler'">
+              <button ngbNavLink>Video Dersler</button>
+              <ng-template ngbNavContent>
+                <app-proje-videoders-list [projeId]="proje.id!"> </app-proje-videoders-list>
+              </ng-template>
+            </li>
+          </ul>
+
+          <div [ngbNavOutlet]="nav" class="mt-3"></div>
         </div>
 
       } @else {
