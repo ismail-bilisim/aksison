@@ -6,11 +6,12 @@ import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum
 import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
 import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
 import { ToastService } from '../../../../core/services/api/toast.service';
+import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
   selector: 'app-videoders-konu-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModalModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModalModule, SoruModalComponent],
   templateUrl: './videoders-konu-list.component.html',
   styleUrl: './videoders-konu-list.component.css'
 })
@@ -19,12 +20,13 @@ export class VideodersKonuListComponent implements OnInit {
 
   @ViewChild('bolumModal') bolumModal!: TemplateRef<any>;
   @ViewChild('konuModal') konuModal!: TemplateRef<any>;
+  @ViewChild(SoruModalComponent) soruModal!: SoruModalComponent;
 
-  private videodersBolumService = inject(VideodersBolumService);
-  private bolumKonuService = inject(BolumKonuService);
-  private modalService = inject(NgbModal);
-  private fb = inject(FormBuilder);
-  private toastService = inject(ToastService);
+  private readonly videodersBolumService = inject(VideodersBolumService);
+  private readonly bolumKonuService = inject(BolumKonuService);
+  private readonly modalService = inject(NgbModal);
+  private readonly fb = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
 
   bolumlar: DersBolumResponse[] = [];
   bolumForm!: FormGroup;
@@ -189,5 +191,15 @@ export class VideodersKonuListComponent implements OnInit {
 
   hasKonular(bolum: DersBolumResponse): boolean {
     return (bolum.bolum.bolumKonular?.length || 0) > 0;
+  }
+
+  // SORU OPERATIONS
+  openSoruModalForKonu(konuId: number): void {
+    this.soruModal.open(konuId);
+  }
+
+  onSoruSaved(): void {
+    // Reload bolumlar to refresh konu sorulari if needed
+    this.loadBolumlar();
   }
 }

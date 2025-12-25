@@ -2,46 +2,53 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from '../../models/soru-videoders-konu';
+import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from '../../models/soru-ders-konu';
+import { SoruRequest} from '../../models/soru-request';
+import { SoruResponse} from '../../models/soru-response';
+import { SoruOzet } from '../../models/soru-ozet';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SoruService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/soruvideoderskonu`;
+  private soruApiUrl = `${environment.apiUrl}/soru`;
+ 
+  // ========== Standalone Soru CRUD Methods ==========
 
   /**
-   * Belirli bir derse ait tüm soruları getirir
+   * Tüm soruları özet olarak getirir
    */
-  getAllByDersId(dersId: number): Observable<SoruVideoDersKonuResponse[]> {
-    return this.http.get<SoruVideoDersKonuResponse[]>(`${this.apiUrl}/by-ders/${dersId}`);
+  getAllOzet(): Observable<SoruOzet[]> {
+    return this.http.get<SoruOzet[]>(`${this.soruApiUrl}/all-ozet`);
   }
 
   /**
-   * Belirli bir ders ve konuya ait soruları getirir
+   * ID'ye göre soru detayını getirir
    */
-  getAllByDersIdAndKonuId(dersId: number, konuId: number): Observable<SoruVideoDersKonuResponse[]> {
-    return this.http.get<SoruVideoDersKonuResponse[]>(`${this.apiUrl}/by-ders-konu/${dersId}/${konuId}`);
+  getById(id: number): Observable<SoruResponse> {
+    return this.http.get<SoruResponse>(`${this.soruApiUrl}/${id}`);
   }
 
   /**
-   * Yeni soru ilişkisi oluşturur
+   * Yeni soru oluşturur
    */
-  create(request: SoruVideoDersKonuRequest): Observable<SoruVideoDersKonuResponse> {
-    return this.http.post<SoruVideoDersKonuResponse>(this.apiUrl, request);
+  create(request: SoruRequest): Observable<SoruResponse> {
+    return this.http.post<SoruResponse>(this.soruApiUrl, request);
   }
 
   /**
-   * Soru ilişkisini siler
+   * Mevcut soruyu günceller
    */
-  delete(dersId: number, konuId: number, soruId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}`, {
-      params: { 
-        dersId: dersId.toString(), 
-        konuId: konuId.toString(), 
-        soruId: soruId.toString() 
-      }
-    });
+  update(id: number, request: SoruRequest): Observable<SoruResponse> {
+    return this.http.put<SoruResponse>(`${this.soruApiUrl}/${id}`, request);
   }
+
+  /**
+   * Soruyu siler
+   */
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.soruApiUrl}/${id}`);
+  }
+
 }

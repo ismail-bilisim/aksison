@@ -81,6 +81,11 @@
                 </div>
               </div>
               <div class="konu-actions">
+                <button class="btn btn-sm btn-outline-success" 
+                        (click)="openSoruModalForKonu(konu.konu.id)"
+                        title="Konuya soru ekle">
+                  <i class="bi bi-question-circle"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-danger" 
                         (click)="deleteKonu(konu.id)"
                         title="Konuyu sil">
@@ -165,3 +170,9 @@
     </button>
   </div>
 </ng-template>
+
+<!-- Soru Modal Component -->
+<app-soru-modal 
+  [dersId]="dersId"
+  (soruSaved)="onSoruSaved()">
+</app-soru-modal>

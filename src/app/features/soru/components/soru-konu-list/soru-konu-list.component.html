@@ -1,0 +1,41 @@
+<div class="soru-konu-list">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h6 class="mb-0">
+      <i class="bi bi-book me-2"></i>
+      İlişkili Konular
+      <span class="badge bg-primary ms-2">{{ konuList.length }}</span>
+    </h6>
+  </div>
+
+  @if (loading) {
+    <div class="text-center p-3">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>
+  } @else if (konuList.length === 0) {
+    <div class="alert alert-info text-center">
+      <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+      <p class="mb-0">Bu soru henüz hiçbir konu ile ilişkilendirilmemiş.</p>
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Konu ID</th>
+            <th>Konu Başlığı</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (konu of konuList; track konu.id) {
+            <tr>
+              <td>{{ konu.id }}</td>
+              <td>{{ konu.baslik }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

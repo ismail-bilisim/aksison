@@ -310,6 +310,44 @@
       </div>
     </li>
 
+    <!-- Sorular -->
+    <li class="nav-item mb-1">
+      <div>
+        <a (click)="toggleSubmenu('Sorular')"
+           class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-question-circle me-2"></i>
+            Sorular
+          </span>
+          <i [class]="'bi ' + (isExpanded('Sorular') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Sorular')) {
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+              <a routerLink="/soru" 
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Tüm Sorular
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/soru/new" 
+                 routerLinkActive="active"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-plus-circle me-2"></i>
+                Soru Ekle
+              </a>
+            </li>
+          </ul>
+        }
+      </div>
+    </li>
+
     <!-- Paydaslar -->
     <li class="nav-item mb-1">
       <div>

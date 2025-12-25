@@ -1,5 +1,7 @@
+import { SoruTipiOzet } from "./soru-tipi-ozet";
+
 export interface SoruOzet {
   id: number;
-  soruTipi: string;
+  soruTipi: SoruTipiOzet;
   soruMetni: string;
 }

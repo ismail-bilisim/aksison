@@ -1,109 +1,31 @@
-import { Component, Input, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { SoruService } from 'src/app/core/services/api/soru.service';
-import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from 'src/app/core/models/soru-videoders-konu';
+import { Router } from '@angular/router';
+import { SoruService } from 'src/app/core/services/api/soru-videoders.service';
+import { SoruVideoDersKonuResponse } from 'src/app/core/models/soru-ders-konu';
 import { ToastService } from '../../../../core/services/api/toast.service';
-import { debounceTime } from 'rxjs';
+import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
   selector: 'app-videoders-soru-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModalModule],
+  imports: [CommonModule, SoruModalComponent],
   templateUrl: './videoders-soru-list.component.html',
   styleUrl: './videoders-soru-list.component.css'
 })
 export class VideodersSoruListComponent implements OnInit {
   @Input() dersId!: number;
 
-  @ViewChild('soruModal') soruModal!: TemplateRef<any>;
+  @ViewChild(SoruModalComponent) soruModal!: SoruModalComponent;
 
   private readonly soruService = inject(SoruService);
-  private readonly modalService = inject(NgbModal);
-  private readonly fb = inject(FormBuilder);
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   sorular: SoruVideoDersKonuResponse[] = [];
-  soruForm!: FormGroup;
-
-  // Dropdown options
-  soruTipleri = [
-    { kod: 'COK', label: 'Çoktan Seçmeli' },
-    { kod: 'DOY', label: 'Doğru-Yanlış' },
-    { kod: 'AUC', label: 'Açık uçlu' }
-    
-  ];
-
-  zorlukDereceleri = [
-    { kod: 'KOL', label: 'Kolay' },
-    { kod: 'ORT', label: 'Orta' },
-    { kod: 'ZOR', label: 'Zor' }
-  ];
-
-  secenekSayilari = [2, 3, 4];
 
   ngOnInit(): void {
-    this.initializeForm();
-    this.setupDynamicValidation();
     this.loadSorular();
-  }
-
-  private initializeForm(): void {
-    this.soruForm = this.fb.group({
-      soruTipi: ['', [Validators.required]],
-      soruMetni: ['', [Validators.required, Validators.maxLength(1000)]],
-      zorlukDerecesi: ['', [Validators.required]],
-      secenekSayisi: [2, [Validators.required, Validators.min(2), Validators.max(4)]],
-      secenek1: ['', [Validators.required, Validators.maxLength(1000)]],
-      secenek2: ['', [Validators.required, Validators.maxLength(1000)]],
-      secenek3: ['', [Validators.maxLength(1000)]],
-      secenek4: ['', [Validators.maxLength(1000)]],
-      dogruSecenek: [1, [Validators.required, Validators.min(1), Validators.max(2)]],
-      kontrolAciklama: ['', [Validators.maxLength(255)]]
-    });
-  }
-
-  private setupDynamicValidation(): void {
-    // Dynamic validation based on secenekSayisi
-    this.soruForm.get('secenekSayisi')?.valueChanges
-      .pipe(debounceTime(100))
-      .subscribe((count: number) => {
-        const secenek3Control = this.soruForm.get('secenek3');
-        const secenek4Control = this.soruForm.get('secenek4');
-        const dogruSecenekControl = this.soruForm.get('dogruSecenek');
-
-        // Update secenek3 validation
-        if (count >= 3) {
-          secenek3Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
-        } else {
-          secenek3Control?.clearValidators();
-          secenek3Control?.setValue('');
-        }
-        secenek3Control?.updateValueAndValidity();
-
-        // Update secenek4 validation
-        if (count >= 4) {
-          secenek4Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
-        } else {
-          secenek4Control?.clearValidators();
-          secenek4Control?.setValue('');
-        }
-        secenek4Control?.updateValueAndValidity();
-
-        // Update dogruSecenek max validator
-        dogruSecenekControl?.setValidators([
-          Validators.required,
-          Validators.min(1),
-          Validators.max(count)
-        ]);
-        
-        // Reset dogruSecenek if it exceeds new count
-        if (dogruSecenekControl?.value > count) {
-          dogruSecenekControl?.setValue(1);
-        }
-        dogruSecenekControl?.updateValueAndValidity();
-      });
   }
 
   private loadSorular(): void {
@@ -120,57 +42,22 @@ export class VideodersSoruListComponent implements OnInit {
   }
 
   openSoruModal(): void {
-    this.soruForm.reset({
-      secenekSayisi: 2,
-      dogruSecenek: 1
-    });
-    this.modalService.open(this.soruModal, { centered: true, size: 'lg' });
+    this.soruModal.open(null); // Konu secilmeden ders bazında soru ekleme.
   }
 
-  saveSoru(): void {
-    if (this.soruForm.invalid) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
-
-    const request: SoruVideoDersKonuRequest = {
-      dersId: this.dersId,
-      konuId: null,  // Sorular sekmesinden eklendiğinde konu ile ilişkilendirilmez
-      soru: {
-        soruTipi: this.soruForm.value.soruTipi,
-        soruMetni: this.soruForm.value.soruMetni,
-        zorlukDerecesi: this.soruForm.value.zorlukDerecesi,
-        secenekSayisi: this.soruForm.value.secenekSayisi,
-        secenek1: this.soruForm.value.secenek1,
-        secenek2: this.soruForm.value.secenek2,
-        secenek3: this.soruForm.value.secenek3 || undefined,
-        secenek4: this.soruForm.value.secenek4 || undefined,
-        dogruSecenek: this.soruForm.value.dogruSecenek,
-      }
-    };
-
-    this.soruService.create(request).subscribe({
-      next: () => {
-        this.toastService.success('Soru başarıyla eklendi');
-        this.modalService.dismissAll();
-        this.loadSorular();
-      },
-      error: (error) => {
-        console.error('Error saving soru:', error);
-        this.toastService.error('Soru eklenirken hata oluştu');
-      }
-    });
+  onSoruSaved(): void {
+    this.loadSorular();
   }
 
-  deleteSoru(soru: SoruVideoDersKonuResponse): void {
-    const soruMetniKisa = soru.soru.soruMetni.length > 50 
-      ? soru.soru.soruMetni.substring(0, 50) + '...' 
-      : soru.soru.soruMetni;
+  deleteDersSoru(dersSoru: SoruVideoDersKonuResponse): void {
+    const soruMetniKisa = dersSoru.soru.soruMetni.length > 50 
+      ? dersSoru.soru.soruMetni.substring(0, 50) + '...' 
+      : dersSoru.soru.soruMetni;
       
-    if (confirm(`"${soruMetniKisa}" sorusunu silmek istediğinize emin misiniz?`)) {
-      this.soruService.delete(soru.dersId, soru.konuId || 0, soru.soruId).subscribe({
+    if (confirm(`"${soruMetniKisa}" sorusunu dersten silmek istediğinize emin misiniz?`)) {
+      this.soruService.deleteDersSoru(dersSoru.id).subscribe({
         next: () => {
-          this.toastService.success('Soru başarıyla silindi');
+          this.toastService.success('Soru bu dersten başarıyla silindi');
           this.loadSorular();
         },
         error: (error) => {
@@ -180,7 +67,6 @@ export class VideodersSoruListComponent implements OnInit {
       });
     }
   }
-
   getSoruTipiLabel(soruTipi: any): string {
     if (typeof soruTipi === 'string') {
       return soruTipi;
@@ -188,4 +74,17 @@ export class VideodersSoruListComponent implements OnInit {
     // Enum nesnesinden kod çekmek için
     return soruTipi?.kod || soruTipi || '-';
   }
-}
+
+  navigateToSoruDetail(soruId: number): void {
+    if (soruId) {
+      this.router.navigate(['/soru/detail', soruId]);
+    }
+  }
+
+  navigateToSoruEdit(soruId: number): void {
+    if (soruId) {
+      this.router.navigate(['/soru/edit', soruId]);
+    }
+  }
+
+} 

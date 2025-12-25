@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <h5 class="mb-0">
+        <i class="bi bi-question-circle me-2"></i>
+        {{ isEditMode ? 'Soru Düzenle' : 'Yeni Soru' }}
+      </h5>
+      @if (formDirty && !isSaving) {
+        <span class="badge bg-warning text-dark">
+          <i class="bi bi-exclamation-circle me-1"></i>Kaydedilmemiş Değişiklikler
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      @if (soru || !isEditMode) {
+        <app-soru-form
+          [initialData]="soru"
+          [isSaving]="isSaving"
+          (save)="onSave($event)"
+          (formCancel)="onCancel()"
+          (formDirtyChange)="onFormDirtyChange($event)">
+        </app-soru-form>
+      } @else {
+        <div class="text-center p-5">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+          </div>
+          <p class="mt-2">Soru yükleniyor...</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

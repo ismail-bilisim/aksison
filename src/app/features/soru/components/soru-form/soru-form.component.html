@@ -1,0 +1,146 @@
+<form [formGroup]="soruForm" (ngSubmit)="onSubmit()">
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label class="form-label">Soru Tipi <span class="text-danger">*</span></label>
+      <select class="form-select" 
+              formControlName="soruTipi"
+              [class.is-invalid]="soruForm.get('soruTipi')?.invalid && soruForm.get('soruTipi')?.touched">
+        <option value="">Seçiniz...</option>
+        <option *ngFor="let tip of soruTipleri" [value]="tip.kod">{{tip.label}}</option>
+      </select>
+      @if (soruForm.get('soruTipi')?.invalid && soruForm.get('soruTipi')?.touched) {
+        <div class="text-danger small mt-1">Soru tipi seçilmelidir</div>
+      }
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Zorluk Derecesi <span class="text-danger">*</span></label>
+      <select class="form-select" 
+              formControlName="zorlukDerecesi"
+              [class.is-invalid]="soruForm.get('zorlukDerecesi')?.invalid && soruForm.get('zorlukDerecesi')?.touched">
+        <option value="">Seçiniz...</option>
+        <option *ngFor="let derece of zorlukDereceleri" [value]="derece.kod">{{derece.label}}</option>
+      </select>
+      @if (soruForm.get('zorlukDerecesi')?.invalid && soruForm.get('zorlukDerecesi')?.touched) {
+        <div class="text-danger small mt-1">Zorluk derecesi seçilmelidir</div>
+      }
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Doğru Seçenek <span class="text-danger">*</span></label>
+      <select class="form-select" 
+              formControlName="dogruSecenek"
+              [class.is-invalid]="soruForm.get('dogruSecenek')?.invalid && soruForm.get('dogruSecenek')?.touched">
+        <option *ngFor="let i of [1, 2, 3, 4]" 
+                [value]="i" 
+                [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI' ? 4 : 2)">
+          {{i}}
+        </option>
+      </select>
+      @if (soruForm.get('dogruSecenek')?.invalid && soruForm.get('dogruSecenek')?.touched) {
+        <div class="text-danger small mt-1">Doğru seçenek belirtilmelidir</div>
+      }
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Soru Metni <span class="text-danger">*</span></label>
+    <textarea class="form-control" 
+              formControlName="soruMetni"
+              rows="5"
+              maxlength="1000"
+              placeholder="Soru metnini girin..."
+              [class.is-invalid]="soruForm.get('soruMetni')?.invalid && soruForm.get('soruMetni')?.touched"></textarea>
+    <div class="d-flex justify-content-between mt-1">
+      <div>
+        @if (soruForm.get('soruMetni')?.invalid && soruForm.get('soruMetni')?.touched) {
+          <div class="text-danger small">Soru metni zorunludur</div>
+        }
+      </div>
+      <small class="text-muted">{{ soruForm.get('soruMetni')?.value?.length || 0 }}/1000</small>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Seçenek 1 <span class="text-danger">*</span></label>
+    <input type="text" 
+           class="form-control" 
+           formControlName="secenek1"
+           maxlength="1000"
+           placeholder="Birinci seçenek"
+           [class.is-invalid]="soruForm.get('secenek1')?.invalid && soruForm.get('secenek1')?.touched">
+    @if (soruForm.get('secenek1')?.invalid && soruForm.get('secenek1')?.touched) {
+      <div class="text-danger small mt-1">Birinci seçenek zorunludur</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Seçenek 2 <span class="text-danger">*</span></label>
+    <input type="text" 
+           class="form-control" 
+           formControlName="secenek2"
+           maxlength="1000"
+           placeholder="İkinci seçenek"
+           [class.is-invalid]="soruForm.get('secenek2')?.invalid && soruForm.get('secenek2')?.touched">
+    @if (soruForm.get('secenek2')?.invalid && soruForm.get('secenek2')?.touched) {
+      <div class="text-danger small mt-1">İkinci seçenek zorunludur</div>
+    }
+  </div>
+
+  <div class="mb-3" *ngIf="soruForm.get('soruTipi')?.value === 'COK'">
+    <label class="form-label">Seçenek 3 <span class="text-danger">*</span></label>
+    <input type="text" 
+           class="form-control" 
+           formControlName="secenek3"
+           maxlength="1000"
+           placeholder="Üçüncü seçenek"
+           [class.is-invalid]="soruForm.get('secenek3')?.invalid && soruForm.get('secenek3')?.touched">
+    @if (soruForm.get('secenek3')?.invalid && soruForm.get('secenek3')?.touched) {
+      <div class="text-danger small mt-1">Üçüncü seçenek zorunludur</div>
+    }
+  </div>
+
+  <div class="mb-3" *ngIf="soruForm.get('soruTipi')?.value === 'COK'">
+    <label class="form-label">Seçenek 4 <span class="text-danger">*</span></label>
+    <input type="text" 
+           class="form-control" 
+           formControlName="secenek4"
+           maxlength="1000"
+           placeholder="Dördüncü seçenek"
+           [class.is-invalid]="soruForm.get('secenek4')?.invalid && soruForm.get('secenek4')?.touched">
+    @if (soruForm.get('secenek4')?.invalid && soruForm.get('secenek4')?.touched) {
+      <div class="text-danger small mt-1">Dördüncü seçenek zorunludur</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Kontrol Açıklaması</label>
+    <textarea class="form-control" 
+              formControlName="kontrolAciklama"
+              rows="2"
+              maxlength="255"
+              placeholder="Opsiyonel kontrol açıklaması..."></textarea>
+    <small class="text-muted">{{ soruForm.get('kontrolAciklama')?.value?.length || 0 }}/255</small>
+  </div>
+
+  <div *ngIf="soruForm.get('soruTipi')?.value === 'DOY'" class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>
+    Doğru-Yanlış sorularında doğru cevap otomatik olarak 1. seçenek olarak ayarlanır.
+  </div>
+
+  <div class="d-flex gap-2 justify-content-end mt-4">
+    <button type="button" 
+            class="btn btn-secondary" 
+            (click)="onCancel()"
+            [disabled]="isSaving">
+      İptal
+    </button>
+    <button type="submit" 
+            class="btn btn-primary"
+            [disabled]="soruForm.invalid || isSaving">
+      @if (isSaving) {
+        <span class="spinner-border spinner-border-sm me-2"></span>
+      }
+      <i class="bi bi-check-lg me-2" *ngIf="!isSaving"></i>
+      {{ initialData ? 'Güncelle' : 'Kaydet' }}
+    </button>
+  </div>
+</form>

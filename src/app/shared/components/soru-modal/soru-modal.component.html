@@ -1,0 +1,97 @@
+<!-- Soru Modal -->
+<ng-template #soruModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{currentKonuId ? 'Konuya Soru Ekle' : 'Derse Soru Ekle'}}
+    </h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="soruForm">
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <label class="form-label form-label-sm">Soru Tipi <span class="text-danger">*</span></label>
+          <select class="form-select form-select-sm" formControlName="soruTipi">
+            <option value="">Seçiniz...</option>
+            <option *ngFor="let tip of soruTipleri" [value]="tip.kod">{{tip.label}}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label form-label-sm">Zorluk <span class="text-danger">*</span></label>
+          <select class="form-select form-select-sm" formControlName="zorlukDerecesi">
+            <option value="">Seçiniz...</option>
+            <option *ngFor="let derece of zorlukDereceleri" [value]="derece.kod">{{derece.label}}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label form-label-sm">Doğru Seçenek <span class="text-danger">*</span></label>
+          <select class="form-select form-select-sm" formControlName="dogruSecenek">
+            <option *ngFor="let i of [1, 2, 3, 4]" 
+                    [value]="i" 
+                    [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI' ? 4 : 2)">
+              {{i}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label form-label-sm">Soru Metni <span class="text-danger">*</span></label>
+        <textarea class="form-control form-control-sm" 
+                  formControlName="soruMetni"
+                  rows="5"
+                  maxlength="1000"
+                  placeholder="Soru metnini girin..."></textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label form-label-sm">Seçenek 1 <span class="text-danger">*</span></label>
+        <input type="text" 
+               class="form-control form-control-sm" 
+               formControlName="secenek1"
+               maxlength="1000"
+               placeholder="Birinci seçenek">
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label form-label-sm">Seçenek 2 <span class="text-danger">*</span></label>
+        <input type="text" 
+               class="form-control form-control-sm" 
+               formControlName="secenek2"
+               maxlength="1000"
+               placeholder="İkinci seçenek">
+      </div>
+
+      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI'">
+        <label class="form-label form-label-sm">Seçenek 3 <span class="text-danger">*</span></label>
+        <input type="text" 
+               class="form-control form-control-sm" 
+               formControlName="secenek3"
+               maxlength="1000"
+               placeholder="Üçüncü seçenek">
+      </div>
+
+      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI'">
+        <label class="form-label form-label-sm">Seçenek 4 <span class="text-danger">*</span></label>
+        <input type="text" 
+               class="form-control form-control-sm" 
+               formControlName="secenek4"
+               maxlength="1000"
+               placeholder="Dördüncü seçenek">
+      </div>
+
+      <small class="form-text text-muted d-block mt-2" *ngIf="soruForm.get('soruTipi')?.value === 'DOGRU_YANLIS'">
+        <i class="bi bi-info-circle me-1"></i>Doğru-Yanlış sorularında doğru cevap Seçenek 1'dir.
+      </small>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="close()">İptal</button>
+    <button type="button" 
+            class="btn btn-primary btn-sm" 
+            (click)="saveSoru()"
+            [disabled]="soruForm.invalid">
+      <i class="bi bi-check-lg me-1"></i>Kaydet
+    </button>
+  </div>
+</ng-template>

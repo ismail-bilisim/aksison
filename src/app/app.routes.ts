@@ -27,6 +27,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/ders/ders-route').then(m => m.DERS_ROUTES)
             },
             {
+                path: 'soru',
+                loadChildren: () => import('./features/soru/soru-route').then(m => m.SORU_ROUTES)
+            },
+            {
                 path: 'kategori',
                 loadChildren: () => import('./features/kategori/kategori-route').then(m => m.KATEGORI_ROUTES)
             },

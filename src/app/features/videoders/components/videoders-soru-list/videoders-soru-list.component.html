@@ -20,20 +20,26 @@
     </div>
 
     <div class="list-group">
-      <div *ngFor="let soru of sorular; let i = index" class="list-group-item">
-        <div class="d-flex justify-content-between align-items-start">
-          <div class="flex-grow-1">
-            <div class="d-flex align-items-center mb-2">
-              <span class="badge bg-primary me-2">{{i + 1}}</span>
-              <span class="badge bg-info me-2">{{getSoruTipiLabel(soru.soru.soruTipi)}}</span>
-              <span class="badge bg-secondary" *ngIf="soru.konuId">Konuya Bağlı</span>
-              <span class="badge bg-warning text-dark" *ngIf="!soru.konuId">Genel Soru</span>
-            </div>
-            <p class="mb-1">{{soru.soru.soruMetni}}</p>
-            <small class="text-muted">ID: {{soru.soru.id}}</small>
+      <div *ngFor="let dersSoru of sorular; let i = index" class="list-group-item list-group-item-compact py-2">
+        <div class="d-flex align-items-center gap-2">
+          <span class="">{{i + 1}}.</span>
+          <span class="badge bg-info text-truncate" style="max-width: 80px;">{{dersSoru.soru.soruTipi}}</span>
+          <span class="badge bg-secondary" *ngIf="dersSoru.konuId">
+            <i class="bi bi-link-45deg"></i>
+          </span>
+          <div class="flex-grow-1 text-truncate small clickable-text" 
+               (click)="navigateToSoruDetail(dersSoru.soru.id)"
+               role="button"
+               title="Soru detayını görüntüle">
+            {{dersSoru.soru.soruMetni}}
           </div>
-          <button class="btn btn-sm btn-outline-danger ms-2" 
-                  (click)="deleteSoru(soru)"
+          <button class="btn btn-sm btn-outline-primary" 
+                  (click)="navigateToSoruEdit(dersSoru.soru.id)"
+                  title="Soruyu düzenle">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" 
+                  (click)="deleteDersSoru(dersSoru)"
                   title="Soruyu sil">
             <i class="bi bi-trash"></i>
           </button>
@@ -43,121 +49,8 @@
   </div>
 </div>
 
-<!-- Soru Modal -->
-<ng-template #soruModal let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">Yeni Soru Ekle</h5>
-    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="soruForm">
-      <!-- Question Info Section -->
-      <div class="mb-4">
-        <h6 class="text-primary mb-3">Soru Bilgileri</h6>
-        
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Soru Tipi <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="soruTipi">
-              <option value="">Seçiniz...</option>
-              <option *ngFor="let tip of soruTipleri" [value]="tip.kod">{{tip.label}}</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Zorluk Derecesi <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="zorlukDerecesi">
-              <option value="">Seçiniz...</option>
-              <option *ngFor="let derece of zorlukDereceleri" [value]="derece.kod">{{derece.label}}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Soru Metni <span class="text-danger">*</span></label>
-          <textarea class="form-control" 
-                    formControlName="soruMetni"
-                    rows="3"
-                    maxlength="1000"
-                    placeholder="Soru metnini girin..."></textarea>
-          <small class="form-text text-muted">
-            {{soruForm.get('soruMetni')?.value?.length || 0}}/1000 karakter
-          </small>
-        </div>
-      </div>
-
-      <!-- Options Section -->
-      <div class="mb-4">
-        <h6 class="text-primary mb-3">Seçenekler</h6>
-        
-        <div class="mb-3">
-          <label class="form-label">Seçenek Sayısı <span class="text-danger">*</span></label>
-          <select class="form-select" formControlName="secenekSayisi">
-            <option *ngFor="let sayi of secenekSayilari" [value]="sayi">{{sayi}} Seçenek</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Seçenek 1 <span class="text-danger">*</span></label>
-          <input type="text" 
-                 class="form-control" 
-                 formControlName="secenek1"
-                 maxlength="1000"
-                 placeholder="Birinci seçenek">
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Seçenek 2 <span class="text-danger">*</span></label>
-          <input type="text" 
-                 class="form-control" 
-                 formControlName="secenek2"
-                 maxlength="1000"
-                 placeholder="İkinci seçenek">
-        </div>
-
-        <div class="mb-3" *ngIf="soruForm.get('secenekSayisi')?.value >= 3">
-          <label class="form-label">Seçenek 3 <span class="text-danger">*</span></label>
-          <input type="text" 
-                 class="form-control" 
-                 formControlName="secenek3"
-                 maxlength="1000"
-                 placeholder="Üçüncü seçenek">
-        </div>
-
-        <div class="mb-3" *ngIf="soruForm.get('secenekSayisi')?.value >= 4">
-          <label class="form-label">Seçenek 4 <span class="text-danger">*</span></label>
-          <input type="text" 
-                 class="form-control" 
-                 formControlName="secenek4"
-                 maxlength="1000"
-                 placeholder="Dördüncü seçenek">
-        </div>
-      </div>
-
-      <!-- Correct Answer Section -->
-      <div class="mb-4">
-        <h6 class="text-primary mb-3">Doğru Cevap</h6>
-        
-        <div class="mb-3">
-          <label class="form-label">Doğru Seçenek <span class="text-danger">*</span></label>
-          <select class="form-select" formControlName="dogruSecenek">
-            <option *ngFor="let i of [1, 2, 3, 4]" 
-                    [value]="i" 
-                    [disabled]="i > soruForm.get('secenekSayisi')?.value">
-              Seçenek {{i}}
-            </option>
-          </select>
-        </div>
-      </div>
-
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
-    <button type="button" 
-            class="btn btn-primary" 
-            (click)="saveSoru()"
-            [disabled]="soruForm.invalid">
-      Kaydet
-    </button>
-  </div>
-</ng-template>
+<!-- Soru Modal Component -->
+<app-soru-modal 
+  [dersId]="dersId"
+  (soruSaved)="onSoruSaved()">
+</app-soru-modal>

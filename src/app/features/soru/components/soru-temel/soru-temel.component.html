@@ -1,0 +1,98 @@
+<div *ngIf="soru" class="soru-temel">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label class="form-label text-muted small">Soru ID</label>
+      <p class="fw-bold">{{ soru.id }}</p>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label text-muted small">Soru Tipi</label>
+      <p>
+        <span class="badge bg-info">{{ getSoruTipiLabel(soru.soruTipi.adi) }}</span>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label text-muted small">Zorluk Derecesi</label>
+      <p>
+        <span [class]="'badge ' + getZorlukBadgeClass(soru.zorlukDerecesi.kodu)">
+          {{ getZorlukDerecesiLabel(soru.zorlukDerecesi.adi) }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-muted small">Soru Metni</label>
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-0">{{ soru.soruMetni }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-muted small">Seçenekler</label>
+    <div class="list-group">
+      <div class="list-group-item" [class.list-group-item-success]="soru.dogruSecenek === 1">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-secondary me-2">1</span>
+          <span class="flex-grow-1">{{ soru.secenek1 }}</span>
+          <i *ngIf="soru.dogruSecenek === 1" class="bi bi-check-circle-fill text-success ms-2"></i>
+        </div>
+      </div>
+      <div class="list-group-item" [class.list-group-item-success]="soru.dogruSecenek === 2">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-secondary me-2">2</span>
+          <span class="flex-grow-1">{{ soru.secenek2 }}</span>
+          <i *ngIf="soru.dogruSecenek === 2" class="bi bi-check-circle-fill text-success ms-2"></i>
+        </div>
+      </div>
+      <div *ngIf="soru.secenek3" class="list-group-item" [class.list-group-item-success]="soru.dogruSecenek === 3">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-secondary me-2">3</span>
+          <span class="flex-grow-1">{{ soru.secenek3 }}</span>
+          <i *ngIf="soru.dogruSecenek === 3" class="bi bi-check-circle-fill text-success ms-2"></i>
+        </div>
+      </div>
+      <div *ngIf="soru.secenek4" class="list-group-item" [class.list-group-item-success]="soru.dogruSecenek === 4">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-secondary me-2">4</span>
+          <span class="flex-grow-1">{{ soru.secenek4 }}</span>
+          <i *ngIf="soru.dogruSecenek === 4" class="bi bi-check-circle-fill text-success ms-2"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3" *ngIf="soru.kontrolAciklama">
+    <div class="col-12">
+      <label class="form-label text-muted small">Kontrol Açıklaması</label>
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>{{ soru.kontrolAciklama }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6" *ngIf="soru.ekleyenKullanici">
+      <label class="form-label text-muted small">Ekleyen Kullanıcı</label>
+      <p>{{ soru.ekleyenKullanici.ad }} {{ soru.ekleyenKullanici.soyad }}</p>
+    </div>
+    <div class="col-md-6" *ngIf="soru.kontroluYapan">
+      <label class="form-label text-muted small">Kontrolü Yapan</label>
+      <p>{{ soru.kontroluYapan.ad }} {{ soru.kontroluYapan.soyad }}</p>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="soru.eklemeTarihi">
+    <div class="col-12">
+      <label class="form-label text-muted small">Ekleme Tarihi</label>
+      <p>{{ soru.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!soru" class="text-center p-5">
+  <div class="spinner-border spinner-border-sm" role="status">
+    <span class="visually-hidden">Yükleniyor...</span>
+  </div>
+</div>
