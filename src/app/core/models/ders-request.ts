@@ -8,7 +8,7 @@ export interface DersRequest {
   niteligiKodu: string;
   tahminiDersSuresi?: number;
   dersOzeti?: string;
-  hedefKitleEgitimSeviye?: number;
+  hedefKitleEgitimSeviye?: string;
   ilgiAlaninaGoreHedefKitle?: string;
   kullanilacakProgramlar?: string;
   kazanimlar?: string;

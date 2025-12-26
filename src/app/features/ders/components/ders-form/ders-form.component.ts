@@ -78,6 +78,7 @@ export class DersFormComponent implements OnInit {
     });
 
     if (this.initialData) {
+      console.log("inital ders Data:", this.initialData);
       this.form.patchValue({
         adi: this.initialData.adi,
         amaci: this.initialData.amaci,
@@ -87,9 +88,7 @@ export class DersFormComponent implements OnInit {
         tahminiDersSuresi: this.initialData.tahminiDersSuresi,
         dersOzeti: this.initialData.dersOzeti,
         onayDurumu: this.initialData.onayDurumu,
-        hedefKitleEgitimSeviyeKodu: this.initialData.hedefKitleEgitimSeviye !== undefined && this.initialData.hedefKitleEgitimSeviye !== null
-          ? String(this.initialData.hedefKitleEgitimSeviye)
-          : undefined,
+        hedefKitleEgitimSeviyeKodu: this.initialData.hedefKitleEgitimSeviye?.kodu,
         ilgiAlaninaGoreHedefKitle: this.initialData.ilgiAlaninaGoreHedefKitle,
         kullanilacakProgramlar: this.initialData.kullanilacakProgramlar,
         kazanimlar: this.initialData.kazanimlar,

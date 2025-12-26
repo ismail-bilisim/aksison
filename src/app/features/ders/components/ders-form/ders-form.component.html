@@ -15,10 +15,6 @@
                 <label class="form-label">Amacı</label>
                 <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
             </div>
-            <div class="col-12">
-                <label class="form-label">Ders Özeti</label>
-                <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
-            </div>
         </div>
     </div>
 
@@ -89,18 +85,18 @@
 
     <div class="info-section mb-4">
         <h6 class="section-title">
-            <i class="bi bi-people me-2"></i>Hedef Kitle ve İçerik
+            <i class="bi bi-people me-2"></i>Hedef Kitle
         </h6>
         <div class="row g-3">
             <div class="col-lg-6">
                 <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
-                <select formControlName="hedefKitleEgitimSeviye" class="form-select">
+                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select">
                     <option [ngValue]="null">Seçiniz</option>
                     @if (loadingHedefKitleEgitimSeviyesi) {
                         <option disabled>Yükleniyor...</option>
                     }
                     @for (seviye of hedefKitleEgitimSeviyeleri; track seviye.id) {
-                        <option [ngValue]="seviye.id">{{ seviye.adi }}</option>
+                        <option [ngValue]="seviye.kodu">{{ seviye.adi }}</option>
                     }
                 </select>
             </div>
@@ -108,20 +104,52 @@
                 <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
                 <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Kullanılacak Programlar</label>
+        </div>
+    </div>
+
+
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-people me-2"></i>Araç Gereçler ve Gereksinimler
+        </h6>
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <label class="form-label"></label>
                 <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
             </div>
-            <div class="col-md-4">
+        </div>
+    </div>
+
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-people me-2"></i>Kazanımlar ve SSS
+        </h6>
+        <div class="row g-3">
+            <div class="col-lg-6">
                 <label class="form-label">Kazanımlar</label>
                 <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-6">
                 <label class="form-label">Sıkça Sorulan Sorular</label>
                 <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
             </div>
         </div>
     </div>
+
+
+
+
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-card-text me-2"></i>Ders Özeti
+        </h6>
+        <div class="row g-3">
+            <div class="col-12">
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+
 
     <div class="form-actions d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-secondary btn-lg" (click)="onCancel()">

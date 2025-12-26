@@ -59,7 +59,8 @@ export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
         next: (response) => {
           this.isSaving = false;
           this.toastService.success('Ders başarıyla güncellendi.');
-          this.router.navigate(['/ders', response.id]);
+          console.log("ders response", response)
+          this.router.navigate(['/ders/detail', response.id]);
         },
         error: (error) => {
           this.isSaving = false;
@@ -72,7 +73,7 @@ export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
         next: (response) => {
           this.isSaving = false;
           this.toastService.success('Ders başarıyla oluşturuldu.');
-          this.router.navigate(['/ders', response.id]);
+          this.router.navigate(['/ders/detail', response.id]);
         },
         error: (error) => {
           this.isSaving = false;
