@@ -1,0 +1,33 @@
+<div class="card mb-3">
+	<div class="card-body">
+		<div class="row mb-3">
+			<div class="col-md-4">
+				<input type="text" class="form-control" [formControl]="talepAdiFilter" placeholder="Talep Sonuç ile Ara">
+			</div>
+			<div class="col-md-4">
+				<select class="form-select" [formControl]="talepDurumuFilter">
+					<option value="">Tüm Durumlar</option>
+					<option *ngFor="let durum of talepDurumlari" [value]="durum.kodu">{{ durum.adi }}</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<select class="form-select" [formControl]="dateRangeFilter">
+					<option value="bu ay">Bu Ay</option>
+					<option value="3 ay">Son 3 Ay</option>
+					<option value="6 ay">Son 6 Ay</option>
+					<option value="bu yıl">Bu Yıl</option>
+					<option value="1 yıl">Son 1 Yıl</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+
+<app-talep-list
+	[items]="items$ | async"
+	[talepDurumlari]="talepDurumlari"
+	[isLoading]="isLoading"
+	(view)="handleView($event)"
+	(edit)="handleEdit($event)"
+	>
+</app-talep-list>

@@ -1,0 +1,4 @@
+/* Add component-specific styles here if needed */
+.invalid-feedback {
+  display: block; /* Ensure feedback is visible when invalid */
+}

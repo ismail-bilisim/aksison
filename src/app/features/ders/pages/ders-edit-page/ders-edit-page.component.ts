@@ -18,7 +18,9 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
   private readonly toastService = inject(ToastService);
 
+  // HTML elementleri(input, div vb.), Child component’ler
   @ViewChild(DersFormComponent) formComponent?: DersFormComponent;
+  // Veri paylaşımı için kullanılmamalı. @Input(), @Output() ya da state yönetimi yerine kullanma.
 
   ders?: DersResponse;
   isEditMode = false;

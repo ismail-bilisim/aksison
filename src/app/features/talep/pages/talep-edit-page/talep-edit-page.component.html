@@ -1,0 +1,15 @@
+@if (isEditMode) {
+<h3 class="mb-3">Talep Düzenle</h3>
+} @else {
+<h3 class="mb-3">Yeni Talep Oluştur</h3>
+}
+
+<app-talep-form 
+  [initialValue]="talepRequest()" 
+  [talepKonusu]="talepKonusu$ | async"
+  [isEditMode]="isEditMode"
+  [isLoading]="isLoading()"
+  (onSave)="onSave($event)"
+  (onCancel)="onCancel()"
+  >
+</app-talep-form>

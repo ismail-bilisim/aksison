@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Kullanici } from '../../models/kullanici';
+import { KullaniciOzet } from '../../models/kullanici-ozet'; // Import KullaniciOzet
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,14 @@ export class KullaniciService {
       params = params.set('size', size.toString());
     }
     return this.http.get<Kullanici[]>(this.apiUrl, { params });
+  }
+
+  /**
+   * Get all users as summary DTOs
+   * GET /api/kullanici/ozet
+   */
+  getAllOzet(): Observable<KullaniciOzet[]> {
+    return this.http.get<KullaniciOzet[]>(`${this.apiUrl}/ozet`);
   }
 
   /**

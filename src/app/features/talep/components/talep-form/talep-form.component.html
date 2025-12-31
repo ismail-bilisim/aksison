@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">{{ isEditMode ? 'Talep Düzenle' : 'Yeni Talep Oluştur' }}</h3>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="talepForm" (ngSubmit)="onSubmit()">
+
+      <!-- Talep Tarihi -->
+      <div class="mb-3">
+        <label for="talepTarihi" class="form-label">Talep Tarihi</label>
+        <input type="date" class="form-control" id="talepTarihi" formControlName="talepTarihi"
+          [class.is-invalid]="talepForm.get('talepTarihi')?.invalid && talepForm.get('talepTarihi')?.touched">
+        <div *ngIf="talepForm.get('talepTarihi')?.invalid && talepForm.get('talepTarihi')?.touched" class="invalid-feedback">
+          Talep Tarihi gereklidir.
+        </div>
+      </div>
+      
+      <!-- Talep Sahibi (Searchable Select - For future, for now simple dropdown) -->
+      <div class="mb-3">
+        <label for="talepSahibi" class="form-label">Talep Sahibi</label>
+        <input type="text" class="form-control" id="talepSahibi" formControlName="talepSahibi"
+          [class.is-invalid]="talepForm.get('talepSahibi')?.invalid && talepForm.get('talepSahibi')?.touched">
+      </div>
+      
+      <!-- Talep Konusu -->
+      <div class="mb-3">
+        <label for="talepKonusuKodu" class="form-label">Talep Konusu</label>
+        <select class="form-select" id="talepKonusuKodu" formControlName="talepKonusuKodu"
+                [class.is-invalid]="talepForm.get('talepKonusuKodu')?.invalid && talepForm.get('talepKonusuKodu')?.touched">
+          <option [value]="null" disabled>Seçiniz...</option>
+          <option *ngFor="let konu of talepKonusu" [value]="konu.kodu">{{ konu.adi }}</option>
+        </select>
+        <div *ngIf="talepForm.get('talepKonusuKodu')?.invalid && talepForm.get('talepKonusuKodu')?.touched" class="invalid-feedback">
+          Talep Konusu gereklidir.
+        </div>
+      </div>
+
+      <!-- Talep İçeriği -->
+      <div class="mb-3">
+        <label for="talepIcerik" class="form-label">Talep İçeriği</label>
+        <textarea class="form-control" id="talepIcerik" formControlName="talepIcerik" rows="3"></textarea>
+      </div>
+
+      <!-- File Upload Section -->
+      <div class="mb-3">
+        <label for="fileUpload" class="form-label">Ek Dosyalar</label>
+        <input class="form-control" type="file" id="fileUpload" multiple (change)="onFileSelected($event)">
+        <div class="mt-2">
+          <h6>Yüklenecek Dosyalar:</h6>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of selectedFiles; let i = index">
+              {{ file.name }}
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeSelectedFile(i)">X</button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel">İptal</button>
+        <button type="submit" class="btn btn-primary" [disabled]="talepForm.invalid">{{ isEditMode ? 'Güncelle' : 'Oluştur' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

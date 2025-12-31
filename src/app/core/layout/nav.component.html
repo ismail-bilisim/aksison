@@ -482,6 +482,84 @@
       </div>
     </li> <!-- Proje Sonu -->
 
+    <!-- Talepler -->
+    <li class="nav-item mb-1">
+      <div>
+        <a (click)="toggleSubmenu('Talepler')"
+           class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-envelope me-2"></i>
+            Talepler
+          </span>
+          <i [class]="'bi ' + (isExpanded('Talepler') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Talepler')) {
+          <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+              <a routerLink="/talep"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-list-ul me-2"></i>
+                Tüm Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/new"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-plus-circle me-2"></i>
+                Yeni Talep
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/kanban"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-kanban me-2"></i>
+                Kanban Görünümü
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/by-durumu/acik"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-folder me-2"></i>
+                Açık Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/by-durumu/devam"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-hourglass-split me-2"></i>
+                Devam Edenler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/my-talepler"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-person-check me-2"></i>
+                Bana Atananlar
+              </a>
+            </li>
+          </ul>
+        }
+      </div>
+    </li>
 
   </ul>
 

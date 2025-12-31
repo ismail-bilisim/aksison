@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <div class="card" *ngIf="talep">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h3 class="card-title">Talep Detayı: {{ talep.talepSonuc }} (ID: {{ talep.id }})</h3>
+      <div>
+        <button class="btn btn-warning me-2" (click)="onEdit()">Düzenle</button>
+        <button *ngIf="talep.onayDurumu === 'tas'" class="btn btn-info me-2" (click)="onSubmitForApproval()">Onaya Sun</button>
+        <button *ngIf="talep.onayDurumu === 'osn'" class="btn btn-success me-2" (click)="onApprove()">Onayla</button>
+        <button *ngIf="talep.onayDurumu === 'osn'" class="btn btn-danger" (click)="onReject()">Reddet</button>
+        <button class="btn btn-sm btn-danger" (click)="onDelete(talep.id)">Sil</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Talep Konusu:</strong> {{ talep.talepKonusu?.adi }}</p>
+          <p><strong>Talep Açıklaması:</strong> {{ talep.talepIcerik }}</p>
+          <p><strong>Talep Tarihi:</strong> {{ talep.talepTarihi | date:'shortDate' }}</p>
+          <p><strong>Talep Sahibi:</strong> {{ talep.talepSahibi }}</p>
+          <p><strong>Atanan Kişi:</strong> {{ talep.atananKisi?.ad }} {{ talep.atananKisi?.soyad }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Talep Durumu:</strong>
+            <span class="badge" [ngClass]="{
+              'bg-warning': talep.talepDurumu?.kodu === 'acik',
+              'bg-info': talep.talepDurumu?.kodu === 'devam',
+              'bg-success': talep.talepDurumu?.kodu === 'tamamlandi',
+              'bg-danger': talep.talepDurumu?.kodu === 'iptal'
+            }">
+              {{ talep.talepDurumu?.adi }}
+            </span>
+          </p>
+          <p><strong>Kapanış Tarihi:</strong> {{ talep.kapanisTarihi | date:'shortDate' }}</p>
+          <p><strong>Onay Durumu:</strong> {{ talep.onayDurumu }}</p>
+          <p><strong>Ekleyen:</strong> {{ talep.ekleyenKullanici?.ad }} {{ talep.ekleyenKullanici?.soyad }}</p>
+          <p><strong>Ekleme Tarihi:</strong> {{ talep.eklemeTarihi | date:'short' }}</p>
+          <p *ngIf="talep.guncelleyenKullanici"><strong>Güncelleyen:</strong> {{ talep.guncelleyenKullanici?.ad }} {{ talep.guncelleyenKullanici?.soyad }}</p>
+          <p *ngIf="talep.guncellemeTarihi"><strong>Güncelleme Tarihi:</strong> {{ talep.guncellemeTarihi | date:'short' }}</p>
+        </div>
+      </div>
+      <hr>
+      <app-talep-ek-dosya-list [talepId]="talep.id"></app-talep-ek-dosya-list>
+    </div>
+  </div>
+  <div *ngIf="!talep" class="alert alert-info">
+    Talep detayları yükleniyor veya bulunamadı.
+  </div>
+</div>

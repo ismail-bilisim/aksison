@@ -1,0 +1,42 @@
+<div class="container-fluid mt-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Talep Kanban Panosu</h3>
+    <div class="col-md-3">
+      <select class="form-select" [formControl]="dateRangeFilter">
+        <option value="bu ay">Bu Ay</option>
+        <option value="3 ay">Son 3 Ay</option>
+        <option value="6 ay">Son 6 Ay</option>
+        <option value="bu yıl">Bu Yıl</option>
+        <option value="1 yıl">Son 1 Yıl</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="kanban-container">
+    <div
+      cdkDropList
+      [cdkDropListData]="column.talepler"
+      class="kanban-column"
+      *ngFor="let column of columns"
+      (cdkDropListDropped)="cdkDropListDropped($event)">
+      <div class="kanban-column-header">
+        <h5>{{ column.durum.adi }} ({{ column.talepler.length }})</h5>
+      </div>
+      <div class="kanban-card-list">
+        <div class="kanban-card" *ngFor="let talep of column.talepler" cdkDrag [cdkDragData]="talep">
+          <div class="card-body">
+            <h6 class="card-title">Talep Sonuc Text</h6>
+            <p class="card-text text-muted small">{{ talep.talepTarihi | date:'shortDate' }}</p>
+            <p class="card-text text-muted small">Konu: {{ talep.talepDurumu.adi }}</p>
+            <div class="d-grid gap-2">
+              <button class="btn btn-sm btn-outline-primary" (click)="viewTalepDetail(talep.id)">Detay</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="column.talepler.length === 0" class="placeholder-card">
+          Bu sütunda talep yok.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

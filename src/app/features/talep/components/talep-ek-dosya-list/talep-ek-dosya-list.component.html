@@ -1,0 +1,21 @@
+<div class="card mt-4">
+  <div class="card-header">
+    <h5 class="card-title">Ekli Dosyalar</h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="ekDosyalar.length === 0" class="alert alert-info">
+      Bu talep için ekli dosya bulunmamaktadır.
+    </div>
+    <ul class="list-group" *ngIf="ekDosyalar.length > 0">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of ekDosyalar">
+        <div>
+          <i class="bi bi-file-earmark me-2"></i> {{ file.dosyaAdi }} ({{ file.dosyaBoyutu / 1024 | number:'1.0-0' }} KB)
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="downloadFile(file.id, file.dosyaAdi)">İndir</button>
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteFile(file.id)">Sil</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

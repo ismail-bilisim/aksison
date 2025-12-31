@@ -1,0 +1,16 @@
+<ng-container *ngIf="talep$ | async as talep; else loading">
+	<app-talep-temel
+		[talep]="talep"
+		(edit)="handleEdit()"
+		(submitForApproval)="handleSubmitForApproval()"
+		(approve)="handleApprove()"
+		(reject)="handleReject()"
+		(delete)="onDelete($event)">
+	</app-talep-temel>
+</ng-container>
+
+<ng-template #loading>
+	<div class="text-center py-4">
+		<div class="spinner-border" role="status"></div>
+	</div>
+</ng-template>

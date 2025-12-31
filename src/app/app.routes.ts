@@ -42,6 +42,10 @@ export const routes: Routes = [
                 path: 'proje',
                 loadChildren: () => import('./features/proje/proje-route').then(m => m.PROJE_ROUTES)
             },
+            {
+                path: 'talep',
+                loadChildren: () => import('./features/talep/talep-route').then(m => m.TALEP_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },
