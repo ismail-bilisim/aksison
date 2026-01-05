@@ -36,11 +36,14 @@ export class TalepFormComponent implements OnInit, OnChanges {
 
   constructor(
   ) {
+    // Bugünün tarihini YYYY-MM-DD formatında al
+    const today = new Date().toISOString().split('T')[0];
+    
     // Form olusturma Tercihi: class alanı olarak oluşturmak ama burada olabilir.
     this.talepForm = this.fb.group({
       talepKonusuKodu: ['', Validators.required],
       talepIcerik: ['', Validators.required],
-      talepTarihi: ['', Validators.required],
+      talepTarihi: [today, Validators.required],
       talepSahibi: ['', Validators.required]
     });
   }

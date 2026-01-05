@@ -15,6 +15,11 @@ export class TalepTemelComponent {
   @Input() talep?: TalepResponse | null;
   @Input() talepSahibiAdSoyad?: string;
   @Input() atananKisiAdSoyad?: string;
+  
+  // Yetki kontrolü için Input'lar (smart component'tan gelir)
+  @Input() canEdit = true;
+  @Input() canApprove = false;
+  @Input() canDelete = false;
 
   @Output() edit = new EventEmitter<void>();
   @Output() submitForApproval = new EventEmitter<void>();

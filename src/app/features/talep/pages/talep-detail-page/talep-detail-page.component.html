@@ -1,13 +1,151 @@
 <ng-container *ngIf="talep$ | async as talep; else loading">
 	<app-talep-temel
 		[talep]="talep"
+		[canEdit]="authService.hasAccess('TALEP', 'EDIT')"
+		[canApprove]="authService.hasAccess('TALEP', 'APPROVE')"
+		[canDelete]="authService.hasAccess('TALEP', 'DELETE')"
 		(edit)="handleEdit()"
 		(submitForApproval)="handleSubmitForApproval()"
 		(approve)="handleApprove()"
 		(reject)="handleReject()"
 		(delete)="onDelete($event)">
 	</app-talep-temel>
+
+	<!-- Assignment Actions -->
+	<div class="card mt-3">
+		<div class="card-header">
+			<h5 class="mb-0">Talep Atama</h5>
+		</div>
+		<div class="card-body">
+			<div class="d-flex gap-2 flex-wrap">
+				<!-- Kendine Ata - PRJYN için -->
+				@if (authService.hasAccess('TALEP', 'ASSIGN_SELF') && !talep.atananKisi) {
+					<button class="btn btn-primary" (click)="handleAssignToSelf()" [disabled]="isLoading()">
+						<i class="bi bi-person-check me-1"></i>
+						Kendime Ata
+					</button>
+				}
+
+				<!-- Başkasına Ata - TAKLI için -->
+				@if (authService.hasAccess('TALEP', 'ASSIGN_OTHERS')) {
+					<button class="btn btn-outline-primary" (click)="openAssignModal()" [disabled]="isLoading()">
+						<i class="bi bi-person-plus me-1"></i>
+						Başkasına Ata
+					</button>
+				}
+
+				<!-- Mevcut Atama Bilgisi -->
+				@if (talep.atananKisi) {
+					<div class="alert alert-info mb-0 py-2 px-3">
+						<i class="bi bi-person-fill me-1"></i>
+						Atanan: <strong>{{ talep.atananKisi.ad }} {{ talep.atananKisi.soyad }}</strong>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </ng-container>
+
+<!-- Assignment Modal -->
+@if (showAssignModal()) {
+	<div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Talep Ata</h5>
+					<button type="button" class="btn-close" (click)="closeAssignModal()"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="assignUser" class="form-label">Kullanıcı Seçin</label>
+						<select 
+							id="assignUser" 
+							class="form-select"
+							[ngModel]="selectedUserId()"
+							(ngModelChange)="selectedUserId.set($event)">
+							<option [ngValue]="null">-- Kullanıcı Seçin --</option>
+							@for (user of assignableUsers$(); track user.id) {
+								<option [ngValue]="user.id">{{ user.ad }} {{ user.soyad }}</option>
+							}
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" (click)="closeAssignModal()">İptal</button>
+					<button 
+						type="button" 
+						class="btn btn-primary" 
+						(click)="handleAssignToOther()"
+						[disabled]="!selectedUserId() || isLoading()">
+						Ata
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<!-- Approval/Rejection Modal -->
+@if (showApprovalModal()) {
+	<div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						@if (approvalAction() === 'approve') {
+							<i class="bi bi-check-circle text-success me-2"></i>Talep Onayı
+						} @else {
+							<i class="bi bi-x-circle text-danger me-2"></i>Talep Reddi
+						}
+					</h5>
+					<button type="button" class="btn-close" (click)="closeApprovalModal()"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="approvalComment" class="form-label">
+							@if (approvalAction() === 'approve') {
+								Onay Açıklaması (Opsiyonel)
+							} @else {
+								Red Sebebi <span class="text-danger">*</span>
+							}
+						</label>
+						<textarea 
+							id="approvalComment" 
+							class="form-control" 
+							rows="3"
+							[placeholder]="approvalAction() === 'approve' ? 'Onay ile ilgili açıklama giriniz...' : 'Red sebebini giriniz...'"
+							[ngModel]="approvalComment()"
+							(ngModelChange)="approvalComment.set($event)">
+						</textarea>
+						@if (approvalAction() === 'reject') {
+							<small class="text-muted">Red sebebi zorunludur.</small>
+						}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" (click)="closeApprovalModal()">İptal</button>
+					@if (approvalAction() === 'approve') {
+						<button 
+							type="button" 
+							class="btn btn-success" 
+							(click)="confirmApprovalAction()"
+							[disabled]="isLoading()">
+							<i class="bi bi-check-lg me-1"></i>Onayla
+						</button>
+					} @else {
+						<button 
+							type="button" 
+							class="btn btn-danger" 
+							(click)="confirmApprovalAction()"
+							[disabled]="isLoading() || !approvalComment()">
+							<i class="bi bi-x-lg me-1"></i>Reddet
+						</button>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+}
 
 <ng-template #loading>
 	<div class="text-center py-4">

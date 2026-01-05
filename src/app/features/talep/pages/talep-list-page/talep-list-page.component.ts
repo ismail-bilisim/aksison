@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TalepListComponent } from '../../components/talep-list/talep-list.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { TalepDurumuOzet } from 'src/app/core/models/talep-durumu';
 import { getDateRange } from 'src/app/core/utils/date-filter.util';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-talep-list-page',
@@ -19,21 +20,24 @@ import { Router, RouterModule } from '@angular/router';
   imports: [CommonModule, TalepListComponent, ReactiveFormsModule, RouterModule]
 })
 export class TalepListPageComponent {
-  items$: Observable<TalepOzet[]>;
-  talepDurumlari: TalepDurumuOzet[] = [];
+  // Dependency Injection via inject()
+  private talepService = inject(TalepService);
+  private talepDurumuService = inject(TalepDurumuService);
+  private toastService = inject(ToastService);
+  private router = inject(Router);
+  protected authService = inject(AuthService);
 
+  // State management
+  items$: Observable<TalepOzet[]>;
+  talepDurumlari$ = this.talepDurumuService.getAllOzet();
+  isLoading = signal(false);
+
+  // Filter controls
   talepAdiFilter = new FormControl('');
   talepDurumuFilter = new FormControl('');
   dateRangeFilter = new FormControl('bu ay');
 
-  isLoading = false;
-
-  constructor(
-    private talepService: TalepService,
-    private talepDurumuService: TalepDurumuService,
-    private toastService: ToastService,
-    private router: Router
-  ) {
+  constructor() {
     this.items$ = combineLatest([
       this.talepAdiFilter.valueChanges.pipe(startWith('')),
       this.talepDurumuFilter.valueChanges.pipe(startWith('')),
@@ -41,41 +45,45 @@ export class TalepListPageComponent {
     ]).pipe(
       debounceTime(300),
       switchMap(([talepSonuc, durumKodu, dateRangeKey]) => {
-        this.isLoading = true;
+        this.isLoading.set(true);
         const { startDate, endDate } = getDateRange(dateRangeKey || 'bu ay');
 
         if (durumKodu) {
           return this.talepService.getTaleplerByDurumu(durumKodu, startDate, endDate).pipe(
-            map(res => res),
-            catchError(err => { this.toastService.error('Talepler yüklenirken hata oluştu.'); console.error(err); return of([] as TalepOzet[]); })
+            catchError(err => { 
+              this.toastService.error('Talepler yüklenirken hata oluştu.'); 
+              console.error(err); 
+              return of([] as TalepOzet[]); 
+            })
           );
         }
 
         return this.talepService.getAllOzet().pipe(
-          map(allTalepler => {
-              return allTalepler;
-          }),
-          catchError(err => { this.toastService.error('Talepler yüklenirken hata oluştu.'); console.error(err); return of([] as TalepOzet[]); })
+          catchError(err => { 
+            this.toastService.error('Talepler yüklenirken hata oluştu.'); 
+            console.error(err); 
+            return of([] as TalepOzet[]); 
+          })
         );
       }),
-      map(res => { this.isLoading = false; return res; })
+      map(res => { 
+        this.isLoading.set(false); 
+        return res; 
+      })
     );
   }
 
-  ngOnInit(): void {
-    this.talepDurumuService.getAllOzet().subscribe(durumlar => {
-      this.talepDurumlari = durumlar;
-    });
-  }
-
   // Handlers for presentational component outputs
-  handleView(id: number) {
+  viewDetail(id: number): void {
     this.router.navigate(['/talep/detail', id]);
   }
 
-  handleEdit(id: number) {
+  edit(id: number): void {
     this.router.navigate(['/talep/edit', id]);
   }
 
+  create(): void {
+    this.router.navigate(['/talep/new']);
+  }
 }
 

@@ -1,66 +1,92 @@
-<div class="card">
+<div class="">
   <div class="card-header">
-    <h3 class="card-title">{{ isEditMode ? 'Talep Düzenle' : 'Yeni Talep Oluştur' }}</h3>
+    <h5 class="card-title mb-0">{{ isEditMode ? 'Talep Düzenle' : 'Yeni Talep Oluştur' }}</h5>
   </div>
-  <div class="card-body">
-    <form [formGroup]="talepForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="talepForm" (ngSubmit)="onSubmit()" class="row">
 
       <!-- Talep Tarihi -->
-      <div class="mb-3">
-        <label for="talepTarihi" class="form-label">Talep Tarihi</label>
+      <div class="mb-3 col-md-4">
+        <label for="talepTarihi" class="form-label">Talep Tarihi <span class="text-danger">*</span></label>
         <input type="date" class="form-control" id="talepTarihi" formControlName="talepTarihi"
           [class.is-invalid]="talepForm.get('talepTarihi')?.invalid && talepForm.get('talepTarihi')?.touched">
-        <div *ngIf="talepForm.get('talepTarihi')?.invalid && talepForm.get('talepTarihi')?.touched" class="invalid-feedback">
-          Talep Tarihi gereklidir.
-        </div>
+        @if (talepForm.get('talepTarihi')?.invalid && talepForm.get('talepTarihi')?.touched) {
+          <div class="invalid-feedback">Talep Tarihi gereklidir.</div>
+        }
       </div>
       
-      <!-- Talep Sahibi (Searchable Select - For future, for now simple dropdown) -->
-      <div class="mb-3">
-        <label for="talepSahibi" class="form-label">Talep Sahibi</label>
+      <!-- Talep Sahibi -->
+      <div class="mb-3 col-md-4">
+        <label for="talepSahibi" class="form-label">Talep Sahibi <span class="text-danger">*</span></label>
         <input type="text" class="form-control" id="talepSahibi" formControlName="talepSahibi"
+          placeholder="Talep sahibinin adını giriniz"
           [class.is-invalid]="talepForm.get('talepSahibi')?.invalid && talepForm.get('talepSahibi')?.touched">
+        @if (talepForm.get('talepSahibi')?.invalid && talepForm.get('talepSahibi')?.touched) {
+          <div class="invalid-feedback">Talep Sahibi gereklidir.</div>
+        }
       </div>
       
       <!-- Talep Konusu -->
-      <div class="mb-3">
-        <label for="talepKonusuKodu" class="form-label">Talep Konusu</label>
+      <div class="mb-3 col-lg-4">
+        <label for="talepKonusuKodu" class="form-label">Talep Konusu <span class="text-danger">*</span></label>
         <select class="form-select" id="talepKonusuKodu" formControlName="talepKonusuKodu"
                 [class.is-invalid]="talepForm.get('talepKonusuKodu')?.invalid && talepForm.get('talepKonusuKodu')?.touched">
-          <option [value]="null" disabled>Seçiniz...</option>
-          <option *ngFor="let konu of talepKonusu" [value]="konu.kodu">{{ konu.adi }}</option>
+          <option value="" disabled>Seçiniz...</option>
+          @for (konu of talepKonusu; track konu.id) {
+            <option [value]="konu.kodu">{{ konu.adi }}</option>
+          }
         </select>
-        <div *ngIf="talepForm.get('talepKonusuKodu')?.invalid && talepForm.get('talepKonusuKodu')?.touched" class="invalid-feedback">
-          Talep Konusu gereklidir.
-        </div>
+        @if (talepForm.get('talepKonusuKodu')?.invalid && talepForm.get('talepKonusuKodu')?.touched) {
+          <div class="invalid-feedback">Talep Konusu gereklidir.</div>
+        }
       </div>
 
       <!-- Talep İçeriği -->
       <div class="mb-3">
-        <label for="talepIcerik" class="form-label">Talep İçeriği</label>
-        <textarea class="form-control" id="talepIcerik" formControlName="talepIcerik" rows="3"></textarea>
+        <label for="talepIcerik" class="form-label">Talep İçeriği <span class="text-danger">*</span></label>
+        <textarea class="form-control" id="talepIcerik" formControlName="talepIcerik" rows="4"
+          placeholder="Talep detaylarını açıklayınız"
+          [class.is-invalid]="talepForm.get('talepIcerik')?.invalid && talepForm.get('talepIcerik')?.touched"></textarea>
+        @if (talepForm.get('talepIcerik')?.invalid && talepForm.get('talepIcerik')?.touched) {
+          <div class="invalid-feedback">Talep İçeriği gereklidir.</div>
+        }
       </div>
 
       <!-- File Upload Section -->
       <div class="mb-3">
         <label for="fileUpload" class="form-label">Ek Dosyalar</label>
-        <input class="form-control" type="file" id="fileUpload" multiple (change)="onFileSelected($event)">
-        <div class="mt-2">
-          <h6>Yüklenecek Dosyalar:</h6>
-          <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of selectedFiles; let i = index">
-              {{ file.name }}
-              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeSelectedFile(i)">X</button>
-            </li>
-          </ul>
-        </div>
-
+        <input class="form-control" type="file" id="fileUpload" multiple (change)="onFileSelected($event)"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif">
+        <small class="text-muted">Desteklenen formatlar: PDF, Word, Excel, Resimler (Max 3MB)</small>
+        
+        @if (selectedFiles.length > 0) {
+          <div class="mt-2">
+            <h6>Yüklenecek Dosyalar:</h6>
+            <ul class="list-group">
+              @for (file of selectedFiles; track $index; let i = $index) {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span>
+                    <i class="bi bi-file-earmark me-1"></i>
+                    {{ file.name }}
+                    <small class="text-muted">({{ (file.size / 1024).toFixed(1) }} KB)</small>
+                  </span>
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeSelectedFile(i)">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </li>
+              }
+            </ul>
+          </div>
+        }
       </div>
 
-      <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-secondary me-2" (click)="onCancel">İptal</button>
-        <button type="submit" class="btn btn-primary" [disabled]="talepForm.invalid">{{ isEditMode ? 'Güncelle' : 'Oluştur' }}</button>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" (click)="onCancel.emit()">İptal</button>
+        <button type="submit" class="btn btn-primary" [disabled]="talepForm.invalid || isLoading">
+          @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          {{ isEditMode ? 'Güncelle' : 'Oluştur' }}
+        </button>
       </div>
     </form>
-  </div>
 </div>

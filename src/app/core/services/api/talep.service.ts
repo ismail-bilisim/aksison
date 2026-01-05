@@ -6,6 +6,7 @@ import { TalepRequest } from '../../models/talep-request';
 import { TalepResponse } from '../../models/talep-response';
 import { TalepOzet } from '../../models/talep-ozet';
 import { TalepStatistics } from '../../models/talep-statistics';
+import { KullaniciOzet } from '../../models/kullanici-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +32,15 @@ export class TalepService {
     return this.http.get<TalepResponse>(`${this.apiUrl}/${id}`);
   }
 
-  getAll(): Observable<TalepResponse[]> {
-    return this.http.get<TalepResponse[]>(this.apiUrl);
-  }
-
   getAllOzet(): Observable<TalepOzet[]> {
     return this.http.get<TalepOzet[]>(`${this.apiUrl}/ozet`);
+  }
+
+  /**
+   * Onay bekleyen talepleri listele (ONAYA_SUNULDU durumundakiler)
+   */
+  getPendingApproval(): Observable<TalepOzet[]> {
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/onay-bekleyen`);
   }
 
   getStatistics(startDate: string, endDate: string): Observable<TalepStatistics> {
@@ -57,7 +61,7 @@ export class TalepService {
     let params = new HttpParams()
       .set('startDate', startDate)
       .set('endDate', endDate);
-    return this.http.get<TalepOzet[]>(`${this.apiUrl}/my-talepler`, { params });
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/bana-atanan`, { params });
   }
 
   getTaleplerByDurumu(durumKodu: string, startDate: string, endDate: string): Observable<TalepOzet[]> {
@@ -67,21 +71,46 @@ export class TalepService {
     return this.http.get<TalepOzet[]>(`${this.apiUrl}/by-durumu/${durumKodu}`, { params });
   }
 
+  /**
+   * Talebi başka birine ata (TAKLI veya ADMIN için)
+   */
   assignTalep(id: number, kullaniciId: number): Observable<TalepResponse> {
     let params = new HttpParams()
-      .set('kullaniciId', kullaniciId.toString());
+      .set('atananKullaniciId', kullaniciId.toString());
     return this.http.post<TalepResponse>(`${this.apiUrl}/${id}/assign`, {}, { params });
+  }
+
+  /**
+   * Talebi kendine ata (PRJYN için)
+   */
+  assignToSelf(id: number): Observable<TalepResponse> {
+    return this.http.post<TalepResponse>(`${this.apiUrl}/${id}/assign-self`, {});
+  }
+
+  /**
+   * Atama yapılabilecek kullanıcıları listele (PRJYN, METGL, ICYON)
+   */
+  getAssignableUsers(): Observable<KullaniciOzet[]> {
+    return this.http.get<KullaniciOzet[]>(`${this.apiUrl}/assignable-users`);
   }
 
   icerikOnayinaSun(id: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
   }
 
-  icerikOnayla(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onayla`, {});
+  icerikOnayla(id: number, aciklama?: string): Observable<void> {
+    let params = new HttpParams();
+    if (aciklama) {
+      params = params.set('aciklama', aciklama);
+    }
+    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onayla`, {}, { params });
   }
 
-  icerikReddet(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, {});
+  icerikReddet(id: number, redSebebi?: string): Observable<void> {
+    let params = new HttpParams();
+    if (redSebebi) {
+      params = params.set('redSebebi', redSebebi);
+    }
+    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, {}, { params });
   }
 }

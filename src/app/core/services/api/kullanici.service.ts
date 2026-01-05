@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Kullanici } from '../../models/kullanici';
-import { KullaniciOzet } from '../../models/kullanici-ozet'; // Import KullaniciOzet
+import { KullaniciOzet } from '../../models/kullanici-ozet';
 
 @Injectable({
   providedIn: 'root'
