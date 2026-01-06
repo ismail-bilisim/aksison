@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ROLE_ACCESS_MAP, ActionType, ResourceType } from '../config/authorization.config';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -59,34 +58,18 @@ export class AuthService {
 
   getUserRoles(): string[] {
     const info = this.getUserInfo();
-    return info?.roles || info?.authorities || [];
+    return info?.authorities || info?.roles || [];
   }
 
   hasRole(role: string): boolean {
     return this.getUserRoles().includes(role);
   }
 
-  /**
-   * İşlem bazlı erişim kontrolü
-   * örn: hasAccess('VIDEODERS', 'EDIT')
-   */
-  //TODO: 
-//Örnek Kullanım:
-//    @if(auth.hasAccess('VIDEODERS', 'CREATE')) {
-//   <button class="btn btn-success"(click) = "onAdd()" > Yeni Ekle </button>}
-  // @if(auth.hasAccess('VIDEODERS', 'DELETE')) {
-  // <button class="btn btn-danger"(click) = "onDelete(v.kodu)" > Sil </button>}
-
-  hasAccess(resource: ResourceType, action: ActionType): boolean {
-    const roles = this.getUserRoles();
-    if (!roles?.length) return false;
-
-    return roles.some(role => {
-      const roleAccess = ROLE_ACCESS_MAP[role];
-      const allowedActions = roleAccess?.[resource];
-      return allowedActions?.includes(action);
-    });
+  hasAnyRole(...roles: string[]): boolean { //Parametreler otomatik olarak diziye çevrilir
+    const userRoles = this.getUserRoles();
+    return roles.some(r => userRoles.includes(r));
   }
+
 
 }
 

@@ -12,7 +12,6 @@ import { TalepOzet } from 'src/app/core/models/talep-ozet';
 @Component({
   selector: 'app-talep-onay-bekleyen-page',
   templateUrl: './talep-onay-bekleyen-page.component.html',
-  styleUrls: ['./talep-onay-bekleyen-page.component.css'],
   standalone: true,
   imports: [CommonModule, RouterModule, TalepListComponent]
 })

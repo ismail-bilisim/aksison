@@ -9,6 +9,8 @@ import { TalepTemelComponent } from 'src/app/features/talep/components/talep-tem
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { ROLES } from 'src/app/core/config/roles';
+
 
 @Component({
   selector: 'app-talep-detail-page',
@@ -25,6 +27,8 @@ export class TalepDetailPageComponent implements OnInit {
   private talepService = inject(TalepService);
   private toastService = inject(ToastService);
   protected authService = inject(AuthService);
+
+  public readonly ROLES = ROLES;
 
   // State
   talep$!: Observable<TalepResponse | null>;
@@ -58,7 +62,7 @@ export class TalepDetailPageComponent implements OnInit {
     );
 
     // Load assignable users if user has permission
-    if (this.authService.hasAccess('TALEP', 'ASSIGN_OTHERS')) {
+    if (this.authService.hasRole(ROLES.TAKLI)) {
       this.talepService.getAssignableUsers().subscribe({
         next: (users) => this.assignableUsers$.set(users),
         error: (err) => console.error('Atanabilir kullanıcılar yüklenemedi:', err)
@@ -72,11 +76,11 @@ export class TalepDetailPageComponent implements OnInit {
     );
   }
 
-  handleEdit(): void {
+  edit(): void {
     this.router.navigate(['/talep', 'edit', this.talepId]);
   }
 
-  handleSubmitForApproval(): void {
+  submitForApproval(): void {
     if (this.talepId && confirm('Talebi onay için sunmak istediğinizden emin misiniz?')) {
       this.isLoading.set(true);
       this.talepService.icerikOnayinaSun(this.talepId).subscribe({
@@ -94,14 +98,14 @@ export class TalepDetailPageComponent implements OnInit {
     }
   }
 
-  handleApprove(): void {
+  onayla(): void {
     // Modal aç - onay için
     this.approvalAction.set('approve');
     this.approvalComment.set('');
     this.showApprovalModal.set(true);
   }
 
-  handleReject(): void {
+  reddet(): void {
     // Modal aç - red için
     this.approvalAction.set('reject');
     this.approvalComment.set('');
@@ -161,7 +165,7 @@ export class TalepDetailPageComponent implements OnInit {
   /**
    * Kendine ata (PRJYN için)
    */
-  handleAssignToSelf(): void {
+  assignToSelf(): void {
     if (!this.talepId) return;
     if (!confirm('Talebi kendinize atamak istediğinizden emin misiniz?')) return;
 
@@ -215,7 +219,7 @@ export class TalepDetailPageComponent implements OnInit {
     });
   }
 
-  onDelete(id: number): void {
+  delete(id: number): void {
     if (!confirm('Talebi silmek istediğinizden emin misiniz?')) return;
     this.isLoading.set(true);
     this.talepService.delete(id).subscribe({

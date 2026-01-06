@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TalepResponse } from '../../../../core/models/talep-response';
 import { TalepEkDosyaListComponent } from '../talep-ek-dosya-list/talep-ek-dosya-list.component';
+import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
 
 @Component({
   selector: 'app-talep-temel',
@@ -13,27 +14,49 @@ import { TalepEkDosyaListComponent } from '../talep-ek-dosya-list/talep-ek-dosya
 })
 export class TalepTemelComponent {
   @Input() talep?: TalepResponse | null;
-  @Input() talepSahibiAdSoyad?: string;
-  @Input() atananKisiAdSoyad?: string;
   
   // Yetki kontrolü için Input'lar (smart component'tan gelir)
-  @Input() canEdit = true;
+  @Input() canEdit = false;
   @Input() canApprove = false;
   @Input() canDelete = false;
+  
+  // Atama için Input'lar
+  @Input() canAssignToSelf = false;
+  @Input() canAssignToOthers = false;
+  @Input() assignableUsers: KullaniciOzet[] = [];
 
   @Output() edit = new EventEmitter<void>();
   @Output() submitForApproval = new EventEmitter<void>();
   @Output() approve = new EventEmitter<void>();
   @Output() reject = new EventEmitter<void>();
   @Output() delete = new EventEmitter<number>();
+  @Output() assignToSelf = new EventEmitter<void>();
+  @Output() assignToOther = new EventEmitter<void>();
 
-  onEdit() { this.edit.emit(); }
-  onSubmitForApproval() { this.submitForApproval.emit(); }
-  onApprove() { this.approve.emit(); }
-  onReject() { this.reject.emit(); }
+  onEdit() {
+    this.edit.emit();
+  }
+  onSubmitForApproval() { 
+    this.submitForApproval.emit(); }
   
+
+  onApprove() { 
+    this.approve.emit(); 
+  }
+  
+  onReject() { 
+    this.reject.emit(); 
+  }
+
   onDelete(id: number) {
     this.delete.emit(id);
   }
 
+  onAssignToSelf() {
+    this.assignToSelf.emit();
+  }
+
+  onAssignToOther() {
+    this.assignToOther.emit();
+  }
 }

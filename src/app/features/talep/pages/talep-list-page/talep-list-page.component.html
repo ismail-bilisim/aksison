@@ -1,12 +1,12 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
 	<h4>Talepler</h4>
 	<div class="d-flex gap-2">
-		@if (authService.hasAccess('TALEP', 'APPROVE')) {
+		@if (authService.hasRole('PRJYN')) {
 			<a routerLink="/talep/onay-bekleyen" class="btn btn-outline-warning">
 				<i class="bi bi-hourglass-split me-1"></i> Onay Bekleyenler
 			</a>
 		}
-		@if (authService.hasAccess('TALEP', 'CREATE')) {
+		@if (authService.hasRole('ADMIN')) {
 			<button class="btn btn-success" (click)="create()">
 				<i class="bi bi-plus-lg me-1"></i> Yeni Talep
 			</button>
