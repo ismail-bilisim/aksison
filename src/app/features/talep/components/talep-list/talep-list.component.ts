@@ -12,7 +12,7 @@ import { TalepOzet } from 'src/app/core/models/talep-ozet';
 })
 export class TalepListComponent {
   // Presentational inputs
-  @Input() items: TalepOzet[] | null = [];
+  @Input() talepler: TalepOzet[] | null = [];
   @Input() isLoading = false;
 
   // Presentational outputs
@@ -25,11 +25,4 @@ export class TalepListComponent {
     this.view.emit(id);
   }
 
-  onEdit(id: number): void {
-    this.edit.emit(id);
-  }
-
-  onDelete(id: number): void {
-    this.delete.emit(id);
-  }
 }

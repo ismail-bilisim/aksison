@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, DragDropModule } from '@angular/cdk/drag-drop';
-import { TalepOzet } from '../../../../core/models/talep-ozet';
 import { TalepDurumuOzet } from '../../../../core/models/talep-durumu';
 import { TalepService } from '../../../../core/services/api/talep.service';
 import { TalepDurumuService } from '../../../../core/services/api/talep-durumu.service';
@@ -12,10 +11,11 @@ import { forkJoin, of } from 'rxjs';
 import { switchMap, tap, map } from 'rxjs/operators';
 import { getDateRange } from '../../../../core/utils/date-filter.util';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TalepOzetDurum } from 'src/app/core/models/talep-ozet-durum';
 
 interface KanbanColumn {
   durum: TalepDurumuOzet;
-  talepler: TalepOzet[];
+  talepler: TalepOzetDurum[];
 }
 
 @Component({
@@ -53,7 +53,7 @@ export class TalepKanbanComponent implements OnInit {
 
     forkJoin([
       this.talepDurumuService.getAllOzet(),
-      this.talepService.getAllOzet() // Fetch all summary tales to filter by date range later
+      this.talepService.getAllOzetWithDurum() // Fetch all summary tales to filter by date range later
     ]).pipe(
       tap(([durumlar, talepler]) => {
         this.talepDurumlari = durumlar.sort((a, b) => a.sira - b.sira); // Ensure correct order
@@ -80,11 +80,11 @@ export class TalepKanbanComponent implements OnInit {
     });
   }
 
-  cdkDropListDropped(event: CdkDragDrop<TalepOzet[]>): void {
+  cdkDropListDropped(event: CdkDragDrop<TalepOzetDurum[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      const movedTalep: TalepOzet = event.item.data;
+      const movedTalep: TalepOzetDurum = event.item.data;
       const targetDurum: TalepDurumuOzet = (event.container.data as any).durum; // Access durum from KanbanColumn
 
       if (!this.isValidTransition(movedTalep.talepDurumu.kodu, targetDurum.kodu)) {

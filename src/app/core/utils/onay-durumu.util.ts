@@ -4,6 +4,21 @@
  * Based on btk.aksisboot.enums.OnayDurumu
  */
 
+/**
+ * OnayDurumu enum - matches backend OnayDurumuEn enum codes
+ */
+export enum OnayDurumu {
+  TASLAK = 'tas',
+  ONAYA_SUNULDU = 'ons',
+  ONAYLI = 'ony',
+  RED = 'red'
+}
+
+/**
+ * All valid OnayDurumu codes as a constant array
+ */
+export const ONAY_DURUMU_CODES = ['tas', 'ons', 'ony', 'red'] as const;
+
 export interface OnayDurumuInfo {
   kod: string;
   aciklama: string;

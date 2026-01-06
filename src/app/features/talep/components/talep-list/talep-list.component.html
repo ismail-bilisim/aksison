@@ -13,39 +13,25 @@
               <th>Tarih</th>
               <th>Sahibi</th>
               <th>İçeriği</th>
-              <th>Durumu</th>
-              <th>Aksiyonlar</th>
+              <th>Detay</th>
             </tr>
           </thead>
           <tbody>
-            @for (talep of items; track talep.id) {
-              <tr>
+            @for (talep of talepler; track talep.id) {
+              <tr (click)="onView(talep.id)">
                 <td>{{ talep.id }}</td>
-                <td>{{ talep.talepTarihi | date:'shortDate' }}</td>
+                <td>{{ talep.talepTarihi }}</td>
                 <td>{{ talep.talepSahibi }}</td>
                 <td>{{ talep.talepIcerik }}</td>
-                <td>
-                  <span class="badge" [ngClass]="{
-                    'bg-primary': talep.talepDurumu.kodu === 'YENI',
-                    'bg-info': talep.talepDurumu.kodu === 'DEVAM',
-                    'bg-success': talep.talepDurumu.kodu === 'TAMAM',
-                    'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
-                  }">
-                    {{ talep.talepDurumu.adi }}
-                  </span>
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-info me-1" (click)="onView(talep.id)" title="Görüntüle">
+                <td colspan="5">
+                  <button class="btn btn-sm btn-outline-primary me-1 row-button" (click)="onView(talep.id)" title="Görüntüle">
                     <i class="bi bi-eye"></i>
-                  </button>
-                  <button class="btn btn-sm btn-primary me-1" (click)="onEdit(talep.id)" title="Düzenle">
-                    <i class="bi bi-pencil"></i>
                   </button>
                 </td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="6" class="text-center text-muted py-3">Kayıt bulunamadı.</td>
+                <td colspan="5" class="text-center text-muted py-3">Kayıt bulunamadı.</td>
               </tr>
             }
           </tbody>

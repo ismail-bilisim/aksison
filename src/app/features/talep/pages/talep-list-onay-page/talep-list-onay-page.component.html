@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-	<h4>
-		<i class="bi bi-hourglass-split me-2 text-warning"></i>
-		Onay Bekleyen Talepler
-	</h4>
-	<a routerLink="/talep" class="btn btn-outline-secondary">
+	<h6>
+		<i class="bi {{ pageIcon() }} me-2 text-primary"></i>
+		{{ pageTitle() }}
+	</h6>
+	<a routerLink="/talep" class="btn btn-outline-secondary btn-sm">
 		<i class="bi bi-arrow-left me-1"></i>Tüm Talepler
 	</a>
 </div>
@@ -16,9 +16,8 @@
 	</div>
 } @else {
 	<app-talep-list
-		[items]="items$ | async"
+		[talepler]="(talepler$ | async) ?? []"
 		[isLoading]="isLoading()"
-		(view)="viewDetail($event)"
-		(edit)="edit($event)">
+		(view)="viewDetail($event)">
 	</app-talep-list>
 }

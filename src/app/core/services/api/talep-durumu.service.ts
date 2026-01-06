@@ -21,6 +21,8 @@ export class TalepDurumuService {
     return this.http.get<TalepDurumuOzet[]>(`${this.apiUrl}/ozet`);
   }
 
+  
+
   getById(id: number): Observable<TalepDurumuResponse> {
     return this.http.get<TalepDurumuResponse>(`${this.apiUrl}/${id}`);
   }

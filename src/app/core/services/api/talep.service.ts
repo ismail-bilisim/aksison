@@ -7,6 +7,7 @@ import { TalepResponse } from '../../models/talep-response';
 import { TalepOzet } from '../../models/talep-ozet';
 import { TalepStatistics } from '../../models/talep-statistics';
 import { KullaniciOzet } from '../../models/kullanici-ozet';
+import { TalepOzetDurum } from '../../models/talep-ozet-durum';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +37,17 @@ export class TalepService {
     return this.http.get<TalepOzet[]>(`${this.apiUrl}/ozet`);
   }
 
+  getAllOzetWithDurum(): Observable<TalepOzetDurum[]> {
+    return this.http.get<TalepOzetDurum[]>(`${this.apiUrl}/ozet-durum`);
+  }
+
+
   /**
-   * Onay bekleyen talepleri listele (ONAYA_SUNULDU durumundakiler)
+   * Onay durumuna göre talepleri listele
+   * @param onayDurumu Onay durumu kodu (tas, ons, ony, red)
    */
-  getPendingApproval(): Observable<TalepOzet[]> {
-    return this.http.get<TalepOzet[]>(`${this.apiUrl}/onay-bekleyen`);
+  getByOnayDurumu(onayDurumu: string): Observable<TalepOzet[]> {
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/by-onay/${onayDurumu}`);
   }
 
   getStatistics(startDate: string, endDate: string): Observable<TalepStatistics> {
