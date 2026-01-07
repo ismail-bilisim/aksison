@@ -1,0 +1,76 @@
+<div class="container-fluid mt-4">
+	<!-- Page Header -->
+	<div class="row mb-4">
+		<div class="col">
+			<h5 class="mb-3">Tüm Talepler</h5>
+			
+			<!-- Date Range Filter -->
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row g-3 align-items-end">
+						<div class="col-sm-6 col-md-4 col-lg-3">
+							<label for="startDate" class="form-label">Başlangıç Tarihi</label>
+							<input 
+								type="date" 
+								id="startDate" 
+								class="form-control" 
+								[(ngModel)]="startDate"
+								(change)="onDateRangeChange()">
+						</div>
+						<div class="col-sm-6 col-md-4 col-lg-3">
+							<label for="endDate" class="form-label">Bitiş Tarihi</label>
+							<input 
+								type="date" 
+								id="endDate" 
+								class="form-control" 
+								[(ngModel)]="endDate"
+								(change)="onDateRangeChange()">
+						</div>
+						<div class="col-md-3 col-lg-2 col-xl-1">
+							<button 
+								class="btn btn-primary w-100" 
+								(click)="onDateRangeChange()"
+								[disabled]="isLoading()">
+								<i class="bi bi-search me-2"></i>
+								Bul
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading State -->
+	@if (isLoading()) {
+		<div class="text-center py-5">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Yükleniyor...</span>
+			</div>
+		</div>
+	}
+
+	<!-- Talep List -->
+	@if (!isLoading()) {
+		@if (talepler.length === 0) {
+			<div class="alert alert-info" role="alert">
+				<i class="bi bi-info-circle me-2"></i>
+				Seçilen tarih aralığında talep bulunamadı.
+			</div>
+		} @else {
+			<div class="row mb-3">
+				<div class="col">
+					<span class="badge bg-secondary">
+						Toplam {{ talepler.length }} talep bulundu
+					</span>
+				</div>
+			</div>
+			
+			<app-talep-list
+				[talepler]="talepler"
+				[isLoading]="isLoading()"
+				(view)="viewDetail($event)">
+			</app-talep-list>
+		}
+	}
+</div>

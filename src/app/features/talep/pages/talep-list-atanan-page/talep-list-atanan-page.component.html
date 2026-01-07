@@ -1,10 +1,12 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-	<h4>Tüm Talepler</h4>
+	<h5>Bana Atanan Talepler</h5>
 </div>
+
+<!-- async pipe ile auto subscribe / unsubscribe -->
 
 
 <app-talep-list
-	[talepler]="talepler$ | async"
+	[talepler]="talepler$ | async" 
 	[isLoading]="isLoading()"
 	(view)="viewDetail($event)">
 </app-talep-list>

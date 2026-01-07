@@ -1,87 +1,279 @@
+/* Kanban Board Container - TAM GENİŞLİK */
+.kanban-board {
+  width: 100%;
+  height: calc(100vh - 200px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 1rem;
+}
+
 .kanban-container {
   display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  height: calc(100vh - 150px); /* Adjust based on header/footer height */
+  gap: 1.5rem;
+  min-height: 100%;
+  padding: 0.5rem;
 }
 
+/* Column Styles */
 .kanban-column {
-  min-width: 300px; /* Minimum width for each column */
-  max-width: 300px;
-  margin-right: 15px;
-  background-color: #f8f9fa; /* Light background for columns */
-  border-radius: 8px;
+  flex: 0 0 320px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 10px rgba(0,0,0,.05);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
 }
 
-.kanban-column:last-child {
-  margin-right: 0;
+.kanban-column:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
+/* Column Header */
 .kanban-column-header {
-  padding: 10px;
-  background-color: #e9ecef; /* Slightly darker header */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  font-weight: bold;
-  text-align: center;
-  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 2px solid #dee2e6;
+  margin-bottom: 0.5rem;
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h6 {
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.header-content .badge {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Card List */
 .kanban-card-list {
-  flex-grow: 1; /* Allows the list to take up available space */
-  padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling for cards */
-  min-height: 50px; /* Ensure drop target is visible even if empty */
+  flex: 1;
+  padding: 0 1rem 1rem;
+  overflow-y: auto;
+  min-height: 100px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
 }
 
+.kanban-card-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kanban-card-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-card-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 3px;
+}
+
+/* Card Styles */
 .kanban-card {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,.05);
-  cursor: grab;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
-.kanban-card:active {
-  cursor: grabbing;
+.kanban-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
 }
 
-.kanban-card .card-body {
-  padding: 10px;
+.kanban-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #4a90e2 0%, #357abd 100%);
 }
 
-.placeholder-card {
-  background-color: #e9ecef;
-  border: 1px dashed #ced4da;
-  border-radius: 5px;
-  padding: 15px;
-  text-align: center;
+/* Card Content */
+.card-content {
+  padding: 1rem;
+  padding-right: 2.5rem;
+}
+
+.card-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.talep-id {
+  font-weight: 600;
+  color: #4a90e2;
+  font-size: 0.875rem;
+}
+
+.talep-date {
+  font-size: 0.75rem;
   color: #6c757d;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
-/* Styles for the CDK drag-and-drop elements */
+.card-body-info {
+  margin-bottom: 0.75rem;
+}
+
+.talep-sahibi {
+  font-size: 0.875rem;
+  color: #495057;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.talep-icerik {
+  font-size: 0.813rem;
+  color: #6c757d;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.card-footer-info .btn {
+  font-size: 0.813rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.card-footer-info .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Empty State */
+.empty-column {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #adb5bd;
+}
+
+.empty-column i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.5;
+}
+
+.empty-column p {
+  font-size: 0.875rem;
+}
+
+/* CDK Drag & Drop Styles */
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  transform: rotate(2deg);
+}
+
+.drag-preview {
+  display: none;
+}
+
+.preview-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 4px solid #4a90e2;
+  min-width: 280px;
+}
+
+.preview-id {
+  font-weight: 600;
+  color: #4a90e2;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.preview-text {
+  color: #495057;
+  margin: 0;
+  font-size: 0.875rem;
 }
 
 .cdk-drag-placeholder {
-  opacity: 0.5;
-  background-color: #f0f0f0;
-  border: 1px dashed #999;
+  opacity: 0.4;
+  background: #e9ecef;
+  border: 2px dashed #adb5bd;
+  border-radius: 10px;
+  min-height: 120px;
 }
 
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .kanban-card-list.cdk-drop-list-dragging .kanban-card:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .kanban-container {
+    gap: 1rem;
+  }
+
+  .kanban-column {
+    flex: 0 0 280px;
+  }
+
+  .card-content {
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .kanban-board {
+    height: calc(100vh - 180px);
+  }
+
+  .kanban-column {
+    flex: 0 0 260px;
+  }
+}
+
+/* Talep sahibi ve konusu yan yana */
+.talep-sahibi-konusu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.talep-sahibi-bold {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.875rem;
+}
+
+.talep-konusu {
+  font-weight: 400;
+  color: #6c757d;
+  font-size: 0.813rem;
 }

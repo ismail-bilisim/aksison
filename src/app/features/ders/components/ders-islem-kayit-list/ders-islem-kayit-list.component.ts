@@ -12,7 +12,7 @@ import { DersIslemKayitService } from 'src/app/core/services/api/ders-islem-kayi
 export class DersIslemKayitListComponent implements OnInit {
   @Input() dersId!: number;
   items: DersIslemKayit[] = [];
-  loading = false;
+  isLoading = false;
 
   private dersIslemKayitService = inject(DersIslemKayitService);
 
@@ -23,15 +23,15 @@ export class DersIslemKayitListComponent implements OnInit {
   }
 
   loadIslemKayitlar(): void {
-    this.loading = true;
+    this.isLoading = true;
     this.dersIslemKayitService.getByDersId(this.dersId).subscribe({
       next: (data) => {
         this.items = data;
-        this.loading = false;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading ders islem kayitlar:', error);
-        this.loading = false;
+        this.isLoading = false;
       }
     });
   }

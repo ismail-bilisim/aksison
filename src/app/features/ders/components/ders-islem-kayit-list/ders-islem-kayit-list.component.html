@@ -2,7 +2,7 @@
   <h5>İşlem Kayıtları</h5>
 </div>
 
-@if (loading) {
+@if (isLoading) {
   <div class="text-center p-3">
     <div class="spinner-border spinner-border-sm" role="status">
       <span class="visually-hidden">Yükleniyor...</span>
@@ -10,13 +10,13 @@
   </div>
 }
 
-@if (!loading && items.length === 0) {
+@if (!isLoading && items.length === 0) {
   <div class="alert alert-info">
     Henüz işlem kaydı bulunmamaktadır.
   </div>
 }
 
-@if (!loading && items.length > 0) {
+@if (!isLoading && items.length > 0) {
   <div class="table-responsive">
     <table class="table table-striped table-hover">
       <thead>

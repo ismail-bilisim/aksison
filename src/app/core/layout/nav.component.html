@@ -500,9 +500,12 @@
               <a routerLink="/talep/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
                 (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
                 <i class="bi bi-plus-circle me-2"></i>
-                Yeni Talep
+                Yeni Talep Oluştur
               </a>
             </li>
+
+            <hr class="w-75 ms-5"/>
+
             <li class="nav-item">
               <a routerLink="/talep/by-onay/tas"
                  routerLinkActive="active"
@@ -544,36 +547,6 @@
               </a>
             </li>
             <li class="nav-item">
-              <a routerLink="/talep/kanban"
-                 routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}"
-                 (click)="closeSidebar()"
-                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-                <i class="bi bi-kanban me-2"></i>
-                Kanban Görünümü
-              </a>
-            </li>
-            <li class="nav-item">
-              <a routerLink="/talep/by-durumu/acik"
-                 routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}"
-                 (click)="closeSidebar()"
-                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-                <i class="bi bi-folder me-2"></i>
-                Açık Talepler
-              </a>
-            </li>
-            <li class="nav-item">
-              <a routerLink="/talep/by-durumu/devam"
-                 routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}"
-                 (click)="closeSidebar()"
-                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-                <i class="bi bi-hourglass-split me-2"></i>
-                Devam Edenler
-              </a>
-            </li>
-            <li class="nav-item">
               <a routerLink="/talep/bana-atanan"
                  routerLinkActive="active"
                  [routerLinkActiveOptions]="{exact: true}"
@@ -583,6 +556,62 @@
                 Bana Atananlar
               </a>
             </li>
+
+            <hr class="w-75 ms-5"/>
+
+            <li class="nav-item">
+              <a routerLink="/talep/by-durum/YPLCK"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark me-2"></i>
+                Yapılacak Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/by-durum/DEVAM"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-clock-history me-2"></i>
+                Devam Eden Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/by-durum/TAMAM"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-check-circle me-2"></i>
+                Tamamlanan Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/by-durum/IPTAL"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-x-circle me-2"></i>
+                İptal Edilen Talepler
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/talep/kanban"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-kanban me-2"></i>
+                Kanban Görünümü
+              </a>
+            </li>
+
+            <hr class="w-75 ms-5"/>
+
             <li class="nav-item">
               <a routerLink="/talep" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeSidebar()"
                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">

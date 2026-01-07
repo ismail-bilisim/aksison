@@ -120,32 +120,9 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onEdit(id: number) {
-    if (id) {
-      this.router.navigate(['/videoders/edit', id]);
-    }
+  viewDetail(id: number) {
+      this.router.navigate(['/videoders/detail', id]);
   }
-
-  onDelete(id: number) {
-    if (id && confirm('Bu video dersi silmek istediğinizden emin misiniz? '+id)) {
-      this.loading = true;
-      this.service.delete(id).subscribe({
-        next: () => {
-          if (this.durum) {
-            this.loadByDurum(this.durum);
-          } else {
-            this.loadAll();
-          }
-        },
-        error: (err) => {
-          console.error('Silme işlemi başarısız. id:' + id, err);
-          this.error = 'Video ders silinemedi. id:'+ id;
-          this.loading = false;
-        }
-      });
-    }
-  }
-
 
   onNewVideoders() {
     this.router.navigate(['/videoders/new']);

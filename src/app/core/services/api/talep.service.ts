@@ -33,8 +33,12 @@ export class TalepService {
     return this.http.get<TalepResponse>(`${this.apiUrl}/${id}`);
   }
 
-  getAllOzet(): Observable<TalepOzet[]> {
-    return this.http.get<TalepOzet[]>(`${this.apiUrl}/ozet`);
+  getAllOzet(startDate?: string, endDate?: string): Observable<TalepOzet[]> {
+    let params = new HttpParams();
+    if (startDate && endDate) {
+      params = params.set('startDate', startDate).set('endDate', endDate);
+    }
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/ozet`, { params });
   }
 
   getAllOzetWithDurum(): Observable<TalepOzetDurum[]> {
@@ -64,18 +68,25 @@ export class TalepService {
     return this.http.get<TalepOzet[]>(`${this.apiUrl}/atanan/${kullaniciId}`, { params });
   }
 
-  getMyTalepler(startDate: string, endDate: string): Observable<TalepOzet[]> {
-    let params = new HttpParams()
-      .set('startDate', startDate)
-      .set('endDate', endDate);
-    return this.http.get<TalepOzet[]>(`${this.apiUrl}/bana-atanan`, { params });
+  
+  //TODO
+  // getMyTalepler(startDate: string, endDate: string): Observable<TalepOzet[]> {
+  //   let params = new HttpParams()
+  //     .set('startDate', startDate)
+  //     .set('endDate', endDate);
+  //   return this.http.get<TalepOzet[]>(`${this.apiUrl}/bana-atanan`, { params });
+  // }
+
+  getAllTalepBanaAtanan(): Observable<TalepOzet[]> {
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/bana-atanan`, { });
   }
+
 
   getTaleplerByDurumu(durumKodu: string, startDate: string, endDate: string): Observable<TalepOzet[]> {
     let params = new HttpParams()
       .set('startDate', startDate)
       .set('endDate', endDate);
-    return this.http.get<TalepOzet[]>(`${this.apiUrl}/by-durumu/${durumKodu}`, { params });
+    return this.http.get<TalepOzet[]>(`${this.apiUrl}/by-durum/${durumKodu}`, { params });
   }
 
   /**

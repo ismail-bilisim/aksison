@@ -7,9 +7,9 @@
 }
 
 @if (kullanici) {
-  <h3>Kullanıcıyı Düzenle</h3>
+  <h5>Kullanıcıyı Düzenle</h5>
 } @else {
-  <h3>Yeni Kullanıcı Ekle</h3>
+  <h5>Yeni Kullanıcı Ekle</h5>
 }
 
 <app-kullanici-form [initialData]="kullanici" (save)="onSave($event)"></app-kullanici-form>

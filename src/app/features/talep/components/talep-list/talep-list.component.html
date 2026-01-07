@@ -2,7 +2,9 @@
   <div class="card-body">
     @if (isLoading) {
       <div class="text-center py-4">
-        <div class="spinner-border" role="status"></div>
+        <div class="spinner-border" role="status">
+                <span class="visually-hidden">Yükleniyor...</span>
+        </div>
       </div>
     } @else {
       <div class="table-responsive">

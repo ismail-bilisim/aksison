@@ -11,8 +11,8 @@
             <tr class="table-row-hover clickable-row"
                 role="button"
                 tabindex="0"
-                (click)="onRowClick(v.id!)"
-                (keydown.enter)="onRowClick(v.id!)"
+                (click)="onViewDetail(v.id!)"
+                (keydown.enter)="onViewDetail(v.id!)"
                 title="Detayları görüntülemek için tıklayın">
                 <td><strong>{{ v.kodu }}</strong></td>
                 <td>{{ v.adi }}</td>
