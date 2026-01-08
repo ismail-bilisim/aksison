@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TalepResponse } from '../../../../core/models/talep-response';
-import { TalepEkDosyaListComponent } from '../talep-ek-dosya-list/talep-ek-dosya-list.component';
 import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
 
 @Component({
@@ -10,7 +9,7 @@ import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
   templateUrl: './talep-temel.component.html',
   styleUrls: ['./talep-temel.component.css'],
   standalone: true,
-  imports: [CommonModule, TalepEkDosyaListComponent],
+  imports: [CommonModule],
 })
 export class TalepTemelComponent {
   @Input() talep?: TalepResponse | null;
@@ -19,6 +18,8 @@ export class TalepTemelComponent {
   @Input() canEdit = false;
   @Input() canApprove = false;
   @Input() canDelete = false;
+  @Input() canCancel = false;
+  @Input() canConclude = false;
   
   // Atama için Input'lar
   @Input() canAssignToSelf = false;
@@ -32,6 +33,8 @@ export class TalepTemelComponent {
   @Output() delete = new EventEmitter<number>();
   @Output() assignToSelf = new EventEmitter<void>();
   @Output() assignToOther = new EventEmitter<void>();
+  @Output() cancell = new EventEmitter<void>()
+  @Output() conclude = new EventEmitter<void>()
 
   onEdit() {
     this.edit.emit();
@@ -59,4 +62,13 @@ export class TalepTemelComponent {
   onAssignToOther() {
     this.assignToOther.emit();
   }
+
+  onCancel(id: number) {
+    this.cancell.emit();
+  }
+
+  onConclude(id: number) {
+    this.conclude.emit();
+  }
+
 }

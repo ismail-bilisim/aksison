@@ -1,6 +1,6 @@
 import { TalepKonusuOzet } from './talep-konusu';
 import { TalepDurumuOzet } from './talep-durumu';
-import { TalepEkDosyaOzet } from './talep-ek-dosya';
+import { TalepEkdosyaOzet } from './talep-ekdosya';
 import { KullaniciOzet } from './kullanici-ozet';
 
 export interface TalepResponse {
@@ -15,7 +15,7 @@ export interface TalepResponse {
   talepDurumu: TalepDurumuOzet;
   kapanisTarihi?: string;
   onayDurumu?: string;
-  ekDosyalar?: TalepEkDosyaOzet[];
+  ekDosyalar?: TalepEkdosyaOzet[];
   ekleyenKullanici?: KullaniciOzet;
   guncelleyenKullanici?: KullaniciOzet;
   eklemeTarihi?: string;

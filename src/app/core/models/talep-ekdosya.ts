@@ -1,6 +1,6 @@
 import { KullaniciOzet } from './kullanici-ozet';
 
-export interface TalepEkDosyaResponse {
+export interface TalepEkdosyaResponse {
   id: number;
   version: number;
   talepId: number;
@@ -12,7 +12,7 @@ export interface TalepEkDosyaResponse {
   eklemeTarihi: string;
 }
 
-export interface TalepEkDosyaOzet {
+export interface TalepEkdosyaOzet {
   id: number;
   dosyaAdi: string;
   dosyaBoyutu: number;

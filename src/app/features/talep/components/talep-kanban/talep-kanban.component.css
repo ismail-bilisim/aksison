@@ -1,7 +1,8 @@
 /* Kanban Board Container - TAM GENİŞLİK */
 .kanban-board {
   width: 100%;
-  height: calc(100vh - 200px);
+  /* slightly increased offset so the board lines up better with surrounding page filters */
+  height: calc(100vh - 220px);
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 1rem;
@@ -12,11 +13,14 @@
   gap: 1.5rem;
   min-height: 100%;
   padding: 0.5rem;
+  flex-wrap: nowrap; /* keep columns on single row and let them shrink/grow */
 }
 
 /* Column Styles */
 .kanban-column {
-  flex: 0 0 320px;
+  /* allow columns to grow/shrink and evenly fill the container width */
+  flex: 1 1 320px;
+  min-width: 260px;
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -237,10 +241,11 @@
 @media (max-width: 768px) {
   .kanban-container {
     gap: 1rem;
+    flex-wrap: wrap; /* allow wrapping on narrower screens */
   }
 
   .kanban-column {
-    flex: 0 0 280px;
+    flex: 1 1 280px;
   }
 
   .card-content {

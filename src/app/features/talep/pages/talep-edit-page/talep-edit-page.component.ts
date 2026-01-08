@@ -3,7 +3,7 @@ import { Component, inject, Input, signal } from '@angular/core';
 import { TalepFormComponent } from '../../components/talep-form/talep-form.component';
 import { TalepRequest } from 'src/app/core/models/talep-request';
 import { TalepService } from 'src/app/core/services/api/talep.service';
-import { TalepEkDosyaService } from 'src/app/core/services/api/talep-ek-dosya.service';
+import { TalepEkdosyaService as TalepEkdosyaService } from 'src/app/core/services/api/talep-ekdosya.service';
 import { forkJoin, of, catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TalepResponse } from 'src/app/core/models/talep-response';
@@ -37,7 +37,7 @@ export class TalepEditPageComponent {
   private lookupService = inject(LookupService);
 
   private toastService = inject(ToastService);
-  private talepEkDosyaService = inject(TalepEkDosyaService);
+  private talepEkdosyaService = inject(TalepEkdosyaService);
 
   talepKonusu$ = this.lookupService.getAllTalepKonusuOzet(); // (Observable değişkeni) için en doğru yer çoğu zaman class gövdesi (field initializer)’dır.
   //  Yani constructor/ngOnInit dışında
@@ -108,7 +108,7 @@ export class TalepEditPageComponent {
         // if there are files selected, upload them
         if (files && files.length > 0) {
           const uploads = files.map(
-            f => this.talepEkDosyaService.uploadFile(f, data.id)
+            f => this.talepEkdosyaService.uploadFile(f, data.id)
           );
 
 

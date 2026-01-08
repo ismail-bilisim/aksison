@@ -1,46 +1,49 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TalepEkDosyaResponse } from '../../../../core/models/talep-ek-dosya';
-import { TalepEkDosyaService } from '../../../../core/services/api/talep-ek-dosya.service';
+import { TalepEkdosyaResponse } from '../../../../core/models/talep-ekdosya';
+import { TalepEkdosyaService } from '../../../../core/services/api/talep-ekdosya.service';
 import { take } from 'rxjs/operators';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 
 @Component({
-  selector: 'app-talep-ek-dosya-list',
+  selector: 'app-talep-ekdosya-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './talep-ek-dosya-list.component.html',
-  styleUrl: './talep-ek-dosya-list.component.css'
+  templateUrl: './talep-ekdosya-list.component.html',
+  styleUrl: './talep-ekdosya-list.component.css'
 })
-export class TalepEkDosyaListComponent implements OnInit, OnChanges {
+export class TalepEkDosyaListComponent implements OnInit {
   @Input() talepId!: number;
-  ekDosyalar: TalepEkDosyaResponse[] = [];
+  ekDosyalar: TalepEkdosyaResponse[] = [];
+  isLoading = false;
+  private hasLoaded = false; // Track if data has been loaded
 
   constructor(
-    private talepEkDosyaService: TalepEkDosyaService,
-    private toastService: ToastService
+    private readonly talepEkDosyaService: TalepEkdosyaService,
+    private readonly toastService: ToastService
   ) { }
 
-  ngOnInit(): void {
-    if (this.talepId) {
-      this.loadEkDosyalar(this.talepId);
+  ngOnInit() {
+    // Auto-load on first initialization
+    if (this.talepId && !this.hasLoaded) {
+      this.loadEkDosyalar();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['talepId'] && changes['talepId'].currentValue !== changes['talepId'].previousValue && this.talepId) {
-      this.loadEkDosyalar(this.talepId);
-    }
-  }
+  loadEkDosyalar(): void {
+    if (!this.talepId || this.hasLoaded) return;
 
-  loadEkDosyalar(talepId: number): void {
-    this.talepEkDosyaService.getFilesByTalepId(talepId).pipe(take(1)).subscribe({
+    this.hasLoaded = true;
+    this.isLoading = true;
+    this.talepEkDosyaService.getFilesByTalepId(this.talepId).pipe(take(1)).subscribe({
       next: (files) => {
         this.ekDosyalar = files;
+        this.isLoading = false;
       },
       error: (err) => {
         this.toastService.error('Ek dosyalar yüklenirken hata oluştu.');
         console.error(err);
+        this.isLoading = false;
       }
     });
   }
@@ -48,14 +51,14 @@ export class TalepEkDosyaListComponent implements OnInit, OnChanges {
   downloadFile(id: number, fileName: string): void {
     this.talepEkDosyaService.downloadFile(id).pipe(take(1)).subscribe({
       next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
+        const url = globalThis.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = fileName;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        a.remove();
+        globalThis.URL.revokeObjectURL(url);
       },
       error: (err) => {
         this.toastService.error('Dosya indirilirken hata oluştu.');

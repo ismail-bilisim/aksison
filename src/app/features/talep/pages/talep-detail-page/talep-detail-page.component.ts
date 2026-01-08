@@ -10,23 +10,35 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ROLES } from 'src/app/core/config/roles';
+import { TalepIslemkayitListComponent } from '../../components/talep-islemkayit-list/talep-islemkayit-list.component';
+import { TalepEkDosyaListComponent as TalepEkdosyaListComponent } from '../../components/talep-ekdosya-list/talep-ekdosya-list.component';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
   selector: 'app-talep-detail-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, TalepTemelComponent, FormsModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    TalepTemelComponent, 
+    FormsModule,
+    NgbNavModule,
+    TalepEkdosyaListComponent,
+    TalepIslemkayitListComponent
+  ],
+
   templateUrl: './talep-detail-page.component.html',
   styleUrls: ['./talep-detail-page.component.css']
 })
 export class TalepDetailPageComponent implements OnInit {
 
   // Dependency Injection via inject()
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private talepService = inject(TalepService);
-  private toastService = inject(ToastService);
-  protected authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly talepService = inject(TalepService);
+  private readonly toastService = inject(ToastService);
+  protected readonly authService = inject(AuthService);
 
   public readonly ROLES = ROLES;
 
@@ -35,6 +47,9 @@ export class TalepDetailPageComponent implements OnInit {
   talepId!: number;
   isLoading = signal(false);
   
+  // Tab state
+  activeTab = signal<number>(1); // 1: Files, 2: Operation Logs
+  
   // Assignment state
   assignableUsers$ = signal<KullaniciOzet[]>([]);
   selectedUserId = signal<number | null>(null);
@@ -42,8 +57,12 @@ export class TalepDetailPageComponent implements OnInit {
   
   // Approval/Rejection modal state
   showApprovalModal = signal(false);
+  showIptalModal = signal(false);
+  showSonucModal = signal(false);
   approvalAction = signal<'approve' | 'reject'>('approve');
   approvalComment = signal<string>('');
+  iptalAciklama = signal<string>('');
+  sonucAciklama = signal<string>('');
 
   ngOnInit(): void {
     this.talep$ = this.route.paramMap.pipe(
@@ -68,6 +87,10 @@ export class TalepDetailPageComponent implements OnInit {
         error: (err) => console.error('Atanabilir kullanıcılar yüklenemedi:', err)
       });
     }
+  }
+
+  onTabChange(tabId: number): void {
+    this.activeTab.set(tabId);
   }
 
   private refreshTalep(): void {
@@ -117,6 +140,16 @@ export class TalepDetailPageComponent implements OnInit {
     this.approvalComment.set('');
   }
 
+  closeIptalModal(): void {
+    this.showIptalModal.set(false);
+    this.iptalAciklama.set('');
+  }
+
+  closeSonucModal(): void {
+    this.showSonucModal.set(false);
+    this.sonucAciklama.set('');
+  }
+
   confirmApprovalAction(): void {
     if (!this.talepId) return;
     
@@ -161,6 +194,53 @@ export class TalepDetailPageComponent implements OnInit {
       });
     }
   }
+
+
+    confirmIptalAction(): void {
+    if (!this.talepId) return;
+    
+    const comment = this.iptalAciklama();
+    
+    this.isLoading.set(true);
+    
+      this.talepService.iptalEt(this.talepId, comment || undefined).subscribe({
+        next: () => {
+          this.toastService.success('Talep başarıyla iptal edildi.');
+          this.isLoading.set(false);
+          this.closeSonucModal();
+          this.refreshTalep();
+        },
+        error: (err) => {
+          this.toastService.error('Talep iptal edilirken hata oluştu.');
+          console.error(err);
+          this.isLoading.set(false);
+        }
+      });
+
+    }
+
+    confirmSonucAction(): void {
+    if (!this.talepId) return;
+    
+    const comment = this.sonucAciklama();
+    
+    this.isLoading.set(true);
+    
+      this.talepService.talepSonuclandir(this.talepId, comment || undefined).subscribe({
+        next: () => {
+          this.toastService.success('Talep başarıyla sonuçlandırıldı.');
+          this.isLoading.set(false);
+          this.closeSonucModal();
+          this.refreshTalep();
+        },
+        error: (err) => {
+          this.toastService.error('Talep sonuçlandırılırken hata oluştu.');
+          console.error(err);
+          this.isLoading.set(false);
+        }
+      });
+
+    }
 
   /**
    * Kendine ata (PRJYN için)
@@ -235,4 +315,22 @@ export class TalepDetailPageComponent implements OnInit {
       }
     });
   }
+
+
+    iptalEt(): void {
+    
+    // Modal aç - iptal için
+    this.iptalAciklama.set('');
+    this.showIptalModal.set(true);
+  }
+
+  
+
+    sonuclandir(): void {
+    // Modal aç - sonuç için
+    this.sonucAciklama.set('');
+    this.showSonucModal.set(true);
+  }
+
+
 }

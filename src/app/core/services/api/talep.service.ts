@@ -1,21 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { TalepRequest } from '../../models/talep-request';
 import { TalepResponse } from '../../models/talep-response';
 import { TalepOzet } from '../../models/talep-ozet';
 import { TalepStatistics } from '../../models/talep-statistics';
 import { KullaniciOzet } from '../../models/kullanici-ozet';
 import { TalepOzetDurum } from '../../models/talep-ozet-durum';
+import { TalepIslemkayit } from '../../models/talep-islemkayit';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TalepService {
+  private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/talep`;
 
-  constructor(private http: HttpClient) { }
+  constructor() {
+
+   }
 
   create(request: TalepRequest): Observable<TalepResponse> {
     return this.http.post<TalepResponse>(this.apiUrl, request);
@@ -25,9 +29,28 @@ export class TalepService {
     return this.http.put<TalepResponse>(`${this.apiUrl}/${id}`, request);
   }
 
+  iptalEt(id: number, iptalAciklama?: string): Observable<void> {
+    let params = new HttpParams();
+    if (iptalAciklama) {
+      params = params.set('aciklama', iptalAciklama);
+    }
+    return this.http.put<void>(`${this.apiUrl}/${id}/iptal-et`, {}, { params });
+  }
+
+
+  talepSonuclandir(id: number, sonucAciklama?: string): Observable<void> {
+    let params = new HttpParams();
+    if (sonucAciklama) {
+      params = params.set('aciklama', sonucAciklama);
+    }
+    return this.http.put<void>(`${this.apiUrl}/${id}/sonuclandir`, {}, { params });
+  }
+
+
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
 
   getById(id: number): Observable<TalepResponse> {
     return this.http.get<TalepResponse>(`${this.apiUrl}/${id}`);
@@ -131,4 +154,12 @@ export class TalepService {
     }
     return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, {}, { params });
   }
+
+  getByTalepId(talepId: number): Observable<TalepIslemkayit[]> {
+    return this.http.get<TalepIslemkayit[]>(`${this.apiUrl}/${talepId}/islemkayit`);
+  }
+
+
+
+
 }
