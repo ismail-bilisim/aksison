@@ -1,7 +1,19 @@
 <section class="mt-4">
     @if (talep) {
         <header class="bg-white rounded-3 shadow-sm p-3 d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">Talep Detayı #{{ talep.id }}</h5>
+                        <div class="d-flex gap-2">
+
+            <span class="badge" [ngClass]="{
+                                                                                    'bg-primary': talep.talepDurumu.kodu === 'YPLCK',
+                                                                                    'bg-info': talep.talepDurumu.kodu === 'DEVAM',
+                                                                                    'bg-success': talep.talepDurumu.kodu === 'TAMAM',
+                                                                                    'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
+                                                                                }">
+                {{ talep.talepDurumu.adi }}
+            </span>
+            <h5 class="mb-0">Talep Detayı #{{ talep.id }}</h5> 
+                                        
+         </div>
             <div class="d-flex gap-2">
                 @if (canEdit && ( talep.onayDurumu=='tas' || talep.onayDurumu=='red' || talep.onayDurumu=='ons') ) {
                     <button class="btn btn-warning btn-sm shadow-sm" (click)="onEdit()">
@@ -57,11 +69,12 @@
                         <dt class="col-sm-4">Talep Konusu</dt>
                         <dd class="col-sm-8">{{ talep.talepKonusu.adi }}</dd>
 
-                        <dt class="col-sm-4">Talep Açıklaması</dt>
-                        <dd class="col-sm-8">{{ talep.talepIcerik }}</dd>
-
                         <dt class="col-sm-4">Talep Tarihi</dt>
                         <dd class="col-sm-8">{{ talep.talepTarihi | date:'dd.MM.yyyy' }}</dd>
+
+                        <dt class="col-sm-4">Talep İçeriği</dt>
+                        <dd class="col-sm-8">{{ talep.talepIcerik }}</dd>
+
 
                         <dt class="col-sm-4">Talep Sahibi</dt>
                         <dd class="col-sm-8">{{ talep.talepSahibi }}</dd>
@@ -79,18 +92,6 @@
 
                 <div class="col-md-6">
                     <dl class="row mb-0">
-                        <dt class="col-sm-4">Talep Durumu</dt>
-                        <dd class="col-sm-8">
-                            <span class="badge" [ngClass]="{
-                                'bg-primary': talep.talepDurumu.kodu === 'YENI',
-                                'bg-info': talep.talepDurumu.kodu === 'DEVAM',
-                                'bg-success': talep.talepDurumu.kodu === 'TAMAM',
-                                'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
-                            }">
-                                {{ talep.talepDurumu.adi }}
-                            </span>
-                        </dd>
-
                         <dt class="col-sm-4">Kapanış Tarihi</dt>
                         <dd class="col-sm-8">
                             @if (talep.kapanisTarihi) {

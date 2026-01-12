@@ -1,35 +1,41 @@
-@if (loading) {
-  <div class="d-flex justify-content-center align-items-center p-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Yükleniyor...</span>
-    </div>
-  </div>
-} @else {
-  <table class="table table-bordered table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>Kod</th>
-        <th>Ünvan</th>
-        <th>Kullanıcı Adı</th>
-        <th>Ad Soyad</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (egitmen of egitmenler; track egitmen.id) {
-        <tr>
-          <td>{{ egitmen.kod }}</td>
-          <td>{{ egitmen.unvan || '-' }}</td>
-          <td>{{ egitmen.kullanici?.ad || '-' }}</td>
-          <td>{{ (egitmen.kullanici?.ad || '') + ' ' + (egitmen.kullanici?.soyad || '') }}</td>
-        </tr>
-      } @empty {
-        <tr>
-          <td colspan="4" class="text-center text-muted py-4">
-            <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-            Kayıt bulunamadı.
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-}
+<div class="table-responsive">
+	<table class="table table-hover align-middle">
+		<thead class="table-light">
+			<tr>
+				<th scope="col">Kod</th>
+				<th scope="col">Ad Soyad</th>
+				<th scope="col">Ünvan</th>
+				<th scope="col">İşlemler</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (egitmen of egitmenler; track egitmen.id) {
+				<tr>
+					<td>{{ egitmen.kod }}</td>
+					<td>
+						<strong>{{ (egitmen.kullanici?.ad || '') + ' ' + (egitmen.kullanici?.soyad || '') }}</strong>
+					</td>
+					<td>{{ egitmen.unvan || '-' }}</td>
+					<td>
+						<div class="btn-group" role="group">
+							<button 
+								type="button" 
+								class="btn btn-sm btn-outline-primary"
+								(click)="egitmen.id && onView(egitmen.id)"
+								title="Detay">
+								<i class="bi bi-eye"></i>
+							</button>
+							<button 
+								type="button" 
+								class="btn btn-sm btn-outline-secondary"
+								(click)="egitmen.id && onEdit(egitmen.id)"
+								title="Düzenle">
+								<i class="bi bi-pencil"></i>
+							</button>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

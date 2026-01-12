@@ -1,0 +1,48 @@
+<div class="container-fluid mt-4">
+	<!-- Page Header -->
+	<div class="row mb-4">
+		<div class="col">
+			<div class="d-flex justify-content-between align-items-center">
+				<h5 class="mb-0">{{ pageTitle() }}</h5>
+				<button class="btn btn-primary" (click)="createNew()">
+					<i class="bi bi-plus-lg me-2"></i>
+					Yeni Eğitmen
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Loading State -->
+	@if (isLoading()) {
+		<div class="text-center py-5">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Yükleniyor...</span>
+			</div>
+		</div>
+	}
+
+	<!-- Egitmen List -->
+	@if (!isLoading()) {
+		@if (egitmenler.length === 0) {
+			<div class="alert alert-info" role="alert">
+				<i class="bi bi-info-circle me-2"></i>
+				Eğitmen bulunamadı.
+			</div>
+		} @else {
+			<div class="row mb-3">
+				<div class="col">
+					<span class="badge bg-secondary">
+						Toplam {{ egitmenler.length }} eğitmen bulundu
+					</span>
+				</div>
+			</div>
+			
+			<app-egitmen-list
+				[egitmenler]="egitmenler"
+				[isLoading]="isLoading()"
+				(view)="viewDetail($event)"
+				(edit)="editEgitmen($event)">
+			</app-egitmen-list>
+		}
+	}
+</div>

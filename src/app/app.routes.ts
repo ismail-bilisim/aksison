@@ -46,6 +46,10 @@ export const routes: Routes = [
                 path: 'talep',
                 loadChildren: () => import('./features/talep/talep-route').then(m => m.TALEP_ROUTES)
             },
+            {
+                path: 'egitmen',
+                loadChildren: () => import('./features/egitmen/egitmen-route').then(m => m.EGITMEN_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },

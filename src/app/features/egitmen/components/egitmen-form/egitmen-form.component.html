@@ -1,0 +1,228 @@
+<form [formGroup]="egitmenForm" (ngSubmit)="onSubmit()">
+	<div class="row g-3">
+		<!-- Kullanıcı Seçimi -->
+		<div class="col-md-6">
+			<label for="kullaniciId" class="form-label">Kullanıcı <span class="text-danger">*</span></label>
+			
+			<!-- Readonly display when user is selected and not in search mode -->
+			@if (selectedKullanici && !isSearchMode) {
+				<div class="input-group">
+					<input 
+						type="text" 
+						class="form-control" 
+						[value]="selectedKullanici.ad + ' ' + selectedKullanici.soyad + ' (' + selectedKullanici.tcKimlikNo + ')'"
+						readonly
+						[class.is-invalid]="egitmenForm.get('kullaniciId')?.invalid && egitmenForm.get('kullaniciId')?.touched">
+					<button 
+						type="button" 
+						class="btn btn-outline-secondary" 
+						(click)="enableSearchMode()"
+						title="Kullanıcıyı Değiştir">
+						<i class="bi bi-pencil"></i> Değiştir
+					</button>
+					<button 
+						type="button" 
+						class="btn btn-outline-danger" 
+						(click)="clearSelection()"
+						title="Seçimi Temizle">
+						<i class="bi bi-x-lg"></i>
+					</button>
+				</div>
+			}
+			
+			<!-- Search input when no user selected or in search mode -->
+			@if (!selectedKullanici || isSearchMode) {
+				<div class="position-relative">
+					<input 
+						id="kullaniciSearch"
+						type="text" 
+						class="form-control" 
+						[formControl]="searchControl"
+						placeholder="TC Kimlik No veya ad-soyad ile arayın..."
+						(blur)="closeDropdown()"
+						[class.is-invalid]="egitmenForm.get('kullaniciId')?.invalid && egitmenForm.get('kullaniciId')?.touched">
+					
+					<!-- Dropdown with search results -->
+					@if (showDropdown) {
+						<div class="dropdown-menu show w-100" style="max-height: 300px; overflow-y: auto;">
+							@if (isLoadingSearch) {
+								<div class="dropdown-item text-center">
+									<span class="spinner-border spinner-border-sm me-2"></span>
+									Aranıyor...
+								</div>
+							}
+							@if (!isLoadingSearch && searchResults.length === 0) {
+								<div class="dropdown-item text-muted">
+									Sonuç bulunamadı
+								</div>
+							}
+							@for (kullanici of searchResults; track kullanici.id) {
+								<button 
+									type="button"
+									class="dropdown-item" 
+									(mousedown)="selectKullanici(kullanici)">
+									{{ kullanici.ad }} {{ kullanici.soyad }} 
+									<small class="text-muted">({{ kullanici.tcKimlikNo }})</small>
+								</button>
+							}
+						</div>
+					}
+				</div>
+			}
+			
+			@if (egitmenForm.get('kullaniciId')?.invalid && egitmenForm.get('kullaniciId')?.touched) {
+				<div class="invalid-feedback d-block">Kullanıcı seçimi zorunludur.</div>
+			}
+		</div>
+
+		<!-- Ünvan -->
+		<div class="col-md-6">
+			<label for="unvan" class="form-label">Ünvan <span class="text-danger">*</span></label>
+			<input 
+				type="text" 
+				id="unvan" 
+				class="form-control" 
+				formControlName="unvan"
+				[class.is-invalid]="egitmenForm.get('unvan')?.invalid && egitmenForm.get('unvan')?.touched">
+			@if (egitmenForm.get('unvan')?.invalid && egitmenForm.get('unvan')?.touched) {
+				<div class="invalid-feedback">Ünvan zorunludur.</div>
+			}
+		</div>
+
+		<!-- Okul/Üniversite Adı -->
+		<div class="col-md-6">
+			<label for="okulUniversiteAdi" class="form-label">Okul/Üniversite Adı <span class="text-danger">*</span></label>
+			<input 
+				type="text" 
+				id="okulUniversiteAdi" 
+				class="form-control" 
+				formControlName="okulUniversiteAdi"
+				[class.is-invalid]="egitmenForm.get('okulUniversiteAdi')?.invalid && egitmenForm.get('okulUniversiteAdi')?.touched">
+			@if (egitmenForm.get('okulUniversiteAdi')?.invalid && egitmenForm.get('okulUniversiteAdi')?.touched) {
+				<div class="invalid-feedback">Okul/Üniversite adı zorunludur.</div>
+			}
+		</div>
+
+		<!-- Bölüm -->
+		<div class="col-md-6">
+			<label for="bolum" class="form-label">Bölüm <span class="text-danger">*</span></label>
+			<input 
+				type="text" 
+				id="bolum" 
+				class="form-control" 
+				formControlName="bolum"
+				[class.is-invalid]="egitmenForm.get('bolum')?.invalid && egitmenForm.get('bolum')?.touched">
+			@if (egitmenForm.get('bolum')?.invalid && egitmenForm.get('bolum')?.touched) {
+				<div class="invalid-feedback">Bölüm zorunludur.</div>
+			}
+		</div>
+
+		<!-- Akademik Dereceler -->
+		<div class="col-md-6">
+			<label for="akademikDereceler" class="form-label">Akademik Dereceler</label>
+			<input 
+				type="text" 
+				id="akademikDereceler" 
+				class="form-control" 
+				formControlName="akademikDereceler">
+		</div>
+
+		<!-- Uzmanlık Alanı -->
+		<div class="col-md-6">
+			<label for="uzmanlikAlani" class="form-label">Uzmanlık Alanı <span class="text-danger">*</span></label>
+			<input 
+				type="text" 
+				id="uzmanlikAlani" 
+				class="form-control" 
+				formControlName="uzmanlikAlani"
+				[class.is-invalid]="egitmenForm.get('uzmanlikAlani')?.invalid && egitmenForm.get('uzmanlikAlani')?.touched">
+			@if (egitmenForm.get('uzmanlikAlani')?.invalid && egitmenForm.get('uzmanlikAlani')?.touched) {
+				<div class="invalid-feedback">Uzmanlık alanı zorunludur.</div>
+			}
+		</div>
+
+		<!-- Çalışılan Kurum -->
+		<div class="col-md-6">
+			<label for="calisilanKurum" class="form-label">Çalışılan Kurum</label>
+			<input 
+				type="text" 
+				id="calisilanKurum" 
+				class="form-control" 
+				formControlName="calisilanKurum">
+		</div>
+
+		<!-- Çevrimiçi Tecrübesi (Yıl) -->
+		<div class="col-md-6">
+			<label for="cevrimIciTecrubesi" class="form-label">Çevrimiçi Tecrübesi (Yıl) <span class="text-danger">*</span></label>
+			<input 
+				type="number" 
+				id="cevrimIciTecrubesi" 
+				class="form-control" 
+				formControlName="cevrimIciTecrubesi"
+				min="0"
+				[class.is-invalid]="egitmenForm.get('cevrimIciTecrubesi')?.invalid && egitmenForm.get('cevrimIciTecrubesi')?.touched">
+			@if (egitmenForm.get('cevrimIciTecrubesi')?.invalid && egitmenForm.get('cevrimIciTecrubesi')?.touched) {
+				<div class="invalid-feedback">Çevrimiçi tecrübesi zorunludur ve 0'dan büyük olmalıdır.</div>
+			}
+		</div>
+
+		<!-- Sosyal Medya Hesabı -->
+		<div class="col-md-6">
+			<label for="sosyalMedyaHesabi" class="form-label">Sosyal Medya Hesabı</label>
+			<input 
+				type="text" 
+				id="sosyalMedyaHesabi" 
+				class="form-control" 
+				formControlName="sosyalMedyaHesabi"
+				placeholder="https://...">
+		</div>
+
+		<!-- Web Sitesi -->
+		<div class="col-md-6">
+			<label for="webSitesi" class="form-label">Web Sitesi</label>
+			<input 
+				type="url" 
+				id="webSitesi" 
+				class="form-control" 
+				formControlName="webSitesi"
+				placeholder="https://...">
+		</div>
+
+		<!-- Eğitmen Profili -->
+		<div class="col-12">
+			<label for="egitmenProfili" class="form-label">Eğitmen Profili</label>
+			<textarea 
+				id="egitmenProfili" 
+				class="form-control" 
+				formControlName="egitmenProfili"
+				rows="3"></textarea>
+		</div>
+
+		<!-- Kısa Özgeçmiş -->
+		<div class="col-12">
+			<label for="kisaOzgecmis" class="form-label">Kısa Özgeçmiş <span class="text-danger">*</span></label>
+			<textarea 
+				id="kisaOzgecmis" 
+				class="form-control" 
+				formControlName="kisaOzgecmis"
+				rows="4"
+				[class.is-invalid]="egitmenForm.get('kisaOzgecmis')?.invalid && egitmenForm.get('kisaOzgecmis')?.touched"></textarea>
+			@if (egitmenForm.get('kisaOzgecmis')?.invalid && egitmenForm.get('kisaOzgecmis')?.touched) {
+				<div class="invalid-feedback">Kısa özgeçmiş zorunludur.</div>
+			}
+		</div>
+
+		<!-- Action Buttons -->
+		<div class="col-12">
+			<div class="d-flex justify-content-end gap-2">
+				<button type="button" class="btn btn-secondary" (click)="onCancel()">
+					İptal
+				</button>
+				<button type="submit" class="btn btn-primary" [disabled]="isLoading">
+					<i class="bi bi-save me-2"></i>
+					{{ isEditMode ? 'Güncelle' : 'Kaydet' }}
+				</button>
+			</div>
+		</div>
+	</div>
+</form>

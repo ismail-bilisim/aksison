@@ -28,7 +28,7 @@
         @for (item of items; track item.id) {
           <tr>
             <td>
-              <span class="badge bg-secondary">{{ item.islemTuru?.adi }}</span>
+              {{ item.islemTuru?.adi }}
             </td>
             <td>{{ item.aciklama || '-' }}</td>
             <td>
@@ -37,7 +37,9 @@
               </small>
             </td>
             <td>
-              <small class="text-muted">{{ item.islemTarihi | date:'dd.MM.yyyy HH:mm' }}</small>
+              <span class="badge bg-secondary"> 
+                <small class="">{{ item.islemTarihi | date:'dd.MM.yyyy HH:mm' }}</small> 
+              </span>
             </td>
           </tr>
         }

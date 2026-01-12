@@ -8,7 +8,7 @@
       <div class="card mb-3">
         <div class="card-body">
           <div class="row g-3 align-items-end">
-            <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="col-sm-5">
               <label for="startDate" class="form-label">Başlangıç Tarihi</label>
               <input 
                 type="date" 
@@ -17,7 +17,7 @@
                 [(ngModel)]="startDate"
                 (change)="onDateRangeChange()">
             </div>
-            <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="col-sm-5">
               <label for="endDate" class="form-label">Bitiş Tarihi</label>
               <input 
                 type="date" 
@@ -26,7 +26,7 @@
                 [(ngModel)]="endDate"
                 (change)="onDateRangeChange()">
             </div>
-            <div class="col-md-3 col-lg-2 col-xl-1">
+            <div class="col-sm-2">
               <button 
                 class="btn btn-primary w-100" 
                 (click)="onDateRangeChange()"

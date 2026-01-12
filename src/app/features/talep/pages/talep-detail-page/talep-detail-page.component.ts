@@ -207,7 +207,7 @@ export class TalepDetailPageComponent implements OnInit {
         next: () => {
           this.toastService.success('Talep başarıyla iptal edildi.');
           this.isLoading.set(false);
-          this.closeSonucModal();
+          this.closeIptalModal();
           this.refreshTalep();
         },
         error: (err) => {

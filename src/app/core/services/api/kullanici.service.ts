@@ -94,5 +94,30 @@ export class KullaniciService {
   delete(tcKimlikNo: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${tcKimlikNo}`);
   }
+
+  /**
+   * Get user summary by ID
+   * GET /api/kullanici/ozet/{id}
+   */
+  getOzetById(id: number): Observable<KullaniciOzet> {
+    return this.http.get<KullaniciOzet>(`${this.apiUrl}/ozet/${id}`);
+  }
+
+  /**
+   * Search users by TC Kimlik No or name (partial match)
+   * GET /api/kullanici/search?q=12345
+   * Limited to 20 results for performance
+   * Empty search term returns empty observable
+   */
+  searchKullanicilar(searchTerm: string): Observable<KullaniciOzet[]> {
+    if (!searchTerm || searchTerm.trim().length === 0) {
+      return new Observable(observer => {
+        observer.next([]);
+        observer.complete();
+      });
+    }
+    const params = new HttpParams().set('q', searchTerm.trim());
+    return this.http.get<KullaniciOzet[]>(`${this.apiUrl}/search`, { params });
+  }
 }
 
