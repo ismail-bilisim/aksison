@@ -80,56 +80,73 @@
             </h6>
           </div>
           <div class="card-body">
-            <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
               <li [ngbNavItem]="'konular'">
                 <button ngbNavLink>Konular</button>
-                <ng-template ngbNavContent>
-                      
-                  <app-videoders-konu-list [dersId]="videoders.id!"></app-videoders-konu-list>
-
-                </ng-template>
               </li>
-
-              <!-- Sorular içeriği -->
-               <li [ngbNavItem]="'sorular'">
+              <li [ngbNavItem]="'sorular'">
                 <button ngbNavLink>Sorular</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-soru-list [dersId]="videoders.id" ></app-videoders-soru-list>
-                </ng-template>
               </li>
-
               <li [ngbNavItem]="'kategoriler'">
-                <button ngbNavLink>Kategoriler</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-kategori-list [dersId]="videoders.id!"></app-videoders-kategori-list>
-                </ng-template>
+                <button ngbNavLink>Kategoriler ({{kategoriler().length}})</button>
+              </li>
+              <li [ngbNavItem]="'egitmenler'">
+                <button ngbNavLink>Eğitmenler</button>
               </li>
               <li [ngbNavItem]="'projeler'">
                 <button ngbNavLink>Projeler</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-proje-list [dersId]="videoders.id!"></app-videoders-proje-list>
-                </ng-template>
               </li>
               <li [ngbNavItem]="'paydaslar'">
                 <button ngbNavLink>Paydaşlar</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-paydas-list [dersId]="videoders.id!"></app-videoders-paydas-list>
-                </ng-template>
               </li>
               <li [ngbNavItem]="'sozlesmeler'">
                 <button ngbNavLink>Sözleşmeler</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-sozlesme-list [dersId]="videoders.id!"></app-videoders-sozlesme-list>
-                </ng-template>
               </li>
               <li [ngbNavItem]="'islemler'">
                 <button ngbNavLink>İşlem Kayıtları</button>
-                <ng-template ngbNavContent>
-                  <app-videoders-islem-kayit-list [dersId]="videoders.id!"></app-videoders-islem-kayit-list>
-                </ng-template>
               </li>
             </ul>
-            <div [ngbNavOutlet]="nav" class="mt-3"></div>
+            
+            <div class="mt-3">
+              <div class="p-3" *ngIf="konularLoaded" [hidden]="activeTab !== 'konular'">
+                <app-videoders-konu-list [dersId]="videoders.id!"></app-videoders-konu-list>
+              </div>
+              
+              <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
+                <app-videoders-soru-list [dersId]="videoders.id"></app-videoders-soru-list>
+              </div>
+              
+              <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
+                <app-kategori-list 
+                  [items]="kategoriler()" 
+                  [isLoading]="kategoriLoading()"
+                  [isDeleting]="kategoriDeleting()"
+                  [isAdding]="kategoriAdding()"
+                  (add)="onKategoriAdd($event)"
+                  (delete)="onKategoriDelete($event)">
+                </app-kategori-list>
+              </div>
+              
+              <div class="p-3" *ngIf="egitmenlerLoaded" [hidden]="activeTab !== 'egitmenler'">
+                <app-videoders-egitmen-list #egitmenList [dersId]="videoders.id!"></app-videoders-egitmen-list>
+              </div>
+              
+              <div class="p-3" *ngIf="projelerLoaded" [hidden]="activeTab !== 'projeler'">
+                <app-videoders-proje-list [dersId]="videoders.id!"></app-videoders-proje-list>
+              </div>
+              
+              <div class="p-3" *ngIf="paydaslarLoaded" [hidden]="activeTab !== 'paydaslar'">
+                <app-videoders-paydas-list [dersId]="videoders.id!"></app-videoders-paydas-list>
+              </div>
+              
+              <div class="p-3" *ngIf="sozlesmelerLoaded" [hidden]="activeTab !== 'sozlesmeler'">
+                <app-videoders-sozlesme-list [dersId]="videoders.id!"></app-videoders-sozlesme-list>
+              </div>
+              
+              <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'islemler'">
+                <app-videoders-islem-kayit-list [dersId]="videoders.id!"></app-videoders-islem-kayit-list>
+              </div>
+            </div>
           </div>
         </div>
 

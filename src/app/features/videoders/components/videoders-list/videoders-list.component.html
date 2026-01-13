@@ -2,24 +2,24 @@
     <table class="table table-hover align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Kodu</th>
                 <th>Adı</th>
+                <th>Detay</th>
             </tr>
         </thead>
         <tbody>
-            @for (v of videodersler; track v.kodu) {
-            <tr class="table-row-hover clickable-row"
-                role="button"
-                tabindex="0"
-                (click)="onViewDetail(v.id!)"
-                (keydown.enter)="onViewDetail(v.id!)"
+            @for (v of videodersler; track v.id) {
+            <tr (click)="onViewDetail(v.id!)" 
                 title="Detayları görüntülemek için tıklayın">
-                <td><strong>{{ v.kodu }}</strong></td>
-                <td>{{ v.adi }}</td>
+                <td> <strong>{{ v.kodu }}</strong> {{ v.adi }}</td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" (click)="onViewDetail(v.id!); $event.stopPropagation()" title="Görüntüle">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
             </tr>
             } @empty {
             <tr>
-                <td colspan="2" class="text-center py-4">
+                <td colspan="3" class="text-center py-4">
                     <div class="text-muted">
                         <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                         Kayıt bulunamadı.

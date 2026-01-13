@@ -204,6 +204,12 @@ export class KategoriFilterPageComponent implements OnInit {
     return this.cachedData.egitmen || [];
   }
 
+  onVideoView(id: number) {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
   getKategoriColorClass(index: number): string {
     return this.kategoriColorClasses[index % this.kategoriColorClasses.length];
   }

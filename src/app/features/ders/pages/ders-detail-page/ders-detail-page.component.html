@@ -52,34 +52,60 @@
 
         <!-- İlişkili Varlıklar -->
         <div class="mt-4">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)" class="nav-tabs">
             <li [ngbNavItem]="'konular'">
               <button ngbNavLink>Konular</button>
-              <ng-template ngbNavContent>
-                <app-ders-konu-list [dersId]="ders.id!"></app-ders-konu-list>
-              </ng-template>
             </li>
             <li [ngbNavItem]="'kategoriler'">
-              <button ngbNavLink>Kategoriler</button>
-              <ng-template ngbNavContent>
-                <app-ders-kategori-list [dersId]="ders.id!"></app-ders-kategori-list>
-              </ng-template>
+              <button ngbNavLink>Kategoriler ({{kategoriler().length}})</button>
             </li>
             <li [ngbNavItem]="'videodersler'">
               <button ngbNavLink>Video Dersler</button>
-              <ng-template ngbNavContent>
-                <app-ders-videoders-list [dersId]="ders.id!"></app-ders-videoders-list>
-              </ng-template>
             </li>
             <li [ngbNavItem]="'dersislemkayitlar'">
               <button ngbNavLink>İşlem Kayıtları</button>
-              <ng-template ngbNavContent>
-                <app-ders-islem-kayit-list [dersId]="ders.id!"></app-ders-islem-kayit-list>
-              </ng-template>
             </li>
           </ul>
 
-          <div [ngbNavOutlet]="nav" class="mt-3"></div>
+          <div class="mt-3">
+            <div class="p-3" *ngIf="konularLoaded" [hidden]="activeTab !== 'konular'">
+              <app-ders-konu-list 
+                [dersId]="ders.id!"
+                [bolumlar]="bolumlar()"
+                [isLoading]="bolumLoading()"
+                (saveBolum)="onSaveBolum($event)"
+                (deleteBolum)="onDeleteBolum($event)"
+                (saveKonu)="onSaveKonu($event)"
+                (deleteKonu)="onDeleteKonu($event)">
+              </app-ders-konu-list>
+            </div>
+            
+            <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
+              <app-kategori-list 
+                [items]="kategoriler()" 
+                [isLoading]="kategoriLoading()"
+                [isDeleting]="kategoriDeleting()"
+                [isAdding]="kategoriAdding()"
+                (add)="onKategoriAdd($event)"
+                (delete)="onKategoriDelete($event)">
+              </app-kategori-list>
+            </div>
+            
+            <div class="p-3" *ngIf="videoderslerLoaded" [hidden]="activeTab !== 'videodersler'">
+              <app-ders-videoders-list 
+                [videodersler]="videodersler()"
+                [isLoading]="videodersLoading()"
+                [errorMessage]="videodersError()">
+              </app-ders-videoders-list>
+            </div>
+            
+            <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'dersislemkayitlar'">
+              <app-ders-islem-kayit-list 
+                [items]="islemKayitlar()"
+                [isLoading]="islemKayitLoading()">
+              </app-ders-islem-kayit-list>
+            </div>
+          </div>
         </div>
       } @else {
         <div class="alert alert-warning">

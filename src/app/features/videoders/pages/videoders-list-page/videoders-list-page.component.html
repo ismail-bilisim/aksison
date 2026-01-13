@@ -30,7 +30,8 @@
 
       @if (!loading && !error) {
         <app-videoders-list 
-          [videodersler]="videodersler">
+          [videodersler]="videodersler"
+          (viewDetail)="viewDetail($event)">
         </app-videoders-list>
       }
     </div>

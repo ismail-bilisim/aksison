@@ -81,7 +81,6 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
       version: response.version, // Backend'den gelen version değerini koru
       tahminiDersSuresi: response.tahminiDersSuresi,
       tahminiDersTeslimTarihi: response.tahminiDersTeslimTarihi ?? undefined,
-      baslamaTarihi: response.baslamaTarihi ?? undefined,
       dersTeslimTarihi: response.dersTeslimTarihi ?? undefined,
       amaci: response.amaci ?? undefined,
       turuKodu: response.turu?.kodu ?? undefined,
@@ -99,7 +98,7 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
       odemeKaynakKodu: response.odemeKaynak?.kodu ?? undefined,
       birimUcret: response.birimUcret ?? undefined,
       toplamUcret: response.toplamUcret ?? undefined,
-      durumKodu: response.dersDurumu?.kodu ?? undefined,
+      // durumKodu removed
       dersId: response.ders?.id ?? undefined
     };
   }

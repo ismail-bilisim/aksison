@@ -65,7 +65,6 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       adi: ['', Validators.required],
       tahminiDersSuresi: [''],
       tahminiDersTeslimTarihi: [''],
-      baslamaTarihi: [''],
       amaci: [''],
       turuKodu: [''],
       seviyesiKodu: [''],

@@ -15,9 +15,6 @@ export class EgitmenKategoriService {
     return this.http.post<EgitmenKategoriResponse>(this.apiUrl, request);
   }
 
-  getAllByEgitmenId(egitmenId: number): Observable<EgitmenKategoriResponse[]> {
-    return this.http.get<EgitmenKategoriResponse[]>(`${this.apiUrl}/by-egitmen/${egitmenId}`);
-  }
 
   getAllKategoriOzetByEgitmenId(egitmenId: number): Observable<KategoriOzet[]> {
     return this.http.get<KategoriOzet[]>(`${this.apiUrl}/by-egitmen/ozet/${egitmenId}`);

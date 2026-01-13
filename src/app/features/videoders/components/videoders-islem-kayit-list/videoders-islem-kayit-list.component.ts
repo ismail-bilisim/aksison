@@ -5,6 +5,7 @@ import { VideoDersIslemKayitService } from 'src/app/core/services/api/videoders-
 
 @Component({
   selector: 'app-videoders-islem-kayit-list',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './videoders-islem-kayit-list.component.html',
   styleUrl: './videoders-islem-kayit-list.component.css'

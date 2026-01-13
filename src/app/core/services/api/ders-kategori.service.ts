@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { DersKategori } from '../../models/ders-kategori';
+import { KategoriOzet } from '../../models/kategori-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +11,14 @@ export class DersKategoriService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/derskategori`;
 
-  getKategoriOzetByDersId(dersId: number): Observable<DersKategori[]> {
-    return this.http.get<DersKategori[]>(`${this.apiUrl}/by-ders/ozet/${dersId}`);
+  getKategoriOzetByDersId(dersId: number): Observable<KategoriOzet[]> {
+    return this.http.get<KategoriOzet[]>(`${this.apiUrl}/by-ders/ozet/${dersId}`);
   }
 
-  addKategori(dersId: number, kategoriId: number): Observable<DersKategori> {
+  addKategori(dersId: number, kategoriId: number): Observable<KategoriOzet> {
     const payload = { dersId, kategoriId };
     console.log('Adding ders kategori with payload:', payload);
-    return this.http.post<DersKategori>(this.apiUrl, payload);
+    return this.http.post<KategoriOzet>(this.apiUrl, payload);
   }
 
   deleteKategori(dersId: number, kategoriId: number): Observable<void> {

@@ -3,7 +3,6 @@ export interface VideoDersRequest {
   version?: number;
   tahminiDersSuresi?: number;
   tahminiDersTeslimTarihi?: string; // LocalDate -> ISO string (yyyy-MM-dd)
-  baslamaTarihi?: string;           // LocalDate -> ISO string
   dersTeslimTarihi?: string;       // LocalDate -> ISO string
   amaci?: string;
   turuKodu?: string;
@@ -22,6 +21,5 @@ export interface VideoDersRequest {
   odemeKaynakKodu?: string;
   birimUcret?: number;             // BigDecimal -> number
   toplamUcret?: number;            // BigDecimal -> number
-  durumKodu?: string;
   dersId?: number;
 }

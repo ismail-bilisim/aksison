@@ -36,7 +36,7 @@
         </div>
         <div class="bolum-actions">
           <button class="btn btn-sm btn-outline-danger" 
-                  (click)="deleteBolum(bolum.id)"
+                  (click)="onDeleteBolum(bolum.id)"
                   title="Bölümü sil">
             <i class="bi bi-trash"></i>
           </button>
@@ -81,7 +81,7 @@
               </div>
               <div class="konu-actions">
                 <button class="btn btn-sm btn-outline-danger" 
-                        (click)="deleteKonu(konu.id)"
+                        (click)="onDeleteKonu(konu.id)"
                         title="Konuyu sil">
                   <i class="bi bi-trash"></i>
                 </button>
@@ -129,7 +129,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
-    <button type="button" class="btn btn-primary" (click)="saveBolum()" [disabled]="bolumForm.invalid">
+    <button type="button" class="btn btn-primary" (click)="onSaveBolum()" [disabled]="bolumForm.invalid">
       Kaydet
     </button>
   </div>
@@ -159,7 +159,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
-    <button type="button" class="btn btn-success" (click)="saveKonu()" [disabled]="konuForm.invalid">
+    <button type="button" class="btn btn-success" (click)="onSaveKonu()" [disabled]="konuForm.invalid">
       Kaydet
     </button>
   </div>
