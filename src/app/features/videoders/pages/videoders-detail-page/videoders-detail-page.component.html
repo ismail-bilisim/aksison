@@ -144,7 +144,14 @@
               </div>
               
               <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'islemler'">
-                <app-videoders-islem-kayit-list [dersId]="videoders.id!"></app-videoders-islem-kayit-list>
+                <app-islem-kayit-list
+                  [items]="videoDersIslemKayitlar()"
+                  [isLoading]="videoDersIslemKayitLoading()"
+                  [title]="'İşlem Kayıtları'"
+                  [showTitle]="true"
+                  [useStyledVersion]="false"
+                  [tableSize]="'md'">
+                </app-islem-kayit-list>
               </div>
             </div>
           </div>

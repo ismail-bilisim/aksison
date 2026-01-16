@@ -100,10 +100,14 @@
             </div>
             
             <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'dersislemkayitlar'">
-              <app-ders-islem-kayit-list 
+              <app-islem-kayit-list
                 [items]="islemKayitlar()"
-                [isLoading]="islemKayitLoading()">
-              </app-ders-islem-kayit-list>
+                [isLoading]="islemKayitLoading()"
+                [title]="'İşlem Kayıtları'"
+                [showTitle]="true"
+                [useStyledVersion]="false"
+                [tableSize]="'md'">
+              </app-islem-kayit-list>
             </div>
           </div>
         </div>

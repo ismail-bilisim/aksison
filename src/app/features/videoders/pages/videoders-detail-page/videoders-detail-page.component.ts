@@ -18,7 +18,9 @@ import { KategoriListComponent } from 'src/app/shared/components/kategori-list/k
 import { VideodersProjeListComponent } from '../../components/videoders-proje-list/videoders-proje-list.component';
 import { VideodersPaydasListComponent } from '../../components/videoders-paydas-list/videoders-paydas-list.component';
 import { VideodersSozlesmeListComponent } from '../../components/videoders-sozlesme-list/videoders-sozlesme-list.component';
-import { VideodersIslemKayitListComponent } from '../../components/videoders-islem-kayit-list/videoders-islem-kayit-list.component';
+import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
+import { VideoDersIslemKayitService } from 'src/app/core/services/api/videoders-islem-kayit.service';
+import { VideoDersIslemKayit } from 'src/app/core/models/videoders-islem-kayit';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
 import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
 import { VideodersEgitmenListComponent } from '../../components/videoders-egitmen-list/videoders-egitmen-list.component';
@@ -40,7 +42,7 @@ import { VideodersEgitmenListComponent } from '../../components/videoders-egitme
     VideodersProjeListComponent,
     VideodersPaydasListComponent,
     VideodersSozlesmeListComponent,
-    VideodersIslemKayitListComponent,
+    IslemKayitListComponent,
     VideodersSoruListComponent,
     VideodersEgitmenListComponent
 ],
@@ -60,6 +62,10 @@ export class VideodersDetailPageComponent implements OnInit {
   kategoriAdding = signal(false);
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
 
+  // İşlem kayıtları için
+  videoDersIslemKayitlar = signal<VideoDersIslemKayit[]>([]);
+  videoDersIslemKayitLoading = signal(false);
+
   // Diğer sekmeler için lazy load bayrakları
   konularLoaded = true; // varsayılan sekme
   sorularLoaded = false;
@@ -73,6 +79,7 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly videodersService = inject(VideodersService);
   private readonly videodersKategoriService = inject(VideodersKategoriService);
+  private readonly videoDersIslemKayitService = inject(VideoDersIslemKayitService);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -242,8 +249,27 @@ export class VideodersDetailPageComponent implements OnInit {
         break;
       case 'islemler':
         this.islemlerLoaded = true;
+        this.loadVideoDersIslemKayitlar();
         break;
     }
+  }
+
+  private loadVideoDersIslemKayitlar(): void {
+    if (!this.videoders?.id) return;
+    this.videoDersIslemKayitLoading.set(true);
+    this.videoDersIslemKayitService.getByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.videoDersIslemKayitlar.set(data);
+          this.videoDersIslemKayitLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadVideoDersIslemKayitlar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.videoDersIslemKayitLoading.set(false);
+        }
+      });
   }
 
   onEdit(videodersId: number): void {

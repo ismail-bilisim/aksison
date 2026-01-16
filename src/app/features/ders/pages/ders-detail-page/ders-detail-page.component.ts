@@ -14,7 +14,7 @@ import { DersTemelComponent } from '../../components/ders-temel/ders-temel.compo
 import { DersKonuListComponent } from '../../components/ders-konu-list/ders-konu-list.component';
 import { DersVideodersListComponent } from '../../components/ders-videoders-list/ders-videoders-list.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
-import { DersIslemKayitListComponent } from '../../components/ders-islem-kayit-list/ders-islem-kayit-list.component';
+import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { DersResponse } from 'src/app/core/models/ders-response';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
@@ -36,7 +36,7 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
     DersKonuListComponent,
     DersVideodersListComponent,
     KategoriListComponent,
-    DersIslemKayitListComponent
+    IslemKayitListComponent
   ],
   templateUrl: './ders-detail-page.component.html',
   styleUrls: ['./ders-detail-page.component.css']

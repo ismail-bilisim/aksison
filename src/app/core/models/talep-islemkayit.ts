@@ -1,13 +1,5 @@
-import { IslemTuruOzet } from './islem-turu-ozet';
-import { KullaniciOzet } from './kullanici-ozet';
+import { IslemKayitBase } from './islem-kayit-base';
 
-export interface TalepIslemkayit {
-  id: number;
-  islemTuru?: IslemTuruOzet;
+export interface TalepIslemkayit extends IslemKayitBase {
   talepId: number;
-  aciklama?: string;
-  islemYapanKullaniciId: number;
-  islemYapanKullanici?: KullaniciOzet;
-  islemTarihi: string;
-  version: number;
 }

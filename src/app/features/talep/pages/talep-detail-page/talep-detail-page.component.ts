@@ -10,7 +10,8 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ROLES } from 'src/app/core/config/roles';
-import { TalepIslemkayitListComponent } from '../../components/talep-islemkayit-list/talep-islemkayit-list.component';
+import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
+import { TalepIslemkayit } from 'src/app/core/models/talep-islemkayit';
 import { TalepEkDosyaListComponent as TalepEkdosyaListComponent } from '../../components/talep-ekdosya-list/talep-ekdosya-list.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -25,7 +26,7 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbNavModule,
     TalepEkdosyaListComponent,
-    TalepIslemkayitListComponent
+    IslemKayitListComponent
   ],
 
   templateUrl: './talep-detail-page.component.html',
@@ -49,6 +50,11 @@ export class TalepDetailPageComponent implements OnInit {
   
   // Tab state
   activeTab = signal<number>(1); // 1: Files, 2: Operation Logs
+  
+  // İşlem kayıtları için
+  talepIslemKayitlar = signal<TalepIslemkayit[]>([]);
+  talepIslemKayitLoading = signal(false);
+  talepIslemKayitLoaded = signal(false);
   
   // Assignment state
   assignableUsers$ = signal<KullaniciOzet[]>([]);
@@ -91,6 +97,26 @@ export class TalepDetailPageComponent implements OnInit {
 
   onTabChange(tabId: number): void {
     this.activeTab.set(tabId);
+    if (tabId === 2 && !this.talepIslemKayitLoaded()) {
+      this.loadTalepIslemKayitlar();
+    }
+  }
+
+  private loadTalepIslemKayitlar(): void {
+    if (!this.talepId || this.talepIslemKayitLoaded()) return;
+    
+    this.talepIslemKayitLoaded.set(true);
+    this.talepIslemKayitLoading.set(true);
+    this.talepService.getByTalepId(this.talepId).subscribe({
+      next: (data) => {
+        this.talepIslemKayitlar.set(data);
+        this.talepIslemKayitLoading.set(false);
+      },
+      error: (error) => {
+        console.error('İşlem kayıtları yüklenirken hata oluştu:', error);
+        this.talepIslemKayitLoading.set(false);
+      }
+    });
   }
 
   private refreshTalep(): void {

@@ -30,7 +30,14 @@
                 <app-talep-ekdosya-list [talepId]="talep.id"></app-talep-ekdosya-list>
             </div>
             <div class="p-3" [hidden]="activeTab() !== 2">
-                <app-talep-islemkayit-list [talepId]="talep.id"></app-talep-islemkayit-list>
+                <app-islem-kayit-list
+                    [items]="talepIslemKayitlar()"
+                    [isLoading]="talepIslemKayitLoading()"
+                    [title]="''"
+                    [showTitle]="false"
+                    [useStyledVersion]="true"
+                    [tableSize]="'sm'">
+                </app-islem-kayit-list>
             </div>
         </div>
     </section>

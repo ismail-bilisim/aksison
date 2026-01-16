@@ -1,0 +1,65 @@
+@if (showTitle) {
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5>{{ title }}</h5>
+  </div>
+}
+
+@if (isLoading) {
+  <div class="text-center p-4">
+    <div class="spinner-border spinner-border-sm text-primary" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+}
+
+@if (!isLoading && items.length === 0) {
+  <div class="alert alert-info mb-0">
+    @if (useStyledVersion) {
+      <i class="bi bi-info-circle me-2"></i>
+    }
+    {{ emptyMessage }}
+  </div>
+}
+
+@if (!isLoading && items.length > 0) {
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0"
+           [class.table-sm]="tableSize === 'sm'"
+           [class.table-striped]="!useStyledVersion">
+      <thead [class.table-light]="useStyledVersion">
+        <tr>
+          <th>İşlem Türü</th>
+          <th>Açıklama</th>
+          <th>İşlem Yapan</th>
+          <th>İşlem Tarihi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of items; track trackById($index, item)) {
+          <tr>
+            <td>
+              {{ item.islemTuru?.adi || '-' }}
+            </td>
+            <td>
+              {{ item.aciklama || '-' }}
+            </td>
+            <td>
+              <small [class.text-muted]="useStyledVersion">
+                {{ item.islemYapanKullanici?.ad }} {{ item.islemYapanKullanici?.soyad }}
+              </small>
+            </td>
+            <td>
+              @if (useStyledVersion) {
+                <span class="badge bg-secondary">
+                  <small>{{ item.islemTarihi | date:'dd.MM.yyyy HH:mm' }}</small>
+                </span>
+              } @else {
+                {{ item.islemTarihi | date:'dd.MM.yyyy HH:mm' }}
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

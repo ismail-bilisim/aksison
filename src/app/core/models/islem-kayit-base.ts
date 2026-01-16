@@ -1,11 +1,14 @@
 import { IslemTuruOzet } from './islem-turu-ozet';
 import { KullaniciOzet } from './kullanici-ozet';
 
-export interface VideoDersIslemKayit {
+/**
+ * Base interface for all operation log entities.
+ * Following Interface Segregation Principle - contains only common properties.
+ * Following Open/Closed Principle - open for extension via specific implementations.
+ */
+export interface IslemKayitBase {
   id: number;
-  islemTuruKodu: string;
   islemTuru?: IslemTuruOzet;
-  videoDersId: number;
   aciklama?: string;
   islemYapanKullaniciId: number;
   islemYapanKullanici?: KullaniciOzet;
