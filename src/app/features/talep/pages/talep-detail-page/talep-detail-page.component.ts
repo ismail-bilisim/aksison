@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { OnayDurumu } from 'src/app/core/models/onay-durumu.enum';
 import { TalepService } from 'src/app/core/services/api/talep.service';
 import { TalepResponse } from 'src/app/core/models/talep-response';
 import { KullaniciOzet } from 'src/app/core/models/kullanici-ozet';
@@ -11,7 +12,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { ROLES } from 'src/app/core/config/roles';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
-import { TalepIslemkayit } from 'src/app/core/models/talep-islemkayit';
+import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { TalepEkDosyaListComponent as TalepEkdosyaListComponent } from '../../components/talep-ekdosya-list/talep-ekdosya-list.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -42,6 +43,9 @@ export class TalepDetailPageComponent implements OnInit {
   protected readonly authService = inject(AuthService);
 
   public readonly ROLES = ROLES;
+  
+  // Enum for template
+  readonly OnayDurumu = OnayDurumu;
 
   // State
   talep$!: Observable<TalepResponse | null>;
@@ -52,7 +56,7 @@ export class TalepDetailPageComponent implements OnInit {
   activeTab = signal<number>(1); // 1: Files, 2: Operation Logs
   
   // İşlem kayıtları için
-  talepIslemKayitlar = signal<TalepIslemkayit[]>([]);
+  talepIslemKayitlar = signal<IslemKayit[]>([]);
   talepIslemKayitLoading = signal(false);
   talepIslemKayitLoaded = signal(false);
   

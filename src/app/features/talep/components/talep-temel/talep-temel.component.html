@@ -15,17 +15,17 @@
                                         
          </div>
             <div class="d-flex gap-2">
-                @if (canEdit && ( talep.onayDurumu=='tas' || talep.onayDurumu=='red' || talep.onayDurumu=='ons') ) {
+                @if (canEdit && ( talep.onayDurumu === OnayDurumu.TASLAK || talep.onayDurumu === OnayDurumu.RED || talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU) ) {
                     <button class="btn btn-warning btn-sm shadow-sm" (click)="onEdit()">
                         <i class="bi bi-pencil me-1"></i>Düzenle
                     </button>
                 }
-                @if (talep.onayDurumu === 'tas') {
+                @if (talep.onayDurumu === OnayDurumu.TASLAK) {
                     <button class="btn btn-info btn-sm shadow-sm" (click)="onSubmitForApproval()">
                         <i class="bi bi-send me-1"></i>Onaya Sun
                     </button>
                 }
-                @if (talep.onayDurumu === 'ons' && canApprove) {
+                @if (talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU && canApprove) {
                     <button class="btn btn-success btn-sm shadow-sm" (click)="onApprove()">
                         <i class="bi bi-check-lg me-1"></i>Onayla
                     </button>
@@ -33,12 +33,12 @@
                         <i class="bi bi-x-lg me-1"></i>Reddet
                     </button>
                 }
-                @if (canAssignToSelf && !talep.atananKisi && talep.onayDurumu === 'ony') {
+                @if (canAssignToSelf && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
                     <button class="btn btn-primary btn-sm shadow-sm" (click)="onAssignToSelf()">
                         <i class="bi bi-person-check me-1"></i>Kendime Ata
                     </button>
                 }
-                @if (canAssignToOthers && !talep.atananKisi && talep.onayDurumu === 'ony') {
+                @if (canAssignToOthers && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
                     <button class="btn btn-outline-primary btn-sm shadow-sm" (click)="onAssignToOther()">
                         <i class="bi bi-person-plus me-1"></i>Başkasına Ata
                     </button>
@@ -102,7 +102,12 @@
                         </dd>
 
                         <dt class="col-sm-4">Onay Durumu</dt>
-                        <dd class="col-sm-8">{{ talep.onayDurumu }}</dd>
+                        <dd class="col-sm-8">
+                            <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(talep.onayDurumu)">
+                                <i [class]="OnayDurumuHelper.getIcon(talep.onayDurumu) + ' me-1'"></i>
+                                {{ OnayDurumuHelper.getText(talep.onayDurumu) }}
+                            </span>
+                        </dd>
 
                         <dt class="col-sm-4">Ekleyen</dt>
                         <dd class="col-sm-8">{{ talep.ekleyenKullanici?.ad }} {{ talep.ekleyenKullanici?.soyad }}</dd>

@@ -6,11 +6,11 @@ import { KullaniciOzet } from './kullanici-ozet';
  * Following Interface Segregation Principle - contains only common properties.
  * Following Open/Closed Principle - open for extension via specific implementations.
  */
-export interface IslemKayitBase {
+export interface IslemKayit {
   id: number;
   islemTuru?: IslemTuruOzet;
   aciklama?: string;
-  islemYapanKullaniciId: number;
+  // islemYapanKullaniciId: number; //TODO sil
   islemYapanKullanici?: KullaniciOzet;
   islemTarihi: string;
   version: number;

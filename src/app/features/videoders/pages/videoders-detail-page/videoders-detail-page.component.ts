@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
@@ -20,7 +21,7 @@ import { VideodersPaydasListComponent } from '../../components/videoders-paydas-
 import { VideodersSozlesmeListComponent } from '../../components/videoders-sozlesme-list/videoders-sozlesme-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { VideoDersIslemKayitService } from 'src/app/core/services/api/videoders-islem-kayit.service';
-import { VideoDersIslemKayit } from 'src/app/core/models/videoders-islem-kayit';
+import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
 import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
 import { VideodersEgitmenListComponent } from '../../components/videoders-egitmen-list/videoders-egitmen-list.component';
@@ -56,6 +57,9 @@ export class VideodersDetailPageComponent implements OnInit {
   loading = false;
   activeTab = 'konular';
   
+  // Enum for template
+  readonly OnayDurumu = OnayDurumu;
+  
   kategoriler = signal<KategoriOzet[]>([]);
   kategoriLoading = signal(false);
   kategoriDeleting = signal(false);
@@ -63,7 +67,7 @@ export class VideodersDetailPageComponent implements OnInit {
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
 
   // İşlem kayıtları için
-  videoDersIslemKayitlar = signal<VideoDersIslemKayit[]>([]);
+  videoDersIslemKayitlar = signal<IslemKayit[]>([]);
   videoDersIslemKayitLoading = signal(false);
 
   // Diğer sekmeler için lazy load bayrakları

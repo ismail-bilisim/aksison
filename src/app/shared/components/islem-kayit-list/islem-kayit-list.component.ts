@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IslemKayitBase } from '../../../core/models/islem-kayit-base';
+import { IslemKayit } from '../../../core/models/islem-kayit';
 
 /**
  * Generic operation log list component (Dumb Component).
@@ -18,7 +18,7 @@ import { IslemKayitBase } from '../../../core/models/islem-kayit-base';
 })
 export class IslemKayitListComponent {
   /** List of operation logs to display */
-  @Input() items: IslemKayitBase[] = [];
+  @Input() items: IslemKayit[] = [];
   
   /** Loading state indicator */
   @Input() isLoading = false;
@@ -42,7 +42,7 @@ export class IslemKayitListComponent {
    * Track by function for optimal *ngFor performance
    * Following Angular best practices
    */
-  trackById(index: number, item: IslemKayitBase): number {
+  trackById(index: number, item: IslemKayit): number {
     return item.id;
   }
 }

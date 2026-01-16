@@ -1,0 +1,128 @@
+@if (proje) {
+  <!-- Header with actions -->
+  <header class="bg-white rounded-3 shadow-sm p-3 d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(proje.onayDurumu)">
+        <i [class]="OnayDurumuHelper.getIcon(proje.onayDurumu) + ' me-1'"></i>
+        {{ OnayDurumuHelper.getText(proje.onayDurumu) }}
+      </span>
+      <h5 class="mb-0">
+        <i class="bi bi-folder me-2"></i>{{ proje.projeAdi }}
+      </h5>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <!-- Onay Durumu: Taslak ise Onaya Sun butonu -->
+      @if (canSubmitForApproval && proje.onayDurumu === OnayDurumu.TASLAK) {
+        <button class="btn btn-info btn-sm shadow-sm" (click)="onSubmitForApproval()">
+          <i class="bi bi-send me-1"></i>Onaya Sun
+        </button>
+      }
+      
+      <!-- Onay Durumu: Onay Bekliyor ise Onayla/Reddet butonları -->
+      @if (canApprove && proje.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
+        <button class="btn btn-success btn-sm shadow-sm" (click)="onApprove()">
+          <i class="bi bi-check-circle me-1"></i>Onayla
+        </button>
+        <button class="btn btn-danger btn-sm shadow-sm" (click)="onReject()">
+          <i class="bi bi-x-circle me-1"></i>Reddet
+        </button>
+      }
+      
+      @if (canEdit) {
+        <button class="btn btn-warning btn-sm shadow-sm" (click)="onEdit()">
+          <i class="bi bi-pencil me-1"></i>Düzenle
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- Proje Bilgileri Kartı -->
+  <main class="bg-white rounded-3 shadow-sm p-3 mb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <h6 class="text-muted mb-3">Proje Bilgileri</h6>
+        
+        <dl class="row mb-0">
+          <dt class="col-sm-5">
+            <i class="bi bi-calendar-event me-2"></i>Başlangıç Tarihi
+          </dt>
+          <dd class="col-sm-7">
+            {{ (proje.baslangicTarihi | date:'dd.MM.yyyy') || '-' }}
+          </dd>
+
+          <dt class="col-sm-5">
+            <i class="bi bi-calendar-check me-2"></i>Bitiş Tarihi
+          </dt>
+          <dd class="col-sm-7">
+            {{ (proje.bitisTarihi | date:'dd.MM.yyyy') || '-' }}
+          </dd>
+
+          <dt class="col-sm-5">
+            <i class="bi bi-flag me-2"></i>Onay Durumu
+          </dt>
+          <dd class="col-sm-7">
+            <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(proje.onayDurumu)">
+              <i [class]="OnayDurumuHelper.getIcon(proje.onayDurumu) + ' me-1'"></i>
+              {{ OnayDurumuHelper.getText(proje.onayDurumu) }}
+            </span>
+          </dd>
+        </dl>
+      </div>
+
+      <div class="col-md-6">
+        <h6 class="text-muted mb-3">İşlem Bilgileri</h6>
+        
+        <dl class="row mb-0">
+          @if (proje.ekleyenKullanici) {
+            <dt class="col-sm-5">
+              <i class="bi bi-person-plus me-2"></i>Ekleyen
+            </dt>
+            <dd class="col-sm-7">
+              {{ proje.ekleyenKullanici.ad }} {{ proje.ekleyenKullanici.soyad }}
+            </dd>
+          }
+
+          @if (proje.eklemeTarihi) {
+            <dt class="col-sm-5">
+              <i class="bi bi-calendar me-2"></i>Eklenme Tarihi
+            </dt>
+            <dd class="col-sm-7">
+              {{ proje.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+            </dd>
+          }
+
+          @if (proje.ekleyenKullanici) {
+            <dt class="col-sm-5">
+              <i class="bi bi-pencil-square me-2"></i>Güncelleyen
+            </dt>
+            <dd class="col-sm-7">
+              {{ proje.ekleyenKullanici.ad }} {{ proje.ekleyenKullanici.soyad }}
+            </dd>
+          }
+
+          @if (proje.eklemeTarihi) {
+            <dt class="col-sm-5">
+              <i class="bi bi-clock me-2"></i>Güncelleme Tarihi
+            </dt>
+            <dd class="col-sm-7">
+              {{ proje.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+            </dd>
+          }
+        </dl>
+      </div>
+
+      @if (proje.aciklama) {
+        <div class="col-12 mt-3">
+          <hr>
+          <h6 class="text-muted mb-2">
+            <i class="bi bi-text-paragraph me-2"></i>Açıklama
+          </h6>
+          <p class="mb-0">{{ proje.aciklama }}</p>
+        </div>
+      }
+    </div>
+  </main>
+} @else {
+  <p class="text-muted">Proje detayları yükleniyor veya bulunamadı.</p>
+}

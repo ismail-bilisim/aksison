@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { VideoDersResponse } from 'src/app/core/models/videoders-response';
-import { getOnayDurumuAciklama, getOnayDurumuBadgeClass, getOnayDurumuIcon } from 'src/app/core/utils/onay-durumu.util';
+import { OnayDurumuHelper } from 'src/app/core/models/onay-durumu.enum';
 
 @Component({
   selector: 'app-videoders-temel',
@@ -18,20 +18,20 @@ export class VideodersTemelComponent {
    * Get OnayDurumu description for display
    */
   getOnayDurumuText(): string {
-    return getOnayDurumuAciklama(this.videoders?.onayDurumu);
+    return OnayDurumuHelper.getText(this.videoders?.onayDurumu);
   }
 
   /**
    * Get OnayDurumu badge CSS class
    */
   getOnayDurumuBadge(): string {
-    return getOnayDurumuBadgeClass(this.videoders?.onayDurumu);
+    return OnayDurumuHelper.getBadgeClass(this.videoders?.onayDurumu);
   }
 
   /**
    * Get OnayDurumu icon class
    */
   getOnayDurumuIcon(): string {
-    return getOnayDurumuIcon(this.videoders?.onayDurumu);
+    return OnayDurumuHelper.getIcon(this.videoders?.onayDurumu);
   }
 }

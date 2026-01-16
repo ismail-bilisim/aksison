@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5>Ders Detayı</h5>
         <div>
-          @if (ders && ders.onayDurumu === 'ons') {
+          @if (ders && ders.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
             <button class="btn btn-success me-2" (click)="icerikOnayla()" [disabled]="submitting">
               <i class="bi bi-check-circle me-1"></i>
               İçeriği Onayla
@@ -15,7 +15,7 @@
             </button>
           }
           
-          @if (ders && (ders.onayDurumu === 'tas' || ders.onayDurumu === 'dei') ) {
+          @if (ders && (ders.onayDurumu === OnayDurumu.TASLAK || ders.onayDurumu === OnayDurumu.RED) ) {
             <button class="btn btn-primary me-2" (click)="icerikOnayinaSun()" [disabled]="submitting">
               <i class="bi bi-send me-1"></i>
               İçerik Onayına Sun

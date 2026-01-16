@@ -9,11 +9,13 @@ import { PaydasRequest } from '../../../../core/models/paydas-request';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { ToastService } from '../../../../core/services/api/toast.service';
 import { PaydasVideodersListComponent } from '../../components/paydas-videoders-list/paydas-videoders-list.component';
+import { PaydasTemelComponent } from '../../components/paydas-temel/paydas-temel.component';
+import { OnayDurumu, OnayDurumuHelper } from '../../../../core/models/onay-durumu.enum';
 
 @Component({
   selector: 'app-paydas-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, PaydasVideodersListComponent],
+  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, PaydasVideodersListComponent, PaydasTemelComponent],
   templateUrl: './paydas-detail-page.component.html',
   styleUrls: ['./paydas-detail-page.component.css']
 })
@@ -30,6 +32,10 @@ export class PaydasDetailPageComponent implements OnInit {
   saving = false;
   submitting = false;
   activeTab = 'bilgiler';
+  
+  // Enum for template
+  readonly OnayDurumu = OnayDurumu;
+  readonly OnayDurumuHelper = OnayDurumuHelper;
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
@@ -156,22 +162,10 @@ export class PaydasDetailPageComponent implements OnInit {
   }
 
   getOnayDurumuBadgeClass(onayDurumu: string): string {
-    switch (onayDurumu) {
-      case 'tas': return 'bg-warning';
-      case 'ons': return 'bg-info';
-      case 'red': return 'bg-danger';
-      case 'ony': return 'bg-success';
-      default: return 'bg-secondary';
-    }
+    return OnayDurumuHelper.getBadgeClass(onayDurumu);
   }
 
   getOnayDurumuText(onayDurumu: string): string {
-    switch (onayDurumu) {
-      case 'tas': return 'Taslak';
-      case 'ons': return 'Onay Bekliyor';
-      case 'red': return 'Reddedildi';
-      case 'ony': return 'Onaylandı';
-      default: return onayDurumu;
-    }
+    return OnayDurumuHelper.getText(onayDurumu);
   }
 }

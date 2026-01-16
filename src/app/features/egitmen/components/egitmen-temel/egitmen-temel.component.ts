@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EgitmenResponse } from '../../../../core/models/egitmen-response';
+import { OnayDurumu, OnayDurumuHelper } from '../../../../core/models/onay-durumu.enum';
 
 @Component({
   selector: 'app-egitmen-temel',
@@ -14,6 +15,10 @@ export class EgitmenTemelComponent {
   @Input() canEdit = false;
   @Input() canApprove = false;
   @Input() canPassive = false;
+  
+  // Enum ve helper template'de kullanım için
+  readonly OnayDurumu = OnayDurumu;
+  readonly OnayDurumuHelper = OnayDurumuHelper;
 
   @Output() edit = new EventEmitter<void>();
   @Output() submitForApproval = new EventEmitter<void>();
@@ -47,22 +52,10 @@ export class EgitmenTemelComponent {
   }
 
   getOnayDurumuBadgeClass(onayDurumu: string): string {
-    switch (onayDurumu) {
-      case 'tas': return 'bg-secondary';
-      case 'ons': return 'bg-warning';
-      case 'ony': return 'bg-success';
-      case 'red': return 'bg-danger';
-      default: return 'bg-secondary';
-    }
+    return OnayDurumuHelper.getBadgeClass(onayDurumu);
   }
 
   getOnayDurumuText(onayDurumu: string): string {
-    switch (onayDurumu) {
-      case 'tas': return 'Taslak';
-      case 'ons': return 'Onay Bekliyor';
-      case 'ony': return 'Onaylandı';
-      case 'red': return 'Reddedildi';
-      default: return onayDurumu;
-    }
+    return OnayDurumuHelper.getText(onayDurumu);
   }
 }

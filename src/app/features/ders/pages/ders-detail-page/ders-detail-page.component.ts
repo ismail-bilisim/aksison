@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbAccordionModule, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { OnayDurumu } from 'src/app/core/models/onay-durumu.enum';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { DersKategoriService } from 'src/app/core/services/api/ders-kategori.service';
 import { DersBolumService } from 'src/app/core/services/api/ders-bolum.service';
@@ -19,7 +20,7 @@ import { DersResponse } from 'src/app/core/models/ders-response';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
-import { DersIslemKayit } from 'src/app/core/models/ders-islem-kayit';
+import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 import { ToastService } from 'src/app/core/services/api/toast.service'; 
 
@@ -60,6 +61,9 @@ export class DersDetailPageComponent implements OnInit {
   activeTab = 'konular';
   submitting = false;
   
+  // Enum for template
+  readonly OnayDurumu = OnayDurumu;
+  
   kategoriler = signal<KategoriOzet[]>([]);
   kategoriLoading = signal(false);
   kategoriDeleting = signal(false);
@@ -76,7 +80,7 @@ export class DersDetailPageComponent implements OnInit {
   videodersError = signal('');
 
   // İşlem kayıtları
-  islemKayitlar = signal<DersIslemKayit[]>([]);
+  islemKayitlar = signal<IslemKayit[]>([]);
   islemKayitLoading = signal(false);
 
   // Sekmeler için lazy load bayrakları

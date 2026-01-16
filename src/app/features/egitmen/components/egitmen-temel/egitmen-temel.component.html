@@ -140,14 +140,14 @@
 				}
 
 				<!-- Onaya Sun Button (Taslak durumunda) -->
-				@if (egitmen.onayDurumu === 'tas') {
+				@if (egitmen.onayDurumu === OnayDurumu.TASLAK) {
 					<button class="btn btn-info btn-sm" (click)="onSubmitForApproval()">
 						<i class="bi bi-send me-1"></i>Onaya Sun
 					</button>
 				}
 
 				<!-- Onayla/Reddet Buttons (Onay bekliyor durumunda) -->
-				@if (canApprove && egitmen.onayDurumu === 'ons') {
+				@if (canApprove && egitmen.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
 					<button class="btn btn-success btn-sm" (click)="onApprove()">
 						<i class="bi bi-check-circle me-1"></i>Onayla
 					</button>

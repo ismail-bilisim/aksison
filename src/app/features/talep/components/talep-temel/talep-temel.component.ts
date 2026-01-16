@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TalepResponse } from '../../../../core/models/talep-response';
 import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
+import { OnayDurumu, OnayDurumuHelper } from '../../../../core/models/onay-durumu.enum';
 
 @Component({
   selector: 'app-talep-temel',
@@ -13,6 +14,10 @@ import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
 })
 export class TalepTemelComponent {
   @Input() talep?: TalepResponse | null;
+  
+  // Enum ve helper template'de kullanım için
+  readonly OnayDurumu = OnayDurumu;
+  readonly OnayDurumuHelper = OnayDurumuHelper;
   
   // Yetki kontrolü için Input'lar (smart component'tan gelir)
   @Input() canEdit = false;

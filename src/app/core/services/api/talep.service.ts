@@ -8,7 +8,7 @@ import { TalepOzet } from '../../models/talep-ozet';
 import { TalepStatistics } from '../../models/talep-statistics';
 import { KullaniciOzet } from '../../models/kullanici-ozet';
 import { TalepOzetDurum } from '../../models/talep-ozet-durum';
-import { TalepIslemkayit } from '../../models/talep-islemkayit';
+import { IslemKayit } from 'src/app/core/models/islem-kayit';
 
 @Injectable({
   providedIn: 'root'
@@ -155,8 +155,8 @@ export class TalepService {
     return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, {}, { params });
   }
 
-  getByTalepId(talepId: number): Observable<TalepIslemkayit[]> {
-    return this.http.get<TalepIslemkayit[]>(`${this.apiUrl}/${talepId}/islemkayit`);
+  getByTalepId(talepId: number): Observable<IslemKayit[]> {
+    return this.http.get<IslemKayit[]>(`${this.apiUrl}/${talepId}/islemkayit`);
   }
 
 
