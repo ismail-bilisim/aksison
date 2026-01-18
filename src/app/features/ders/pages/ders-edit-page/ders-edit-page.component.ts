@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { CanComponentDeactivate } from 'src/app/core/guards/unsaved-changes.guard';
@@ -7,6 +7,7 @@ import { DersResponse } from 'src/app/core/models/ders-response';
 import { DersFormComponent } from "src/app/features/ders/components/ders-form/ders-form.component";
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 import { ToastService } from 'src/app/core/services/api/toast.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ders-edit-page',
@@ -17,6 +18,7 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 })
 export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // HTML elementleri(input, div vb.), Child component’ler
   @ViewChild(DersFormComponent) formComponent?: DersFormComponent;
@@ -37,7 +39,9 @@ export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
-      this.service.getById(+id).subscribe({
+      this.service.getById(+id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (res) => {
           this.ders = res;
           console.log("Yüklenen ders: ", this.ders);
@@ -57,7 +61,9 @@ export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
     this.isSaving = true;
 
     if (this.ders?.id) {
-      this.service.update(this.ders.id, dersRequest).subscribe({
+      this.service.update(this.ders.id, dersRequest)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           this.isSaving = false;
           this.toastService.success('Ders başarıyla güncellendi.');
@@ -71,7 +77,9 @@ export class DersEditPageComponent implements OnInit, CanComponentDeactivate {
         }
       });
     } else {
-      this.service.create(dersRequest).subscribe({
+      this.service.create(dersRequest)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
         next: (response) => {
           this.isSaving = false;
           this.toastService.success('Ders başarıyla oluşturuldu.');

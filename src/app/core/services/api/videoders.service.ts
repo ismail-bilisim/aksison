@@ -33,6 +33,19 @@ export class VideodersService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Onay işlemleri
+  icerikOnayinaSun(id: number): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  }
+
+  icerikOnayla(id: number, onayNotu?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, onayNotu || null);
+  }
+
+  icerikReddet(id: number, redNedeni?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, redNedeni || null);
+  }
+
   getById(id: number): Observable<VideoDersResponse> {
     return this.http.get<VideoDersResponse>(`${this.apiUrl}/${id}`);
   }

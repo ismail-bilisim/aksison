@@ -1,7 +1,8 @@
-import { Component, OnInit, inject, ViewChild, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, signal, DestroyRef, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
@@ -31,8 +32,10 @@ import { VideodersEgitmenListComponent } from '../../components/videoders-egitme
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     NgbNavModule,
     NgbAccordionModule,
+    NgbModalModule,
     VideodersTemelComponent,
     VideodersKonuListComponent,
     VideodersSorumlularComponent,
@@ -52,10 +55,13 @@ import { VideodersEgitmenListComponent } from '../../components/videoders-egitme
 })
 export class VideodersDetailPageComponent implements OnInit {
   @ViewChild('egitmenList') egitmenList?: VideodersEgitmenListComponent;
+  @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
+  @ViewChild('redModal') redModalTemplate!: TemplateRef<any>;
   
   videoders?: VideoDersResponse;
   loading = false;
   activeTab = 'konular';
+  submitting = false;
   
   // Enum for template
   readonly OnayDurumu = OnayDurumu;
@@ -84,8 +90,13 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly videodersService = inject(VideodersService);
   private readonly videodersKategoriService = inject(VideodersKategoriService);
   private readonly videoDersIslemKayitService = inject(VideoDersIslemKayitService);
+  private readonly modalService = inject(NgbModal);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
+
+  // Modal input değerleri
+  onayNotu: string = '';
+  redNedeni: string = '';
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -280,5 +291,102 @@ export class VideodersDetailPageComponent implements OnInit {
     if (videodersId) {
       this.router.navigate(['/videoders/edit', videodersId]);
     }
+  }
+
+  icerikOnayinaSun(): void {
+    if (!this.videoders?.id || this.submitting) {
+      return;
+    }
+    this.submitting = true;
+    this.videodersService.icerikOnayinaSun(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.videoders = updated;
+          this.submitting = false;
+          this.toastService.success('Ders başarıyla onaya gönderildi.');
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'icerikOnayinaSun');
+          this.submitting = false;
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  icerikOnayla(): void {
+    if (!this.videoders?.id || this.submitting) {
+      return;
+    }
+
+    this.onayNotu = '';
+    this.modalService.open(this.onayModalTemplate, { centered: true }).result.then(
+      (result) => {
+        if (result === 'confirm') {
+          this.onaylaIslemi();
+        }
+      },
+      () => {
+        // Modal dismissed
+      }
+    );
+  }
+
+  private onaylaIslemi(): void {
+    if (!this.videoders?.id) return;
+
+    this.submitting = true;
+    this.videodersService.icerikOnayla(this.videoders.id, this.onayNotu || undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.videoders = updated;
+          this.submitting = false;
+          this.toastService.success(`Ders içeriği onaylandı. Ders kodu: ${updated.kodu}`);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'icerikOnayla');
+          this.submitting = false;
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  icerikReddet(): void {
+    if (!this.videoders?.id || this.submitting) {
+      return;
+    }
+
+    this.redNedeni = '';
+    this.modalService.open(this.redModalTemplate, { centered: true }).result.then(
+      (result) => {
+        if (result === 'confirm') {
+          this.reddetIslemi();
+        }
+      },
+      () => {
+        // Modal dismissed
+      }
+    );
+  }
+
+  private reddetIslemi(): void {
+    if (!this.videoders?.id) return;
+
+    this.submitting = true;
+    this.videodersService.icerikReddet(this.videoders.id, this.redNedeni || undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.videoders = updated;
+          this.submitting = false;
+          this.toastService.info('Ders içeriği reddedildi.');
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'icerikReddet');
+          this.submitting = false;
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
   }
 }

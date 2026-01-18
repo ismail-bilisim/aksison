@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
 import { VideoDersRequest } from 'src/app/core/models/videoders-request';
 import { VideoDersResponse } from 'src/app/core/models/videoders-response';
 import { VideodersFormComponent } from "src/app/features/videoders/components/videoders-form/videoders-form.component";
 import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-videoders-edit-page',
@@ -19,6 +20,7 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
   isEditMode = false;
   private routeSub?: Subscription;
   private currentId?: number;
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     private route: ActivatedRoute,
@@ -57,9 +59,23 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
     };
 
     if (this.isEditMode && this.currentId) {
-      this.service.update(this.currentId, requestWithVersion).subscribe(() => this.router.navigate(['/videoders']));
+      this.service.update(this.currentId, requestWithVersion)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => this.router.navigate(['/videoders', this.currentId]),
+          error: (error) => {
+            console.error('Video ders güncellenirken hata oluştu:', error);
+          }
+        });
     } else {
-      this.service.create(requestWithVersion).subscribe(() => this.router.navigate(['/videoders']));
+      this.service.create(requestWithVersion)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => this.router.navigate(['/videoders', this.currentId]),
+          error: (error) => {
+            console.error('Video ders oluşturulurken hata oluştu:', error);
+          }
+        });
     }
   }
 
