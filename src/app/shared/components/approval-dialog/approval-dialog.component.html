@@ -1,0 +1,44 @@
+<div class="dialog-panel">
+  <div class="modal-header" [ngClass]="headerClass">
+    <h5 class="modal-title">
+      <i [class]="iconClass + ' me-2'"></i>{{ data.title }}
+    </h5>
+    <button type="button" class="btn-close" (click)="cancel()"></button>
+  </div>
+
+  <div class="modal-body">
+    <p class="mb-3">
+      <strong>{{ data.entityName }}</strong>
+      {{ data.message }}
+    </p>
+
+    @if (data.additionalInfo) {
+      <p class="text-muted small mb-3">
+        <i class="bi bi-info-circle me-1"></i>{{ data.additionalInfo }}
+      </p>
+    }
+
+    <div class="mb-3">
+      <label class="form-label">{{ data.noteLabel }}</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        [(ngModel)]="note"
+        [placeholder]="data.placeholder || ''">
+      </textarea>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
+      <i class="bi bi-x-lg me-1"></i>{{ data.cancelText || 'İptal' }}
+    </button>
+    <button
+      type="button"
+      class="btn"
+      [ngClass]="data.appearance === 'approve' ? 'btn-success' : 'btn-danger'"
+      (click)="confirm()">
+      <i [class]="iconClass + ' me-1'"></i>{{ data.confirmText }}
+    </button>
+  </div>
+</div>

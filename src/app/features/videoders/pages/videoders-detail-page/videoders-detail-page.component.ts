@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, ViewChild, signal, DestroyRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
@@ -26,6 +27,7 @@ import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
 import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
 import { VideodersEgitmenListComponent } from '../../components/videoders-egitmen-list/videoders-egitmen-list.component';
+import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/components/approval-dialog/approval-dialog.component';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -33,9 +35,9 @@ import { VideodersEgitmenListComponent } from '../../components/videoders-egitme
   imports: [
     CommonModule,
     FormsModule,
+    DialogModule,
     NgbNavModule,
     NgbAccordionModule,
-    NgbModalModule,
     VideodersTemelComponent,
     VideodersKonuListComponent,
     VideodersSorumlularComponent,
@@ -55,8 +57,6 @@ import { VideodersEgitmenListComponent } from '../../components/videoders-egitme
 })
 export class VideodersDetailPageComponent implements OnInit {
   @ViewChild('egitmenList') egitmenList?: VideodersEgitmenListComponent;
-  @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
-  @ViewChild('redModal') redModalTemplate!: TemplateRef<any>;
   
   videoders?: VideoDersResponse;
   loading = false;
@@ -90,7 +90,7 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly videodersService = inject(VideodersService);
   private readonly videodersKategoriService = inject(VideodersKategoriService);
   private readonly videoDersIslemKayitService = inject(VideoDersIslemKayitService);
-  private readonly modalService = inject(NgbModal);
+  private readonly dialog = inject(Dialog);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -319,17 +319,25 @@ export class VideodersDetailPageComponent implements OnInit {
       return;
     }
 
-    this.onayNotu = '';
-    this.modalService.open(this.onayModalTemplate, { centered: true }).result.then(
-      (result) => {
-        if (result === 'confirm') {
-          this.onaylaIslemi();
-        }
-      },
-      () => {
-        // Modal dismissed
+    const data: ApprovalDialogData = {
+      title: 'İçerik Onayı',
+      message: 'isimli dersin içeriğini onaylamak istediğinizden emin misiniz?',
+      entityName: this.videoders.adi,
+      noteLabel: 'Onay Notu (opsiyonel)',
+      placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+      additionalInfo: 'Onaylanan derse otomatik olarak bir ders kodu atanacaktır.',
+      confirmText: 'Onayla',
+      cancelText: 'İptal',
+      appearance: 'approve'
+    };
+
+    const ref = this.dialog.open<string | null>(ApprovalDialogComponent, { data });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result !== null && result !== undefined) {
+        this.onayNotu = result;
+        this.onaylaIslemi();
       }
-    );
+    });
   }
 
   private onaylaIslemi(): void {
@@ -357,17 +365,25 @@ export class VideodersDetailPageComponent implements OnInit {
       return;
     }
 
-    this.redNedeni = '';
-    this.modalService.open(this.redModalTemplate, { centered: true }).result.then(
-      (result) => {
-        if (result === 'confirm') {
-          this.reddetIslemi();
-        }
-      },
-      () => {
-        // Modal dismissed
+    const data: ApprovalDialogData = {
+      title: 'İçerik Reddi',
+      message: 'isimli dersin içeriğini reddetmek istediğinizden emin misiniz?',
+      entityName: this.videoders.adi,
+      noteLabel: 'Red Nedeni (opsiyonel)',
+      placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+      additionalInfo: 'Reddedilen ders taslak durumuna dönecektir.',
+      confirmText: 'Reddet',
+      cancelText: 'İptal',
+      appearance: 'reject'
+    };
+
+    const ref = this.dialog.open<string | null>(ApprovalDialogComponent, { data });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result !== null && result !== undefined) {
+        this.redNedeni = result;
+        this.reddetIslemi();
       }
-    );
+    });
   }
 
   private reddetIslemi(): void {

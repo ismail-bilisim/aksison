@@ -36,6 +36,14 @@ export class EgitmenService {
     return this.http.get<EgitmenOzet[]>(`${this.apiUrl}/by-aktif/${aktifMi}`);
   }
 
+  searchApproved(query: string): Observable<EgitmenOzet[]> {
+    const params: any = {};
+    if (query) {
+      params['q'] = query;
+    }
+    return this.http.get<EgitmenOzet[]>(`${this.apiUrl}/search`, { params });
+  }
+
   getByKategoriler(kategoriIds: number[]): Observable<EgitmenOzet[]> {
     const params = { ids: kategoriIds.join(',') };
     return this.http.get<EgitmenOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });

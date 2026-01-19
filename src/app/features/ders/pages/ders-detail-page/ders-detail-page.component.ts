@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, ViewChild, TemplateRef, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbNavModule, NgbAccordionModule, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { OnayDurumu } from 'src/app/core/models/onay-durumu.enum';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { DersKategoriService } from 'src/app/core/services/api/ders-kategori.service';
@@ -23,6 +24,7 @@ import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 import { ToastService } from 'src/app/core/services/api/toast.service'; 
+import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/components/approval-dialog/approval-dialog.component';
 
 @Component({
   selector: 'app-ders-detail-page',
@@ -30,9 +32,9 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
   imports: [
     CommonModule,
     FormsModule,
+    DialogModule,
     NgbNavModule,
     NgbAccordionModule,
-    NgbModalModule,
     DersTemelComponent,
     DersKonuListComponent,
     DersVideodersListComponent,
@@ -53,7 +55,7 @@ export class DersDetailPageComponent implements OnInit {
   private readonly bolumKonuService = inject(BolumKonuService);
   private readonly videodersService = inject(VideodersService);
   private readonly dersIslemKayitService = inject(DersIslemKayitService);
-  private readonly modalService = inject(NgbModal);
+  private readonly dialog = inject(Dialog);
   private readonly destroyRef = inject(DestroyRef);
 
   ders?: DersResponse;
@@ -88,10 +90,6 @@ export class DersDetailPageComponent implements OnInit {
   videoderslerLoaded = false;
   islemlerLoaded = false;
 
-  // Modal referansları
-  @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
-  @ViewChild('redModal') redModalTemplate!: TemplateRef<any>;
-  
   // Modal input değerleri
   onayNotu: string = '';
   redNedeni: string = '';
@@ -432,19 +430,26 @@ export class DersDetailPageComponent implements OnInit {
     if (!this.ders?.id || this.submitting) {
       return;
     }
-    
-    // Modal aç
-    this.onayNotu = '';
-    this.modalService.open(this.onayModalTemplate, { centered: true }).result.then(
-      (result) => {
-        if (result === 'confirm') {
-          this.onaylaIslemi();
-        }
-      },
-      () => {
-        // Modal dismissed (cancelled)
+
+    const data: ApprovalDialogData = {
+      title: 'İçerik Onayı',
+      message: 'isimli dersin içeriğini onaylamak istediğinizden emin misiniz?',
+      entityName: this.ders.adi,
+      noteLabel: 'Onay Notu (opsiyonel)',
+      placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+      additionalInfo: 'Onaylanan derse otomatik olarak bir ders kodu atanacaktır.',
+      confirmText: 'Onayla',
+      cancelText: 'İptal',
+      appearance: 'approve'
+    };
+
+    const ref = this.dialog.open<string | null>(ApprovalDialogComponent, { data });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result !== null && result !== undefined) {
+        this.onayNotu = result;
+        this.onaylaIslemi();
       }
-    );
+    });
   }
 
   private onaylaIslemi(): void {
@@ -471,19 +476,26 @@ export class DersDetailPageComponent implements OnInit {
     if (!this.ders?.id || this.submitting) {
       return;
     }
-    
-    // Modal aç
-    this.redNedeni = '';
-    this.modalService.open(this.redModalTemplate, { centered: true }).result.then(
-      (result) => {
-        if (result === 'confirm') {
-          this.reddetIslemi();
-        }
-      },
-      () => {
-        // Modal dismissed (cancelled)
+
+    const data: ApprovalDialogData = {
+      title: 'İçerik Reddi',
+      message: 'isimli dersin içeriğini reddetmek istediğinizden emin misiniz?',
+      entityName: this.ders.adi,
+      noteLabel: 'Red Nedeni (opsiyonel)',
+      placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+      additionalInfo: 'Reddedilen ders taslak durumuna dönecektir.',
+      confirmText: 'Reddet',
+      cancelText: 'İptal',
+      appearance: 'reject'
+    };
+
+    const ref = this.dialog.open<string | null>(ApprovalDialogComponent, { data });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result !== null && result !== undefined) {
+        this.redNedeni = result;
+        this.reddetIslemi();
       }
-    );
+    });
   }
 
   private reddetIslemi(): void {
