@@ -14,6 +14,8 @@ import { HedefKitleEgitimSeviyesiService } from 'src/app/core/services/api/hedef
 import { HedefKitleEgitimSeviyesiResponse } from 'src/app/core/models/hedef-kitle-egitim-seviyesi-response';
 import { OdemeKaynak } from 'src/app/core/models/odeme-kaynak';
 import { OdemeKaynakService } from 'src/app/core/services/api/odeme-kaynak.service';
+import { LookupService } from 'src/app/core/services/api/lookup.service';
+import { SehirOzet } from 'src/app/core/models/sehir-ozet';
 
 @Component({
   selector: 'app-yuzyuzeders-form',
@@ -46,6 +48,9 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
   odemeKaynaklari: OdemeKaynak[] = [];
   loadingOdemeKaynak = false;
 
+  sehirler: SehirOzet[] = [];
+  loadingSehir = false;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly dersService: DersService,
@@ -53,10 +58,11 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
     private readonly dersSeviyesiService: DersSeviyesiService,
     private readonly dersNiteligiService: DersNiteligiService,
     private readonly hedefKitleEgitimSeviyesiService: HedefKitleEgitimSeviyesiService,
-    private readonly odemeKaynakService: OdemeKaynakService
+    private readonly odemeKaynakService: OdemeKaynakService,
+    private readonly lookupService: LookupService
   ) {
     this.form = this.fb.group({
-      dersKodu: ['', Validators.required],
+      dersId: ['', Validators.required],
       adi: ['', Validators.required],
       amaci: [''],
       dersOzeti: [''],
@@ -72,7 +78,7 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       baslamaTarihi: [''],
       bitisTarihi: [''],
       egitimYeri: [''],
-      sehir: [''],
+      sehirKodu: [''],
       kontenjan: [''],
       odemeKaynak: [''],
       birimUcret: [''],
@@ -83,7 +89,7 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.loadLookupData();
 
-    this.form.get('dersKodu')?.valueChanges.subscribe(dersId => {
+    this.form.get('dersId')?.valueChanges.subscribe(dersId => {
       if (dersId) {
         this.loadDersDetay(dersId);
       }
@@ -116,6 +122,7 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
     this.loadDersNitelikleri();
     this.loadHedefKitleEgitimSeviyeleri();
     this.loadOdemeKaynaklari();
+    this.loadSehirler();
   }
 
   private loadDersler(): void {
@@ -198,6 +205,20 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       error: (err) => {
         console.error('Ödeme kaynakları yüklenemedi:', err);
         this.loadingOdemeKaynak = false;
+      }
+    });
+  }
+
+  private loadSehirler(): void {
+    this.loadingSehir = true;
+    this.lookupService.getAllSehirOzet().subscribe({
+      next: (data) => {
+        this.sehirler = data;
+        this.loadingSehir = false;
+      },
+      error: (err) => {
+        console.error('Şehirler yüklenemedi:', err);
+        this.loadingSehir = false;
       }
     });
   }

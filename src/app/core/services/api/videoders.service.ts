@@ -67,7 +67,7 @@ export class VideodersService {
 
   // GET by Onay Durumu
   getAllByOnayDurumu(onayDurumu: string): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-onay-durumu/${onayDurumu}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-onay/${onayDurumu}`);
   }
 
   // GET by Turu

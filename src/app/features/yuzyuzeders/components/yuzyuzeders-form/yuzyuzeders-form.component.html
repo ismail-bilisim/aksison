@@ -7,8 +7,8 @@
         <div class="row g-3">
             <div class="col-12">
                 <label class="form-label">Ders Seç *</label>
-                <select formControlName="dersKodu" class="form-select" 
-                        [class.is-invalid]="form.get('dersKodu')?.invalid && form.get('dersKodu')?.touched">
+                <select formControlName="dersId" class="form-select" 
+                        [class.is-invalid]="form.get('dersId')?.invalid && form.get('dersId')?.touched">
                     <option value="">Seçiniz</option>
                     @if (loadingDers) {
                         <option disabled>Yükleniyor...</option>
@@ -17,7 +17,7 @@
                         <option [value]="ders.id">{{ ders.kodu }} - {{ ders.adi }}</option>
                     }
                 </select>
-                @if (form.get('dersKodu')?.invalid && form.get('dersKodu')?.touched) {
+                @if (form.get('dersId')?.invalid && form.get('dersId')?.touched) {
                     <div class="text-danger small mt-1">Ders seçimi zorunludur.</div>
                 }
             </div>
@@ -106,7 +106,15 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Şehir</label>
-                <input formControlName="sehir" class="form-control" placeholder="Şehir kodu giriniz" />
+                <select formControlName="sehirKodu" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingSehir) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (sehir of sehirler; track sehir.kodu) {
+                        <option [value]="sehir.kodu">{{ sehir.adi }}</option>
+                    }
+                </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Başlama Tarihi</label>

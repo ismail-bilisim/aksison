@@ -5,6 +5,7 @@ import { catchError, shareReplay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TalepKonusuOzet } from '../../models/talep-konusu';
 import { KategoriOzet } from '../../models/kategori-ozet';
+import { SehirOzet } from '../../models/sehir-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class LookupService {
 
   private apiUrlTalepKonusu = `${environment.apiUrl}/talepkonusu`;
   private apiUrlKategori = `${environment.apiUrl}/kategori`;
+  private apiUrlSehir = `${environment.apiUrl}/sehir`;
   
   constructor() { }
 
@@ -47,6 +49,10 @@ export class LookupService {
 
   getAllTalepKonusuOzet() {
     return this.cachedGet<TalepKonusuOzet[]>(this.apiUrlTalepKonusu + '/ozet');
+  }
+
+  getAllSehirOzet() {
+    return this.cachedGet<SehirOzet[]>(this.apiUrlSehir + '/ozet');
   }
 
   // manuel yenileme istersen
