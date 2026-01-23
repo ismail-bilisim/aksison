@@ -1,0 +1,18 @@
+<div class="container mt-4">
+    @if (isEditMode) {
+    <h5 class="mb-3">Yüzyüze Dersi Düzenle</h5>
+    } @else {
+    <h5 class="mb-3">Yeni Yüzyüze Dersi Ekle</h5>
+    }
+
+    <section class="card p-4 shadow-sm border-0">
+        <app-yuzyuzeders-form [initialData]="yuzyuzedersRequest" (save)="onSave($event)">
+        </app-yuzyuzeders-form>
+    </section>
+
+    <div class="mt-4 d-flex justify-content-end">
+        <a routerLink="/yuzyuzeders" class="btn btn-outline-secondary">
+            ← Listeye Dön
+        </a>
+    </div>
+</div>

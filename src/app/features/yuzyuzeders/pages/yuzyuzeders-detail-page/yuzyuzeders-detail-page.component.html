@@ -1,0 +1,170 @@
+@if (loading) {
+  <div class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+} @else if (yuzyuzeders) {
+  <div class="container-fluid py-4">
+    <!-- Başlık ve Aksiyon Butonları -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>
+        <i class="bi bi-person-video me-2"></i>Yüzyüze Ders Detayı
+      </h3>
+      <div class="d-flex gap-2">
+        <!-- Düzenle butonu - Sadece onaylı olmayan dersler için -->
+        @if (yuzyuzeders.onayDurumu !== OnayDurumu.ONAYLI) {
+          <button 
+            class="btn btn-primary" 
+            (click)="onEdit(yuzyuzeders.id)"
+            [disabled]="submitting">
+            <i class="bi bi-pencil me-1"></i>Düzenle
+          </button>
+        }
+        
+        <!-- İçerik Onayına Sun butonu - Sadece Taslak veya Red durumunda -->
+        @if (yuzyuzeders.onayDurumu === OnayDurumu.TASLAK || yuzyuzeders.onayDurumu === OnayDurumu.RED) {
+          <button 
+            class="btn btn-warning" 
+            (click)="icerikOnayinaSun()"
+            [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>İçerik Onayına Sun
+          </button>
+        }
+        
+        <!-- İçerik Onayla/Reddet butonları - Sadece Onaya Sunuldu durumunda -->
+        @if (yuzyuzeders.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
+          <button 
+            class="btn btn-success" 
+            (click)="icerikOnayla()"
+            [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>İçeriği Onayla
+          </button>
+          <button 
+            class="btn btn-danger" 
+            (click)="icerikReddet()"
+            [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>İçeriği Reddet
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Temel Bilgiler -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-info-circle me-2"></i>Temel Bilgiler
+        </h5>
+      </div>
+      <div class="card-body">
+        <app-yuzyuzeders-temel [yuzyuzeders]="yuzyuzeders"></app-yuzyuzeders-temel>
+      </div>
+    </div>
+
+    <!-- Ders Özeti -->
+    @if (yuzyuzeders.dersOzeti) {
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-file-text me-2"></i>Ders Özeti
+          </h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-0">{{ yuzyuzeders.dersOzeti }}</p>
+        </div>
+      </div>
+    }
+
+    <!-- Ana Ders Bilgisi -->
+    @if (yuzyuzeders.ders) {
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-book me-2"></i>Ana Ders
+          </h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <div class="col-md-6">
+              <dt class="mb-2">Kodu</dt>
+              <dd>{{ yuzyuzeders.ders.kodu }}</dd>
+            </div>
+            <div class="col-md-6">
+              <dt class="mb-2">Adı</dt>
+              <dd>{{ yuzyuzeders.ders.adi }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    }
+
+    <!-- Ücret Bilgisi -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-currency-exchange me-2"></i>Ücret Bilgisi
+        </h5>
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <div class="col-md-4">
+            <dt class="mb-2">Birim Ücret</dt>
+            <dd>{{ yuzyuzeders.birimUcret ? (yuzyuzeders.birimUcret | number:'1.2-2') + ' ₺' : 'Belirtilmemiş' }}</dd>
+          </div>
+          <div class="col-md-4">
+            <dt class="mb-2">Toplam Ücret</dt>
+            <dd>{{ yuzyuzeders.toplamUcret ? (yuzyuzeders.toplamUcret | number:'1.2-2') + ' ₺' : 'Belirtilmemiş' }}</dd>
+          </div>
+          <div class="col-md-4">
+            <dt class="mb-2">Ödeme Kaynağı</dt>
+            <dd>{{ yuzyuzeders.odemeKaynak?.adi || 'Belirtilmemiş' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Eğitim Bilgileri -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="bi bi-geo-alt me-2"></i>Eğitim Bilgileri
+        </h5>
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <div class="col-md-6">
+            <dt class="mb-2">Eğitim Yeri</dt>
+            <dd class="mb-3">{{ yuzyuzeders.egitimYeri || 'Belirtilmemiş' }}</dd>
+            
+            <dt class="mb-2">Şehir</dt>
+            <dd class="mb-3">{{ yuzyuzeders.sehir?.adi || 'Belirtilmemiş' }}</dd>
+            
+            <dt class="mb-2">Başlama Tarihi</dt>
+            <dd class="mb-3">{{ yuzyuzeders.baslamaTarihi ? (yuzyuzeders.baslamaTarihi | date:'dd/MM/yyyy') : 'Belirtilmemiş' }}</dd>
+            
+            <dt class="mb-2">Bitiş Tarihi</dt>
+            <dd class="mb-3">{{ yuzyuzeders.bitisTarihi ? (yuzyuzeders.bitisTarihi | date:'dd/MM/yyyy') : 'Belirtilmemiş' }}</dd>
+          </div>
+          <div class="col-md-6">
+            <dt class="mb-2">Ders Süresi</dt>
+            <dd class="mb-3">{{ yuzyuzeders.dersSuresi ? yuzyuzeders.dersSuresi + ' dakika' : 'Belirtilmemiş' }}</dd>
+            
+            <dt class="mb-2">Kontenjan</dt>
+            <dd class="mb-3">{{ yuzyuzeders.kontenjan || 'Belirtilmemiş' }}</dd>
+            
+            <dt class="mb-2">Başvuru Sayısı</dt>
+            <dd class="mb-3">{{ yuzyuzeders.basvuruSayisi || '0' }}</dd>
+            
+            <dt class="mb-2">Tamamlayan Sayısı</dt>
+            <dd class="mb-3">{{ yuzyuzeders.tamamlayanSayisi || '0' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-warning m-4">
+    <i class="bi bi-exclamation-triangle me-2"></i>Yüzyüze ders bulunamadı.
+  </div>
+}

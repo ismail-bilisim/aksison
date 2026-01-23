@@ -1,0 +1,202 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="yuzyuzeders-form">
+    <!-- Ders Seçimi -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-bookmark-check me-2"></i>Ders Seçimi
+        </h6>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label">Ders Seç *</label>
+                <select formControlName="dersKodu" class="form-select" 
+                        [class.is-invalid]="form.get('dersKodu')?.invalid && form.get('dersKodu')?.touched">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDers) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (ders of dersler; track ders.id) {
+                        <option [value]="ders.id">{{ ders.kodu }} - {{ ders.adi }}</option>
+                    }
+                </select>
+                @if (form.get('dersKodu')?.invalid && form.get('dersKodu')?.touched) {
+                    <div class="text-danger small mt-1">Ders seçimi zorunludur.</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Temel Bilgiler -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-card-text me-2"></i>Temel Bilgiler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Adı *</label>
+                <input formControlName="adi" class="form-control" 
+                       [class.is-invalid]="form.get('adi')?.invalid && form.get('adi')?.touched" />
+                @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
+                    <div class="text-danger small mt-1">Ders adı zorunludur.</div>
+                }
+            </div>
+            <div class="col-12">
+                <label class="form-label">Amacı</label>
+                <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Özeti</label>
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sınıflandırma ve Özellikler -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-diagram-3 me-2"></i>Sınıflandırma ve Özellikler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Ders Türü</label>
+                <select formControlName="turuKodu" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersTuru) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (tur of dersTurleri; track tur.kodu) {
+                        <option [value]="tur.kodu">{{ tur.adi }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Seviye</label>
+                <select formControlName="seviyesiKodu" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersSeviyesi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (sev of dersSeviyeleri; track sev.kodu) {
+                        <option [value]="sev.kodu">{{ sev.adi }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nitelik</label>
+                <select formControlName="niteligiKodu" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingDersNiteligi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (nit of dersNitelikleri; track nit.kodu) {
+                        <option [value]="nit.kodu">{{ nit.adi }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Eğitim Yeri ve Tarihler -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-geo-alt me-2"></i>Eğitim Yeri ve Tarihler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Eğitim Yeri</label>
+                <input formControlName="egitimYeri" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Şehir</label>
+                <input formControlName="sehir" class="form-control" placeholder="Şehir kodu giriniz" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Başlama Tarihi</label>
+                <input type="datetime-local" formControlName="baslamaTarihi" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Bitiş Tarihi</label>
+                <input type="datetime-local" formControlName="bitisTarihi" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Ders Süresi (dk)</label>
+                <input type="number" formControlName="dersSuresi" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Kontenjan</label>
+                <input type="number" formControlName="kontenjan" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Hedef Kitle ve İçerik -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-people me-2"></i>Hedef Kitle ve İçerik
+        </h6>
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
+                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingHedefKitleEgitimSeviyesi) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (seviye of hedefKitleEgitimSeviyeleri; track seviye.kodu) {
+                        <option [value]="seviye.kodu">{{ seviye.adi }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
+                <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Kullanılacak Programlar</label>
+                <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Kazanımlar</label>
+                <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Sıkça Sorulan Sorular</label>
+                <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finansal Bilgiler -->
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-cash-stack me-2"></i>Finansal Bilgiler
+        </h6>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Ödeme Kaynak</label>
+                <select formControlName="odemeKaynak" class="form-select">
+                    <option value="">Seçiniz</option>
+                    @if (loadingOdemeKaynak) {
+                        <option disabled>Yükleniyor...</option>
+                    }
+                    @for (kaynak of odemeKaynaklari; track kaynak.kodu) {
+                        <option [value]="kaynak.kodu">{{ kaynak.adi }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Birim Ücret</label>
+                <input type="number" step="0.01" formControlName="birimUcret" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Toplam Ücret</label>
+                <input type="number" step="0.01" formControlName="toplamUcret" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions text-end">
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid">
+            <i class="bi bi-save me-2"></i>Kaydet
+        </button>
+    </div>
+</form>

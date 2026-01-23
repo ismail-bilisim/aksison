@@ -1,0 +1,183 @@
+@if (yuzyuzeders) {
+  <!-- Yüzyüze Ders Başlık ve Durum -->
+  <div class="ders-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          @if (yuzyuzeders.kodu) {
+            {{ yuzyuzeders.kodu }} -
+          }
+          <span class="text-muted ">{{ yuzyuzeders.adi }}</span>
+        </h5>
+        <div class="text-muted mb-2">
+        @if (yuzyuzeders.dersDurumu) {
+          <span class="badge bg-info text-dark badge-md">
+            <i class="bi bi-flag me-1"></i>
+            {{ yuzyuzeders.dersDurumu.adi }}
+          </span>
+        }
+        </div>
+
+        @if (yuzyuzeders.ders) {
+          <div class="text-muted small">
+            <i class="bi bi-book me-1"></i>
+            <span class="fw-medium">Ana Ders:</span> 
+            <a [routerLink]="['/ders/detail', yuzyuzeders.ders.id]" class="text-decoration-none">
+              {{ yuzyuzeders.ders.adi }} <span class="text-muted">({{ yuzyuzeders.ders.kodu }})</span>
+            </a>
+          </div>
+        }
+      </div>
+      <div class="d-flex flex-column gap-2 align-items-end">
+        <span class="badge {{ getOnayDurumuBadge() }} badge-lg">
+          <i class="{{ getOnayDurumuIcon() }} me-1"></i>
+          {{ getOnayDurumuText() }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Amaç -->
+  @if (yuzyuzeders.amaci) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-bullseye me-2"></i>Ders Amacı
+      </h6>
+      <p class="text-content">{{ yuzyuzeders.amaci }}</p>
+    </div>
+  }
+
+  <!-- Sınıflandırma ve Temel Bilgiler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-diagram-3 me-2"></i>Sınıflandırma ve Özellikler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Ders Türü</dt>
+        <dd>{{ yuzyuzeders.turu?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Seviye</dt>
+        <dd>{{ yuzyuzeders.seviyesi?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Nitelik</dt>
+        <dd>{{ yuzyuzeders.niteligi?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hedef Kitle -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-people me-2"></i>Hedef Kitle
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>İlgi Alanına Göre Hedef Kitle</dt>
+        <dd>{{ yuzyuzeders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Hedef Kitle Eğitim Seviyesi</dt>
+        <dd>{{ yuzyuzeders.hedefKitleEgitimSeviye?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eğitim Yeri ve Tarihler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-geo-alt me-2"></i>Eğitim Yeri ve Tarihler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>
+          <i class="bi bi-building text-primary me-1"></i>Eğitim Yeri
+        </dt>
+        <dd>{{ yuzyuzeders.egitimYeri || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>
+          <i class="bi bi-pin-map text-info me-1"></i>Şehir
+        </dt>
+        <dd>{{ yuzyuzeders.sehir?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      @if (yuzyuzeders.baslamaTarihi) {
+        <div class="info-item">
+          <dt>
+            <i class="bi bi-calendar-event text-success me-1"></i>Başlama Tarihi
+          </dt>
+          <dd>{{ yuzyuzeders.baslamaTarihi | date:'dd/MM/yyyy' }}</dd>
+        </div>
+      }
+      @if (yuzyuzeders.bitisTarihi) {
+        <div class="info-item">
+          <dt>
+            <i class="bi bi-calendar-check text-warning me-1"></i>Bitiş Tarihi
+          </dt>
+          <dd>{{ yuzyuzeders.bitisTarihi | date:'dd/MM/yyyy' }}</dd>
+        </div>
+      }
+      <div class="info-item">
+        <dt>
+          <i class="bi bi-clock-history text-primary me-1"></i>Ders Süresi
+        </dt>
+        <dd>{{ yuzyuzeders.dersSuresi ? yuzyuzeders.dersSuresi + ' dakika' : 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kontenjan Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-people-fill me-2"></i>Kontenjan ve Katılım Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kontenjan</dt>
+        <dd>{{ yuzyuzeders.kontenjan || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Başvuru Sayısı</dt>
+        <dd>{{ yuzyuzeders.basvuruSayisi || '0' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Tamamlayan Sayısı</dt>
+        <dd>{{ yuzyuzeders.tamamlayanSayisi || '0' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kazanim ve Araclar -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-trophy me-2"></i>Kazanım ve Araçlar
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kazanımlar</dt>
+        <dd>{{ yuzyuzeders.kazanimlar  || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Kullanılacak Araçlar</dt>
+        <dd>{{ yuzyuzeders.kullanilacakProgramlar || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sıkça Sorulan Sorular -->
+  @if (yuzyuzeders.sikcaSorulanSorular) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-question-circle me-2"></i>Sıkça Sorulan Sorular
+      </h6>
+      <p class="text-content text-pre-wrap">{{ yuzyuzeders.sikcaSorulanSorular }}</p>
+    </div>
+  }
+
+} @else {
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Ders bilgisi yükleniyor...
+</div>
+}

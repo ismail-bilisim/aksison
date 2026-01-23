@@ -23,6 +23,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/videoders/videoders-route').then(m => m.VIDEODERS_ROUTES)
             },
             { 
+                path: 'yuzyuzeders', 
+                loadChildren: () => import('./features/yuzyuzeders/yuzyuze-route').then(m => m.YUZYUZEDERS_ROUTES)
+            },
+            { 
                 path: 'ders', 
                 loadChildren: () => import('./features/ders/ders-route').then(m => m.DERS_ROUTES)
             },
