@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-end align-items-center mb-3">
+  <button class="btn btn-outline-primary btn-sm" (click)="requestAdd()">
+    <i class="bi bi-plus"></i>
+    Ekle
+  </button>
+</div>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border spinner-border-sm" role="status">
+    <span class="visually-hidden">Yükleniyor...</span>
+  </div>
+</div>
+
+<div *ngIf="!loading && items.length === 0" class="alert alert-info">
+  Henüz proje eklenmemiş.
+</div>
+
+<div *ngIf="!loading && items.length > 0" class="row">
+  <div *ngFor="let item of items" class="col-md-6 col-lg-4 mb-3">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h6 class="card-title mb-0 text-primary">
+            <i class="bi bi-folder me-2"></i>
+            {{ item.projeAdi }}
+          </h6>
+          <button class="btn btn-sm btn-outline-danger"
+                  (click)="delete.emit(item)"
+                  [disabled]="deleting"
+                  title="Kaldır">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+        <div class="proje-info">
+          <div class="mb-1">
+            <small class="text-muted">
+              <i class="bi bi-calendar-event me-1"></i>
+              {{ item.baslangicTarihi | date:'dd.MM.yyyy' }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #projeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Proje Ekle</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div *ngIf="modalLoading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Projeler yükleniyor...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!modalLoading">
+      <div *ngIf="availableProjeler.length === 0" class="alert alert-info">
+        Tüm projeler zaten eklenmiş. Eklenebilecek proje bulunmamaktadır.
+      </div>
+
+      <div *ngIf="availableProjeler.length > 0">
+        <p>Eklemek istediğiniz projeleri seçin:</p>
+        <div class="list-group">
+          <label *ngFor="let proje of availableProjeler" class="list-group-item list-group-item-action">
+            <div class="form-check">
+              <input class="form-check-input"
+                     type="checkbox"
+                     [checked]="isProjeSelected(proje.id)"
+                     (change)="toggleProjeSelection(proje.id)">
+              <div class="form-check-label">
+                <strong>{{ proje.projeAdi }}</strong>
+                <div class="small text-muted">
+                  <i class="bi bi-calendar-event me-1"></i>{{ proje.baslangicTarihi | date:'dd.MM.yyyy' }}
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+      İptal
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirmAdd()" [disabled]="selectedProjeler.length === 0 || adding">
+      <span *ngIf="adding" class="spinner-border spinner-border-sm me-2" role="status"></span>
+      Ekle ({{ selectedProjeler.length }})
+    </button>
+  </div>
+</ng-template>

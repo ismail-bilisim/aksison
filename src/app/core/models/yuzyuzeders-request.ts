@@ -18,12 +18,12 @@ export interface YuzyuzeDersRequest {
   baslamaTarihi?: string; // LocalDateTime -> ISO 8601 string
   bitisTarihi?: string; // LocalDateTime -> ISO 8601 string
   egitimYeri?: string;
-  sehir?: string;
+  sehirKodu?: string;
   kontenjan?: number;
   tamamlayanSayisi?: number;
   basvuruSayisi?: number;
   paydasId?: number;
-  odemeKaynak?: string;
+  odemeKaynakKodu?: string;
   birimUcret?: number; // BigDecimal -> number
   toplamUcret?: number; // BigDecimal -> number
   durumKodu?: string;
@@ -32,4 +32,5 @@ export interface YuzyuzeDersRequest {
   materyalGelistiriciId?: number;
   grafikDuzenleyiciId?: number;
   medyaSorumluId?: number;
+  dersId?: number;
 }

@@ -46,7 +46,7 @@ export class YuzyuzedersService {
   }
 
   icerikOnayinaSun(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onayina-sun`, {});
+    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
   }
 
   icerikOnayla(id: number, onayNotu?: string): Observable<void> {

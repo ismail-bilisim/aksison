@@ -15,6 +15,7 @@ export interface TalepResponse {
   talepDurumu: TalepDurumuOzet;
   kapanisTarihi?: string;
   onayDurumu?: string;
+  acilMi?: boolean;
   ekDosyalar?: TalepEkdosyaOzet[];
   ekleyenKullanici?: KullaniciOzet;
   guncelleyenKullanici?: KullaniciOzet;

@@ -1,3 +1,9 @@
+import { VideodersProjeService } from 'src/app/core/services/api/videoders-proje.service';
+import { ProjeService } from 'src/app/core/services/api/proje.service';
+import { ProjeOzet } from 'src/app/core/models/proje-ozet';
+import { VideodersEgitmenService } from 'src/app/core/services/api/videoders-egitmen.service';
+import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
+import { EgitmenOzet } from 'src/app/core/models/egitmen-ozet';
 import { Component, OnInit, inject, ViewChild, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,25 +15,30 @@ import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
+import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { ToastService } from '../../../../core/services/api/toast.service';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { KategoriOzet } from '../../../../core/models/kategori-ozet';
+import { Kategori } from 'src/app/core/models/kategori';
 import { VideodersTemelComponent } from '../../components/videoders-temel/videoders-temel.component';
 import { VideodersKonuListComponent } from '../../components/videoders-konu-list/videoders-konu-list.component';
 import { VideodersSorumlularComponent } from '../../components/videoders-sorumlular/videoders-sorumlular.component';
 import { VideodersUcretComponent } from '../../components/videoders-ucret/videoders-ucret.component';
 import { VideodersOnkosulListComponent } from '../../components/videoders-onkosul-list/videoders-onkosul-list.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
-import { VideodersProjeListComponent } from '../../components/videoders-proje-list/videoders-proje-list.component';
-import { VideodersPaydasListComponent } from '../../components/videoders-paydas-list/videoders-paydas-list.component';
+import { ProjeListComponent } from 'src/app/shared/components/proje-list/proje-list.component';
 import { VideodersSozlesmeListComponent } from '../../components/videoders-sozlesme-list/videoders-sozlesme-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { VideoDersIslemKayitService } from 'src/app/core/services/api/videoders-islem-kayit.service';
 import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
 import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
-import { VideodersEgitmenListComponent } from '../../components/videoders-egitmen-list/videoders-egitmen-list.component';
+import { EgitmenListComponent } from 'src/app/shared/components/egitmen-list/egitmen-list.component';
 import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/components/approval-dialog/approval-dialog.component';
+import { PaydasListComponent } from 'src/app/shared/components/paydas-list/paydas-list.component';
+import { PaydasOzet } from 'src/app/core/models/paydas-ozet';
+import { VideodersPaydasService } from 'src/app/core/services/api/videoders-paydas.service';
+import { PaydasService } from 'src/app/core/services/api/paydas.service';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -45,18 +56,21 @@ import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/comp
     VideodersOzetComponent,
     VideodersOnkosulListComponent,
     KategoriListComponent,
-    VideodersProjeListComponent,
-    VideodersPaydasListComponent,
+    ProjeListComponent,
+    PaydasListComponent,
     VideodersSozlesmeListComponent,
     IslemKayitListComponent,
     VideodersSoruListComponent,
-    VideodersEgitmenListComponent
+    EgitmenListComponent
 ],
   templateUrl: './videoders-detail-page.component.html',
   styleUrls: ['./videoders-detail-page.component.css']
 })
 export class VideodersDetailPageComponent implements OnInit {
-  @ViewChild('egitmenList') egitmenList?: VideodersEgitmenListComponent;
+  @ViewChild('egitmenList') egitmenList?: EgitmenListComponent;
+  @ViewChild('paydasList') paydasList?: PaydasListComponent;
+  @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
+  @ViewChild('projeList') projeList?: ProjeListComponent;
   
   videoders?: VideoDersResponse;
   loading = false;
@@ -70,7 +84,32 @@ export class VideodersDetailPageComponent implements OnInit {
   kategoriLoading = signal(false);
   kategoriDeleting = signal(false);
   kategoriAdding = signal(false);
+  kategoriModalLoading = signal(false);
+  availableKategoriler = signal<Kategori[]>([]);
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
+
+  paydaslar = signal<PaydasOzet[]>([]);
+  paydasLoading = signal(false);
+  paydasDeleting = signal(false);
+  paydasAdding = signal(false);
+  paydasModalLoading = signal(false);
+  availablePaydaslar = signal<PaydasOzet[]>([]);
+  paydasLoaded = false;
+
+  egitmenler = signal<EgitmenOzet[]>([]);
+  egitmenLoading = signal(false);
+  egitmenAssigning = signal(false);
+  egitmenModalLoading = signal(false);
+  availableEgitmenler = signal<EgitmenOzet[]>([]);
+  egitmenLoaded = false;
+
+  projeler = signal<ProjeOzet[]>([]);
+  projeLoading = signal(false);
+  projeDeleting = signal(false);
+  projeAdding = signal(false);
+  projeModalLoading = signal(false);
+  availableProjeler = signal<ProjeOzet[]>([]);
+  projelerLoaded = false;
 
   // İşlem kayıtları için
   videoDersIslemKayitlar = signal<IslemKayit[]>([]);
@@ -79,9 +118,6 @@ export class VideodersDetailPageComponent implements OnInit {
   // Diğer sekmeler için lazy load bayrakları
   konularLoaded = true; // varsayılan sekme
   sorularLoaded = false;
-  egitmenlerLoaded = false;
-  projelerLoaded = false;
-  paydaslarLoaded = false;
   sozlesmelerLoaded = false;
   islemlerLoaded = false;
 
@@ -89,7 +125,14 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly videodersService = inject(VideodersService);
   private readonly videodersKategoriService = inject(VideodersKategoriService);
+  private readonly kategoriService = inject(KategoriService);
+  private readonly videodersEgitmenService = inject(VideodersEgitmenService);
+  private readonly egitmenService = inject(EgitmenService);
+  private readonly videodersProjeService = inject(VideodersProjeService);
+  private readonly projeService = inject(ProjeService);
   private readonly videoDersIslemKayitService = inject(VideoDersIslemKayitService);
+  private readonly videodersPaydasService = inject(VideodersPaydasService);
+  private readonly paydasService = inject(PaydasService);
   private readonly dialog = inject(Dialog);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -170,6 +213,33 @@ export class VideodersDetailPageComponent implements OnInit {
       });
   }
 
+  onKategoriAddRequested(): void {
+    if (!this.videoders?.id) return;
+
+    this.kategoriModalLoading.set(true);
+    this.kategoriService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(
+            this.kategoriler()
+              .map(k => k.id)
+              .filter((id): id is number => id !== undefined)
+          );
+          this.availableKategoriler.set(
+            data.filter((k): k is Kategori => k.id !== undefined && !mevcutIds.has(k.id))
+          );
+          this.kategoriModalLoading.set(false);
+          setTimeout(() => this.kategoriList?.openKategoriModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableKategoriler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.kategoriModalLoading.set(false);
+        }
+      });
+  }
+
 
   onKategoriAdd(kategoriIds: number[]): void {
     if (kategoriIds.length === 0 || !this.videoders?.id) {
@@ -194,6 +264,7 @@ export class VideodersDetailPageComponent implements OnInit {
               this.toastService.success('Kategoriler başarıyla eklendi.');
               this.loadKategoriler();
               this.kategoriAdding.set(false);
+              this.kategoriList?.closeKategoriModal();
             }
           },
           error: (error) => {
@@ -228,14 +299,266 @@ export class VideodersDetailPageComponent implements OnInit {
       });
   }
 
+  private loadPaydaslar(): void {
+    if (!this.videoders?.id) return;
+
+    this.paydasLoading.set(true);
+    this.videodersPaydasService.getByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.paydaslar.set(data);
+          this.paydasLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadPaydaslar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.paydasLoading.set(false);
+        }
+      });
+  }
+
+  onPaydasAddRequested(): void {
+    if (!this.videoders?.id) return;
+
+    this.paydasModalLoading.set(true);
+    this.paydasService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(this.paydaslar().map(p => p.id));
+          this.availablePaydaslar.set(data.filter(p => !mevcutIds.has(p.id)));
+          this.paydasModalLoading.set(false);
+          setTimeout(() => this.paydasList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailablePaydaslar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.paydasModalLoading.set(false);
+        }
+      });
+  }
+
+  onPaydasAddConfirm(paydasIds: number[]): void {
+    if (!this.videoders?.id || paydasIds.length === 0) return;
+
+    this.paydasAdding.set(true);
+    const requests = paydasIds.map(id => this.videodersPaydasService.addPaydas(this.videoders!.id, id));
+
+    let completed = 0;
+    const total = requests.length;
+    requests.forEach(req => {
+      req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.toastService.success('Paydaşlar başarıyla eklendi.');
+            this.loadPaydaslar();
+            this.paydasAdding.set(false);
+            this.paydasList?.closeModal();
+          }
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addPaydaslar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.paydasAdding.set(false);
+        }
+      });
+    });
+  }
+
+  onPaydasDelete(item: PaydasOzet): void {
+    if (!this.videoders?.id || !item.id) return;
+
+    this.paydasDeleting.set(true);
+    this.videodersPaydasService.deletePaydas(this.videoders.id, item.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Paydaş başarıyla kaldırıldı.');
+          this.loadPaydaslar();
+          this.paydasDeleting.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deletePaydas');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.paydasDeleting.set(false);
+        }
+      });
+  }
+
+  private loadEgitmenler(): void {
+    if (!this.videoders?.id) return;
+
+    this.egitmenLoading.set(true);
+    this.videodersEgitmenService.getByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.egitmenler.set(data);
+          this.egitmenLoading.set(false);
+          this.egitmenLoaded = true;
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadEgitmenler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenLoading.set(false);
+        }
+      });
+  }
+
+  onEgitmenAddRequested(searchTerm?: string): void {
+    if (!this.videoders?.id) return;
+    this.egitmenModalLoading.set(true);
+    this.egitmenService.searchApproved(searchTerm || '')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(this.egitmenler().map(e => e.id));
+          this.availableEgitmenler.set((data || []).filter(e => !mevcutIds.has(e.id)));
+          this.egitmenModalLoading.set(false);
+          setTimeout(() => this.egitmenList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableEgitmenler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenModalLoading.set(false);
+        }
+      });
+  }
+
+  onEgitmenAddConfirm(egitmenIds: number[]): void {
+    if (!this.videoders?.id || egitmenIds.length === 0) return;
+
+    this.egitmenAssigning.set(true);
+    const requests = egitmenIds.map(id => this.videodersEgitmenService.addEgitmen(this.videoders!.id, id));
+    let completed = 0;
+    const total = requests.length;
+    requests.forEach(req => {
+      req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.toastService.success('Eğitmen(ler) başarıyla atandı');
+            this.loadEgitmenler();
+            this.egitmenAssigning.set(false);
+            this.egitmenList?.closeModal();
+          }
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addEgitmen');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenAssigning.set(false);
+        }
+      });
+    });
+  }
+
+  onEgitmenDelete(id: number): void {
+    if (!this.videoders?.id || !id) return;
+    this.egitmenLoading.set(true);
+    this.videodersEgitmenService.deleteEgitmen(this.videoders.id, id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Eğitmen kaldırıldı');
+          this.egitmenLoading.set(false);
+          this.loadEgitmenler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteEgitmen');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenLoading.set(false);
+        }
+      });
+  }
+
+  private loadProjeler(): void {
+    if (!this.videoders?.id) return;
+    this.projeLoading.set(true);
+    this.videodersProjeService.getByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.projeler.set(data);
+          this.projeLoading.set(false);
+          this.projelerLoaded = true;
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeLoading.set(false);
+        }
+      });
+  }
+
+  onProjeAddRequested(): void {
+    if (!this.videoders?.id) return;
+    this.projeModalLoading.set(true);
+    this.projeService.getAllOzet()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(this.projeler().map(p => p.id));
+          this.availableProjeler.set(data.filter(p => !mevcutIds.has(p.id)));
+          this.projeModalLoading.set(false);
+          setTimeout(() => this.projeList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeModalLoading.set(false);
+        }
+      });
+  }
+
+  onProjeAddConfirm(projeIds: number[]): void {
+    if (!this.videoders?.id || projeIds.length === 0) return;
+    this.projeAdding.set(true);
+    const requests = projeIds.map(id => this.videodersProjeService.addProje(this.videoders!.id, id));
+    let completed = 0;
+    const total = requests.length;
+    requests.forEach(req => {
+      req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.toastService.success('Projeler başarıyla eklendi.');
+            this.loadProjeler();
+            this.projeAdding.set(false);
+            this.projeList?.closeModal();
+          }
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeAdding.set(false);
+        }
+      });
+    });
+  }
+
+  onProjeDelete(item: ProjeOzet): void {
+    if (!this.videoders?.id || !item.id) return;
+    this.projeDeleting.set(true);
+    this.videodersProjeService.deleteProje(this.videoders.id, item.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Proje başarıyla kaldırıldı.');
+          this.loadProjeler();
+          this.projeDeleting.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteProje');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeDeleting.set(false);
+        }
+      });
+  }
+
   onTabChange(event: NgbNavChangeEvent): void {
     console.log('Tab değişti:', event.nextId);
-    if (event.nextId === 'egitmenler') {
-      setTimeout(() => {
-        this.egitmenList?.loadEgitmenler();
-      }, 0);
-    }
-
     switch (event.nextId) {
       case 'kategoriler':
         if (!this.kategoriLoaded) {
@@ -251,13 +574,20 @@ export class VideodersDetailPageComponent implements OnInit {
         this.sorularLoaded = true;
         break;
       case 'egitmenler':
-        this.egitmenlerLoaded = true;
+        if (!this.egitmenLoaded) {
+          this.loadEgitmenler();
+        }
         break;
       case 'projeler':
-        this.projelerLoaded = true;
+        if (!this.projelerLoaded) {
+          this.loadProjeler();
+        }
         break;
       case 'paydaslar':
-        this.paydaslarLoaded = true;
+        if (!this.paydasLoaded) {
+          this.loadPaydaslar();
+          this.paydasLoaded = true;
+        }
         break;
       case 'sozlesmeler':
         this.sozlesmelerLoaded = true;

@@ -44,7 +44,8 @@ export class TalepFormComponent implements OnInit, OnChanges {
       talepKonusuKodu: ['', Validators.required],
       talepIcerik: ['', Validators.required],
       talepTarihi: [today, Validators.required],
-      talepSahibi: ['', Validators.required]
+      talepSahibi: ['', Validators.required],
+      acilMi: [false]
     });
   }
 

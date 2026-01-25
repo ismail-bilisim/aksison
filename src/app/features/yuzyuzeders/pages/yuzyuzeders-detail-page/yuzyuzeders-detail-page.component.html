@@ -122,6 +122,90 @@
           </div>
         </dl>
       </div>
+        <!-- İlişkili Varlıklar -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-diagram-3 me-2"></i>İlişkili Varlıklar
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
+              <li [ngbNavItem]="'konular'">
+                <button ngbNavLink>Konular</button>
+              </li>
+              <li [ngbNavItem]="'sorular'">
+                <button ngbNavLink>Sorular</button>
+              </li>
+              <li [ngbNavItem]="'kategoriler'">
+                <button ngbNavLink>Kategoriler ({{ kategoriler().length }})</button>
+              </li>
+              <li [ngbNavItem]="'egitmenler'">
+                <button ngbNavLink>Eğitmenler</button>
+              </li>
+              <li [ngbNavItem]="'projeler'">
+                <button ngbNavLink>Projeler</button>
+              </li>
+              <li [ngbNavItem]="'paydaslar'">
+                <button ngbNavLink>Paydaşlar</button>
+              </li>
+              <li [ngbNavItem]="'sozlesmeler'">
+                <button ngbNavLink>Sözleşmeler</button>
+              </li>
+              <li [ngbNavItem]="'islemler'">
+                <button ngbNavLink>İşlem Kayıtları</button>
+              </li>
+            </ul>
+
+            <div class="mt-3">
+              <div class="p-3" [hidden]="activeTab !== 'kategoriler'">
+                <app-kategori-list
+                  #kategoriList
+                  [items]="kategoriler()"
+                  [isLoading]="kategoriLoading()"
+                  [isDeleting]="kategoriDeleting()"
+                  [isAdding]="kategoriAdding()"
+                  [modalLoading]="kategoriModalLoading()"
+                  [availableKategoriler]="availableKategoriler()"
+                  (addRequested)="onKategoriAddRequested()"
+                  (addConfirmed)="onKategoriAdd($event)"
+                  (delete)="onKategoriDelete($event)">
+                </app-kategori-list>
+              </div>
+
+              <div class="p-3" [hidden]="activeTab !== 'paydaslar'">
+                <app-paydas-list
+                  #paydasList
+                  [items]="paydaslar()"
+                  [loading]="paydasLoading()"
+                  [deleting]="paydasDeleting()"
+                  [modalLoading]="paydasModalLoading()"
+                  [adding]="paydasAdding()"
+                  [availablePaydaslar]="availablePaydaslar()"
+                  (addRequested)="onPaydasAddRequested()"
+                  (addConfirmed)="onPaydasAddConfirm($event)"
+                  (delete)="onPaydasDelete($event)">
+                </app-paydas-list>
+              </div>
+
+              <div class="p-3" [hidden]="activeTab !== 'islemler'">
+                <app-islem-kayit-list
+                  [items]="islemKayitlar()"
+                  [isLoading]="islemKayitLoading()"
+                  [title]="'İşlem Kayıtları'"
+                  [showTitle]="true"
+                  [useStyledVersion]="false"
+                  [tableSize]="'md'">
+                </app-islem-kayit-list>
+              </div>
+
+              <div class="p-3 text-muted" [hidden]="activeTab === 'kategoriler' || activeTab === 'paydaslar' || activeTab === 'islemler'">
+                İlgili sekme için bileşen henüz eklenmedi.
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
 
     <!-- Eğitim Bilgileri -->

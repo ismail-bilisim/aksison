@@ -82,12 +82,16 @@
             </div>
             
             <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
-              <app-kategori-list 
-                [items]="kategoriler()" 
+              <app-kategori-list
+                #kategoriList
+                [items]="kategoriler()"
                 [isLoading]="kategoriLoading()"
                 [isDeleting]="kategoriDeleting()"
                 [isAdding]="kategoriAdding()"
-                (add)="onKategoriAdd($event)"
+                [modalLoading]="kategoriModalLoading()"
+                [availableKategoriler]="availableKategoriler()"
+                (addRequested)="onKategoriAddRequested()"
+                (addConfirmed)="onKategoriAdd($event)"
                 (delete)="onKategoriDelete($event)">
               </app-kategori-list>
             </div>

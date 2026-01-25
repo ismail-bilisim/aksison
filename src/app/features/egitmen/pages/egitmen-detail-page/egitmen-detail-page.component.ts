@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,12 +8,14 @@ import { NgbNavModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { EgitmenResponse } from '../../../../core/models/egitmen-response';
 import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
 import { EgitmenKategoriService } from 'src/app/core/services/api/egitmen-kategori.service';
+import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ROLES } from 'src/app/core/config/roles';
 import { EgitmenTemelComponent } from '../../components/egitmen-temel/egitmen-temel.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
+import { Kategori } from 'src/app/core/models/kategori';
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 
 @Component({
@@ -23,10 +25,12 @@ import { ErrorHandler } from 'src/app/core/utils/error-handler';
   styleUrl: './egitmen-detail-page.component.css'
 })
 export class EgitmenDetailPageComponent implements OnInit {
+  @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly egitmenService = inject(EgitmenService);
   private readonly egitmenKategoriService = inject(EgitmenKategoriService);
+  private readonly kategoriService = inject(KategoriService);
   private readonly toastService = inject(ToastService);
   protected readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
@@ -41,6 +45,8 @@ export class EgitmenDetailPageComponent implements OnInit {
   kategoriLoading = signal(false);
   kategoriDeleting = signal(false);
   kategoriAdding = signal(false);
+  kategoriModalLoading = signal(false);
+  availableKategoriler = signal<Kategori[]>([]);
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
 
   activeTab = signal<number>(1);
@@ -96,6 +102,35 @@ export class EgitmenDetailPageComponent implements OnInit {
       });
   }
 
+  onKategoriAddRequested(): void {
+    if (!this.egitmenId) {
+      return;
+    }
+
+    this.kategoriModalLoading.set(true);
+    this.kategoriService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(
+            this.kategoriler()
+              .map(k => k.id)
+              .filter((id): id is number => id !== undefined)
+          );
+          this.availableKategoriler.set(
+            data.filter((k): k is Kategori => k.id !== undefined && !mevcutIds.has(k.id))
+          );
+          this.kategoriModalLoading.set(false);
+          setTimeout(() => this.kategoriList?.openKategoriModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableKategoriler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.kategoriModalLoading.set(false);
+        }
+      });
+  }
+
   onKategoriAdd(kategoriIds: number[]): void {
     if (kategoriIds.length === 0) {
       return;
@@ -119,6 +154,7 @@ export class EgitmenDetailPageComponent implements OnInit {
               this.toastService.success('Kategoriler başarıyla eklendi.');
               this.loadKategoriler();
               this.kategoriAdding.set(false);
+              this.kategoriList?.closeKategoriModal();
             }
           },
           error: (error) => {

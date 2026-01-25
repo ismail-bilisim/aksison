@@ -8,10 +8,10 @@
                 <label class="form-label">Ders Seç *</label>
                 <select formControlName="dersId" class="form-select" [class.is-invalid]="form.get('dersId')?.invalid && form.get('dersId')?.touched">
                     <option value="">Seçiniz</option>
-                    @if (loadingDers) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (ders of dersler; track ders.id) {
+                    @for (ders of lookupData?.dersler ?? []; track ders.id) {
                         <option [value]="ders.id">{{ ders.kodu }} - {{ ders.adi }}</option>
                     }
                 </select>
@@ -54,10 +54,10 @@
                 <label class="form-label">Ders Türü</label>
                 <select formControlName="turuKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingDersTuru) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (tur of dersTurleri; track tur.kodu) {
+                    @for (tur of lookupData?.dersTurleri ?? []; track tur.kodu) {
                         <option [value]="tur.kodu">{{ tur.adi }}</option>
                     }
                 </select>
@@ -66,10 +66,10 @@
                 <label class="form-label">Seviye</label>
                 <select formControlName="seviyesiKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingDersSeviyesi) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (sev of dersSeviyeleri; track sev.kodu) {
+                    @for (sev of lookupData?.dersSeviyeleri ?? []; track sev.kodu) {
                         <option [value]="sev.kodu">{{ sev.adi }}</option>
                     }
                 </select>
@@ -78,10 +78,10 @@
                 <label class="form-label">Nitelik</label>
                 <select formControlName="niteligiKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingDersNiteligi) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (nit of dersNitelikleri; track nit.kodu) {
+                    @for (nit of lookupData?.dersNitelikleri ?? []; track nit.kodu) {
                         <option [value]="nit.kodu">{{ nit.adi }}</option>
                     }
                 </select>
@@ -90,10 +90,10 @@
                 <label class="form-label">Ders Çekim Yöntemi</label>
                 <select formControlName="dersCekimYontemKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingDersCekimYontemi) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (yontem of dersCekimYontemleri; track yontem.kodu) {
+                    @for (yontem of lookupData?.dersCekimYontemleri ?? []; track yontem.kodu) {
                         <option [value]="yontem.kodu">{{ yontem.adi }}</option>
                     }
                 </select>
@@ -127,10 +127,10 @@
                 <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
                 <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingHedefKitleEgitimSeviyesi) {
+                    @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
                     }
-                    @for (seviye of hedefKitleEgitimSeviyeleri; track seviye.kodu) {
+                    @for (seviye of lookupData?.hedefKitleEgitimSeviyeleri ?? []; track seviye.kodu) {
                         <option [value]="seviye.kodu">{{ seviye.adi }}</option>
                     }
                 </select>
@@ -167,10 +167,10 @@
                 <label class="form-label">Ödeme Kaynak</label>
                 <select formControlName="odemeKaynakKodu" class="form-select">
                     <option value="">Seçiniz</option>
-                    @if (loadingOdemeKaynak) {
+                    @if (!lookupData) {
                     <option disabled>Yükleniyor...</option>
                     }
-                    @for (kaynak of odemeKaynaklari; track kaynak.kodu) {
+                    @for (kaynak of lookupData?.odemeKaynaklari ?? []; track kaynak.kodu) {
                     <option [value]="kaynak.kodu">{{ kaynak.adi }}</option>
                     }
                 </select>

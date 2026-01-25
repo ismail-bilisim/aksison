@@ -4,4 +4,5 @@ export interface TalepRequest {
   talepSahibi?: string;
   talepKonusuKodu: string;
   talepIcerik: string;
+  acilMi?: boolean;
 }

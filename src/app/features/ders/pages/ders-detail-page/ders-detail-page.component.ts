@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { OnayDurumu } from 'src/app/core/models/onay-durumu.enum';
 import { DersService } from 'src/app/core/services/api/ders.service';
+import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { DersKategoriService } from 'src/app/core/services/api/ders-kategori.service';
 import { DersBolumService } from 'src/app/core/services/api/ders-bolum.service';
 import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
@@ -19,6 +20,7 @@ import { KategoriListComponent } from 'src/app/shared/components/kategori-list/k
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { DersResponse } from 'src/app/core/models/ders-response';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
+import { Kategori } from 'src/app/core/models/kategori';
 import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { IslemKayit } from 'src/app/core/models/islem-kayit';
@@ -45,11 +47,13 @@ import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/comp
   styleUrls: ['./ders-detail-page.component.css']
 })
 export class DersDetailPageComponent implements OnInit {
+  @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
 
   private readonly toastService = inject(ToastService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dersService = inject(DersService);
+  private readonly kategoriService = inject(KategoriService);
   private readonly dersKategoriService = inject(DersKategoriService);
   private readonly dersBolumService = inject(DersBolumService);
   private readonly bolumKonuService = inject(BolumKonuService);
@@ -70,6 +74,8 @@ export class DersDetailPageComponent implements OnInit {
   kategoriLoading = signal(false);
   kategoriDeleting = signal(false);
   kategoriAdding = signal(false);
+  kategoriModalLoading = signal(false);
+  availableKategoriler = signal<Kategori[]>([]);
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
 
   // Konular / bölümler
@@ -317,6 +323,35 @@ export class DersDetailPageComponent implements OnInit {
       });
   }
 
+  onKategoriAddRequested(): void {
+    if (!this.ders?.id) {
+      return;
+    }
+
+    this.kategoriModalLoading.set(true);
+    this.kategoriService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(
+            this.kategoriler()
+              .map(k => k.id)
+              .filter((id): id is number => id !== undefined)
+          );
+          this.availableKategoriler.set(
+            data.filter((k): k is Kategori => k.id !== undefined && !mevcutIds.has(k.id))
+          );
+          this.kategoriModalLoading.set(false);
+          setTimeout(() => this.kategoriList?.openKategoriModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableKategoriler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.kategoriModalLoading.set(false);
+        }
+      });
+  }
+
 
   onKategoriAdd(kategoriIds: number[]): void {
     if (kategoriIds.length === 0 || !this.ders?.id) {
@@ -341,6 +376,7 @@ export class DersDetailPageComponent implements OnInit {
               this.toastService.success('Kategoriler başarıyla eklendi.');
               this.loadKategoriler();
               this.kategoriAdding.set(false);
+              this.kategoriList?.closeKategoriModal();
             }
           },
           error: (error) => {

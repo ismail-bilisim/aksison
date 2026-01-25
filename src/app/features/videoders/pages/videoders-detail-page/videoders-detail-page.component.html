@@ -141,26 +141,63 @@
               </div>
               
               <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
-                <app-kategori-list 
+                <app-kategori-list
+                  #kategoriList
                   [items]="kategoriler()" 
                   [isLoading]="kategoriLoading()"
                   [isDeleting]="kategoriDeleting()"
                   [isAdding]="kategoriAdding()"
-                  (add)="onKategoriAdd($event)"
+                  [modalLoading]="kategoriModalLoading()"
+                  [availableKategoriler]="availableKategoriler()"
+                  (addRequested)="onKategoriAddRequested()"
+                  (addConfirmed)="onKategoriAdd($event)"
                   (delete)="onKategoriDelete($event)">
                 </app-kategori-list>
               </div>
               
-              <div class="p-3" *ngIf="egitmenlerLoaded" [hidden]="activeTab !== 'egitmenler'">
-                <app-videoders-egitmen-list #egitmenList [dersId]="videoders.id!" [canAssign]="videoders.onayDurumu === OnayDurumu.ONAYLI"></app-videoders-egitmen-list>
+              <div class="p-3" *ngIf="egitmenLoaded" [hidden]="activeTab !== 'egitmenler'">
+                <app-egitmen-list
+                  #egitmenList
+                  [items]="egitmenler()"
+                  [loading]="egitmenLoading()"
+                  [canAssign]="videoders.onayDurumu === OnayDurumu.ONAYLI"
+                  [modalLoading]="egitmenModalLoading()"
+                  [assigning]="egitmenAssigning()"
+                  [availableEgitmenler]="availableEgitmenler()"
+                  (addRequested)="onEgitmenAddRequested($event)"
+                  (addConfirmed)="onEgitmenAddConfirm($event)"
+                  (delete)="onEgitmenDelete($event)">
+                </app-egitmen-list>
               </div>
               
               <div class="p-3" *ngIf="projelerLoaded" [hidden]="activeTab !== 'projeler'">
-                <app-videoders-proje-list [dersId]="videoders.id!"></app-videoders-proje-list>
+                <app-proje-list
+                  #projeList
+                  [items]="projeler()"
+                  [loading]="projeLoading()"
+                  [deleting]="projeDeleting()"
+                  [modalLoading]="projeModalLoading()"
+                  [adding]="projeAdding()"
+                  [availableProjeler]="availableProjeler()"
+                  (addRequested)="onProjeAddRequested()"
+                  (addConfirmed)="onProjeAddConfirm($event)"
+                  (delete)="onProjeDelete($event)">
+                </app-proje-list>
               </div>
               
-              <div class="p-3" *ngIf="paydaslarLoaded" [hidden]="activeTab !== 'paydaslar'">
-                <app-videoders-paydas-list [dersId]="videoders.id!"></app-videoders-paydas-list>
+              <div class="p-3" *ngIf="paydasLoaded" [hidden]="activeTab !== 'paydaslar'">
+                <app-paydas-list
+                  #paydasList
+                  [items]="paydaslar()"
+                  [loading]="paydasLoading()"
+                  [deleting]="paydasDeleting()"
+                  [modalLoading]="paydasModalLoading()"
+                  [adding]="paydasAdding()"
+                  [availablePaydaslar]="availablePaydaslar()"
+                  (addRequested)="onPaydasAddRequested()"
+                  (addConfirmed)="onPaydasAddConfirm($event)"
+                  (delete)="onPaydasDelete($event)">
+                </app-paydas-list>
               </div>
               
               <div class="p-3" *ngIf="sozlesmelerLoaded" [hidden]="activeTab !== 'sozlesmeler'">

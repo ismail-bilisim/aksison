@@ -4,11 +4,11 @@
                         <div class="d-flex gap-2">
 
             <span class="badge" [ngClass]="{
-                                                                                    'bg-primary': talep.talepDurumu.kodu === 'YPLCK',
-                                                                                    'bg-info': talep.talepDurumu.kodu === 'DEVAM',
-                                                                                    'bg-success': talep.talepDurumu.kodu === 'TAMAM',
-                                                                                    'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
-                                                                                }">
+                'bg-primary': talep.talepDurumu.kodu === 'YPLCK',
+                'bg-info': talep.talepDurumu.kodu === 'DEVAM',
+                'bg-success': talep.talepDurumu.kodu === 'TAMAM',
+                'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
+                            }">
                 {{ talep.talepDurumu.adi }}
             </span>
             <h5 class="mb-0">Talep Detayı #{{ talep.id }}</h5> 
@@ -75,6 +75,16 @@
                         <dt class="col-sm-4">Talep İçeriği</dt>
                         <dd class="col-sm-8">{{ talep.talepIcerik }}</dd>
 
+                        <dt class="col-sm-4">Acil Durum</dt>
+                        <dd class="col-sm-8">
+                            @if (talep.acilMi) {
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>Acil
+                                </span>
+                            } @else {
+                                <span class="text-muted">Normal</span>
+                            }
+                        </dd>
 
                         <dt class="col-sm-4">Talep Sahibi</dt>
                         <dd class="col-sm-8">{{ talep.talepSahibi }}</dd>

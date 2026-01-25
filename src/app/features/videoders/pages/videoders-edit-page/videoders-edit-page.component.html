@@ -5,8 +5,24 @@
     <h5 class="mb-3">Yeni Video Dersi Ekle</h5>
     }
 
+    @if (isLoadingLookups()) {
+        <div class="alert alert-info">
+            <i class="bi bi-hourglass-split me-2"></i>Lookup verileri yükleniyor...
+        </div>
+    }
+
+    @if (isLoadingDersDetay()) {
+        <div class="alert alert-info">
+            <i class="bi bi-hourglass-split me-2"></i>Ders detayı yükleniyor...
+        </div>
+    }
+
     <section class="card p-4 shadow-sm border-0">
-        <app-videoders-form [initialData]="videodersRequest" (save)="onSave($event)">
+        <app-videoders-form 
+            [initialData]="videodersRequest()" 
+            [lookupData]="lookupData()"
+            (save)="onSave($event)"
+            (dersSelected)="onDersSelected($event)">
         </app-videoders-form>
     </section>
 
