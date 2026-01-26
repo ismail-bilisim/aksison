@@ -1,19 +1,19 @@
-import { Component, Input, OnInit, inject, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SoruService } from 'src/app/core/services/api/soru-videoders.service';
 import { SoruVideoDersKonuResponse } from 'src/app/core/models/soru-ders-konu';
-import { ToastService } from '../../../../core/services/api/toast.service';
+import { ToastService } from 'src/app/core/services/api/toast.service';
 import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
-  selector: 'app-videoders-soru-list',
+  selector: 'app-soru-list',
   standalone: true,
   imports: [CommonModule, SoruModalComponent],
-  templateUrl: './videoders-soru-list.component.html',
-  styleUrl: './videoders-soru-list.component.css'
+  templateUrl: './soru-list.component.html',
+  styleUrl: './soru-list.component.css'
 })
-export class VideodersSoruListComponent implements OnInit {
+export class SoruListComponent implements OnInit {
   @Input() dersId!: number;
 
   @ViewChild(SoruModalComponent) soruModal!: SoruModalComponent;

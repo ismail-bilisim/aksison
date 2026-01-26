@@ -1,21 +1,21 @@
-import { Component, Input, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, TemplateRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum.service';
 import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
-import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
-import { ToastService } from '../../../../core/services/api/toast.service';
+import { DersBolumRequest, DersBolumResponse, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
+import { ToastService } from 'src/app/core/services/api/toast.service';
 import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
-  selector: 'app-videoders-konu-list',
+  selector: 'app-konu-list',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbModalModule, SoruModalComponent],
-  templateUrl: './videoders-konu-list.component.html',
-  styleUrl: './videoders-konu-list.component.css'
+  templateUrl: './konu-list.component.html',
+  styleUrl: './konu-list.component.css'
 })
-export class VideodersKonuListComponent implements OnInit {
+export class KonuListComponent implements OnInit {
   @Input() dersId!: number;
 
   @ViewChild('bolumModal') bolumModal!: TemplateRef<any>;

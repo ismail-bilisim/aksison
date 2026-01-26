@@ -16,6 +16,7 @@ import { DersIslemKayitService } from 'src/app/core/services/api/ders-islem-kayi
 import { DersTemelComponent } from '../../components/ders-temel/ders-temel.component';
 import { DersKonuListComponent } from '../../components/ders-konu-list/ders-konu-list.component';
 import { DersVideodersListComponent } from '../../components/ders-videoders-list/ders-videoders-list.component';
+import { DersYuzyuzedersListComponent } from '../../components/ders-yuzyuzeders-list/ders-yuzyuzeders-list.component';  
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { DersResponse } from 'src/app/core/models/ders-response';
@@ -27,6 +28,7 @@ import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 import { ToastService } from 'src/app/core/services/api/toast.service'; 
 import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/components/approval-dialog/approval-dialog.component';
+import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.service';
 
 @Component({
   selector: 'app-ders-detail-page',
@@ -40,8 +42,9 @@ import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/comp
     DersTemelComponent,
     DersKonuListComponent,
     DersVideodersListComponent,
+    DersYuzyuzedersListComponent,
     KategoriListComponent,
-    IslemKayitListComponent
+    IslemKayitListComponent,
   ],
   templateUrl: './ders-detail-page.component.html',
   styleUrls: ['./ders-detail-page.component.css']
@@ -58,6 +61,7 @@ export class DersDetailPageComponent implements OnInit {
   private readonly dersBolumService = inject(DersBolumService);
   private readonly bolumKonuService = inject(BolumKonuService);
   private readonly videodersService = inject(VideodersService);
+  private readonly yuzyuzedersService = inject(YuzyuzedersService);
   private readonly dersIslemKayitService = inject(DersIslemKayitService);
   private readonly dialog = inject(Dialog);
   private readonly destroyRef = inject(DestroyRef);
@@ -87,14 +91,27 @@ export class DersDetailPageComponent implements OnInit {
   videodersLoading = signal(false);
   videodersError = signal('');
 
+  // Video dersler
+  yuzyuzedersler = signal<DersOzet[]>([]);
+  yuzyuzedersLoading = signal(false);
+  yuzyuzedersError = signal('');
+
   // İşlem kayıtları
   islemKayitlar = signal<IslemKayit[]>([]);
   islemKayitLoading = signal(false);
 
+
   // Sekmeler için lazy load bayrakları
   konularLoaded = true; // varsayılan sekme
+
   videoderslerLoaded = false;
+  yuzyuzederslerLoaded = false;
   islemlerLoaded = false;
+  paydasLoaded = false;
+  egitmenLoaded = false;
+  projelerLoaded = false;
+  sorularLoaded = false;
+  sozlesmelerLoaded = false;
 
   // Modal input değerleri
   onayNotu: string = '';
@@ -279,6 +296,29 @@ export class DersDetailPageComponent implements OnInit {
       });
   }
 
+
+  private loadYuzyuzedersler(): void {
+    if (!this.ders?.id) return;
+    this.yuzyuzedersLoading.set(true);
+    this.yuzyuzedersError.set('');
+    this.yuzyuzedersService.getByDersId(this.ders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.yuzyuzedersler.set(data);
+          this.yuzyuzedersLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadYuzyuzedersler');
+          const msg = ErrorHandler.extractErrorMessage(error);
+          this.yuzyuzedersError.set(msg);
+          this.toastService.error(msg);
+          this.yuzyuzedersLoading.set(false);
+        }
+      });
+  }
+
+
   private loadIslemKayitlar(): void {
     if (!this.ders?.id) return;
     this.islemKayitLoading.set(true);
@@ -431,9 +471,24 @@ export class DersDetailPageComponent implements OnInit {
     } else if (tabId === 'videodersler') {
       this.videoderslerLoaded = true;
       this.loadVideodersler();
-    } else if (tabId === 'dersislemkayitlar') {
+    } else if(tabId==="yuzyuzedersler") {
+      this.yuzyuzederslerLoaded = true;
+      this.loadYuzyuzedersler();
+    }
+    
+    else if (tabId === 'dersislemkayitlar') {
       this.islemlerLoaded = true;
       this.loadIslemKayitlar();
+    } else if (tabId === 'paydaslar') {
+      this.paydasLoaded = true;
+    } else if (tabId === 'egitmenler') {
+      this.egitmenLoaded = true;
+    } else if (tabId === 'projeler') {
+      this.projelerLoaded = true;
+    } else if (tabId === 'sorular') {
+      this.sorularLoaded = true;
+    } else if (tabId === 'sozlesmeler') {
+      this.sozlesmelerLoaded = true;
     }
   }
 

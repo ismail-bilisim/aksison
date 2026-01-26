@@ -24,6 +24,17 @@ import { PaydasOzet } from 'src/app/core/models/paydas-ozet';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { YuzyuzedersIslemKayitService } from 'src/app/core/services/api/yuzyuzeders-islem-kayit.service';
 import { IslemKayit } from 'src/app/core/models/islem-kayit';
+import { KonuListComponent } from 'src/app/shared/components/konu-list/konu-list.component';
+import { SoruListComponent } from 'src/app/shared/components/soru-list/soru-list.component';
+import { SozlesmeListComponent } from 'src/app/shared/components/sozlesme-list/sozlesme-list.component';
+import { EgitmenListComponent } from 'src/app/shared/components/egitmen-list/egitmen-list.component';
+import { ProjeListComponent } from 'src/app/shared/components/proje-list/proje-list.component';
+import { EgitmenOzet } from 'src/app/core/models/egitmen-ozet';
+import { ProjeOzet } from 'src/app/core/models/proje-ozet';
+import { YuzyuzedersEgitmenService } from 'src/app/core/services/api/yuzyuzeders-egitmen.service';
+import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
+import { YuzyuzedersProjeService } from 'src/app/core/services/api/yuzyuzeders-proje.service';
+import { ProjeService } from 'src/app/core/services/api/proje.service';
 
 @Component({
   selector: 'app-yuzyuzeders-detail-page',
@@ -36,7 +47,12 @@ import { IslemKayit } from 'src/app/core/models/islem-kayit';
     YuzyuzedersTemelComponent,
     KategoriListComponent,
     PaydasListComponent,
-    IslemKayitListComponent
+    IslemKayitListComponent,
+    KonuListComponent,
+    SoruListComponent,
+    SozlesmeListComponent,
+    EgitmenListComponent,
+    ProjeListComponent
   ],
   templateUrl: './yuzyuzeders-detail-page.component.html',
   styleUrls: ['./yuzyuzeders-detail-page.component.css']
@@ -44,6 +60,8 @@ import { IslemKayit } from 'src/app/core/models/islem-kayit';
 export class YuzyuzedersDetailPageComponent implements OnInit {
   @ViewChild('paydasList') paydasList?: PaydasListComponent;
   @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
+  @ViewChild('egitmenList') egitmenList?: EgitmenListComponent;
+  @ViewChild('projeList') projeList?: ProjeListComponent;
   yuzyuzeders?: YuzyuzeDersResponse;
   loading = false;
   activeTab = 'konular';
@@ -72,6 +90,25 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   islemKayitLoading = signal(false);
   islemlerLoaded = false;
 
+  egitmenler = signal<EgitmenOzet[]>([]);
+  egitmenLoading = signal(false);
+  egitmenAssigning = signal(false);
+  egitmenModalLoading = signal(false);
+  availableEgitmenler = signal<EgitmenOzet[]>([]);
+  egitmenLoaded = false;
+
+  projeler = signal<ProjeOzet[]>([]);
+  projeLoading = signal(false);
+  projeDeleting = signal(false);
+  projeAdding = signal(false);
+  projeModalLoading = signal(false);
+  availableProjeler = signal<ProjeOzet[]>([]);
+  projelerLoaded = false;
+
+  konularLoaded = true;
+  sorularLoaded = false;
+  sozlesmelerLoaded = false;
+
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly yuzyuzedersService = inject(YuzyuzedersService);
@@ -80,6 +117,10 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   private readonly yuzyuzedersPaydasService = inject(YuzyuzedersPaydasService);
   private readonly paydasService = inject(PaydasService);
   private readonly yuzyuzedersIslemKayitService = inject(YuzyuzedersIslemKayitService);
+  private readonly yuzyuzedersEgitmenService = inject(YuzyuzedersEgitmenService);
+  private readonly egitmenService = inject(EgitmenService);
+  private readonly yuzyuzedersProjeService = inject(YuzyuzedersProjeService);
+  private readonly projeService = inject(ProjeService);
   private readonly dialog = inject(Dialog);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -116,6 +157,14 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
 
   onTabChange(event: NgbNavChangeEvent): void {
     switch (event.nextId) {
+      case 'konular':
+        this.konularLoaded = true;
+        break;
+      case 'sorular':
+        if (!this.sorularLoaded) {
+          this.sorularLoaded = true;
+        }
+        break;
       case 'kategoriler':
         if (!this.kategoriLoaded) {
           this.loadKategoriler();
@@ -127,6 +176,21 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
           this.loadPaydaslar();
           this.paydasLoaded = true;
         }
+        break;
+      case 'egitmenler':
+        if (!this.egitmenLoaded) {
+          this.loadEgitmenler();
+          this.egitmenLoaded = true;
+        }
+        break;
+      case 'projeler':
+        if (!this.projelerLoaded) {
+          this.loadProjeler();
+          this.projelerLoaded = true;
+        }
+        break;
+      case 'sozlesmeler':
+        this.sozlesmelerLoaded = true;
         break;
       case 'islemler':
         if (!this.islemlerLoaded) {
@@ -315,6 +379,177 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
         }
       });
   }
+
+  private loadEgitmenler(): void {
+    if (!this.yuzyuzeders?.id) return;
+
+    this.egitmenLoading.set(true);
+    this.yuzyuzedersEgitmenService.getByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.egitmenler.set(data);
+          this.egitmenLoading.set(false);
+          this.egitmenLoaded = true;
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadEgitmenler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenLoading.set(false);
+        }
+      });
+  }
+
+  onEgitmenAddRequested(searchTerm?: string): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.egitmenModalLoading.set(true);
+    this.egitmenService.searchApproved(searchTerm || '')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(this.egitmenler().map(e => e.id));
+          this.availableEgitmenler.set((data || []).filter(e => !mevcutIds.has(e.id)));
+          this.egitmenModalLoading.set(false);
+          setTimeout(() => this.egitmenList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableEgitmenler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenModalLoading.set(false);
+        }
+      });
+  }
+
+  onEgitmenAddConfirm(egitmenIds: number[]): void {
+    if (!this.yuzyuzeders?.id || egitmenIds.length === 0) return;
+
+    this.egitmenAssigning.set(true);
+    const requests = egitmenIds.map(id => this.yuzyuzedersEgitmenService.addEgitmen(this.yuzyuzeders!.id, id));
+    let completed = 0;
+    const total = requests.length;
+    requests.forEach(req => {
+      req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.toastService.success('Eğitmen(ler) başarıyla atandı');
+            this.loadEgitmenler();
+            this.egitmenAssigning.set(false);
+            this.egitmenList?.closeModal();
+          }
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addEgitmen');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenAssigning.set(false);
+        }
+      });
+    });
+  }
+
+  onEgitmenDelete(id: number): void {
+    if (!this.yuzyuzeders?.id || !id) return;
+    this.egitmenLoading.set(true);
+    this.yuzyuzedersEgitmenService.deleteEgitmen(this.yuzyuzeders.id, id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Eğitmen kaldırıldı');
+          this.egitmenLoading.set(false);
+          this.loadEgitmenler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteEgitmen');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.egitmenLoading.set(false);
+        }
+      });
+  }
+
+  private loadProjeler(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.projeLoading.set(true);
+    this.yuzyuzedersProjeService.getByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.projeler.set(data);
+          this.projeLoading.set(false);
+          this.projelerLoaded = true;
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeLoading.set(false);
+        }
+      });
+  }
+
+  onProjeAddRequested(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.projeModalLoading.set(true);
+    this.projeService.getAllOzet()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          const mevcutIds = new Set(this.projeler().map(p => p.id));
+          this.availableProjeler.set(data.filter(p => !mevcutIds.has(p.id)));
+          this.projeModalLoading.set(false);
+          setTimeout(() => this.projeList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadAvailableProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeModalLoading.set(false);
+        }
+      });
+  }
+
+  onProjeAddConfirm(projeIds: number[]): void {
+    if (!this.yuzyuzeders?.id || projeIds.length === 0) return;
+    this.projeAdding.set(true);
+    const requests = projeIds.map(id => this.yuzyuzedersProjeService.addProje(this.yuzyuzeders!.id, id));
+    let completed = 0;
+    const total = requests.length;
+    requests.forEach(req => {
+      req.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: () => {
+          completed++;
+          if (completed === total) {
+            this.toastService.success('Projeler başarıyla eklendi.');
+            this.loadProjeler();
+            this.projeAdding.set(false);
+            this.projeList?.closeModal();
+          }
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addProjeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeAdding.set(false);
+        }
+      });
+    });
+  }
+
+  onProjeDelete(item: ProjeOzet): void {
+    if (!this.yuzyuzeders?.id || !item.id) return;
+    this.projeDeleting.set(true);
+    this.yuzyuzedersProjeService.deleteProje(this.yuzyuzeders.id, item.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Proje başarıyla kaldırıldı.');
+          this.loadProjeler();
+          this.projeDeleting.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteProje');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.projeDeleting.set(false);
+        }
+      });
+  }
+
 
   private loadIslemKayitlar(): void {
     if (!this.yuzyuzeders?.id) return;

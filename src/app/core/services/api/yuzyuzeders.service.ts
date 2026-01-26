@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { YuzyuzeDersRequest } from '../../models/yuzyuzeders-request';
 import { YuzyuzeDersResponse } from '../../models/yuzyuzeders-response';
+import { DersOzet } from '../../models/ders-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -56,4 +57,11 @@ export class YuzyuzedersService {
   icerikReddet(id: number, redNedeni?: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, { redNedeni });
   }
+
+  // GET by Ders ID - for listing video lessons related to a parent course
+  getByDersId(dersId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-ders/${dersId}`);
+  }
+  
+  
 }

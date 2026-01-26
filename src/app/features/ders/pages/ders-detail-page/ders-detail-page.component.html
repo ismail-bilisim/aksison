@@ -63,6 +63,9 @@
             <li [ngbNavItem]="'videodersler'">
               <button ngbNavLink>Video Dersler</button>
             </li>
+            <li [ngbNavItem]="'yuzyuzedersler'">
+              <button ngbNavLink>Yüzyüze Dersler</button>
+            </li>
             <li [ngbNavItem]="'dersislemkayitlar'">
               <button ngbNavLink>İşlem Kayıtları</button>
             </li>
@@ -102,6 +105,14 @@
                 [isLoading]="videodersLoading()"
                 [errorMessage]="videodersError()">
               </app-ders-videoders-list>
+            </div>
+
+            <div class="p-3" *ngIf="yuzyuzederslerLoaded" [hidden]="activeTab !== 'yuzyuzedersler'">
+              <app-ders-yuzyuzeders-list 
+                [yuzyuzedersler]="yuzyuzedersler()"
+                [isLoading]="yuzyuzedersLoading()"
+                [errorMessage]="yuzyuzedersError()">
+              </app-ders-yuzyuzeders-list>
             </div>
             
             <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'dersislemkayitlar'">

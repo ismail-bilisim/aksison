@@ -871,6 +871,9 @@
                 İptal Edilen Talepler
               </a>
             </li>
+
+            <hr class="w-75 ms-5"/>
+
             <li class="nav-item">
               <a routerLink="/talep/kanban"
                  routerLinkActive="active"
@@ -879,6 +882,17 @@
                  class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
                 <i class="bi bi-kanban me-2"></i>
                 Kanban Görünümü
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a routerLink="/talep/stats"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}"
+                 (click)="closeSidebar()"
+                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-graph-up me-2"></i>
+                İstatistikler
               </a>
             </li>
 

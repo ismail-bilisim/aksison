@@ -108,8 +108,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
             turuKodu: ders.turu?.kodu ?? currentRequest?.turuKodu,
             seviyesiKodu: ders.seviyesi?.kodu ?? currentRequest?.seviyesiKodu,
             niteligiKodu: ders.niteligi?.kodu ?? currentRequest?.niteligiKodu,
-            hedefKitleEgitimSeviyeKodu: ders.hedefKitleEgitimSeviye !== undefined 
-              ? String(ders.hedefKitleEgitimSeviye) 
+            hedefKitleEgitimSeviyeKodu: ders.hedefKitleEgitimSeviye?.kodu !== undefined
+              ? String(ders.hedefKitleEgitimSeviye.kodu)
               : currentRequest?.hedefKitleEgitimSeviyeKodu,
             ilgiAlaninaGoreHedefKitle: ders.ilgiAlaninaGoreHedefKitle ?? currentRequest?.ilgiAlaninaGoreHedefKitle,
             kullanilacakProgramlar: ders.kullanilacakProgramlar ?? currentRequest?.kullanilacakProgramlar,

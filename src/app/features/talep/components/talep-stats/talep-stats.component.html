@@ -1,0 +1,120 @@
+@if (loading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+    <p class="mt-3 text-muted">İstatistikler yükleniyor...</p>
+  </div>
+} @else if (talepStats) {
+  <div class="row">
+    <!-- Toplam Talepler -->
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-list-ul display-4 text-primary mb-2"></i>
+          <h6 class="card-title text-muted">Toplam Talep</h6>
+          <h2 class="card-text">{{ talepStats.toplamCount }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Açık Talepler -->
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-file-earmark display-4 text-warning mb-2"></i>
+          <h6 class="card-title text-muted">Yapılacak</h6>
+          <h2 class="card-text">{{ talepStats.acikCount }}</h2>
+          <a routerLink="/talep/by-durum/YPLCK" class="btn btn-sm btn-outline-warning mt-2">
+            Görüntüle
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Devam Eden -->
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-clock-history display-4 text-info mb-2"></i>
+          <h6 class="card-title text-muted">Devam Eden</h6>
+          <h2 class="card-text">{{ talepStats.devamEdenCount }}</h2>
+          <a routerLink="/talep/by-durum/DEVAM" class="btn btn-sm btn-outline-info mt-2">
+            Görüntüle
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tamamlanan -->
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-check-circle display-4 text-success mb-2"></i>
+          <h6 class="card-title text-muted">Tamamlanan</h6>
+          <h2 class="card-text">{{ talepStats.tamamlananCount }}</h2>
+          <a routerLink="/talep/by-durum/TAMAM" class="btn btn-sm btn-outline-success mt-2">
+            Görüntüle
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- İptal Edilen -->
+    <div class="col-md-3 col-sm-6 mb-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <i class="bi bi-x-circle display-4 text-danger mb-2"></i>
+          <h6 class="card-title text-muted">İptal Edilen</h6>
+          <h2 class="card-text">{{ talepStats.iptalCount }}</h2>
+          <a routerLink="/talep/by-durum/IPTAL" class="btn btn-sm btn-outline-danger mt-2">
+            Görüntüle
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Konulara Göre Dağılım -->
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="bi bi-pie-chart me-2"></i>
+            Talep Konularına Göre Dağılım
+          </h5>
+          @if (talepStats.byKonusu && (talepStats.byKonusu | keyvalue).length > 0) {
+            <div class="table-responsive mt-3">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Konu</th>
+                    <th class="text-end">Adet</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (entry of (talepStats.byKonusu | keyvalue); track entry.key) {
+                    <tr>
+                      <td>{{ entry.key }}</td>
+                      <td class="text-end">
+                        <span class="badge bg-primary rounded-pill">{{ entry.value }}</span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="text-muted mb-0">Konu bazında talep bulunamadı.</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-info" role="alert">
+    <i class="bi bi-info-circle me-2"></i>
+    İstatistik verisi bulunamadı.
+  </div>
+}

@@ -21,18 +21,18 @@ import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { KategoriOzet } from '../../../../core/models/kategori-ozet';
 import { Kategori } from 'src/app/core/models/kategori';
 import { VideodersTemelComponent } from '../../components/videoders-temel/videoders-temel.component';
-import { VideodersKonuListComponent } from '../../components/videoders-konu-list/videoders-konu-list.component';
+import { KonuListComponent } from 'src/app/shared/components/konu-list/konu-list.component';
 import { VideodersSorumlularComponent } from '../../components/videoders-sorumlular/videoders-sorumlular.component';
 import { VideodersUcretComponent } from '../../components/videoders-ucret/videoders-ucret.component';
 import { VideodersOnkosulListComponent } from '../../components/videoders-onkosul-list/videoders-onkosul-list.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { ProjeListComponent } from 'src/app/shared/components/proje-list/proje-list.component';
-import { VideodersSozlesmeListComponent } from '../../components/videoders-sozlesme-list/videoders-sozlesme-list.component';
+import { SozlesmeListComponent } from 'src/app/shared/components/sozlesme-list/sozlesme-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { VideoDersIslemKayitService } from 'src/app/core/services/api/videoders-islem-kayit.service';
 import { IslemKayit } from 'src/app/core/models/islem-kayit';
 import { VideodersOzetComponent } from '../../components/videoders-ozet/videoders-ozet.component';
-import { VideodersSoruListComponent } from '../../components/videoders-soru-list/videoders-soru-list.component';
+import { SoruListComponent } from 'src/app/shared/components/soru-list/soru-list.component';
 import { EgitmenListComponent } from 'src/app/shared/components/egitmen-list/egitmen-list.component';
 import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/components/approval-dialog/approval-dialog.component';
 import { PaydasListComponent } from 'src/app/shared/components/paydas-list/paydas-list.component';
@@ -50,7 +50,7 @@ import { PaydasService } from 'src/app/core/services/api/paydas.service';
     NgbNavModule,
     NgbAccordionModule,
     VideodersTemelComponent,
-    VideodersKonuListComponent,
+    KonuListComponent,
     VideodersSorumlularComponent,
     VideodersUcretComponent,
     VideodersOzetComponent,
@@ -58,9 +58,9 @@ import { PaydasService } from 'src/app/core/services/api/paydas.service';
     KategoriListComponent,
     ProjeListComponent,
     PaydasListComponent,
-    VideodersSozlesmeListComponent,
+    SozlesmeListComponent,
     IslemKayitListComponent,
-    VideodersSoruListComponent,
+    SoruListComponent,
     EgitmenListComponent
 ],
   templateUrl: './videoders-detail-page.component.html',
@@ -186,6 +186,50 @@ export class VideodersDetailPageComponent implements OnInit {
         }
       });
   }
+
+    onTabChange(event: NgbNavChangeEvent): void {
+    console.log('Tab değişti:', event.nextId);
+    switch (event.nextId) {
+      case 'kategoriler':
+        if (!this.kategoriLoaded) {
+          console.log('Kategoriler tabı açıldı, kategoriler yüklenecek');
+          this.loadKategoriler();
+          this.kategoriLoaded = true;
+        }
+        break;
+      case 'konular':
+        this.konularLoaded = true;
+        break;
+      case 'sorular':
+        this.sorularLoaded = true;
+        break;
+      case 'egitmenler':
+        if (!this.egitmenLoaded) {
+          this.loadEgitmenler();
+        }
+        break;
+      case 'projeler':
+        if (!this.projelerLoaded) {
+          this.loadProjeler();
+        }
+        break;
+      case 'paydaslar':
+        if (!this.paydasLoaded) {
+          this.loadPaydaslar();
+          this.paydasLoaded = true;
+        }
+        break;
+      case 'sozlesmeler':
+        this.sozlesmelerLoaded = true;
+        break;
+      case 'islemler':
+        this.islemlerLoaded = true;
+        this.loadVideoDersIslemKayitlar();
+        break;
+    }
+  }
+
+
 
   loadKategoriler(dersId?: number): void {
     const id = dersId || this.videoders?.id;
@@ -555,48 +599,6 @@ export class VideodersDetailPageComponent implements OnInit {
           this.projeDeleting.set(false);
         }
       });
-  }
-
-  onTabChange(event: NgbNavChangeEvent): void {
-    console.log('Tab değişti:', event.nextId);
-    switch (event.nextId) {
-      case 'kategoriler':
-        if (!this.kategoriLoaded) {
-          console.log('Kategoriler tabı açıldı, kategoriler yüklenecek');
-          this.loadKategoriler();
-          this.kategoriLoaded = true;
-        }
-        break;
-      case 'konular':
-        this.konularLoaded = true;
-        break;
-      case 'sorular':
-        this.sorularLoaded = true;
-        break;
-      case 'egitmenler':
-        if (!this.egitmenLoaded) {
-          this.loadEgitmenler();
-        }
-        break;
-      case 'projeler':
-        if (!this.projelerLoaded) {
-          this.loadProjeler();
-        }
-        break;
-      case 'paydaslar':
-        if (!this.paydasLoaded) {
-          this.loadPaydaslar();
-          this.paydasLoaded = true;
-        }
-        break;
-      case 'sozlesmeler':
-        this.sozlesmelerLoaded = true;
-        break;
-      case 'islemler':
-        this.islemlerLoaded = true;
-        this.loadVideoDersIslemKayitlar();
-        break;
-    }
   }
 
   private loadVideoDersIslemKayitlar(): void {
