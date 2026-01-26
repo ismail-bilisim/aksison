@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgbNavModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
@@ -9,8 +9,12 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 import { KategoriTemelComponent } from '../../components/kategori-temel/kategori-temel.component';
 import { KategoriAltKategoriListComponent } from '../../components/kategori-alt-kategori-list/kategori-alt-kategori-list.component';
 import { KategoriDersListComponent } from '../../components/kategori-ders-list/kategori-ders-list.component';
-import { KategoriVideodersListComponent } from '../../components/kategori-videoders-list/kategori-videoders-list.component';
+import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
+import { VideodersService } from '../../../../core/services/api/videoders.service';
+import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
 import { KategoriEgitmenListComponent } from '../../components/kategori-egitmen-list/kategori-egitmen-list.component';
+import { DersOzet } from '../../../../core/models/ders-ozet';
 
 @Component({
   selector: 'app-kategori-detail-page',
@@ -22,7 +26,8 @@ import { KategoriEgitmenListComponent } from '../../components/kategori-egitmen-
     KategoriTemelComponent,
     KategoriAltKategoriListComponent,
     KategoriDersListComponent,
-    KategoriVideodersListComponent,
+    VideodersListComponent,
+    YuzyuzedersListComponent,
     KategoriEgitmenListComponent
   ],
   templateUrl: './kategori-detail-page.component.html',
@@ -33,11 +38,25 @@ export class KategoriDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private kategoriService = inject(KategoriService);
+  private videodersService = inject(VideodersService);
+  private yuzyuzedersService = inject(YuzyuzedersService);
 
   kategori?: Kategori;
   breadcrumbs: Kategori[] = [];
   loading = false;
   activeTab = 'altKategoriler';
+
+  // Video dersler
+  videodersler = signal<DersOzet[]>([]);
+  videodersLoading = signal(false);
+  videodersError = signal('');
+  videodersLoaded = false;
+
+  // Yüz yüze dersler
+  yuzyuzedersler = signal<DersOzet[]>([]);
+  yuzyuzedersLoading = signal(false);
+  yuzyuzedersError = signal('');
+  yuzyuzedersLoaded = false;
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -89,6 +108,67 @@ export class KategoriDetailPageComponent implements OnInit {
   navigateToKategori(kategoriId?: number): void {
     if (kategoriId) {
       this.router.navigate(['/kategori/detail', kategoriId]);
+    }
+  }
+
+  onTabChange(tabId: string): void {
+    if (tabId === 'videodersler' && !this.videodersLoaded) {
+      this.videodersLoaded = true;
+      this.loadVideodersler();
+    }
+    if (tabId === 'yuzyuzedersler' && !this.yuzyuzedersLoaded) {
+      this.yuzyuzedersLoaded = true;
+      this.loadYuzyuzedersler();
+    }
+  }
+
+  private loadVideodersler(): void {
+    if (!this.kategori?.id) return;
+    this.videodersLoading.set(true);
+    this.videodersError.set('');
+    this.videodersService.getByKategoriler([this.kategori.id]).subscribe({
+      next: (data) => {
+        this.videodersler.set(data);
+        this.videodersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadVideodersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.videodersError.set(msg);
+        this.toastService.error(msg);
+        this.videodersLoading.set(false);
+      }
+    });
+  }
+
+  onVideodersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  private loadYuzyuzedersler(): void {
+    if (!this.kategori?.id) return;
+    this.yuzyuzedersLoading.set(true);
+    this.yuzyuzedersError.set('');
+    this.yuzyuzedersService.getByKategoriler([this.kategori.id]).subscribe({
+      next: (data) => {
+        this.yuzyuzedersler.set(data);
+        this.yuzyuzedersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadYuzyuzedersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.yuzyuzedersError.set(msg);
+        this.toastService.error(msg);
+        this.yuzyuzedersLoading.set(false);
+      }
+    });
+  }
+
+  onYuzyuzedersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
     }
   }
 }

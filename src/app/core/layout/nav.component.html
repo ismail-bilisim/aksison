@@ -138,6 +138,8 @@
                 Tüm Dersler
               </a>
             </li>
+            <hr class="w-75 ms-5" />
+
             <li class="nav-item">
               <a routerLink="/ders/new" 
                  routerLinkActive="active"
@@ -169,18 +171,6 @@
         <!-- Submenu -->
         @if (isExpanded('VideoDersler')) {
           <ul class="nav flex-column ms-3">
-            <li class="nav-item">
-              <a routerLink="/videoders/new" 
-                 routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}"
-                 (click)="closeSidebar()"
-                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-                <i class="bi bi-plus-circle me-2"></i>
-                Yeni Video Ders Oluştur
-              </a>
-            </li>
-
-            <hr class="w-75 ms-5"/>
 
             <li class="nav-item">
               <a routerLink="/videoders/by-onay/tas"
@@ -313,6 +303,16 @@
                 Tüm Dersler
               </a>
             </li>
+
+            <hr class="w-75 ms-5" />
+
+            <li class="nav-item">
+              <a routerLink="/videoders/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-plus-circle me-2"></i>
+                Yeni Video Ders
+              </a>
+            </li>            
             
           </ul>
         }
@@ -333,19 +333,6 @@
         <!-- Submenu -->
         @if (isExpanded('YuzyuzeDersler')) {
           <ul class="nav flex-column ms-3">
-            <li class="nav-item">
-              <a routerLink="/yuzyuzeders/new" 
-                 routerLinkActive="active"
-                 [routerLinkActiveOptions]="{exact: true}"
-                 (click)="closeSidebar()"
-                 class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
-                <i class="bi bi-plus-circle me-2"></i>
-                Yeni Yüzyüze Ders Oluştur
-              </a>
-            </li>
-
-            <hr class="w-75 ms-5"/>
-
             <li class="nav-item">
               <a routerLink="/yuzyuzeders/by-onay/tas"
                  routerLinkActive="active"
@@ -460,7 +447,17 @@
                 Tüm Dersler
               </a>
             </li>
-            
+
+            <hr class="w-75 ms-5" />
+
+            <li class="nav-item">
+              <a routerLink="/yuzyuzeders/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-plus-circle me-2"></i>
+                Yeni Yüzyüze Ders
+              </a>
+            </li>
+
           </ul>
         }
       </div>

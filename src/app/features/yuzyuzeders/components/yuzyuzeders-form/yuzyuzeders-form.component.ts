@@ -15,6 +15,7 @@ import { DersService } from 'src/app/core/services/api/ders.service';
 export class YuzyuzedersFormComponent implements OnInit, OnChanges {
   @Input() initialData?: YuzyuzeDersRequest;
   @Input() lookupData?: YuzyuzedersLookupData;
+  @Input() isEditMode = false;
   
   @Output() save = new EventEmitter<YuzyuzeDersRequest>();
   @Output() dersSelected = new EventEmitter<number>();
@@ -28,23 +29,23 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
     this.form = this.fb.group({
       dersId: ['', Validators.required],
       adi: ['', Validators.required],
-      amaci: [''],
-      dersOzeti: [''],
-      turuKodu: [''],
-      seviyesiKodu: [''],
-      niteligiKodu: [''],
-      hedefKitleEgitimSeviyeKodu: [''],
+      amaci: ['', Validators.required],
+      dersOzeti: ['', Validators.required],
+      turuKodu: ['', Validators.required],
+      seviyesiKodu: ['', Validators.required],
+      niteligiKodu: ['', Validators.required],
+      hedefKitleEgitimSeviyeKodu: ['', Validators.required],
       ilgiAlaninaGoreHedefKitle: [''],
-      kullanilacakProgramlar: [''],
-      kazanimlar: [''],
+      kullanilacakProgramlar: ['', Validators.required],
+      kazanimlar: ['', Validators.required],
       sikcaSorulanSorular: [''],
       dersSuresi: [''],
-      baslamaTarihi: [''],
-      bitisTarihi: [''],
-      egitimYeri: [''],
-      sehirKodu: [''],
+      baslamaTarihi: ['', Validators.required],
+      bitisTarihi: ['', Validators.required],
+      egitimYeri: ['', Validators.required],
+      sehirKodu: ['', Validators.required],
       kontenjan: [''],
-      odemeKaynakKodu: [''],
+      odemeKaynakKodu: ['', Validators.required],
       birimUcret: [''],
       toplamUcret: ['']
     });

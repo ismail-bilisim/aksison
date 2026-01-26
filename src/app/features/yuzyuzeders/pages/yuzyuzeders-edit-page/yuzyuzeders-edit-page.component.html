@@ -21,6 +21,7 @@
         <app-yuzyuzeders-form 
             [initialData]="yuzyuzedersRequest()" 
             [lookupData]="lookupData()"
+            [isEditMode]="isEditMode"
             (save)="onSave($event)"
             (dersSelected)="onDersSelected($event)">
         </app-yuzyuzeders-form>

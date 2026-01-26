@@ -8,7 +8,8 @@
             <div class="col-12">
                 <label class="form-label">Ders Seç *</label>
                 <select formControlName="dersId" class="form-select" 
-                        [class.is-invalid]="form.get('dersId')?.invalid && form.get('dersId')?.touched">
+                    [disabled]="isEditMode"
+                    [class.is-invalid]="form.get('dersId')?.invalid && form.get('dersId')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -32,19 +33,21 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Adı *</label>
-                <input formControlName="adi" class="form-control" 
-                       [class.is-invalid]="form.get('adi')?.invalid && form.get('adi')?.touched" />
+                  <input formControlName="adi" class="form-control" 
+                      [class.is-invalid]="form.get('adi')?.invalid && form.get('adi')?.touched" />
                 @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
                     <div class="text-danger small mt-1">Ders adı zorunludur.</div>
                 }
             </div>
             <div class="col-12">
                 <label class="form-label">Amacı</label>
-                <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
+                <textarea formControlName="amaci" class="form-control" rows="3"
+                          [class.is-invalid]="form.get('amaci')?.invalid && form.get('amaci')?.touched"></textarea>
             </div>
             <div class="col-12">
                 <label class="form-label">Özeti</label>
-                <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"
+                          [class.is-invalid]="form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched"></textarea>
             </div>
         </div>
     </div>
@@ -57,7 +60,8 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Ders Türü</label>
-                <select formControlName="turuKodu" class="form-select">
+                <select formControlName="turuKodu" class="form-select"
+                    [class.is-invalid]="form.get('turuKodu')?.invalid && form.get('turuKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -69,7 +73,8 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Seviye</label>
-                <select formControlName="seviyesiKodu" class="form-select">
+                <select formControlName="seviyesiKodu" class="form-select"
+                    [class.is-invalid]="form.get('seviyesiKodu')?.invalid && form.get('seviyesiKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -81,7 +86,8 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Nitelik</label>
-                <select formControlName="niteligiKodu" class="form-select">
+                <select formControlName="niteligiKodu" class="form-select"
+                    [class.is-invalid]="form.get('niteligiKodu')?.invalid && form.get('niteligiKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -102,11 +108,13 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Eğitim Yeri</label>
-                <input formControlName="egitimYeri" class="form-control" />
+                  <input formControlName="egitimYeri" class="form-control"
+                      [class.is-invalid]="form.get('egitimYeri')?.invalid && form.get('egitimYeri')?.touched" />
             </div>
             <div class="col-md-6">
                 <label class="form-label">Şehir</label>
-                <select formControlName="sehirKodu" class="form-select">
+                <select formControlName="sehirKodu" class="form-select"
+                    [class.is-invalid]="form.get('sehirKodu')?.invalid && form.get('sehirKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -118,11 +126,13 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Başlama Tarihi</label>
-                <input type="datetime-local" formControlName="baslamaTarihi" class="form-control" />
+                  <input type="datetime-local" formControlName="baslamaTarihi" class="form-control"
+                      [class.is-invalid]="form.get('baslamaTarihi')?.invalid && form.get('baslamaTarihi')?.touched" />
             </div>
             <div class="col-md-4">
                 <label class="form-label">Bitiş Tarihi</label>
-                <input type="datetime-local" formControlName="bitisTarihi" class="form-control" />
+                  <input type="datetime-local" formControlName="bitisTarihi" class="form-control"
+                      [class.is-invalid]="form.get('bitisTarihi')?.invalid && form.get('bitisTarihi')?.touched" />
             </div>
             <div class="col-md-4">
                 <label class="form-label">Ders Süresi (dk)</label>
@@ -143,7 +153,8 @@
         <div class="row g-3">
             <div class="col-lg-6">
                 <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
-                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select">
+                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select"
+                    [class.is-invalid]="form.get('hedefKitleEgitimSeviyeKodu')?.invalid && form.get('hedefKitleEgitimSeviyeKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -159,11 +170,13 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Kullanılacak Programlar</label>
-                <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"></textarea>
+                <textarea formControlName="kullanilacakProgramlar" class="form-control" rows="2"
+                          [class.is-invalid]="form.get('kullanilacakProgramlar')?.invalid && form.get('kullanilacakProgramlar')?.touched"></textarea>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Kazanımlar</label>
-                <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
+                <textarea formControlName="kazanimlar" class="form-control" rows="3"
+                          [class.is-invalid]="form.get('kazanimlar')?.invalid && form.get('kazanimlar')?.touched"></textarea>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Sıkça Sorulan Sorular</label>
@@ -180,7 +193,8 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Ödeme Kaynak</label>
-                <select formControlName="odemeKaynakKodu" class="form-select">
+                <select formControlName="odemeKaynakKodu" class="form-select"
+                    [class.is-invalid]="form.get('odemeKaynakKodu')?.invalid && form.get('odemeKaynakKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>

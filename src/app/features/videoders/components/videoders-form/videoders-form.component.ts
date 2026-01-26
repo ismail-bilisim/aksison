@@ -15,6 +15,7 @@ import { DersService } from 'src/app/core/services/api/ders.service';
 export class VideodersFormComponent implements OnInit, OnChanges {
   @Input() initialData?: VideoDersRequest;
   @Input() lookupData?: VideodersLookupData;
+  @Input() isEditMode = false;
   
   @Output() save = new EventEmitter<VideoDersRequest>();
   @Output() dersSelected = new EventEmitter<number>();
@@ -30,19 +31,19 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       adi: ['', Validators.required],
       tahminiDersSuresi: [''],
       tahminiDersTeslimTarihi: [''],
-      amaci: [''],
-      turuKodu: [''],
-      seviyesiKodu: [''],
-      niteligiKodu: [''],
-      hedefKitleEgitimSeviyeKodu: [''],
+      amaci: ['', Validators.required],
+      turuKodu: ['', Validators.required],
+      seviyesiKodu: ['', Validators.required],
+      niteligiKodu: ['', Validators.required],
+      hedefKitleEgitimSeviyeKodu: ['', Validators.required],
       ilgiAlaninaGoreHedefKitle: [''],
-      kullanilacakProgramlar: [''],
-      kazanimlar: [''],
+      kullanilacakProgramlar: ['', Validators.required],
+      kazanimlar: ['', Validators.required],
       sikcaSorulanSorular: [''],
-      dersOzeti: [''],
+      dersOzeti: ['', Validators.required],
       dersCekimYontemKodu: [''],
       portalAdresi: [''],
-      odemeKaynakKodu: [''],
+      odemeKaynakKodu: ['', Validators.required],
       birimUcret: [''],
       toplamUcret: ['']
     });

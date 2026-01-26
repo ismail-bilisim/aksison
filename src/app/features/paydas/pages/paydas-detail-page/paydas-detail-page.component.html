@@ -32,7 +32,7 @@
 
         <!-- Tabs for additional info -->
         <div class="mt-4">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)" class="nav-tabs">
             <li [ngbNavItem]="'bilgiler'">
               <button ngbNavLink>Bilgiler</button>
               <ng-template ngbNavContent>
@@ -44,7 +44,23 @@
             <li [ngbNavItem]="'videodersler'">
               <button ngbNavLink>Video Dersler</button>
               <ng-template ngbNavContent>
-                <app-paydas-videoders-list [paydasId]="paydas.id!"></app-paydas-videoders-list>
+                <app-videoders-list 
+                  [videodersler]="videodersler()"
+                  [isLoading]="videodersLoading()"
+                  [errorMessage]="videodersError()"
+                  (select)="onVideodersSelect($event)">
+                </app-videoders-list>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="'yuzyuzedersler'">
+              <button ngbNavLink>Yüz Yüze Dersler</button>
+              <ng-template ngbNavContent>
+                <app-yuzyuzeders-list 
+                  [yuzyuzedersler]="yuzyuzedersler()"
+                  [isLoading]="yuzyuzedersLoading()"
+                  [errorMessage]="yuzyuzedersError()"
+                  (select)="onYuzyuzedersSelect($event)">
+                </app-yuzyuzeders-list>
               </ng-template>
             </li>
           </ul>

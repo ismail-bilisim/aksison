@@ -3,7 +3,6 @@
     <h5>Yuzyuze Dersler</h5>
   </div>
 
-  <!-- Loading Spinner -->
   @if (isLoading) {
     <div class="text-center py-4">
       <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -13,7 +12,6 @@
     </div>
   }
 
-  <!-- Error Message -->
   @if (!isLoading && errorMessage) {
     <div class="alert alert-danger" role="alert">
       <i class="bi bi-exclamation-triangle me-2"></i>
@@ -21,7 +19,6 @@
     </div>
   }
 
-  <!-- Empty State -->
   @if (!isLoading && !errorMessage && yuzyuzedersler.length === 0) {
     <div class="alert alert-info">
       <i class="bi bi-info-circle me-2"></i>
@@ -29,7 +26,6 @@
     </div>
   }
 
-  <!-- Table -->
   @if (!isLoading && !errorMessage && yuzyuzedersler.length > 0) {
     <div class="table-responsive">
       <table class="table table-hover table-bordered align-middle">
@@ -41,12 +37,14 @@
         </thead>
         <tbody>
           @for (yuzyuzeders of yuzyuzedersler; track yuzyuzeders.id) {
-            <tr class="table-row-hover clickable-row"
-                role="button"
-                tabindex="0"
-                (click)="onRowClick(yuzyuzeders.id!)"
-                (keydown.enter)="onRowClick(yuzyuzeders.id!)"
-                title="Detayları görüntülemek için tıklayın">
+            <tr
+              class="table-row-hover clickable-row"
+              role="button"
+              tabindex="0"
+              (click)="onRowClick(yuzyuzeders.id)"
+              (keydown.enter)="onRowClick(yuzyuzeders.id)"
+              title="Detayları görüntülemek için tıklayın"
+            >
               <td><strong>{{ yuzyuzeders.kodu }}</strong></td>
               <td>{{ yuzyuzeders.adi }}</td>
             </tr>

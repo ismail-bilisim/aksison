@@ -156,7 +156,7 @@ export class VideodersService {
 
   // GET by Proje ID - for listing video lessons related to a project
   getByProjeId(projeId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${projeId}`);
+    return this.http.get<DersOzet[]>(`${environment.apiUrl}/proje-videoders/by-proje/${projeId}`);
   }
 
   // GET by Paudas ID - for listing video lessons related to a paydas
@@ -164,7 +164,7 @@ export class VideodersService {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${paydasId}`);
   }
 
-
-}
-
-
+  // GET by Egitmen ID - for listing video lessons related to an egitmen
+  getByEgitmenId(egitmenId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${environment.apiUrl}/videoders-egitmen/by-egitmen/${egitmenId}`);
+  }

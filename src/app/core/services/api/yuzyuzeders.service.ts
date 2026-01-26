@@ -62,6 +62,25 @@ export class YuzyuzedersService {
   getByDersId(dersId: number): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-ders/${dersId}`);
   }
-  
-  
+
+  // GET by Paydas ID - for listing yuzyuze lessons related to a paydas
+  getAllByPaydas(paydasId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-paydas/${paydasId}`);
+  }
+
+  // GET by Proje ID - for listing yuzyuze lessons related to a proje
+  getByProjeId(projeId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${environment.apiUrl}/proje-yuzyuzeders/by-proje/${projeId}`);
+  }
+
+  // GET by Kategori IDs - for listing yuzyuze lessons related to kategoriler
+  getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
+    const params = { ids: kategoriIds.join(',') };
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
+  }
+
+  // GET by Egitmen ID - for listing yuzyuze lessons related to an egitmen
+  getByEgitmenId(egitmenId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${environment.apiUrl}/yuzyuzeders-egitmen/by-egitmen/${egitmenId}`);
+  }
 }

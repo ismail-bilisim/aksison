@@ -15,8 +15,8 @@ import { VideodersService } from 'src/app/core/services/api/videoders.service';
 import { DersIslemKayitService } from 'src/app/core/services/api/ders-islem-kayit.service';
 import { DersTemelComponent } from '../../components/ders-temel/ders-temel.component';
 import { DersKonuListComponent } from '../../components/ders-konu-list/ders-konu-list.component';
-import { DersVideodersListComponent } from '../../components/ders-videoders-list/ders-videoders-list.component';
-import { DersYuzyuzedersListComponent } from '../../components/ders-yuzyuzeders-list/ders-yuzyuzeders-list.component';  
+import { VideodersListComponent } from 'src/app/shared/components/videoders-list/videoders-list.component';
+import { YuzyuzedersListComponent } from 'src/app/shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { DersResponse } from 'src/app/core/models/ders-response';
@@ -41,8 +41,8 @@ import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.servic
     NgbAccordionModule,
     DersTemelComponent,
     DersKonuListComponent,
-    DersVideodersListComponent,
-    DersYuzyuzedersListComponent,
+    VideodersListComponent,
+    YuzyuzedersListComponent,
     KategoriListComponent,
     IslemKayitListComponent,
   ],
@@ -316,6 +316,18 @@ export class DersDetailPageComponent implements OnInit {
           this.yuzyuzedersLoading.set(false);
         }
       });
+  }
+
+  onVideodersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  onYuzyuzedersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
   }
 
 

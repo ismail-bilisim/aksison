@@ -99,7 +99,7 @@ export class LookupService {
   }
 
   getDersler(): Observable<DersOzet[]> {
-    return this.cachedGet<DersOzet[]>(`${this.apiUrls.ders}/all-ozet`);
+    return this.cachedGet<DersOzet[]>(`${this.apiUrls.ders}/onayli-ozet`);
   }
 
   // ========== Videoders Aggregate Lookup ==========

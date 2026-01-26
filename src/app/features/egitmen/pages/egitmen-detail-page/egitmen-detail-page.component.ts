@@ -9,18 +9,23 @@ import { EgitmenResponse } from '../../../../core/models/egitmen-response';
 import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
 import { EgitmenKategoriService } from 'src/app/core/services/api/egitmen-kategori.service';
 import { KategoriService } from 'src/app/core/services/api/kategori.service';
+import { VideodersService } from 'src/app/core/services/api/videoders.service';
+import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ROLES } from 'src/app/core/config/roles';
 import { EgitmenTemelComponent } from '../../components/egitmen-temel/egitmen-temel.component';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
+import { VideodersListComponent } from 'src/app/shared/components/videoders-list/videoders-list.component';
+import { YuzyuzedersListComponent } from 'src/app/shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { Kategori } from 'src/app/core/models/kategori';
+import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { ErrorHandler } from 'src/app/core/utils/error-handler';
 
 @Component({
   selector: 'app-egitmen-detail-page',
-  imports: [CommonModule, RouterModule, FormsModule, NgbNavModule, NgbModalModule, EgitmenTemelComponent, KategoriListComponent],
+  imports: [CommonModule, RouterModule, FormsModule, NgbNavModule, NgbModalModule, EgitmenTemelComponent, KategoriListComponent, VideodersListComponent, YuzyuzedersListComponent],
   templateUrl: './egitmen-detail-page.component.html',
   styleUrl: './egitmen-detail-page.component.css'
 })
@@ -31,6 +36,8 @@ export class EgitmenDetailPageComponent implements OnInit {
   private readonly egitmenService = inject(EgitmenService);
   private readonly egitmenKategoriService = inject(EgitmenKategoriService);
   private readonly kategoriService = inject(KategoriService);
+  private readonly videodersService = inject(VideodersService);
+  private readonly yuzyuzedersService = inject(YuzyuzedersService);
   private readonly toastService = inject(ToastService);
   protected readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
@@ -48,7 +55,17 @@ export class EgitmenDetailPageComponent implements OnInit {
   kategoriModalLoading = signal(false);
   availableKategoriler = signal<Kategori[]>([]);
   kategoriLoaded = false; // Kategoriler yüklenip yüklenmediğini takip eder
+  // Video dersler
+  videodersler = signal<DersOzet[]>([]);
+  videodersLoading = signal(false);
+  videodersError = signal('');
+  videodersLoaded = false;
 
+  // Yüz yüze dersler
+  yuzyuzedersler = signal<DersOzet[]>([]);
+  yuzyuzedersLoading = signal(false);
+  yuzyuzedersError = signal('');
+  yuzyuzedersLoaded = false;
   activeTab = signal<number>(1);
 
   showApprovalModal = signal(false);
@@ -78,6 +95,14 @@ export class EgitmenDetailPageComponent implements OnInit {
     if (tabId === 3 && !this.kategoriLoaded) {
       this.loadKategoriler();
       this.kategoriLoaded = true;
+    }
+    if (tabId === 4 && !this.videodersLoaded) {
+      this.videodersLoaded = true;
+      this.loadVideodersler();
+    }
+    if (tabId === 5 && !this.yuzyuzedersLoaded) {
+      this.yuzyuzedersLoaded = true;
+      this.loadYuzyuzedersler();
     }
   }
 
@@ -320,5 +345,59 @@ export class EgitmenDetailPageComponent implements OnInit {
           }
         });
     }
+  }
+
+  onVideodersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  onYuzyuzedersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
+
+  private loadVideodersler(): void {
+    if (!this.egitmenId) return;
+    this.videodersLoading.set(true);
+    this.videodersError.set('');
+    this.videodersService.getByEgitmenId(this.egitmenId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.videodersler.set(data);
+          this.videodersLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadVideodersler');
+          const msg = ErrorHandler.extractErrorMessage(error);
+          this.videodersError.set(msg);
+          this.toastService.error(msg);
+          this.videodersLoading.set(false);
+        }
+      });
+  }
+
+  private loadYuzyuzedersler(): void {
+    if (!this.egitmenId) return;
+    this.yuzyuzedersLoading.set(true);
+    this.yuzyuzedersError.set('');
+    this.yuzyuzedersService.getByEgitmenId(this.egitmenId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.yuzyuzedersler.set(data);
+          this.yuzyuzedersLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadYuzyuzedersler');
+          const msg = ErrorHandler.extractErrorMessage(error);
+          this.yuzyuzedersError.set(msg);
+          this.toastService.error(msg);
+          this.yuzyuzedersLoading.set(false);
+        }
+      });
   }
 }

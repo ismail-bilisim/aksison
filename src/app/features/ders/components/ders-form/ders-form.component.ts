@@ -48,17 +48,17 @@ export class DersFormComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       adi: ['', Validators.required],
-      amaci: [''],
+      amaci: ['', Validators.required],
       turuKodu: ['', Validators.required],
       seviyesiKodu: ['', Validators.required],
       niteligiKodu: ['', Validators.required],
-      tahminiDersSuresi: [''],
-      dersOzeti: [''],
+      tahminiDersSuresi: ['', Validators.required],
+      dersOzeti: ['', Validators.required],
       onayDurumu: [''],
-      hedefKitleEgitimSeviyeKodu: [''],
-      ilgiAlaninaGoreHedefKitle: [''],
+      hedefKitleEgitimSeviyeKodu: ['', Validators.required],
+      ilgiAlaninaGoreHedefKitle: ['', Validators.required],
       kullanilacakProgramlar: [''],
-      kazanimlar: [''],
+      kazanimlar: ['', Validators.required],
       sikcaSorulanSorular: ['']
     });
   }

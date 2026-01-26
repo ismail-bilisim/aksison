@@ -38,37 +38,11 @@
         </div>
       } @else if (kategori) {
 
-        <!-- Ana Başlık Kartı -->
-        <div class="card shadow-sm mb-3">
-          <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">
-              <i class="bi bi-tags-fill me-2"></i>{{ kategori.adi }}
-            </h5>
-          </div>
-        </div>
-
-        <!-- Ana Accordion -->
-        <div ngbAccordion [closeOthers]="true">
-          <!-- Temel Bilgiler -->
-          <div ngbAccordionItem [collapsed]="false">
-            <h5 ngbAccordionHeader>
-              <button ngbAccordionButton>
-                <i class="bi bi-info-square me-2"></i>Temel Bilgiler
-              </button>
-            </h5>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ng-template>
-                  <app-kategori-temel [kategori]="kategori"></app-kategori-temel>
-                </ng-template>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-kategori-temel [kategori]="kategori"></app-kategori-temel>
 
         <!-- İlişkili Varlıklar -->
         <div class="mt-4">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)" class="nav-tabs">
             <li [ngbNavItem]="'altKategoriler'">
               <button ngbNavLink>Alt Kategoriler</button>
               <ng-template ngbNavContent>
@@ -84,7 +58,23 @@
             <li [ngbNavItem]="'videodersler'">
               <button ngbNavLink>Video Dersler</button>
               <ng-template ngbNavContent>
-                <app-kategori-videoders-list [kategoriId]="kategori.id!"></app-kategori-videoders-list>
+                <app-videoders-list 
+                  [videodersler]="videodersler()"
+                  [isLoading]="videodersLoading()"
+                  [errorMessage]="videodersError()"
+                  (select)="onVideodersSelect($event)">
+                </app-videoders-list>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="'yuzyuzedersler'">
+              <button ngbNavLink>Yüz Yüze Dersler</button>
+              <ng-template ngbNavContent>
+                <app-yuzyuzeders-list 
+                  [yuzyuzedersler]="yuzyuzedersler()"
+                  [isLoading]="yuzyuzedersLoading()"
+                  [errorMessage]="yuzyuzedersError()"
+                  (select)="onYuzyuzedersSelect($event)">
+                </app-yuzyuzeders-list>
               </ng-template>
             </li>
             <li [ngbNavItem]="'egitmenler'">

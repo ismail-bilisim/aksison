@@ -13,7 +13,11 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Amacı</label>
-                <textarea formControlName="amaci" class="form-control" rows="3"></textarea>
+                <textarea formControlName="amaci" class="form-control" rows="3"
+                          [class.is-invalid]="form.get('amaci')?.invalid && form.get('amaci')?.touched"></textarea>
+                @if (form.get('amaci')?.invalid && form.get('amaci')?.touched) {
+                    <div class="text-danger small mt-1">Amaç zorunludur.</div>
+                }
             </div>
         </div>
     </div>
@@ -90,7 +94,8 @@
         <div class="row g-3">
             <div class="col-lg-6">
                 <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
-                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select">
+                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select"
+                    [class.is-invalid]="form.get('hedefKitleEgitimSeviyeKodu')?.invalid && form.get('hedefKitleEgitimSeviyeKodu')?.touched">
                     <option [ngValue]="null">Seçiniz</option>
                     @if (loadingHedefKitleEgitimSeviyesi) {
                         <option disabled>Yükleniyor...</option>
@@ -99,10 +104,17 @@
                         <option [ngValue]="seviye.kodu">{{ seviye.adi }}</option>
                     }
                 </select>
+                @if (form.get('hedefKitleEgitimSeviyeKodu')?.invalid && form.get('hedefKitleEgitimSeviyeKodu')?.touched) {
+                    <div class="text-danger small mt-1">Hedef kitle eğitim seviyesi zorunludur.</div>
+                }
             </div>
             <div class="col-lg-6">
                 <label class="form-label">İlgi Alanına Göre Hedef Kitle</label>
-                <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"></textarea>
+                <textarea formControlName="ilgiAlaninaGoreHedefKitle" class="form-control" rows="2"
+                          [class.is-invalid]="form.get('ilgiAlaninaGoreHedefKitle')?.invalid && form.get('ilgiAlaninaGoreHedefKitle')?.touched"></textarea>
+                @if (form.get('ilgiAlaninaGoreHedefKitle')?.invalid && form.get('ilgiAlaninaGoreHedefKitle')?.touched) {
+                    <div class="text-danger small mt-1">Bu alan zorunludur.</div>
+                }
             </div>
         </div>
     </div>
@@ -127,7 +139,11 @@
         <div class="row g-3">
             <div class="col-lg-6">
                 <label class="form-label">Kazanımlar</label>
-                <textarea formControlName="kazanimlar" class="form-control" rows="3"></textarea>
+                <textarea formControlName="kazanimlar" class="form-control" rows="3"
+                          [class.is-invalid]="form.get('kazanimlar')?.invalid && form.get('kazanimlar')?.touched"></textarea>
+                @if (form.get('kazanimlar')?.invalid && form.get('kazanimlar')?.touched) {
+                    <div class="text-danger small mt-1">Kazanımlar zorunludur.</div>
+                }
             </div>
             <div class="col-lg-6">
                 <label class="form-label">Sıkça Sorulan Sorular</label>
@@ -146,6 +162,9 @@
         <div class="row g-3">
             <div class="col-12">
                 <textarea formControlName="dersOzeti" class="form-control" rows="4"></textarea>
+                @if (form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched) {
+                    <div class="text-danger small mt-1">Ders özeti zorunludur.</div>
+                }
             </div>
         </div>
     </div>

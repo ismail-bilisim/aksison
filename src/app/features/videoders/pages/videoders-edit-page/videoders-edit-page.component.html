@@ -21,6 +21,7 @@
         <app-videoders-form 
             [initialData]="videodersRequest()" 
             [lookupData]="lookupData()"
+            [isEditMode]="isEditMode"
             (save)="onSave($event)"
             (dersSelected)="onDersSelected($event)">
         </app-videoders-form>

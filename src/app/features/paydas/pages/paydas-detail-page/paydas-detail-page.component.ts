@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, TemplateRef, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,14 +8,18 @@ import { PaydasResponse } from '../../../../core/models/paydas-response';
 import { PaydasRequest } from '../../../../core/models/paydas-request';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { ToastService } from '../../../../core/services/api/toast.service';
-import { PaydasVideodersListComponent } from '../../components/paydas-videoders-list/paydas-videoders-list.component';
+import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
+import { VideodersService } from '../../../../core/services/api/videoders.service';
+import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
 import { PaydasTemelComponent } from '../../components/paydas-temel/paydas-temel.component';
 import { OnayDurumu, OnayDurumuHelper } from '../../../../core/models/onay-durumu.enum';
+import { DersOzet } from '../../../../core/models/ders-ozet';
 
 @Component({
   selector: 'app-paydas-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, PaydasVideodersListComponent, PaydasTemelComponent],
+  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, VideodersListComponent, YuzyuzedersListComponent, PaydasTemelComponent],
   templateUrl: './paydas-detail-page.component.html',
   styleUrls: ['./paydas-detail-page.component.css']
 })
@@ -24,6 +28,8 @@ export class PaydasDetailPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly paydasService = inject(PaydasService);
+  private readonly videodersService = inject(VideodersService);
+  private readonly yuzyuzedersService = inject(YuzyuzedersService);
   private readonly modalService = inject(NgbModal);
 
   paydas?: PaydasResponse;
@@ -36,6 +42,18 @@ export class PaydasDetailPageComponent implements OnInit {
   // Enum for template
   readonly OnayDurumu = OnayDurumu;
   readonly OnayDurumuHelper = OnayDurumuHelper;
+
+  // Video dersler
+  videodersler = signal<DersOzet[]>([]);
+  videodersLoading = signal(false);
+  videodersError = signal('');
+  videodersLoaded = false;
+
+  // Yüz yüze dersler
+  yuzyuzedersler = signal<DersOzet[]>([]);
+  yuzyuzedersLoading = signal(false);
+  yuzyuzedersError = signal('');
+  yuzyuzedersLoaded = false;
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
@@ -167,5 +185,66 @@ export class PaydasDetailPageComponent implements OnInit {
 
   getOnayDurumuText(onayDurumu: string): string {
     return OnayDurumuHelper.getText(onayDurumu);
+  }
+
+  onTabChange(tabId: string): void {
+    if (tabId === 'videodersler' && !this.videodersLoaded) {
+      this.videodersLoaded = true;
+      this.loadVideodersler();
+    }
+    if (tabId === 'yuzyuzedersler' && !this.yuzyuzedersLoaded) {
+      this.yuzyuzedersLoaded = true;
+      this.loadYuzyuzedersler();
+    }
+  }
+
+  private loadVideodersler(): void {
+    if (!this.paydas?.id) return;
+    this.videodersLoading.set(true);
+    this.videodersError.set('');
+    this.videodersService.getAllByPaydas(this.paydas.id).subscribe({
+      next: (data) => {
+        this.videodersler.set(data);
+        this.videodersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadVideodersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.videodersError.set(msg);
+        this.toastService.error(msg);
+        this.videodersLoading.set(false);
+      }
+    });
+  }
+
+  onVideodersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  private loadYuzyuzedersler(): void {
+    if (!this.paydas?.id) return;
+    this.yuzyuzedersLoading.set(true);
+    this.yuzyuzedersError.set('');
+    this.yuzyuzedersService.getAllByPaydas(this.paydas.id).subscribe({
+      next: (data) => {
+        this.yuzyuzedersler.set(data);
+        this.yuzyuzedersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadYuzyuzedersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.yuzyuzedersError.set(msg);
+        this.toastService.error(msg);
+        this.yuzyuzedersLoading.set(false);
+      }
+    });
+  }
+
+  onYuzyuzedersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
   }
 }

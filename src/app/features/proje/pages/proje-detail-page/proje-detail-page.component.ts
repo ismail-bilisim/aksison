@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, TemplateRef, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,14 +7,18 @@ import { ProjeService } from '../../../../core/services/api/proje.service';
 import { ProjeResponse } from '../../../../core/models/proje-response';
 import { ErrorHandler } from '../../../../core/utils/error-handler';
 import { ToastService } from '../../../../core/services/api/toast.service';
-import { ProjeVideodersListComponent } from '../../components/proje-videoders-list/proje-videoders-list.component';
+import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
+import { VideodersService } from '../../../../core/services/api/videoders.service';
+import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
 import { ProjeTemelComponent } from '../../components/proje-temel/proje-temel.component';
 import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
+import { DersOzet } from '../../../../core/models/ders-ozet';
 
 @Component({
   selector: 'app-proje-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbNavModule, NgbModalModule, ProjeVideodersListComponent, ProjeTemelComponent],
+  imports: [CommonModule, FormsModule, NgbNavModule, NgbModalModule, VideodersListComponent, YuzyuzedersListComponent, ProjeTemelComponent],
   templateUrl: './proje-detail-page.component.html',
   styleUrls: ['./proje-detail-page.component.css']
 })
@@ -23,6 +27,8 @@ export class ProjeDetailPageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly projeService = inject(ProjeService);
+  private readonly videodersService = inject(VideodersService);
+  private readonly yuzyuzedersService = inject(YuzyuzedersService);
   private readonly modalService = inject(NgbModal);
 
   proje?: ProjeResponse;
@@ -32,6 +38,18 @@ export class ProjeDetailPageComponent implements OnInit {
   
   // Enum for template
   readonly OnayDurumu = OnayDurumu;
+
+  // Video dersler
+  videodersler = signal<DersOzet[]>([]);
+  videodersLoading = signal(false);
+  videodersError = signal('');
+  videodersLoaded = false;
+
+  // Yüz yüze dersler
+  yuzyuzedersler = signal<DersOzet[]>([]);
+  yuzyuzedersLoading = signal(false);
+  yuzyuzedersError = signal('');
+  yuzyuzedersLoaded = false;
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
@@ -128,4 +146,65 @@ export class ProjeDetailPageComponent implements OnInit {
           }
       });
  }
+
+  onTabChange(tabId: string): void {
+    if (tabId === 'videodersler' && !this.videodersLoaded) {
+      this.videodersLoaded = true;
+      this.loadVideodersler();
+    }
+    if (tabId === 'yuzyuzedersler' && !this.yuzyuzedersLoaded) {
+      this.yuzyuzedersLoaded = true;
+      this.loadYuzyuzedersler();
+    }
+  }
+
+  private loadVideodersler(): void {
+    if (!this.proje?.id) return;
+    this.videodersLoading.set(true);
+    this.videodersError.set('');
+    this.videodersService.getByProjeId(this.proje.id).subscribe({
+      next: (data) => {
+        this.videodersler.set(data);
+        this.videodersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadVideodersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.videodersError.set(msg);
+        this.toastService.error(msg);
+        this.videodersLoading.set(false);
+      }
+    });
+  }
+
+  onVideodersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  private loadYuzyuzedersler(): void {
+    if (!this.proje?.id) return;
+    this.yuzyuzedersLoading.set(true);
+    this.yuzyuzedersError.set('');
+    this.yuzyuzedersService.getByProjeId(this.proje.id).subscribe({
+      next: (data) => {
+        this.yuzyuzedersler.set(data);
+        this.yuzyuzedersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadYuzyuzedersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.yuzyuzedersError.set(msg);
+        this.toastService.error(msg);
+        this.yuzyuzedersLoading.set(false);
+      }
+    });
+  }
+
+  onYuzyuzedersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
 }
