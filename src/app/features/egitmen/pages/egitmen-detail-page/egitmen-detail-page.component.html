@@ -68,7 +68,7 @@
 					[videodersler]="videodersler()"
 					[isLoading]="videodersLoading()"
 					[errorMessage]="videodersError()"
-					(select)="onVideodersSelect($event)">
+					(videoSelected)="onVideodersSelect($event)">
 				</app-videoders-list>
 			</div>
 			<div class="p-3" [hidden]="activeTab() !== 5">
@@ -76,7 +76,7 @@
 					[yuzyuzedersler]="yuzyuzedersler()"
 					[isLoading]="yuzyuzedersLoading()"
 					[errorMessage]="yuzyuzedersError()"
-					(select)="onYuzyuzedersSelect($event)">
+					(videoSelected)="onYuzyuzedersSelect($event)">
 				</app-yuzyuzeders-list>
 			</div>
 		</div>

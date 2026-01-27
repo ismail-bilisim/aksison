@@ -23,17 +23,8 @@ export class IslemKayitListComponent {
   /** Loading state indicator */
   @Input() isLoading = false;
   
-  /** Optional title for the list */
-  @Input() title = 'İşlem Kayıtları';
-  
-  /** Show or hide title */
-  @Input() showTitle = true;
-  
   /** Empty state message */
   @Input() emptyMessage = 'Henüz işlem kaydı bulunmamaktadır.';
-  
-  /** Table size control */
-  @Input() tableSize: 'sm' | 'md' = 'sm';
   
   /** Use styled version (with badges, icons) */
   @Input() useStyledVersion = true;

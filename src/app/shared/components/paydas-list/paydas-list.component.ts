@@ -21,6 +21,7 @@ export class PaydasListComponent {
   @Output() addRequested = new EventEmitter<void>();
   @Output() addConfirmed = new EventEmitter<number[]>();
   @Output() delete = new EventEmitter<PaydasOzet>();
+  @Output() paydasSelected = new EventEmitter<number>();
 
   @ViewChild('paydasModal') paydasModalTemplate!: TemplateRef<any>;
 
@@ -61,5 +62,11 @@ export class PaydasListComponent {
       return;
     }
     this.addConfirmed.emit([...this.selectedPaydaslar]);
+  }
+
+  onSelect(paydas: PaydasOzet): void {
+    if (paydas.id) {
+      this.paydasSelected.emit(paydas.id);
+    }
   }
 }

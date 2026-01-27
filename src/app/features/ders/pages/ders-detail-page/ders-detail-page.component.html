@@ -104,7 +104,7 @@
                 [videodersler]="videodersler()"
                 [isLoading]="videodersLoading()"
                 [errorMessage]="videodersError()"
-                (select)="onVideodersSelect($event)">
+                (videoSelected)="onVideodersSelect($event)">
               </app-videoders-list>
             </div>
 
@@ -113,7 +113,7 @@
                 [yuzyuzedersler]="yuzyuzedersler()"
                 [isLoading]="yuzyuzedersLoading()"
                 [errorMessage]="yuzyuzedersError()"
-                (select)="onYuzyuzedersSelect($event)">
+                (videoSelected)="onYuzyuzedersSelect($event)">
               </app-yuzyuzeders-list>
             </div>
             
@@ -121,10 +121,7 @@
               <app-islem-kayit-list
                 [items]="islemKayitlar()"
                 [isLoading]="islemKayitLoading()"
-                [title]="'İşlem Kayıtları'"
-                [showTitle]="true"
-                [useStyledVersion]="false"
-                [tableSize]="'md'">
+                [useStyledVersion]="false">
               </app-islem-kayit-list>
             </div>
           </div>

@@ -144,10 +144,17 @@ export class VideodersService {
     return this.getAllByMateryalGelistirici(kullaniciId);
   }
 
+  // coklu kategoriye göre
   getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
     const params = { ids: kategoriIds.join(',') };
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
   }
+
+  // GET by Kategori ID - for listing video lessons related to a single kategori
+  getAllozetByKategori(kategoriId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategori/${kategoriId}`);
+  }
+
 
   // GET by Ders ID - for listing video lessons related to a parent course
   getByDersId(dersId: number): Observable<DersOzet[]> {
@@ -156,15 +163,17 @@ export class VideodersService {
 
   // GET by Proje ID - for listing video lessons related to a project
   getByProjeId(projeId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${environment.apiUrl}/proje-videoders/by-proje/${projeId}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${projeId}`);
   }
 
   // GET by Paudas ID - for listing video lessons related to a paydas
   getByPaydasId(paydasId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${paydasId}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-paydas/${paydasId}`);
   }
 
   // GET by Egitmen ID - for listing video lessons related to an egitmen
   getByEgitmenId(egitmenId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${environment.apiUrl}/videoders-egitmen/by-egitmen/${egitmenId}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-egitmen/${egitmenId}`);
   }
+  
+}

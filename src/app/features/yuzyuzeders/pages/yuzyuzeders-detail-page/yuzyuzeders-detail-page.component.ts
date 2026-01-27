@@ -296,6 +296,30 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
       });
   }
 
+  onKategoriSelect(kategoriId: number): void {
+    if (kategoriId) {
+      this.router.navigate(['/kategori/detail', kategoriId]);
+    }
+  }
+
+  onEgitmenSelect(egitmenId: number): void {
+    if (egitmenId) {
+      this.router.navigate(['/egitmen/detail', egitmenId]);
+    }
+  }
+
+  onProjeSelect(projeId: number): void {
+    if (projeId) {
+      this.router.navigate(['/proje/detail', projeId]);
+    }
+  }
+
+  onPaydasSelect(paydasId: number): void {
+    if (paydasId) {
+      this.router.navigate(['/paydas/detail', paydasId]);
+    }
+  }
+
   private loadPaydaslar(): void {
     if (!this.yuzyuzeders?.id) return;
     this.paydasLoading.set(true);
@@ -622,10 +646,10 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
           this.yuzyuzedersService.icerikOnayla(this.yuzyuzeders!.id, result)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-              next: () => {
-                this.toastService.success('İçerik başarıyla onaylandı.');
-                this.loadYuzyuzeders(this.yuzyuzeders!.id);
+              next: (updated) => {
+                this.yuzyuzeders=updated;
                 this.submitting = false;
+                this.toastService.success('İçerik başarıyla onaylandı. Kodu: '+updated.kodu);
               },
               error: (error) => {
                 ErrorHandler.logError(error, 'icerikOnayla');

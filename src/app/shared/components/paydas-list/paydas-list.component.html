@@ -17,15 +17,15 @@
 
 <div *ngIf="!loading && items.length > 0" class="row">
     <div *ngFor="let item of items" class="col-md-6 col-lg-4 mb-3">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
+        <div class="card h-100 shadow-sm" style="cursor: pointer;">
+            <div class="card-body" (click)="onSelect(item)">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <h6 class="card-title mb-0 text-primary">
                         <i class="bi bi-building me-2"></i>
                         {{ item.adi }}
                     </h6>
                     <button class="btn btn-sm btn-outline-danger" 
-                            (click)="delete.emit(item)" 
+                            (click)="delete.emit(item); $event.stopPropagation()" 
                             [disabled]="deleting"
                             title="Kaldır">
                         <i class="bi bi-trash"></i>

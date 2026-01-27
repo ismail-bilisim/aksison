@@ -23,6 +23,7 @@ export class EgitmenListComponent {
   @Output() addRequested = new EventEmitter<string>();
   @Output() addConfirmed = new EventEmitter<number[]>();
   @Output() delete = new EventEmitter<number>();
+  @Output() egitmenSelected = new EventEmitter<number>();
 
   @ViewChild('egitmenModal') egitmenModalTemplate!: TemplateRef<any>;
 
@@ -59,5 +60,11 @@ export class EgitmenListComponent {
   confirmAdd(): void {
     if (this.selectedEgitmenIds.length === 0) return;
     this.addConfirmed.emit([...this.selectedEgitmenIds]);
+  }
+
+  onSelect(egitmen: EgitmenOzet): void {
+    if (egitmen.id) {
+      this.egitmenSelected.emit(egitmen.id);
+    }
   }
 }

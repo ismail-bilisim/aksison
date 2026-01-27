@@ -191,7 +191,8 @@
                   [availableKategoriler]="availableKategoriler()"
                   (addRequested)="onKategoriAddRequested()"
                   (addConfirmed)="onKategoriAdd($event)"
-                  (delete)="onKategoriDelete($event)">
+                  (delete)="onKategoriDelete($event)"
+                  (kategoriSelected)="onKategoriSelect($event)">
                 </app-kategori-list>
               </div>
 
@@ -206,7 +207,8 @@
                   [availableEgitmenler]="availableEgitmenler()"
                   (addRequested)="onEgitmenAddRequested($event)"
                   (addConfirmed)="onEgitmenAddConfirm($event)"
-                  (delete)="onEgitmenDelete($event)">
+                  (delete)="onEgitmenDelete($event)"
+                  (egitmenSelected)="onEgitmenSelect($event)">
                 </app-egitmen-list>
               </div>
 
@@ -221,7 +223,8 @@
                   [availableProjeler]="availableProjeler()"
                   (addRequested)="onProjeAddRequested()"
                   (addConfirmed)="onProjeAddConfirm($event)"
-                  (delete)="onProjeDelete($event)">
+                  (delete)="onProjeDelete($event)"
+                  (projeSelected)="onProjeSelect($event)">
                 </app-proje-list>
               </div>
 
@@ -236,7 +239,8 @@
                   [availablePaydaslar]="availablePaydaslar()"
                   (addRequested)="onPaydasAddRequested()"
                   (addConfirmed)="onPaydasAddConfirm($event)"
-                  (delete)="onPaydasDelete($event)">
+                  (delete)="onPaydasDelete($event)"
+                  (paydasSelected)="onPaydasSelect($event)">
                 </app-paydas-list>
               </div>
 
@@ -248,10 +252,7 @@
                 <app-islem-kayit-list
                   [items]="islemKayitlar()"
                   [isLoading]="islemKayitLoading()"
-                  [title]="'İşlem Kayıtları'"
-                  [showTitle]="true"
-                  [useStyledVersion]="false"
-                  [tableSize]="'md'">
+                  [useStyledVersion]="false">
                 </app-islem-kayit-list>
               </div>
             </div>

@@ -62,7 +62,7 @@
                   [videodersler]="videodersler()"
                   [isLoading]="videodersLoading()"
                   [errorMessage]="videodersError()"
-                  (select)="onVideodersSelect($event)">
+                  (videoSelected)="onVideodersSelect($event)">
                 </app-videoders-list>
               </ng-template>
             </li>
@@ -73,7 +73,7 @@
                   [yuzyuzedersler]="yuzyuzedersler()"
                   [isLoading]="yuzyuzedersLoading()"
                   [errorMessage]="yuzyuzedersError()"
-                  (select)="onYuzyuzedersSelect($event)">
+                  (videoSelected)="onYuzyuzedersSelect($event)">
                 </app-yuzyuzeders-list>
               </ng-template>
             </li>

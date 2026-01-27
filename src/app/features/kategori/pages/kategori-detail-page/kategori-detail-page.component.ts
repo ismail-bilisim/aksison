@@ -126,7 +126,7 @@ export class KategoriDetailPageComponent implements OnInit {
     if (!this.kategori?.id) return;
     this.videodersLoading.set(true);
     this.videodersError.set('');
-    this.videodersService.getByKategoriler([this.kategori.id]).subscribe({
+    this.videodersService.getAllozetByKategori(this.kategori.id).subscribe({
       next: (data) => {
         this.videodersler.set(data);
         this.videodersLoading.set(false);
@@ -151,7 +151,7 @@ export class KategoriDetailPageComponent implements OnInit {
     if (!this.kategori?.id) return;
     this.yuzyuzedersLoading.set(true);
     this.yuzyuzedersError.set('');
-    this.yuzyuzedersService.getByKategoriler([this.kategori.id]).subscribe({
+    this.yuzyuzedersService.getAllOzetByKategori(this.kategori.id).subscribe({
       next: (data) => {
         this.yuzyuzedersler.set(data);
         this.yuzyuzedersLoading.set(false);

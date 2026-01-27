@@ -21,6 +21,7 @@ export class ProjeListComponent {
   @Output() addRequested = new EventEmitter<void>();
   @Output() addConfirmed = new EventEmitter<number[]>();
   @Output() delete = new EventEmitter<ProjeOzet>();
+  @Output() projeSelected = new EventEmitter<number>();
 
   @ViewChild('projeModal') projeModalTemplate!: TemplateRef<any>;
 
@@ -61,5 +62,11 @@ export class ProjeListComponent {
       return;
     }
     this.addConfirmed.emit([...this.selectedProjeler]);
+  }
+
+  onSelect(proje: ProjeOzet): void {
+    if (proje.id) {
+      this.projeSelected.emit(proje.id);
+    }
   }
 }

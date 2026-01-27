@@ -1,52 +1,52 @@
 <div class="yuzyuze-ders-list-container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5>Yuzyuze Dersler</h5>
-  </div>
 
   @if (isLoading) {
-    <div class="text-center py-4">
+    <div class="text-center p-4">
       <div class="spinner-border spinner-border-sm text-primary" role="status">
         <span class="visually-hidden">Yükleniyor...</span>
       </div>
-      <p class="mt-2 text-muted">Yuzyuze dersler yükleniyor...</p>
     </div>
   }
 
   @if (!isLoading && errorMessage) {
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger mb-0" role="alert">
       <i class="bi bi-exclamation-triangle me-2"></i>
       {{ errorMessage }}
     </div>
   }
 
   @if (!isLoading && !errorMessage && yuzyuzedersler.length === 0) {
-    <div class="alert alert-info">
-      <i class="bi bi-info-circle me-2"></i>
-      Bu derse ait yuzyuze ders bulunamadı.
+    <div class="alert alert-info mb-0">
+      @if (useStyledVersion) {
+        <i class="bi bi-info-circle me-2"></i>
+      }
+      {{ emptyMessage }}
     </div>
   }
 
   @if (!isLoading && !errorMessage && yuzyuzedersler.length > 0) {
     <div class="table-responsive">
-      <table class="table table-hover table-bordered align-middle">
-        <thead class="table-light">
+      <table class="table small table-hover align-middle mb-0" [class.table-striped]="!useStyledVersion">
+        <thead [class.table-light]="useStyledVersion">
           <tr>
             <th>Kodu</th>
             <th>Adı</th>
           </tr>
         </thead>
         <tbody>
-          @for (yuzyuzeders of yuzyuzedersler; track yuzyuzeders.id) {
+          @for (item of yuzyuzedersler; track trackById($index, item)) {
             <tr
               class="table-row-hover clickable-row"
               role="button"
               tabindex="0"
-              (click)="onRowClick(yuzyuzeders.id)"
-              (keydown.enter)="onRowClick(yuzyuzeders.id)"
+              (click)="onRowClick(item.id)"
+              (keydown.enter)="onRowClick(item.id)"
               title="Detayları görüntülemek için tıklayın"
             >
-              <td><strong>{{ yuzyuzeders.kodu }}</strong></td>
-              <td>{{ yuzyuzeders.adi }}</td>
+              <td><strong>{{ item.kodu }}</strong></td>
+              <td>
+                <small [class.text-muted]="useStyledVersion">{{ item.adi }}</small>
+              </td>
             </tr>
           }
         </tbody>

@@ -50,8 +50,8 @@ export class YuzyuzedersService {
     return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
   }
 
-  icerikOnayla(id: number, onayNotu?: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onayla`, { onayNotu });
+  icerikOnayla(id: number, onayNotu?: string): Observable<YuzyuzeDersResponse> {
+    return this.http.put<YuzyuzeDersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, { onayNotu });
   }
 
   icerikReddet(id: number, redNedeni?: string): Observable<void> {
@@ -63,6 +63,18 @@ export class YuzyuzedersService {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-ders/${dersId}`);
   }
 
+  // GET by multiple kategori
+  getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
+    const params = { ids: kategoriIds.join(',') };
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
+  }
+
+  // GET by only one kategori
+  getAllOzetByKategori(kategoriId: number): Observable<DersOzet[]> {
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategori/${kategoriId}`);
+  }
+
+
   // GET by Paydas ID - for listing yuzyuze lessons related to a paydas
   getAllByPaydas(paydasId: number): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-paydas/${paydasId}`);
@@ -70,17 +82,12 @@ export class YuzyuzedersService {
 
   // GET by Proje ID - for listing yuzyuze lessons related to a proje
   getByProjeId(projeId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${environment.apiUrl}/proje-yuzyuzeders/by-proje/${projeId}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-proje/${projeId}`);
   }
 
-  // GET by Kategori IDs - for listing yuzyuze lessons related to kategoriler
-  getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {
-    const params = { ids: kategoriIds.join(',') };
-    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-kategoriler`, { params });
-  }
 
   // GET by Egitmen ID - for listing yuzyuze lessons related to an egitmen
   getByEgitmenId(egitmenId: number): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${environment.apiUrl}/yuzyuzeders-egitmen/by-egitmen/${egitmenId}`);
+    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-egitmen/${egitmenId}`);
   }
 }

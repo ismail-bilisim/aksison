@@ -22,6 +22,7 @@ export class KategoriListComponent {
   @Output() addRequested = new EventEmitter<void>();
   @Output() addConfirmed = new EventEmitter<number[]>();
   @Output() delete = new EventEmitter<number>();
+  @Output() kategoriSelected = new EventEmitter<number>();
   
   @ViewChild('kategoriModal') kategoriModalTemplate!: TemplateRef<any>;
   
@@ -78,5 +79,11 @@ export class KategoriListComponent {
     this.addConfirmed.emit(this.selectedKategoriler);
     this.modalService.dismissAll();
     this.selectedKategoriler = [];
+  }
+
+  onSelect(item: KategoriOzet) {
+    if (item.id) {
+      this.kategoriSelected.emit(item.id);
+    }
   }
 }

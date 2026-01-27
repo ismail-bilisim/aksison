@@ -1,8 +1,4 @@
-@if (showTitle) {
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <small>{{ title }}</small>
-  </div>
-}
+
 
 @if (isLoading) {
   <div class="text-center p-4">
@@ -23,8 +19,7 @@
 
 @if (!isLoading && items.length > 0) {
   <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0"
-           [class.table-sm]="tableSize === 'sm'"
+    <table class="table small table-hover align-middle mb-0"
            [class.table-striped]="!useStyledVersion">
       <thead [class.table-light]="useStyledVersion">
         <tr>

@@ -343,6 +343,30 @@ export class VideodersDetailPageComponent implements OnInit {
       });
   }
 
+  onKategoriSelect(kategoriId: number): void {
+    if (kategoriId) {
+      this.router.navigate(['/kategori/detail', kategoriId]);
+    }
+  }
+
+  onEgitmenSelect(egitmenId: number): void {
+    if (egitmenId) {
+      this.router.navigate(['/egitmen/detail', egitmenId]);
+    }
+  }
+
+  onProjeSelect(projeId: number): void {
+    if (projeId) {
+      this.router.navigate(['/proje/detail', projeId]);
+    }
+  }
+
+  onPaydasSelect(paydasId: number): void {
+    if (paydasId) {
+      this.router.navigate(['/paydas/detail', paydasId]);
+    }
+  }
+
   private loadPaydaslar(): void {
     if (!this.videoders?.id) return;
 

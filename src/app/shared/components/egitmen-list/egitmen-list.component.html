@@ -17,8 +17,8 @@
 
 <div *ngIf="!loading && items.length > 0" class="row">
   <div class="col-md-6 col-lg-4 mb-3" *ngFor="let egitmen of items">
-    <div class="card h-100 shadow-sm">
-      <div class="card-body">
+    <div class="card h-100 shadow-sm" style="cursor: pointer;">
+      <div class="card-body" (click)="onSelect(egitmen)">
         <div class="d-flex justify-content-between align-items-start mb-2">
           <div>
             <h6 class="card-title mb-1">
@@ -27,7 +27,7 @@
             </h6>
             <small class="text-muted">TC: {{ egitmen.kullanici?.tcKimlikNo }}</small>
           </div>
-          <button class="btn btn-sm btn-outline-danger" (click)="delete.emit(egitmen.id!)" title="Kaldır">
+          <button class="btn btn-sm btn-outline-danger" (click)="delete.emit(egitmen.id!); $event.stopPropagation()" title="Kaldır">
             <i class="bi bi-trash"></i>
           </button>
         </div>

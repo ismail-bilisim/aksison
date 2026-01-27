@@ -14,12 +14,18 @@ export class YuzyuzedersListComponent {
   @Input() yuzyuzedersler: DersOzet[] = [];
   @Input() isLoading = false;
   @Input() errorMessage = '';
+  @Input() useStyledVersion = false;
+  @Input() emptyMessage = 'Bu derse ait yuzyuze ders bulunamadı.';
 
-  @Output() select = new EventEmitter<number>();
+  @Output() videoSelected = new EventEmitter<number>();
 
   onRowClick(id?: number): void {
     if (id) {
-      this.select.emit(id);
+      this.videoSelected.emit(id);
     }
+  }
+
+  trackById(index: number, item: DersOzet): number | undefined {
+    return item?.id;
   }
 }
