@@ -1,134 +1,142 @@
 @if (paydas) {
-  <!-- Header with actions -->
-  <header class="bg-white rounded-3 shadow-sm p-3 d-flex justify-content-between align-items-center mb-3">
-    <div class="d-flex align-items-center gap-2">
-      <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(paydas.onayDurumu)">
-        {{ OnayDurumuHelper.getText(paydas.onayDurumu) }}
-      </span>
-      <h5 class="mb-0">
-        <i class="bi bi-building me-2"></i>{{ paydas.adi }}
-      </h5>
-    </div>
-    
-    <div class="d-flex gap-2">
-      <!-- Onay Durumu: Taslak ise Onaya Sun butonu -->
-      @if (canSubmitForApproval && paydas.onayDurumu === OnayDurumu.TASLAK) {
-        <button class="btn btn-info btn-sm shadow-sm" (click)="onSubmitForApproval()">
-          <i class="bi bi-send me-1"></i>Onaya Sun
-        </button>
-      }
-      
-      <!-- Onay Durumu: Onay Bekliyor ise Onayla/Reddet butonları -->
-      @if (canApprove && paydas.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
-        <button class="btn btn-success btn-sm shadow-sm" (click)="onApprove()">
-          <i class="bi bi-check-circle me-1"></i>Onayla
-        </button>
-        <button class="btn btn-danger btn-sm shadow-sm" (click)="onReject()">
-          <i class="bi bi-x-circle me-1"></i>Reddet
-        </button>
-      }
-      
-      @if (canEdit) {
-        <button class="btn btn-warning btn-sm shadow-sm" (click)="onEdit()">
-          <i class="bi bi-pencil me-1"></i>Düzenle
-        </button>
-      }
-    </div>
-  </header>
-
-  <!-- Paydaş Bilgileri Kartı -->
-  <main class="bg-white rounded-3 shadow-sm p-3 mb-3">
-    <div class="row">
-      <div class="col-md-6">
-        <h6 class="text-muted mb-3">İletişim Bilgileri</h6>
-        
-        <dl class="row mb-0">
-          <dt class="col-sm-4">
-            <i class="bi bi-person me-2"></i>Temsilci
-          </dt>
-          <dd class="col-sm-8">{{ paydas.temsilci || '-' }}</dd>
-
-          <dt class="col-sm-4">
-            <i class="bi bi-telephone me-2"></i>Telefon
-          </dt>
-          <dd class="col-sm-8">
-            @if (paydas.telefon) {
-              <a [href]="'tel:' + paydas.telefon">{{ paydas.telefon }}</a>
-            } @else {
-              -
-            }
-          </dd>
-
-          <dt class="col-sm-4">
-            <i class="bi bi-envelope me-2"></i>E-Posta
-          </dt>
-          <dd class="col-sm-8">
-            @if (paydas.eposta) {
-              <a [href]="'mailto:' + paydas.eposta">{{ paydas.eposta }}</a>
-            } @else {
-              -
-            }
-          </dd>
-        </dl>
+  <!-- Paydaş Başlık ve Durum -->
+  <div class="paydas-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          <i class="bi bi-building me-2 text-primary"></i>
+          <span class="text-muted">{{ paydas.adi }}</span>
+        </h5>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <span class="badge badge-lg" [ngClass]="OnayDurumuHelper.getBadgeClass(paydas.onayDurumu)">
+            <i [class]="OnayDurumuHelper.getIcon(paydas.onayDurumu) + ' me-1'"></i>
+            {{ OnayDurumuHelper.getText(paydas.onayDurumu) }}
+          </span>
+        </div>
       </div>
-
-      <div class="col-md-6">
-        <h6 class="text-muted mb-3">Adres ve Diğer Bilgiler</h6>
-        
-        <dl class="row mb-0">
-          <dt class="col-sm-4">
-            <i class="bi bi-geo-alt me-2"></i>Adres
-          </dt>
-          <dd class="col-sm-8">{{ paydas.adres || '-' }}</dd>
-
-          <dt class="col-sm-4">
-            <i class="bi bi-flag me-2"></i>Onay Durumu
-          </dt>
-          <dd class="col-sm-8">
-            <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(paydas.onayDurumu)">
-              {{ getOnayDurumuText() }}
-            </span>
-          </dd>
-
-          @if (paydas.ekleyenKullanici) {
-            <dt class="col-sm-4">
-              <i class="bi bi-person-plus me-2"></i>Ekleyen
-            </dt>
-            <dd class="col-sm-8">
-              {{ paydas.ekleyenKullanici.ad }} {{ paydas.ekleyenKullanici.soyad }}
-            </dd>
-          }
-
-          @if (paydas.eklemeTarihi) {
-            <dt class="col-sm-4">
-              <i class="bi bi-calendar me-2"></i>Eklenme Tarihi
-            </dt>
-            <dd class="col-sm-8">
-              {{ paydas.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
-            </dd>
-          }
-
-          @if (paydas.ekleyenKullanici) {
-            <dt class="col-sm-4">
-              <i class="bi bi-pencil-square me-2"></i>Güncelleyen
-            </dt>
-            <dd class="col-sm-8">
-              {{ paydas.ekleyenKullanici.ad }} {{ paydas.ekleyenKullanici.soyad }}
-            </dd>
-          }
-
-          @if (paydas.eklemeTarihi) {
-            <dt class="col-sm-4">
-              <i class="bi bi-clock me-2"></i>Güncelleme Tarihi
-            </dt>
-            <dd class="col-sm-8">
-              {{ paydas.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
-            </dd>
-          }
-        </dl>
+      <div class="d-flex gap-2 flex-wrap">
+        @if (canSubmitForApproval && paydas.onayDurumu === OnayDurumu.TASLAK) {
+          <button class="btn btn-info btn-sm" (click)="onSubmitForApproval()">
+            <i class="bi bi-send me-1"></i>Onaya Sun
+          </button>
+        }
+        @if (canApprove && paydas.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
+          <button class="btn btn-success btn-sm" (click)="onApprove()">
+            <i class="bi bi-check-lg me-1"></i>Onayla
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="onReject()">
+            <i class="bi bi-x-lg me-1"></i>Reddet
+          </button>
+        }
+        @if (canEdit) {
+          <button class="btn btn-warning btn-sm" (click)="onEdit()">
+            <i class="bi bi-pencil me-1"></i>Düzenle
+          </button>
+        }
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- İletişim Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-telephone me-2"></i>İletişim Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Temsilci</dt>
+        <dd>
+          @if (paydas.temsilci) {
+            <i class="bi bi-person me-1"></i>
+            {{ paydas.temsilci }}
+          } @else {
+            <span class="text-muted fst-italic">Belirtilmemiş</span>
+          }
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Telefon</dt>
+        <dd>
+          @if (paydas.telefon) {
+            <i class="bi bi-telephone me-1"></i>
+            <a [href]="'tel:' + paydas.telefon">{{ paydas.telefon }}</a>
+          } @else {
+            <span class="text-muted fst-italic">Belirtilmemiş</span>
+          }
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>E-Posta</dt>
+        <dd>
+          @if (paydas.eposta) {
+            <i class="bi bi-envelope me-1"></i>
+            <a [href]="'mailto:' + paydas.eposta">{{ paydas.eposta }}</a>
+          } @else {
+            <span class="text-muted fst-italic">Belirtilmemiş</span>
+          }
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Adres</dt>
+        <dd>
+          @if (paydas.adres) {
+            <i class="bi bi-geo-alt me-1"></i>
+            {{ paydas.adres }}
+          } @else {
+            <span class="text-muted fst-italic">Belirtilmemiş</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kayıt Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-clock-history me-2"></i>Kayıt Bilgileri
+    </h6>
+    <div class="info-grid">
+      @if (paydas.ekleyenKullanici) {
+        <div class="info-item">
+          <dt>Ekleyen</dt>
+          <dd>
+            <i class="bi bi-person me-1"></i>
+            {{ paydas.ekleyenKullanici.ad }} {{ paydas.ekleyenKullanici.soyad }}
+          </dd>
+        </div>
+      }
+      @if (paydas.eklemeTarihi) {
+        <div class="info-item">
+          <dt>Ekleme Tarihi</dt>
+          <dd>
+            <i class="bi bi-calendar-plus me-1"></i>
+            {{ paydas.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+          </dd>
+        </div>
+      }
+      @if (paydas.ekleyenKullanici) {
+        <div class="info-item">
+          <dt>Güncelleyen</dt>
+          <dd>
+            <i class="bi bi-person me-1"></i>
+            {{ paydas.ekleyenKullanici.ad }} {{ paydas.ekleyenKullanici.soyad }}
+          </dd>
+        </div>
+      }
+      @if (paydas.eklemeTarihi) {
+        <div class="info-item">
+          <dt>Güncelleme Tarihi</dt>
+          <dd>
+            <i class="bi bi-calendar-range me-1"></i>
+            {{ paydas.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+          </dd>
+        </div>
+      }
+    </div>
+  </div>
 } @else {
-  <p class="text-muted">Paydaş detayları yükleniyor veya bulunamadı.</p>
+  <div class="text-center py-5">
+    <i class="bi bi-building text-muted" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3">Paydaş detayları yükleniyor veya bulunamadı.</p>
+  </div>
 }

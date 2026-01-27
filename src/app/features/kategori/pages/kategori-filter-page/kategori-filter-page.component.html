@@ -1,157 +1,162 @@
 <div class="container-fluid py-4">
-  <div class="row">
-    <div class="col-12">
-      <h5 class="mb-4">
-        <i class="bi bi-funnel-fill me-2"></i>
+  <!-- Sayfa Başlığı -->
+  <div class="page-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="bi bi-funnel-fill me-2 text-primary"></i>
         Kategorik Süzgeç
       </h5>
     </div>
   </div>
 
   <!-- Kategori Selection Section -->
-  <section class="row mb-4">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-header bg-white border-0 rounded-top-4">
-          <h6 class="mb-0">
-            <i class="bi bi-tags-fill me-2"></i>
-            Seçili Kategoriler 
-            @if (selectedKategoriIds.size > 0) {
-              <span class="badge bg-light text-primary ms-2">{{ selectedKategoriIds.size }}</span>
-            }
-          </h6>
-        </div>
-        <div class="card-body">
-          @if (kategorilerLoading) {
-            <div class="d-flex justify-content-center align-items-center p-5">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Kategoriler yükleniyor...</span>
-              </div>
-            </div>
-          } @else {
-            <div class="row g-3">
-              @for (kategori of kategoriler; track kategori.id; let idx = $index) {
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                  <button
-                    class="w-100 text-start border-0 shadow-sm rounded-2 p-2 kategori-pill"
-                    [ngClass]="[getKategoriColorClass(idx), isSelected(kategori.id) ? 'active' : '']"
-                    (click)="toggleKategori(kategori.id)"
-                    type="button">
-                    <div class="d-flex justify-content-between align-items-start">
-                      <div>
-                        <small class="d-block pill-label">{{ kategori.kodu }}</small>
-                        <strong class="fs-6">{{ kategori.adi }}</strong>
-                      </div>
-                      <i class="bi" [ngClass]="isSelected(kategori.id) ? 'bi-check-circle-fill text-white' : 'bi-check-circle text-white-50'"></i>
-                    </div>
-                  </button>
-                </div>
-              } @empty {
-                <div class="col-12">
-                  <div class="alert alert-info mb-0">
-                    <i class="bi bi-info-circle me-2"></i>
-                    Kategori bulunamadı.
-                  </div>
-                </div>
-              }
-            </div>
-          }
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-tags-fill me-2"></i>
+      Kategoriler
+      @if (selectedKategoriIds.size > 0) {
+        <span class="badge bg-primary ms-2">{{ selectedKategoriIds.size }} seçili</span>
+      }
+    </h6>
+    
+    @if (kategorilerLoading) {
+      <div class="d-flex justify-content-center align-items-center p-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Kategoriler yükleniyor...</span>
         </div>
       </div>
-    </div>
-  </section>
+    } @else {
+      <div class="row g-3">
+        @for (kategori of kategoriler; track kategori.id; let idx = $index) {
+          <div class="col-lg-2 col-md-3 col-sm-4">
+            <button
+              class="w-100 text-start border-0 shadow-sm rounded-3 p-2 kategori-pill"
+              [ngClass]="[getKategoriColorClass(idx), isSelected(kategori.id) ? 'active' : '']"
+              (click)="toggleKategori(kategori.id)"
+              type="button">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <small class="d-block pill-label">{{ kategori.kodu }}</small>
+                  <strong class="fs-6">{{ kategori.adi }}</strong>
+                </div>
+                <i class="bi" [ngClass]="isSelected(kategori.id) ? 'bi-check-circle-fill text-white' : 'bi-check-circle text-white-50'"></i>
+              </div>
+            </button>
+          </div>
+        } @empty {
+          <div class="col-12">
+            <div class="alert alert-info mb-0">
+              <i class="bi bi-info-circle me-2"></i>
+              Kategori bulunamadı.
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
 
   <!-- Results Section with Tabs -->
   @if (selectedKategoriIds.size > 0) {
-    <section class="row">
-      <div class="col-12">
-        <div class="card border-0 shadow-sm rounded-4">
-          <div class="card-header bg-white border-0 rounded-top-4">
-            <div class="btn-group" role="tablist">
-              <button class="btn btn-outline-primary" [class.active]="activeTab === 'hidden'" (click)="onTabChange('hidden')" type="button">
-                 
-              </button>
-              <button class="btn btn-outline-primary" [class.active]="activeTab === 'ders'" (click)="onTabChange('ders')" type="button">
-                <i class="bi bi-book me-1"></i> Dersler
-                @if (counts.ders > 0) { <span class="badge rounded-pill bg-primary ms-2">{{ counts.ders }}</span> }
-              </button>
-              <button class="btn btn-outline-primary" [class.active]="activeTab === 'videoders'" (click)="onTabChange('videoders')" type="button">
-                <i class="bi bi-play-circle me-1"></i> Video Dersler
-                @if (counts.videoders > 0) { <span class="badge rounded-pill bg-primary ms-2">{{ counts.videoders }}</span> }
-              </button>
-              <button class="btn btn-outline-primary" [class.active]="activeTab === 'egitmen'" (click)="onTabChange('egitmen')" type="button">
-                <i class="bi bi-person-badge me-1"></i> Eğitmenler
-                @if (counts.egitmen > 0) { <span class="badge rounded-pill bg-primary ms-2">{{ counts.egitmen }}</span> }
-              </button>
+    <div class="results-section">
+      <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)" class="nav-tabs">
+        <li [ngbNavItem]="'ders'">
+          <button ngbNavLink>
+            <i class="bi bi-book me-1"></i>Dersler
+            @if (counts.ders > 0) {
+              <span class="badge rounded-pill bg-primary ms-2">{{ counts.ders }}</span>
+            }
+          </button>
+          <ng-template ngbNavContent>
+            <div class="tab-content-wrapper p-3">
+              @if (loadingStates.ders) {
+                <div class="d-flex justify-content-center align-items-center p-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Dersler yükleniyor...</span>
+                  </div>
+                </div>
+              } @else {
+                <app-ders-list [dersler]="getDersler()"></app-ders-list>
+              }
             </div>
-          </div>
-          <div class="card-body">
-
-            <!-- Hidden Tab Content -->
-            @if (activeTab === 'hidden') {
-              <div class="tab-pane-content">
-              </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="'videoders'">
+          <button ngbNavLink>
+            <i class="bi bi-play-circle me-1"></i>Video Dersler
+            @if (counts.videoders > 0) {
+              <span class="badge rounded-pill bg-primary ms-2">{{ counts.videoders }}</span>
             }
-
-            
-            <!-- Ders Tab Content -->
-            @if (activeTab === 'ders') {
-              <div class="tab-pane-content">
-                @if (loadingStates.ders) {
-                  <div class="d-flex justify-content-center align-items-center p-5">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Dersler yükleniyor...</span>
-                    </div>
+          </button>
+          <ng-template ngbNavContent>
+            <div class="tab-content-wrapper p-3">
+              @if (loadingStates.videoders) {
+                <div class="d-flex justify-content-center align-items-center p-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Video dersler yükleniyor...</span>
                   </div>
-                } @else {
-                  <app-ders-list [dersler]="getDersler()"></app-ders-list>
-                }
-              </div>
+                </div>
+              } @else {
+                <app-videoders-list [videodersler]="getVideoDersler()" (viewDetail)="onVideoView($event)"></app-videoders-list>
+              }
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="'yuzyuzeders'">
+          <button ngbNavLink>
+            <i class="bi bi-people me-1"></i>Yüz Yüze Dersler
+            @if (counts.yuzyuzeders > 0) {
+              <span class="badge rounded-pill bg-primary ms-2">{{ counts.yuzyuzeders }}</span>
             }
-
-            <!-- VideoDers Tab Content -->
-            @if (activeTab === 'videoders') {
-              <div class="tab-pane-content">
-                @if (loadingStates.videoders) {
-                  <div class="d-flex justify-content-center align-items-center p-5">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Video dersler yükleniyor...</span>
-                    </div>
+          </button>
+          <ng-template ngbNavContent>
+            <div class="tab-content-wrapper p-3">
+              @if (loadingStates.yuzyuzeders) {
+                <div class="d-flex justify-content-center align-items-center p-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Yüz yüze dersler yükleniyor...</span>
                   </div>
-                } @else {
-                  <app-videoders-list [videodersler]="getVideoDersler()" (viewDetail)="onVideoView($event)"></app-videoders-list>
-                }
-              </div>
+                </div>
+              } @else {
+                <app-yuzyuzeders-list 
+                  [yuzyuzedersler]="getYuzyuzeDersler()" 
+                  (videoSelected)="onYuzyuzeView($event)">
+                </app-yuzyuzeders-list>
+              }
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="'egitmen'">
+          <button ngbNavLink>
+            <i class="bi bi-person-badge me-1"></i>Eğitmenler
+            @if (counts.egitmen > 0) {
+              <span class="badge rounded-pill bg-primary ms-2">{{ counts.egitmen }}</span>
             }
-
-            <!-- Egitmen Tab Content -->
-            @if (activeTab === 'egitmen') {
-              <div class="tab-pane-content">
-                @if (loadingStates.egitmen) {
-                  <div class="d-flex justify-content-center align-items-center p-5">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Eğitmenler yükleniyor...</span>
-                    </div>
+          </button>
+          <ng-template ngbNavContent>
+            <div class="tab-content-wrapper p-3">
+              @if (loadingStates.egitmen) {
+                <div class="d-flex justify-content-center align-items-center p-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Eğitmenler yükleniyor...</span>
                   </div>
-                } @else {
-                  <app-egitmen-list 
-                    [egitmenler]="getEgitmenler()" 
-                    [isLoading]="loadingStates.egitmen">
-                  </app-egitmen-list>
-                }
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-    </section>
+                </div>
+              } @else {
+                <app-egitmen-list 
+                  [egitmenler]="getEgitmenler()" 
+                  [isLoading]="loadingStates.egitmen">
+                </app-egitmen-list>
+              }
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-0"></div>
+    </div>
   } @else {
-    <div class="row">
-      <div class="col-12">
-        <div class="alert alert-info">
-          <i class="bi bi-info-circle me-2"></i>
-          Lütfen yukarıdan en az bir kategori seçin.
-        </div>
+    <div class="info-section">
+      <div class="text-center py-5">
+        <i class="bi bi-hand-index text-muted" style="font-size: 3rem;"></i>
+        <p class="text-muted mt-3">Lütfen yukarıdan en az bir kategori seçin.</p>
       </div>
     </div>
   }

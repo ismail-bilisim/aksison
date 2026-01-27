@@ -1,79 +1,119 @@
 @if (kategori) {
-  <div class="card mb-3">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Kategori Bilgileri</h5>
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <strong>Kategori ID:</strong>
-          <p>{{ kategori.id }}</p>
-        </div>
-        <div class="col-md-4">
-          <strong>Kategori Kodu:</strong>
-          <p>{{ kategori.kodu || 'Belirtilmemiş' }}</p>
-        </div>
-        <div class="col-md-4">
-          <strong>Versiyon:</strong>
-          <p>{{ kategori.version }}</p>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <strong>Kategori Adı:</strong>
-          <p>{{ kategori.adi }}</p>
-        </div>
-        <div class="col-md-6">
-          <strong>Üst Kategori:</strong>
-          @if (kategori.ustKategori) {
-            <p>
-              <a href="javascript:void(0)" 
-                 (click)="navigateToKategori(kategori.ustKategori.id)"
-                 class="text-decoration-none">
-                <i class="bi bi-tag me-1"></i>{{ kategori.ustKategori.adi }}
-              </a>
-            </p>
-          } @else {
-            <p class="text-muted">Ana Kategori</p>
+  <!-- Kategori Başlık -->
+  <div class="kategori-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          <i class="bi bi-tag me-2 text-primary"></i>
+          @if (kategori.kodu) {
+            <span class="text-primary fw-bold">{{ kategori.kodu }}</span>
+            <span class="mx-2">-</span>
           }
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-12">
-          <strong>Açıklama:</strong>
-          <p class="text-pre-wrap">{{ kategori.aciklama || 'Belirtilmemiş' }}</p>
+          <span class="text-muted">{{ kategori.adi }}</span>
+        </h5>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          @if (kategori.ustKategori) {
+            <span class="badge badge-lg bg-secondary">
+              <i class="bi bi-diagram-3 me-1"></i>Alt Kategori
+            </span>
+          } @else {
+            <span class="badge badge-lg bg-primary">
+              <i class="bi bi-diagram-2 me-1"></i>Ana Kategori
+            </span>
+          }
         </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header bg-info text-white">
-      <h5 class="mb-0">Kayıt Bilgileri</h5>
-    </div>
-    <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <strong>Ekleyen Kullanıcı:</strong>
-          @if (kategori.ekleyenKullanici) {
-            <p>
-              <i class="bi bi-person me-1"></i>
-              {{ kategori.ekleyenKullanici.ad }} {{ kategori.ekleyenKullanici.soyad }}
-            </p>
+  <!-- Kategori Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-info-circle me-2"></i>Kategori Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kategori Kodu</dt>
+        <dd>{{ kategori.kodu || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Kategori Adı</dt>
+        <dd>{{ kategori.adi }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Üst Kategori</dt>
+        <dd>
+          @if (kategori.ustKategori) {
+            <a href="javascript:void(0)" 
+               (click)="navigateToKategori(kategori.ustKategori.id)"
+               class="text-decoration-none">
+              <i class="bi bi-tag me-1"></i>{{ kategori.ustKategori.adi }}
+            </a>
           } @else {
-            <p class="text-muted">Belirtilmemiş</p>
+            <span class="text-muted fst-italic">Ana Kategori (Üst kategori yok)</span>
           }
-        </div>
-        <div class="col-md-6">
-          <strong>Ekleme Tarihi:</strong>
-          <p>
-            <i class="bi bi-calendar me-1"></i>
-            {{ formatDate(kategori.eklemeTarihi) }}
-          </p>
-        </div>
+        </dd>
       </div>
     </div>
+  </div>
+
+  <!-- Açıklama -->
+  @if (kategori.aciklama) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-text-paragraph me-2"></i>Açıklama
+      </h6>
+      <p class="text-content text-pre-wrap">{{ kategori.aciklama }}</p>
+    </div>
+  }
+
+  <!-- Kayıt Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-clock-history me-2"></i>Kayıt Bilgileri
+    </h6>
+    <div class="info-grid">
+      @if (kategori.ekleyenKullanici) {
+        <div class="info-item">
+          <dt>Ekleyen</dt>
+          <dd>
+            <i class="bi bi-person me-1"></i>
+            {{ kategori.ekleyenKullanici.ad }} {{ kategori.ekleyenKullanici.soyad }}
+          </dd>
+        </div>
+      }
+      @if (kategori.eklemeTarihi) {
+        <div class="info-item">
+          <dt>Ekleme Tarihi</dt>
+          <dd>
+            <i class="bi bi-calendar-plus me-1"></i>
+            {{ formatDate(kategori.eklemeTarihi) }}
+          </dd>
+        </div>
+      }
+      @if (kategori.ekleyenKullanici) {
+        <div class="info-item">
+          <dt>Güncelleyen</dt>
+          <dd>
+            <i class="bi bi-person me-1"></i>
+            {{ kategori.ekleyenKullanici.ad }} {{ kategori.ekleyenKullanici.soyad }}
+          </dd>
+        </div>
+      }
+      @if (kategori.eklemeTarihi) {
+        <div class="info-item">
+          <dt>Güncelleme Tarihi</dt>
+          <dd>
+            <i class="bi bi-calendar-range me-1"></i>
+            {{ formatDate(kategori.eklemeTarihi) }}
+          </dd>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-5">
+    <i class="bi bi-tag text-muted" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3">Kategori detayları yükleniyor veya bulunamadı.</p>
   </div>
 }

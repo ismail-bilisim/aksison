@@ -42,7 +42,6 @@ export class KategoriDetailPageComponent implements OnInit {
   private yuzyuzedersService = inject(YuzyuzedersService);
 
   kategori?: Kategori;
-  breadcrumbs: Kategori[] = [];
   loading = false;
   activeTab = 'altKategoriler';
 
@@ -76,7 +75,6 @@ export class KategoriDetailPageComponent implements OnInit {
     this.kategoriService.getById(id).subscribe({
       next: (data) => {
         this.kategori = data;
-        this.buildBreadcrumbs(data);
         this.loading = false;
       },
       error: (error) => {
@@ -87,19 +85,6 @@ export class KategoriDetailPageComponent implements OnInit {
     });
   }
 
-  buildBreadcrumbs(kategori: Kategori): void {
-    this.breadcrumbs = [];
-    let current: Kategori | undefined = kategori;
-    
-    // Build breadcrumb trail from current to root
-    while (current) {
-      this.breadcrumbs.unshift(current);
-      current = current.ustKategori ? { ...current.ustKategori } as Kategori : undefined;
-      
-      // Prevent infinite loops
-      if (this.breadcrumbs.length > 10) break;
-    }
-  }
 
   onBack(): void {
     this.router.navigate(['/kategori']);

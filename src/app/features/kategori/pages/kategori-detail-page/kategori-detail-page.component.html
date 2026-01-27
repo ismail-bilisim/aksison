@@ -4,23 +4,6 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h5>Kategori Detayı</h5>
-          @if (breadcrumbs.length > 0) {
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb mb-0">
-                @for (crumb of breadcrumbs; track crumb.id; let isLast = $last) {
-                  <li class="breadcrumb-item" [class.active]="isLast">
-                    @if (!isLast && crumb.id) {
-                      <a href="javascript:void(0)" (click)="navigateToKategori(crumb.id)" class="text-decoration-none">
-                        <i class="bi bi-tag me-1"></i>{{ crumb.adi }}
-                      </a>
-                    } @else {
-                      <i class="bi bi-tag-fill me-1"></i>{{ crumb.adi }}
-                    }
-                  </li>
-                }
-              </ol>
-            </nav>
-          }
         </div>
         <div>
           <button class="btn btn-secondary" (click)="onBack()">

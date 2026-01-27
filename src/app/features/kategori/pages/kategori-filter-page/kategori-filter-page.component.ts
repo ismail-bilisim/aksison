@@ -1,22 +1,25 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
+import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.service';
 import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { EgitmenOzet } from 'src/app/core/models/egitmen-ozet';
 import { DersListComponent } from 'src/app/features/ders/components/ders-list/ders-list.component';
-import { VideodersListComponent } from 'src/app/features/videoders/components/videoders-list/videoders-list.component'; 
+import { VideodersListComponent } from 'src/app/features/videoders/components/videoders-list/videoders-list.component';
+import { YuzyuzedersListComponent } from 'src/app/shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
 import { EgitmenListComponent } from 'src/app/features/egitmen/components/egitmen-list/egitmen-list.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-kategori-filter-page',
   standalone: true,
-  imports: [CommonModule, DersListComponent, VideodersListComponent, EgitmenListComponent],
+  imports: [CommonModule, NgbNavModule, DersListComponent, VideodersListComponent, YuzyuzedersListComponent, EgitmenListComponent],
   templateUrl: './kategori-filter-page.component.html',
   styleUrl: './kategori-filter-page.component.css'
 })
@@ -24,6 +27,7 @@ export class KategoriFilterPageComponent implements OnInit {
   private kategoriService = inject(KategoriService);
   private dersService = inject(DersService);
   private videoDersService = inject(VideodersService);
+  private yuzyuzeDersService = inject(YuzyuzedersService);
   private egitmenService = inject(EgitmenService);
   private toastService = inject(ToastService);
 
@@ -36,29 +40,29 @@ export class KategoriFilterPageComponent implements OnInit {
   previousSelectionKey = '';
 
   // Tab and data state
-  activeTab: 'hidden' | 'ders' | 'videoders' | 'egitmen' = 'hidden';
+  activeTab: 'ders' | 'videoders' | 'yuzyuzeders' | 'egitmen' = 'ders';
   
   // Cached data
   cachedData = {
-    hidden: null as any | null,
     ders: null as DersOzet[] | null,
     videoders: null as DersOzet[] | null,
+    yuzyuzeders: null as DersOzet[] | null,
     egitmen: null as EgitmenOzet[] | null
   };
 
   // Loading states
   loadingStates = {
-    hidden: false,
     ders: false,
     videoders: false,
+    yuzyuzeders: false,
     egitmen: false
   };
 
   // Result counts
   counts = {
-    hidden: 0,
     ders: 0,
     videoders: 0,
+    yuzyuzeders: 0,
     egitmen: 0
   };
 
@@ -104,27 +108,27 @@ export class KategoriFilterPageComponent implements OnInit {
     if (newKey !== this.previousSelectionKey) {
       // Clear cache if selection changed
       this.cachedData = {
-        hidden: null,
         ders: null,
         videoders: null,
+        yuzyuzeders: null,
         egitmen: null
       };
       this.counts = {
-        hidden: 0,
         ders: 0,
         videoders: 0,
+        yuzyuzeders: 0,
         egitmen: 0
       };
       this.previousSelectionKey = newKey;
     }
   }
 
-  onTabChange(tab: 'hidden' | 'ders' | 'videoders' | 'egitmen'): void {
+  onTabChange(tab: 'ders' | 'videoders' | 'yuzyuzeders' | 'egitmen'): void {
     this.activeTab = tab;
     this.loadTabData(tab);
   }
 
-  loadTabData(tab: 'hidden' | 'ders' | 'videoders' | 'egitmen'): void {
+  loadTabData(tab: 'ders' | 'videoders' | 'yuzyuzeders' | 'egitmen'): void {
     if (this.selectedKategoriIds.size === 0) {
       this.toastService.warning('En az bir kategori seçin');
       return;
@@ -173,6 +177,23 @@ export class KategoriFilterPageComponent implements OnInit {
         });
         break;
 
+      case 'yuzyuzeders':
+        this.yuzyuzeDersService.getByKategoriler(kategoriIds).subscribe({
+          next: (data) => {
+            this.cachedData.yuzyuzeders = data;
+            this.counts.yuzyuzeders = data.length;
+            this.loadingStates.yuzyuzeders = false;
+            if (data.length === 0) {
+              this.toastService.warning('Sonuç bulunamadı');
+            }
+          },
+          error: (err) => {
+            this.toastService.error('Yüz yüze dersler yüklenirken hata oluştu.');
+            this.loadingStates.yuzyuzeders = false;
+          }
+        });
+        break;
+
       case 'egitmen':
         this.egitmenService.getByKategoriler(kategoriIds).subscribe({
           next: (data) => {
@@ -200,6 +221,10 @@ export class KategoriFilterPageComponent implements OnInit {
     return this.cachedData.videoders || [];
   }
 
+  getYuzyuzeDersler(): DersOzet[] {
+    return this.cachedData.yuzyuzeders || [];
+  }
+
   getEgitmenler(): EgitmenOzet[] {
     return this.cachedData.egitmen || [];
   }
@@ -207,6 +232,12 @@ export class KategoriFilterPageComponent implements OnInit {
   onVideoView(id: number) {
     if (id) {
       this.router.navigate(['/videoders/detail', id]);
+    }
+  }
+
+  onYuzyuzeView(id: number) {
+    if (id) {
+      this.router.navigate(['/yuzyuzeders/detail', id]);
     }
   }
 

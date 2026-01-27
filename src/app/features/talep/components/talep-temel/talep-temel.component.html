@@ -1,143 +1,188 @@
-<section class="mt-4">
-    @if (talep) {
-        <header class="bg-white rounded-3 shadow-sm p-3 d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex gap-2">
-
-            <span class="badge" [ngClass]="{
-                'bg-primary': talep.talepDurumu.kodu === 'YPLCK',
-                'bg-info': talep.talepDurumu.kodu === 'DEVAM',
-                'bg-success': talep.talepDurumu.kodu === 'TAMAM',
-                'bg-danger': talep.talepDurumu.kodu === 'IPTAL'
-                            }">
-                {{ talep.talepDurumu.adi }}
+@if (talep) {
+  <!-- Talep Başlık ve Durum -->
+  <div class="talep-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          <span class="text-primary fw-bold">#{{ talep.id }}</span>
+          <span class="mx-2">-</span>
+          <span class="text-muted">{{ talep.talepKonusu.adi }}</span>
+        </h5>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <span class="badge badge-lg" [ngClass]="getTalepDurumuBadge()">
+            <i [class]="getTalepDurumuIcon() + ' me-1'"></i>
+            {{ talep.talepDurumu.adi }}
+          </span>
+          <span class="badge badge-lg" [ngClass]="OnayDurumuHelper.getBadgeClass(talep.onayDurumu)">
+            <i [class]="OnayDurumuHelper.getIcon(talep.onayDurumu) + ' me-1'"></i>
+            {{ OnayDurumuHelper.getText(talep.onayDurumu) }}
+          </span>
+          @if (talep.acilMi) {
+            <span class="badge badge-lg bg-danger">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i>Acil
             </span>
-            <h5 class="mb-0">Talep Detayı #{{ talep.id }}</h5> 
-                                        
-         </div>
-            <div class="d-flex gap-2">
-                @if (canEdit && ( talep.onayDurumu === OnayDurumu.TASLAK || talep.onayDurumu === OnayDurumu.RED || talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU) ) {
-                    <button class="btn btn-warning btn-sm shadow-sm" (click)="onEdit()">
-                        <i class="bi bi-pencil me-1"></i>Düzenle
-                    </button>
-                }
-                @if (talep.onayDurumu === OnayDurumu.TASLAK) {
-                    <button class="btn btn-info btn-sm shadow-sm" (click)="onSubmitForApproval()">
-                        <i class="bi bi-send me-1"></i>Onaya Sun
-                    </button>
-                }
-                @if (talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU && canApprove) {
-                    <button class="btn btn-success btn-sm shadow-sm" (click)="onApprove()">
-                        <i class="bi bi-check-lg me-1"></i>Onayla
-                    </button>
-                    <button class="btn btn-danger btn-sm shadow-sm" (click)="onReject()">
-                        <i class="bi bi-x-lg me-1"></i>Reddet
-                    </button>
-                }
-                @if (canAssignToSelf && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
-                    <button class="btn btn-primary btn-sm shadow-sm" (click)="onAssignToSelf()">
-                        <i class="bi bi-person-check me-1"></i>Kendime Ata
-                    </button>
-                }
-                @if (canAssignToOthers && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
-                    <button class="btn btn-outline-primary btn-sm shadow-sm" (click)="onAssignToOther()">
-                        <i class="bi bi-person-plus me-1"></i>Başkasına Ata
-                    </button>
-                }
-                @if (canDelete) {
-                    <button class="btn btn-danger btn-sm shadow-sm" (click)="onDelete(talep.id)">
-                        <i class="bi bi-trash me-1"></i>Sil
-                    </button>
-                }
-                @if (canCancel) {
-                    <button class="btn btn-outline-danger btn-sm shadow-sm" (click)="onCancel(talep.id)">
-                        <i class="bi bi-exclamation-circle"></i>İptal Et
-                    </button>
-                }
-                @if (canConclude) {
-                    <button class="btn btn-primary btn-sm shadow-sm" (click)="onConclude(talep.id)">
-                        <i class="bi  bi-file-lock me-1"></i>Sonuçlandır
-                    </button>
-                }
+          }
+        </div>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        @if (canEdit && (talep.onayDurumu === OnayDurumu.TASLAK || talep.onayDurumu === OnayDurumu.RED || talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU)) {
+          <button class="btn btn-warning btn-sm" (click)="onEdit()">
+            <i class="bi bi-pencil me-1"></i>Düzenle
+          </button>
+        }
+        @if (talep.onayDurumu === OnayDurumu.TASLAK) {
+          <button class="btn btn-info btn-sm" (click)="onSubmitForApproval()">
+            <i class="bi bi-send me-1"></i>Onaya Sun
+          </button>
+        }
+        @if (talep.onayDurumu === OnayDurumu.ONAYA_SUNULDU && canApprove) {
+          <button class="btn btn-success btn-sm" (click)="onApprove()">
+            <i class="bi bi-check-lg me-1"></i>Onayla
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="onReject()">
+            <i class="bi bi-x-lg me-1"></i>Reddet
+          </button>
+        }
+        @if (canAssignToSelf && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
+          <button class="btn btn-primary btn-sm" (click)="onAssignToSelf()">
+            <i class="bi bi-person-check me-1"></i>Kendime Ata
+          </button>
+        }
+        @if (canAssignToOthers && !talep.atananKisi && talep.onayDurumu === OnayDurumu.ONAYLI) {
+          <button class="btn btn-outline-primary btn-sm" (click)="onAssignToOther()">
+            <i class="bi bi-person-plus me-1"></i>Başkasına Ata
+          </button>
+        }
+        @if (canDelete) {
+          <button class="btn btn-outline-danger btn-sm" (click)="onDelete(talep.id)">
+            <i class="bi bi-trash me-1"></i>Sil
+          </button>
+        }
+        @if (canCancel) {
+          <button class="btn btn-outline-danger btn-sm" (click)="onCancel(talep.id)">
+            <i class="bi bi-x-circle me-1"></i>İptal Et
+          </button>
+        }
+        @if (canConclude) {
+          <button class="btn btn-primary btn-sm" (click)="onConclude(talep.id)">
+            <i class="bi bi-file-lock me-1"></i>Sonuçlandır
+          </button>
+        }
+      </div>
+    </div>
+  </div>
 
-            </div>
-        </header>
+  <!-- Talep İçeriği -->
+  @if (talep.talepIcerik) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-chat-left-text me-2"></i>Talep İçeriği
+      </h6>
+      <p class="text-content text-pre-wrap">{{ talep.talepIcerik }}</p>
+    </div>
+  }
 
-        <main class="bg-white rounded-3 shadow-sm p-3 mb-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Talep Konusu</dt>
-                        <dd class="col-sm-8">{{ talep.talepKonusu.adi }}</dd>
+  <!-- Talep Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-info-circle me-2"></i>Talep Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Talep Konusu</dt>
+        <dd>{{ talep.talepKonusu.adi }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Talep Tarihi</dt>
+        <dd>
+          <i class="bi bi-calendar-event me-1"></i>
+          {{ talep.talepTarihi | date:'dd.MM.yyyy' }}
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Talep Sahibi</dt>
+        <dd>
+          <i class="bi bi-person me-1"></i>
+          {{ talep.talepSahibi }}
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Kapanış Tarihi</dt>
+        <dd>
+          @if (talep.kapanisTarihi) {
+            <i class="bi bi-calendar-check me-1"></i>
+            {{ talep.kapanisTarihi | date:'dd.MM.yyyy' }}
+          } @else {
+            <span class="text-muted fst-italic">Henüz belirlenmedi</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
 
-                        <dt class="col-sm-4">Talep Tarihi</dt>
-                        <dd class="col-sm-8">{{ talep.talepTarihi | date:'dd.MM.yyyy' }}</dd>
+  <!-- Atama Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-person-badge me-2"></i>Atama Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Atanan Kişi</dt>
+        <dd>
+          @if (talep.atananKisi) {
+            <i class="bi bi-person-check me-1"></i>
+            {{ talep.atananKisi.ad }} {{ talep.atananKisi.soyad }}
+          } @else {
+            <span class="text-muted fst-italic">Henüz atanmadı</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
 
-                        <dt class="col-sm-4">Talep İçeriği</dt>
-                        <dd class="col-sm-8">{{ talep.talepIcerik }}</dd>
-
-                        <dt class="col-sm-4">Acil Durum</dt>
-                        <dd class="col-sm-8">
-                            @if (talep.acilMi) {
-                                <span class="badge bg-danger">
-                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>Acil
-                                </span>
-                            } @else {
-                                <span class="text-muted">Normal</span>
-                            }
-                        </dd>
-
-                        <dt class="col-sm-4">Talep Sahibi</dt>
-                        <dd class="col-sm-8">{{ talep.talepSahibi }}</dd>
-
-                        <dt class="col-sm-4">Atanan Kişi</dt>
-                        <dd class="col-sm-8">
-                            @if (talep.atananKisi) {
-                                <span class="text-muted">{{ talep.atananKisi.ad }} {{ talep.atananKisi.soyad }}</span>
-                            } @else {
-                                <span class="text-muted">Henüz atanmadı</span>
-                            }
-                        </dd>
-                    </dl>
-                </div>
-
-                <div class="col-md-6">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-4">Kapanış Tarihi</dt>
-                        <dd class="col-sm-8">
-                            @if (talep.kapanisTarihi) {
-                                {{ talep.kapanisTarihi | date:'dd.MM.yyyy' }}
-                            } @else {
-                                <span class="text-muted">-</span>
-                            }
-                        </dd>
-
-                        <dt class="col-sm-4">Onay Durumu</dt>
-                        <dd class="col-sm-8">
-                            <span class="badge" [ngClass]="OnayDurumuHelper.getBadgeClass(talep.onayDurumu)">
-                                <i [class]="OnayDurumuHelper.getIcon(talep.onayDurumu) + ' me-1'"></i>
-                                {{ OnayDurumuHelper.getText(talep.onayDurumu) }}
-                            </span>
-                        </dd>
-
-                        <dt class="col-sm-4">Ekleyen</dt>
-                        <dd class="col-sm-8">{{ talep.ekleyenKullanici?.ad }} {{ talep.ekleyenKullanici?.soyad }}</dd>
-
-                        <dt class="col-sm-4">Ekleme Tarihi</dt>
-                        <dd class="col-sm-8">{{ talep.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}</dd>
-
-                        @if (talep.guncelleyenKullanici) {
-                            <dt class="col-sm-4">Güncelleyen</dt>
-                            <dd class="col-sm-8">{{ talep.guncelleyenKullanici.ad }} {{ talep.guncelleyenKullanici.soyad }}</dd>
-                        }
-                        @if (talep.guncellemeTarihi) {
-                            <dt class="col-sm-4">Güncelleme Tarihi</dt>
-                            <dd class="col-sm-8">{{ talep.guncellemeTarihi | date:'dd.MM.yyyy HH:mm' }}</dd>
-                        }
-                    </dl>
-                </div>
-            </div>
-        </main>
-    } @else {
-        <p class="text-muted">Talep detayları yükleniyor veya bulunamadı.</p>
-    }
-</section>
+  <!-- Kayıt Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-clock-history me-2"></i>Kayıt Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Ekleyen</dt>
+        <dd>
+          <i class="bi bi-person me-1"></i>
+          {{ talep.ekleyenKullanici?.ad }} {{ talep.ekleyenKullanici?.soyad }}
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Ekleme Tarihi</dt>
+        <dd>
+          <i class="bi bi-calendar-plus me-1"></i>
+          {{ talep.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+        </dd>
+      </div>
+      @if (talep.guncelleyenKullanici) {
+        <div class="info-item">
+          <dt>Güncelleyen</dt>
+          <dd>
+            <i class="bi bi-person me-1"></i>
+            {{ talep.guncelleyenKullanici.ad }} {{ talep.guncelleyenKullanici.soyad }}
+          </dd>
+        </div>
+      }
+      @if (talep.guncellemeTarihi) {
+        <div class="info-item">
+          <dt>Güncelleme Tarihi</dt>
+          <dd>
+            <i class="bi bi-calendar-range me-1"></i>
+            {{ talep.guncellemeTarihi | date:'dd.MM.yyyy HH:mm' }}
+          </dd>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="text-center py-5">
+    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3">Talep detayları yükleniyor veya bulunamadı.</p>
+  </div>
+}

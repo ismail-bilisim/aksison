@@ -1,44 +1,55 @@
-<div class="card">
-  <div class="card-body">
-    @if (isLoading) {
-      <div class="text-center py-4">
-        <div class="spinner-border" role="status">
-                <span class="visually-hidden">Yükleniyor...</span>
+<div class="list-container">
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>
+  } @else if (talepler && talepler.length > 0) {
+    <div class="list-header">
+      <span class="list-count">
+        <i class="bi bi-file-earmark-text me-1"></i>
+        {{ talepler.length }} talep
+      </span>
+    </div>
+    <div class="list-items">
+      @for (talep of talepler; track talep.id) {
+        <div class="list-item" 
+             role="button"
+             tabindex="0"
+             (click)="onView(talep.id)"
+             (keydown.enter)="onView(talep.id)">
+          <div class="item-icon">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              <span class="item-id">#{{ talep.id }}</span>
+              {{ talep.talepIcerik | slice:0:60 }}{{ (talep.talepIcerik.length || 0) > 60 ? '...' : '' }}
+            </div>
+            <div class="item-details">
+              @if (talep.talepTarihi) {
+                <span class="detail-item">
+                  <i class="bi bi-calendar me-1"></i>{{ talep.talepTarihi }}
+                </span>
+              }
+              @if (talep.talepSahibi) {
+                <span class="detail-item">
+                  <i class="bi bi-person me-1"></i>{{ talep.talepSahibi }}
+                </span>
+              }
+            </div>
+          </div>
+          <div class="item-action">
+            <i class="bi bi-chevron-right"></i>
+          </div>
         </div>
-      </div>
-    } @else {
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tarih</th>
-              <th>Sahibi</th>
-              <th>İçeriği</th>
-              <th>Detay</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (talep of talepler; track talep.id) {
-              <tr (click)="onView(talep.id)">
-                <td>{{ talep.id }}</td>
-                <td>{{ talep.talepTarihi }}</td>
-                <td>{{ talep.talepSahibi }}</td>
-                <td>{{ talep.talepIcerik }}</td>
-                <td colspan="5">
-                  <button class="btn btn-sm btn-outline-primary me-1 row-button" (click)="onView(talep.id)" title="Görüntüle">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                </td>
-              </tr>
-            } @empty {
-              <tr>
-                <td colspan="5" class="text-center text-muted py-3">Kayıt bulunamadı.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="bi bi-file-earmark-text"></i>
+      <p>Talep bulunamadı.</p>
+    </div>
+  }
 </div>

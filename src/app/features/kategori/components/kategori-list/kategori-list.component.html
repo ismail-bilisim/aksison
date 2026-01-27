@@ -1,27 +1,27 @@
 <div class="list-container">
-  @if (videodersler && videodersler.length > 0) {
+  @if (kategoriler && kategoriler.length > 0) {
     <div class="list-header">
       <span class="list-count">
-        <i class="bi bi-play-circle me-1"></i>
-        {{ videodersler.length }} video ders
+        <i class="bi bi-tags me-1"></i>
+        {{ kategoriler.length }} kategori
       </span>
     </div>
     <div class="list-items">
-      @for (v of videodersler; track v.id) {
+      @for (kategori of kategoriler; track kategori.id) {
         <div class="list-item" 
              role="button"
              tabindex="0"
-             (click)="onViewDetail(v.id!)"
-             (keydown.enter)="onViewDetail(v.id!)">
+             (click)="onKategoriClick(kategori.id)"
+             (keydown.enter)="onKategoriClick(kategori.id)">
           <div class="item-icon">
-            <i class="bi bi-play-circle"></i>
+            <i class="bi bi-tag"></i>
           </div>
           <div class="item-content">
             <div class="item-title">
-              @if (v.kodu) {
-                <span class="item-code">{{ v.kodu }}</span>
+              @if (kategori.kodu) {
+                <span class="item-code">{{ kategori.kodu }}</span>
               }
-              {{ v.adi }}
+              {{ kategori.adi }}
             </div>
           </div>
           <div class="item-action">
@@ -32,8 +32,8 @@
     </div>
   } @else {
     <div class="empty-state">
-      <i class="bi bi-play-circle"></i>
-      <p>Video ders bulunamadı.</p>
+      <i class="bi bi-tags"></i>
+      <p>Kategori bulunamadı.</p>
     </div>
   }
 </div>

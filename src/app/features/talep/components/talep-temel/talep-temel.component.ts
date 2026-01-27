@@ -41,6 +41,32 @@ export class TalepTemelComponent {
   @Output() cancell = new EventEmitter<void>()
   @Output() conclude = new EventEmitter<void>()
 
+  // Talep durumu için badge class
+  getTalepDurumuBadge(): string {
+    if (!this.talep?.talepDurumu?.kodu) return 'bg-secondary';
+    
+    switch (this.talep.talepDurumu.kodu) {
+      case 'YPLCK': return 'bg-primary';
+      case 'DEVAM': return 'bg-info';
+      case 'TAMAM': return 'bg-success';
+      case 'IPTAL': return 'bg-danger';
+      default: return 'bg-secondary';
+    }
+  }
+
+  // Talep durumu için icon
+  getTalepDurumuIcon(): string {
+    if (!this.talep?.talepDurumu?.kodu) return 'bi bi-question-circle';
+    
+    switch (this.talep.talepDurumu.kodu) {
+      case 'YPLCK': return 'bi bi-hourglass-split';
+      case 'DEVAM': return 'bi bi-play-circle';
+      case 'TAMAM': return 'bi bi-check-circle';
+      case 'IPTAL': return 'bi bi-x-circle';
+      default: return 'bi bi-question-circle';
+    }
+  }
+
   onEdit() {
     this.edit.emit();
   }

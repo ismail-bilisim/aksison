@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { KategoriService } from 'src/app/core/services/api/kategori.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
+import { KategoriListComponent } from '../../components/kategori-list/kategori-list.component';
 
 @Component({
   selector: 'app-kategori-list-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, KategoriListComponent],
   templateUrl: './kategori-list-page.component.html',
   styleUrl: './kategori-list-page.component.css'
 })

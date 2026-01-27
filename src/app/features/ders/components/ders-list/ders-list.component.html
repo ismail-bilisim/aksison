@@ -1,35 +1,41 @@
-<div class="table-responsive">
-    <table class="table table-hover align-middle">
-            <thead class="table-dark">
-            <tr>
-                <th>Kodu</th>
-                <th>Adı</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (ders of dersler; track ders.id) {
-            <tr class="table-row-hover clickable-row"
-                role="button"
-                tabindex="0"
-                (click)="onRowClick(ders.id!)"
-                (keydown.enter)="onRowClick(ders.id!)"
-                title="Detayları görüntülemek için tıklayın">
-                <td><strong>{{ ders.kodu }}</strong></td>
-                <td>{{ ders.adi }}</td>
-            </tr>
-            } @empty {
-            <tr>
-                <td colspan="2" class="text-center py-4">
-                    <div class="text-muted">
-                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                        Kayıt bulunamadı.
-                    </div>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-
+<div class="list-container">
+  @if (dersler && dersler.length > 0) {
+    <div class="list-header">
+      <span class="list-count">
+        <i class="bi bi-book me-1"></i>
+        {{ dersler.length }} ders
+      </span>
+    </div>
+    <div class="list-items">
+      @for (ders of dersler; track ders.id) {
+        <div class="list-item" 
+             role="button"
+             tabindex="0"
+             (click)="onRowClick(ders.id!)"
+             (keydown.enter)="onRowClick(ders.id!)">
+          <div class="item-icon">
+            <i class="bi bi-book"></i>
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              @if (ders.kodu) {
+                <span class="item-code">{{ ders.kodu }}</span>
+              }
+              {{ ders.adi }}
+            </div>
+          </div>
+          <div class="item-action">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="bi bi-inbox"></i>
+      <p>Kayıt bulunamadı.</p>
+    </div>
+  }
 </div>
 
 

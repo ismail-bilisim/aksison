@@ -1,174 +1,215 @@
-<div class="card shadow-sm mb-4">
-	<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-		<h5 class="mb-0">
-			<i class="bi bi-person-badge me-2"></i>
-			Eğitmen Bilgileri
-		</h5>
-		<span class="badge" [ngClass]="getOnayDurumuBadgeClass(egitmen?.onayDurumu || '')">
-			{{ getOnayDurumuText(egitmen?.onayDurumu || '') }}
-		</span>
-	</div>
+@if (egitmen) {
+  <!-- Eğitmen Başlık ve Durum -->
+  <div class="egitmen-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          <span class="text-primary fw-bold">{{ egitmen.kod }}</span>
+          <span class="mx-2">-</span>
+          <span class="text-muted">{{ egitmen.kullanici?.ad }} {{ egitmen.kullanici?.soyad }}</span>
+        </h5>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <span class="badge badge-lg" [ngClass]="getOnayDurumuBadgeClass(egitmen.onayDurumu || '')">
+            <i [class]="OnayDurumuHelper.getIcon(egitmen.onayDurumu) + ' me-1'"></i>
+            {{ getOnayDurumuText(egitmen.onayDurumu || '') }}
+          </span>
+          @if (egitmen.aktifMi) {
+            <span class="badge badge-lg bg-success">
+              <i class="bi bi-check-circle me-1"></i>Aktif
+            </span>
+          } @else {
+            <span class="badge badge-lg bg-secondary">
+              <i class="bi bi-x-circle me-1"></i>Pasif
+            </span>
+          }
+        </div>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        @if (canEdit) {
+          <button class="btn btn-warning btn-sm" (click)="onEdit()">
+            <i class="bi bi-pencil me-1"></i>Düzenle
+          </button>
+        }
+        @if (egitmen.onayDurumu === OnayDurumu.TASLAK) {
+          <button class="btn btn-info btn-sm" (click)="onSubmitForApproval()">
+            <i class="bi bi-send me-1"></i>Onaya Sun
+          </button>
+        }
+        @if (canApprove && egitmen.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
+          <button class="btn btn-success btn-sm" (click)="onApprove()">
+            <i class="bi bi-check-lg me-1"></i>Onayla
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="onReject()">
+            <i class="bi bi-x-lg me-1"></i>Reddet
+          </button>
+        }
+        @if (canPassive) {
+          @if (egitmen.aktifMi) {
+            <button class="btn btn-outline-warning btn-sm" (click)="onPasifYap()">
+              <i class="bi bi-toggle-off me-1"></i>Pasifleştir
+            </button>
+          } @else {
+            <button class="btn btn-outline-success btn-sm" (click)="onAktifYap()">
+              <i class="bi bi-toggle-on me-1"></i>Aktifleştir
+            </button>
+          }
+        }
+      </div>
+    </div>
+  </div>
 
-	@if (egitmen) {
-		<div class="card-body">
-			<div class="row g-3">
-				<!-- Kod -->
-				<div class="col-md-3">
-					<label class="form-label text-muted small">Kod</label>
-					<p class="mb-0 fw-semibold">{{ egitmen.kod }}</p>
-				</div>
+  <!-- Kişisel Bilgiler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-person me-2"></i>Kişisel Bilgiler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kod</dt>
+        <dd>{{ egitmen.kod }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Ünvan</dt>
+        <dd>{{ egitmen.unvan || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Kullanıcı</dt>
+        <dd>
+          <i class="bi bi-person me-1"></i>
+          {{ egitmen.kullanici?.ad }} {{ egitmen.kullanici?.soyad }}
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>E-Posta</dt>
+        <dd>
+          @if (egitmen.kullanici?.tcKimlikNo) {
+            <i class="bi bi-envelope me-1"></i>
+            <a [href]="'mailto:' + egitmen.kullanici?.tcKimlikNo">{{ egitmen.kullanici?.tcKimlikNo }}</a>
+          } @else {
+            <span class="text-muted fst-italic">Belirtilmemiş</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
 
-				<!-- Kullanıcı -->
-				<div class="col-md-3">
-					<label class="form-label text-muted small">Kullanıcı</label>
-					<p class="mb-0 fw-semibold">{{ egitmen.kullanici?.ad }} {{ egitmen.kullanici?.soyad }}</p>
-				</div>
+  <!-- Eğitim ve Kariyer Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-mortarboard me-2"></i>Eğitim ve Kariyer
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Okul/Üniversite</dt>
+        <dd>{{ egitmen.okulUniversiteAdi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Bölüm</dt>
+        <dd>{{ egitmen.bolum || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Uzmanlık Alanı</dt>
+        <dd>{{ egitmen.uzmanlikAlani || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Çalışılan Kurum</dt>
+        <dd>{{ egitmen.calisilanKurum || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
 
-				<!-- Ünvan -->
-				<div class="col-md-3">
-					<label class="form-label text-muted small">Ünvan</label>
-					<p class="mb-0">{{ egitmen.unvan || '-' }}</p>
-				</div>
+  <!-- Deneyim ve Performans -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-graph-up me-2"></i>Deneyim ve Performans
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Çevrimiçi Tecrübesi</dt>
+        <dd>
+          <i class="bi bi-clock me-1"></i>
+          {{ egitmen.cevrimIciTecrubesi }} yıl
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Performans Puanı</dt>
+        <dd>
+          @if (egitmen.performansPuani) {
+            <i class="bi bi-star-fill text-warning me-1"></i>
+            {{ egitmen.performansPuani }}
+          } @else {
+            <span class="text-muted fst-italic">Henüz değerlendirilmedi</span>
+          }
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt>Sosyal Medya Tarama</dt>
+        <dd>
+          @if (egitmen.sosyalMedyaTarama) {
+            <span class="badge bg-info">
+              <i class="bi bi-check me-1"></i>Yapıldı
+            </span>
+          } @else {
+            <span class="badge bg-secondary">
+              <i class="bi bi-x me-1"></i>Yapılmadı
+            </span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
 
-				<!-- Aktif Durum -->
-				<div class="col-md-3">
-					<label class="form-label text-muted small">Durum</label>
-					<p class="mb-0">
-						@if (egitmen.aktifMi) {
-							<span class="badge bg-success">Aktif</span>
-						} @else {
-							<span class="badge bg-secondary">Pasif</span>
-						}
-					</p>
-				</div>
+  <!-- Web ve Sosyal Medya -->
+  @if (egitmen.webSitesi || egitmen.sosyalMedyaHesabi) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-globe me-2"></i>Web ve Sosyal Medya
+      </h6>
+      <div class="info-grid">
+        @if (egitmen.webSitesi) {
+          <div class="info-item">
+            <dt>Web Sitesi</dt>
+            <dd>
+              <i class="bi bi-link-45deg me-1"></i>
+              <a [href]="egitmen.webSitesi" target="_blank" rel="noopener">{{ egitmen.webSitesi }}</a>
+            </dd>
+          </div>
+        }
+        @if (egitmen.sosyalMedyaHesabi) {
+          <div class="info-item">
+            <dt>Sosyal Medya</dt>
+            <dd>
+              <i class="bi bi-share me-1"></i>
+              <a [href]="egitmen.sosyalMedyaHesabi" target="_blank" rel="noopener">{{ egitmen.sosyalMedyaHesabi }}</a>
+            </dd>
+          </div>
+        }
+      </div>
+    </div>
+  }
 
-				<!-- Okul/Üniversite -->
-				<div class="col-md-6">
-					<label class="form-label text-muted small">Okul/Üniversite</label>
-					<p class="mb-0">{{ egitmen.okulUniversiteAdi || '-' }}</p>
-				</div>
+  <!-- Eğitmen Profili -->
+  @if (egitmen.egitmenProfili) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-person-vcard me-2"></i>Eğitmen Profili
+      </h6>
+      <p class="text-content text-pre-wrap">{{ egitmen.egitmenProfili }}</p>
+    </div>
+  }
 
-				<!-- Bölüm -->
-				<div class="col-md-6">
-					<label class="form-label text-muted small">Bölüm</label>
-					<p class="mb-0">{{ egitmen.bolum || '-' }}</p>
-				</div>
-
-				<!-- Uzmanlık Alanı -->
-				<div class="col-md-6">
-					<label class="form-label text-muted small">Uzmanlık Alanı</label>
-					<p class="mb-0">{{ egitmen.uzmanlikAlani || '-' }}</p>
-				</div>
-
-				<!-- Çalışılan Kurum -->
-				<div class="col-md-6">
-					<label class="form-label text-muted small">Çalışılan Kurum</label>
-					<p class="mb-0">{{ egitmen.calisilanKurum || '-' }}</p>
-				</div>
-
-				<!-- Çevrimiçi Tecrübesi -->
-				<div class="col-md-4">
-					<label class="form-label text-muted small">Çevrimiçi Tecrübesi</label>
-					<p class="mb-0">{{ egitmen.cevrimIciTecrubesi }} yıl</p>
-				</div>
-
-				<!-- Performans Puanı -->
-				<div class="col-md-4">
-					<label class="form-label text-muted small">Performans Puanı</label>
-					<p class="mb-0">{{ egitmen.performansPuani || '-' }}</p>
-				</div>
-
-				<!-- Sosyal Medya Tarama -->
-				<div class="col-md-4">
-					<label class="form-label text-muted small">Sosyal Medya Tarama</label>
-					<p class="mb-0">
-						@if (egitmen.sosyalMedyaTarama) {
-							<span class="badge bg-info">Yapıldı</span>
-						} @else {
-							<span class="badge bg-secondary">Yapılmadı</span>
-						}
-					</p>
-				</div>
-
-				<!-- Web Sitesi -->
-				@if (egitmen.webSitesi) {
-					<div class="col-md-6">
-						<label class="form-label text-muted small">Web Sitesi</label>
-						<p class="mb-0">
-							<a [href]="egitmen.webSitesi" target="_blank" rel="noopener">
-								{{ egitmen.webSitesi }}
-							</a>
-						</p>
-					</div>
-				}
-
-				<!-- Sosyal Medya -->
-				@if (egitmen.sosyalMedyaHesabi) {
-					<div class="col-md-6">
-						<label class="form-label text-muted small">Sosyal Medya</label>
-						<p class="mb-0">
-							<a [href]="egitmen.sosyalMedyaHesabi" target="_blank" rel="noopener">
-								{{ egitmen.sosyalMedyaHesabi }}
-							</a>
-						</p>
-					</div>
-				}
-
-				<!-- Eğitmen Profili -->
-				@if (egitmen.egitmenProfili) {
-					<div class="col-12">
-						<label class="form-label text-muted small">Eğitmen Profili</label>
-						<p class="mb-0">{{ egitmen.egitmenProfili }}</p>
-					</div>
-				}
-
-				<!-- Kısa Özgeçmiş -->
-				<div class="col-12">
-					<label class="form-label text-muted small">Kısa Özgeçmiş</label>
-					<p class="mb-0">{{ egitmen.kisaOzgecmis || '-' }}</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="card-footer bg-light">
-			<div class="d-flex gap-2 flex-wrap">
-				<!-- Düzenle Button -->
-				@if (canEdit) {
-					<button class="btn btn-primary btn-sm" (click)="onEdit()">
-						<i class="bi bi-pencil me-1"></i>Düzenle
-					</button>
-				}
-
-				<!-- Onaya Sun Button (Taslak durumunda) -->
-				@if (egitmen.onayDurumu === OnayDurumu.TASLAK) {
-					<button class="btn btn-info btn-sm" (click)="onSubmitForApproval()">
-						<i class="bi bi-send me-1"></i>Onaya Sun
-					</button>
-				}
-
-				<!-- Onayla/Reddet Buttons (Onay bekliyor durumunda) -->
-				@if (canApprove && egitmen.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
-					<button class="btn btn-success btn-sm" (click)="onApprove()">
-						<i class="bi bi-check-circle me-1"></i>Onayla
-					</button>
-					<button class="btn btn-danger btn-sm" (click)="onReject()">
-						<i class="bi bi-x-circle me-1"></i>Reddet
-					</button>
-				}
-
-				<!-- Pasifleştir/Aktifleştir Buttons -->
-				@if (canPassive) {
-					@if (egitmen.aktifMi) {
-						<button class="btn btn-warning btn-sm" (click)="onPasifYap()">
-							<i class="bi bi-toggle-off me-1"></i>Pasifleştir
-						</button>
-					} @else {
-						<button class="btn btn-success btn-sm" (click)="onAktifYap()">
-							<i class="bi bi-toggle-on me-1"></i>Aktifleştir
-						</button>
-					}
-				}
-			</div>
-		</div>
-	}
-</div>
+  <!-- Kısa Özgeçmiş -->
+  @if (egitmen.kisaOzgecmis) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-file-text me-2"></i>Kısa Özgeçmiş
+      </h6>
+      <p class="text-content text-pre-wrap">{{ egitmen.kisaOzgecmis }}</p>
+    </div>
+  }
+} @else {
+  <div class="text-center py-5">
+    <i class="bi bi-person-badge text-muted" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3">Eğitmen detayları yükleniyor veya bulunamadı.</p>
+  </div>
+}

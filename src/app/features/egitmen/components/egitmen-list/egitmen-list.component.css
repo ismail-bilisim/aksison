@@ -1,5 +1,135 @@
-/* Add custom styles here if needed */
-.table-row-hover:hover {
-  cursor: pointer;
+/* List Container */
+.list-container {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.list-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
   background-color: #f8f9fa;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.list-count {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* List Items */
+.list-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-item:focus {
+  outline: none;
+  background-color: #e7f1ff;
+}
+
+/* Item Icon */
+.item-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.item-icon i {
+  font-size: 1.25rem;
+  color: white;
+}
+
+/* Item Content */
+.item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  font-weight: 500;
+  color: #212529;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.item-code {
+  background-color: #e7f1ff;
+  color: #0d6efd;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.item-subtitle {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+/* Item Actions */
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.item-actions .btn {
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.5rem;
+}
+
+.item-actions .btn:hover {
+  background-color: #e9ecef;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
 }

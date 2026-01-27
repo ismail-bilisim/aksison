@@ -1,35 +1,39 @@
-<div class="table-responsive">
-  <table class="table table-hover align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th>Paydaş Adı</th>
-        <th>Temsilci</th>
-      </tr>
-    </thead>
-    <tbody>
+<div class="list-container">
+  @if (paydaslar && paydaslar.length > 0) {
+    <div class="list-header">
+      <span class="list-count">
+        <i class="bi bi-building me-1"></i>
+        {{ paydaslar.length }} paydaş
+      </span>
+    </div>
+    <div class="list-items">
       @for (paydas of paydaslar; track paydas.id) {
-      <tr class="table-row-hover clickable-row"
-          role="button"
-          tabindex="0"
-          (click)="onPaydasClick(paydas.id)"
-          (keydown.enter)="onPaydasClick(paydas.id)"
-          title="Detayları görüntülemek için tıklayın">
-        <td>
-          <i class="bi bi-building me-2 text-primary"></i>
-          <strong>{{ paydas.adi }}</strong>
-        </td>
-        <td>{{ paydas.temsilci || '-' }}</td>
-      </tr>
-      } @empty {
-      <tr>
-        <td colspan="2" class="text-center py-4">
-          <div class="text-muted">
-            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-            Kayıt bulunamadı.
+        <div class="list-item" 
+             role="button"
+             tabindex="0"
+             (click)="onPaydasClick(paydas.id)"
+             (keydown.enter)="onPaydasClick(paydas.id)">
+          <div class="item-icon">
+            <i class="bi bi-building"></i>
           </div>
-        </td>
-      </tr>
+          <div class="item-content">
+            <div class="item-title">{{ paydas.adi }}</div>
+            @if (paydas.temsilci) {
+              <div class="item-subtitle">
+                <i class="bi bi-person me-1"></i>{{ paydas.temsilci }}
+              </div>
+            }
+          </div>
+          <div class="item-action">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
       }
-    </tbody>
-  </table>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="bi bi-building"></i>
+      <p>Paydaş bulunamadı.</p>
+    </div>
+  }
 </div>

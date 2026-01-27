@@ -1,1 +1,89 @@
 /* Proje Temel Component Styles */
+
+/* Header Section */
+.proje-header {
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.proje-header h5 {
+  color: #2c3e50;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Badge Styling */
+.badge-lg {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Section Styles */
+.info-section {
+  padding: 1.25rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  border-left: 4px solid #0d6efd;
+}
+
+.section-title {
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.section-title i {
+  color: #0d6efd;
+}
+
+/* Info Grid - Responsive Grid Layout */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.info-item dt {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.info-item dd {
+  color: #212529;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+.info-item dd i {
+  color: #6c757d;
+}
+
+/* Text Content */
+.text-content {
+  color: #212529;
+  line-height: 1.7;
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+/* Text Pre-Wrap Utility */
+.text-pre-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Button Styling */
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}

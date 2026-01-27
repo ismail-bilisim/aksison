@@ -1,35 +1,39 @@
-<div class="table-responsive">
-  <table class="table table-hover align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th>Proje Adı</th>
-        <th>Başlangıç Tarihi</th>
-      </tr>
-    </thead>
-    <tbody>
+<div class="list-container">
+  @if (projeler && projeler.length > 0) {
+    <div class="list-header">
+      <span class="list-count">
+        <i class="bi bi-folder me-1"></i>
+        {{ projeler.length }} proje
+      </span>
+    </div>
+    <div class="list-items">
       @for (proje of projeler; track proje.id) {
-      <tr class="table-row-hover clickable-row"
-          role="button"
-          tabindex="0"
-          (click)="onProjeClick(proje.id)"
-          (keydown.enter)="onProjeClick(proje.id)"
-          title="Detayları görüntülemek için tıklayın">
-        <td>
-          <i class="bi bi-folder me-2 text-primary"></i>
-          <strong>{{ proje.projeAdi }}</strong>
-        </td>
-        <td>{{ proje.baslangicTarihi | date:'dd.MM.yyyy' }}</td>
-      </tr>
-      } @empty {
-      <tr>
-        <td colspan="4" class="text-center py-4">
-          <div class="text-muted">
-            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-            Kayıt bulunamadı.
+        <div class="list-item" 
+             role="button"
+             tabindex="0"
+             (click)="onProjeClick(proje.id)"
+             (keydown.enter)="onProjeClick(proje.id)">
+          <div class="item-icon">
+            <i class="bi bi-folder"></i>
           </div>
-        </td>
-      </tr>
+          <div class="item-content">
+            <div class="item-title">{{ proje.projeAdi }}</div>
+            @if (proje.baslangicTarihi) {
+              <div class="item-subtitle">
+                <i class="bi bi-calendar-event me-1"></i>{{ proje.baslangicTarihi | date:'dd.MM.yyyy' }}
+              </div>
+            }
+          </div>
+          <div class="item-action">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
       }
-    </tbody>
-  </table>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="bi bi-folder"></i>
+      <p>Proje bulunamadı.</p>
+    </div>
+  }
 </div>
