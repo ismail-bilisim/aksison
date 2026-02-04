@@ -8,7 +8,7 @@ import { HedefKitleEgitimSeviyesiResponse } from '../../models/hedef-kitle-egiti
   providedIn: 'root'
 })
 export class HedefKitleEgitimSeviyesiService {
-  private baseUrl = `${environment.apiUrl}/hedef-kitle-egitim-seviyeleri`;
+  private baseUrl = `${environment.apiUrl}/hedefkitle-egitimseviyesi`;
 
   constructor(private http: HttpClient) {}
 

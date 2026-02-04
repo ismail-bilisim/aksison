@@ -162,12 +162,16 @@ export class TalepEditPageComponent {
     if (!response.version) {
       throw new Error('TalepResponse.version alanı eksik.');
     }
+
+    console.log('Mapping TalepResponse to TalepRequest:', response);
     return {
       version: response.version, // Backend'den gelen version değerini koru
       talepTarihi: response.talepTarihi ?? undefined,
       talepSahibi: response.talepSahibi ?? undefined,
       talepKonusuKodu: response.talepKonusu.kodu ?? undefined,
       talepIcerik: response.talepIcerik ?? undefined,
+      acilMi: response.acilMi 
+
     };
   }
 
