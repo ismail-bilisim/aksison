@@ -22,29 +22,29 @@
           </button>
         }
         
-        <!-- İçerik Onayına Sun butonu - Sadece Taslak veya Red durumunda -->
+        <!-- Başlatma Onayına Sun butonu - Sadece Taslak veya Red durumunda -->
         @if (yuzyuzeders.onayDurumu === OnayDurumu.TASLAK || yuzyuzeders.onayDurumu === OnayDurumu.RED) {
           <button 
             class="btn btn-warning" 
-            (click)="icerikOnayinaSun()"
+            (click)="baslatmaOnayinaSun()"
             [disabled]="submitting">
-            <i class="bi bi-send me-1"></i>İçerik Onayına Sun
+            <i class="bi bi-send me-1"></i>Başlatma Onayına Sun
           </button>
         }
         
-        <!-- İçerik Onayla/Reddet butonları - Sadece Onaya Sunuldu durumunda -->
+        <!-- Başlatmayı Onayla/Reddet butonları - Sadece Onaya Sunuldu durumunda -->
         @if (yuzyuzeders.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
           <button 
             class="btn btn-success" 
-            (click)="icerikOnayla()"
+            (click)="baslatmaOnayla()"
             [disabled]="submitting">
-            <i class="bi bi-check-circle me-1"></i>İçeriği Onayla
+            <i class="bi bi-check-circle me-1"></i>Başlatmayı Onayla
           </button>
           <button 
             class="btn btn-danger" 
-            (click)="icerikReddet()"
+            (click)="baslatmaReddet()"
             [disabled]="submitting">
-            <i class="bi bi-x-circle me-1"></i>İçeriği Reddet
+            <i class="bi bi-x-circle me-1"></i>Başlatmayı Reddet
           </button>
         }
       </div>

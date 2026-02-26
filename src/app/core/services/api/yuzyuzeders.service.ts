@@ -46,16 +46,16 @@ export class YuzyuzedersService {
     return this.http.get<YuzyuzeDersResponse[]>(`${this.apiUrl}/all-ozet`);
   }
 
-  icerikOnayinaSun(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  baslatmaOnayinaSun(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/baslatma-onaya-sun`, {});
   }
 
-  icerikOnayla(id: number, onayNotu?: string): Observable<YuzyuzeDersResponse> {
-    return this.http.put<YuzyuzeDersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, { onayNotu });
+  baslatmaOnayla(id: number, onayNotu?: string): Observable<YuzyuzeDersResponse> {
+    return this.http.put<YuzyuzeDersResponse>(`${this.apiUrl}/${id}/baslatma-onayla`, { onayNotu });
   }
 
-  icerikReddet(id: number, redNedeni?: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/icerik-reddet`, { redNedeni });
+  baslatmaReddet(id: number, redNedeni?: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/baslatma-reddet`, { redNedeni });
   }
 
   // GET by Ders ID - for listing video lessons related to a parent course

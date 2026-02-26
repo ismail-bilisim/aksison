@@ -94,8 +94,9 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Ders Çekim Yöntemi</label>
-                <select formControlName="dersCekimYontemKodu" class="form-select">
+                <label class="form-label">Ders Çekim Yöntemi *</label>
+                <select formControlName="dersCekimYontemKodu" class="form-select"
+                    [class.is-invalid]="form.get('dersCekimYontemKodu')?.invalid && form.get('dersCekimYontemKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>
@@ -104,6 +105,9 @@
                         <option [value]="yontem.kodu">{{ yontem.adi }}</option>
                     }
                 </select>
+                @if (form.get('dersCekimYontemKodu')?.invalid && form.get('dersCekimYontemKodu')?.touched) {
+                    <div class="text-danger small mt-1">Ders çekim yöntemini seçiniz.</div>
+                }
             </div>
         </div>
     </div>
@@ -113,12 +117,17 @@
             <i class="bi bi-calendar-event me-2"></i>Tarihler ve Süreler
         </h6>
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="form-label">Tahmini Ders Süresi (dk)</label>
-                <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
+                <div class="input-group">
+                    <input type="number" formControlName="tahminiDersSuresi" class="form-control" />
+                    @if (tahminiDersSuresiFormatli) {
+                        <span class="input-group-text">{{ tahminiDersSuresiFormatli }}</span>
+                    }
+                </div>
             </div>
             <!-- Başlama Tarihi removed -->
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="form-label">Tahmini Teslim Tarihi</label>
                 <input type="date" formControlName="tahminiDersTeslimTarihi" class="form-control" />
             </div>
@@ -160,39 +169,6 @@
             <div class="col-md-4">
                 <label class="form-label">Sıkça Sorulan Sorular</label>
                 <textarea formControlName="sikcaSorulanSorular" class="form-control" rows="3"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-section mb-4">
-        <h6 class="section-title">
-            <i class="bi bi-cash-stack me-2"></i>Portal ve Finansal Bilgiler
-        </h6>
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label">Portal Adresi</label>
-                <input type="url" formControlName="portalAdresi" class="form-control" />
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Ödeme Kaynak</label>
-                <select formControlName="odemeKaynakKodu" class="form-select"
-                    [class.is-invalid]="form.get('odemeKaynakKodu')?.invalid && form.get('odemeKaynakKodu')?.touched">
-                    <option value="">Seçiniz</option>
-                    @if (!lookupData) {
-                    <option disabled>Yükleniyor...</option>
-                    }
-                    @for (kaynak of lookupData?.odemeKaynaklari ?? []; track kaynak.kodu) {
-                    <option [value]="kaynak.kodu">{{ kaynak.adi }}</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Birim Ücret</label>
-                <input type="number" step="0.01" formControlName="birimUcret" class="form-control" />
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Toplam Ücret</label>
-                <input type="number" step="0.01" formControlName="toplamUcret" class="form-control" />
             </div>
         </div>
     </div>

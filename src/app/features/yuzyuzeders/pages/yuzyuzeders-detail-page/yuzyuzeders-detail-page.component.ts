@@ -600,37 +600,37 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
     }
   }
 
-  icerikOnayinaSun(): void {
+  baslatmaOnayinaSun(): void {
     if (!this.yuzyuzeders?.id) return;
 
-    if (!confirm('İçeriği onaya sunmak istediğinize emin misiniz?')) {
+    if (!confirm('Başlatmayı onaya sunmak istediğinize emin misiniz?')) {
       return;
     }
 
     this.submitting = true;
-    this.yuzyuzedersService.icerikOnayinaSun(this.yuzyuzeders.id)
+    this.yuzyuzedersService.baslatmaOnayinaSun(this.yuzyuzeders.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.toastService.success('İçerik başarıyla onaya sunuldu.');
+          this.toastService.success('Başlatma başarıyla onaya sunuldu.');
           this.loadYuzyuzeders(this.yuzyuzeders!.id);
           this.submitting = false;
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikOnayinaSun');
+          ErrorHandler.logError(error, 'baslatmaOnayinaSun');
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.submitting = false;
         }
       });
   }
 
-  icerikOnayla(): void {
+  baslatmaOnayla(): void {
     if (!this.yuzyuzeders?.id) return;
 
     const dialogRef = this.dialog.open<string>(ApprovalDialogComponent, {
       data: {
-        title: 'İçerik Onay',
-        message: 'İçeriği onaylamak istediğinize emin misiniz?',
+        title: 'Başlatma Onay',
+        message: 'Başlatmayı Onaylamak istediğinize emin misiniz?',
         noteLabel: 'Onay Notu (İsteğe Bağlı)',
         confirmText: 'Onayla',
         appearance: 'approve'
@@ -643,7 +643,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
       .subscribe(result => {
         if (result !== undefined) {
           this.submitting = true;
-          this.yuzyuzedersService.icerikOnayla(this.yuzyuzeders!.id, result)
+          this.yuzyuzedersService.baslatmaOnayla(this.yuzyuzeders!.id, result)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
               next: (updated) => {
@@ -652,7 +652,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
                 this.toastService.success('İçerik başarıyla onaylandı. Kodu: '+updated.kodu);
               },
               error: (error) => {
-                ErrorHandler.logError(error, 'icerikOnayla');
+                ErrorHandler.logError(error, 'baslatmaOnayla');
                 this.toastService.error(ErrorHandler.extractErrorMessage(error));
                 this.submitting = false;
               }
@@ -661,13 +661,13 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
       });
   }
 
-  icerikReddet(): void {
+  baslatmaReddet(): void {
     if (!this.yuzyuzeders?.id) return;
 
     const dialogRef = this.dialog.open<string>(ApprovalDialogComponent, {
       data: {
-        title: 'İçerik Red',
-        message: 'İçeriği reddetmek istediğinize emin misiniz?',
+        title: 'Başlatma Red',
+        message: 'Başlatmayı reddetmek istediğinize emin misiniz?',
         noteLabel: 'Red Nedeni (Zorunlu)',
         confirmText: 'Reddet',
         appearance: 'reject'
@@ -680,7 +680,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
       .subscribe(result => {
         if (result !== undefined) {
           this.submitting = true;
-          this.yuzyuzedersService.icerikReddet(this.yuzyuzeders!.id, result)
+          this.yuzyuzedersService.baslatmaReddet(this.yuzyuzeders!.id, result)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
               next: () => {
@@ -689,7 +689,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
                 this.submitting = false;
               },
               error: (error) => {
-                ErrorHandler.logError(error, 'icerikReddet');
+                ErrorHandler.logError(error, 'baslatmaReddet');
                 this.toastService.error(ErrorHandler.extractErrorMessage(error));
                 this.submitting = false;
               }

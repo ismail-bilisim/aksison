@@ -53,16 +53,16 @@ export class DersService {
   }
 
   //TODO: onays sonrasi donen deger ile birsey yapilacak mi yoksa id le yeniden sorgulama ve yonlendirme yeterli mi?
-  icerikOnayinaSun(id: number): Observable<DersResponse> {
-    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  baslatmaOnayinaSun(id: number): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/baslatma-onaya-sun`, {});
   }
 
-  icerikOnayla(id: number, onayNotu?: string): Observable<DersResponse> {
-    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, onayNotu || null);
+  baslatmaOnayla(id: number, onayNotu?: string): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/baslatma-onayla`, onayNotu || null);
   }
 
-  icerikReddet(id: number, redNedeni?: string): Observable<DersResponse> {
-    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, redNedeni || null);
+  baslatmaReddet(id: number, redNedeni?: string): Observable<DersResponse> {
+    return this.http.put<DersResponse>(`${this.apiUrl}/${id}/baslatma-reddet`, redNedeni || null);
   }
 
   getByKategoriler(kategoriIds: number[]): Observable<DersOzet[]> {

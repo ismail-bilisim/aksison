@@ -14,12 +14,8 @@ export interface VideoDersRequest {
   kazanimlar?: string;
   sikcaSorulanSorular?: string;
   dersOzeti?: string;
-  dersCekimYontemKodu?: string;       // 
-  portalAdresi?: string;
+  dersCekimYontemKodu?: string;
   onayDurumu?: string;
   paydasId?: number;
-  odemeKaynakKodu?: string;
-  birimUcret?: number;             // BigDecimal -> number
-  toplamUcret?: number;            // BigDecimal -> number
   dersId?: number;
 }

@@ -508,12 +508,12 @@ export class DersDetailPageComponent implements OnInit {
     this.router.navigate(['/ders']);
   }
 
-  icerikOnayinaSun(): void {
+  baslatmaOnayinaSun(): void {
     if (!this.ders?.id || this.submitting) {
       return;
     }
     this.submitting = true;
-    this.dersService.icerikOnayinaSun(this.ders.id)
+    this.dersService.baslatmaOnayinaSun(this.ders.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -522,21 +522,21 @@ export class DersDetailPageComponent implements OnInit {
           this.toastService.success('Ders başarıyla onaya gönderildi.');
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikOnayinaSun');
+          ErrorHandler.logError(error, 'baslatmaOnayinaSun');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }
       });
   }
 
-  icerikOnayla(): void {
+  baslatmaOnayla(): void {
     if (!this.ders?.id || this.submitting) {
       return;
     }
 
     const data: ApprovalDialogData = {
-      title: 'İçerik Onayı',
-      message: 'isimli dersin içeriğini onaylamak istediğinizden emin misiniz?',
+      title: 'Başlatma Onayı',
+      message: 'isimli dersin başlatılmasını onaylamak istediğinizden emin misiniz?',
       entityName: this.ders.adi,
       noteLabel: 'Onay Notu (opsiyonel)',
       placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
@@ -559,7 +559,7 @@ export class DersDetailPageComponent implements OnInit {
     if (!this.ders?.id) return;
     
     this.submitting = true;
-    this.dersService.icerikOnayla(this.ders.id, this.onayNotu || undefined)
+    this.dersService.baslatmaOnayla(this.ders.id, this.onayNotu || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -568,14 +568,14 @@ export class DersDetailPageComponent implements OnInit {
           this.toastService.success(`Ders içeriği onaylandı. Ders kodu: ${updated.kodu}`);
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikOnayla');
+          ErrorHandler.logError(error, 'baslatmaOnayla');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }
       });
   }
 
-  icerikReddet(): void {
+  baslatmaReddet(): void {
     if (!this.ders?.id || this.submitting) {
       return;
     }
@@ -605,7 +605,7 @@ export class DersDetailPageComponent implements OnInit {
     if (!this.ders?.id) return;
     
     this.submitting = true;
-    this.dersService.icerikReddet(this.ders.id, this.redNedeni || undefined)
+    this.dersService.baslatmaReddet(this.ders.id, this.redNedeni || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -614,7 +614,7 @@ export class DersDetailPageComponent implements OnInit {
           this.toastService.info('Ders içeriği reddedildi.');
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikReddet');
+          ErrorHandler.logError(error, 'baslatmaReddet');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }

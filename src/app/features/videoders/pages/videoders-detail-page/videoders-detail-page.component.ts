@@ -649,12 +649,12 @@ export class VideodersDetailPageComponent implements OnInit {
     }
   }
 
-  icerikOnayinaSun(): void {
+  baslatmaOnayinaSun(): void {
     if (!this.videoders?.id || this.submitting) {
       return;
     }
     this.submitting = true;
-    this.videodersService.icerikOnayinaSun(this.videoders.id)
+    this.videodersService.baslatmaOnayinaSun(this.videoders.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -663,21 +663,21 @@ export class VideodersDetailPageComponent implements OnInit {
           this.toastService.success('Ders başarıyla onaya gönderildi.');
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikOnayinaSun');
+          ErrorHandler.logError(error, 'baslatmaOnayinaSun');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }
       });
   }
 
-  icerikOnayla(): void {
+  baslatmaOnayla(): void {
     if (!this.videoders?.id || this.submitting) {
       return;
     }
 
     const data: ApprovalDialogData = {
-      title: 'İçerik Onayı',
-      message: 'isimli dersin içeriğini onaylamak istediğinizden emin misiniz?',
+      title: 'Başlatma Onayı',
+      message: 'isimli dersin başlatılmasını onaylamak istediğinizden emin misiniz?',
       entityName: this.videoders.adi,
       noteLabel: 'Onay Notu (opsiyonel)',
       placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
@@ -700,7 +700,7 @@ export class VideodersDetailPageComponent implements OnInit {
     if (!this.videoders?.id) return;
 
     this.submitting = true;
-    this.videodersService.icerikOnayla(this.videoders.id, this.onayNotu || undefined)
+    this.videodersService.baslatmaOnayla(this.videoders.id, this.onayNotu || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -709,14 +709,14 @@ export class VideodersDetailPageComponent implements OnInit {
           this.toastService.success(`Ders içeriği onaylandı. Ders kodu: ${updated.kodu}`);
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikOnayla');
+          ErrorHandler.logError(error, 'baslatmaOnayla');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }
       });
   }
 
-  icerikReddet(): void {
+  baslatmaReddet(): void {
     if (!this.videoders?.id || this.submitting) {
       return;
     }
@@ -746,7 +746,7 @@ export class VideodersDetailPageComponent implements OnInit {
     if (!this.videoders?.id) return;
 
     this.submitting = true;
-    this.videodersService.icerikReddet(this.videoders.id, this.redNedeni || undefined)
+    this.videodersService.baslatmaReddet(this.videoders.id, this.redNedeni || undefined)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
@@ -755,7 +755,7 @@ export class VideodersDetailPageComponent implements OnInit {
           this.toastService.info('Ders içeriği reddedildi.');
         },
         error: (error) => {
-          ErrorHandler.logError(error, 'icerikReddet');
+          ErrorHandler.logError(error, 'baslatmaReddet');
           this.submitting = false;
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }

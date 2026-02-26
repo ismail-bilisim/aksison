@@ -12,20 +12,20 @@
           }
 
           @if (ders && (ders.onayDurumu === OnayDurumu.TASLAK || ders.onayDurumu === OnayDurumu.RED) ) {
-            <button class="btn btn-primary me-2" (click)="icerikOnayinaSun()" [disabled]="submitting">
+            <button class="btn btn-primary me-2" (click)="baslatmaOnayinaSun()" [disabled]="submitting">
               <i class="bi bi-send me-1"></i>
-              İçerik Onayına Sun
+              Başlatma Onayına Sun
             </button>
           }
 
           @if (ders && ders.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
-            <button class="btn btn-success me-2" (click)="icerikOnayla()" [disabled]="submitting">
+            <button class="btn btn-success me-2" (click)="baslatmaOnayla()" [disabled]="submitting">
               <i class="bi bi-check-circle me-1"></i>
-              İçeriği Onayla
+              Başlatmayı Onayla
             </button>
-            <button class="btn btn-danger me-2" (click)="icerikReddet()" [disabled]="submitting">
+            <button class="btn btn-danger me-2" (click)="baslatmaReddet()" [disabled]="submitting">
               <i class="bi bi-x-circle me-1"></i>
-              İçeriği Reddet
+              Başlatmayı Reddet
             </button>
           }
           

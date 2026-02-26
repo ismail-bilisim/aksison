@@ -41,11 +41,7 @@ export class VideodersFormComponent implements OnInit, OnChanges {
       kazanimlar: ['', Validators.required],
       sikcaSorulanSorular: [''],
       dersOzeti: ['', Validators.required],
-      dersCekimYontemKodu: [''],
-      portalAdresi: [''],
-      odemeKaynakKodu: ['', Validators.required],
-      birimUcret: [''],
-      toplamUcret: ['']
+      dersCekimYontemKodu: ['', Validators.required]
     });
   }
 
@@ -72,6 +68,14 @@ export class VideodersFormComponent implements OnInit, OnChanges {
     }
     console.log('Patching form with data:', data);
     this.form.patchValue(data, { emitEvent: false });
+  }
+
+  get tahminiDersSuresiFormatli(): string {
+    const dak = Number(this.form.get('tahminiDersSuresi')?.value);
+    if (!dak || isNaN(dak) || dak < 0) return '';
+    const saat = Math.floor(dak / 60);
+    const dakika = dak % 60;
+    return `${String(saat).padStart(2, '0')}:${String(dakika).padStart(2, '0')}`;
   }
 
   onSubmit() {

@@ -34,16 +34,16 @@ export class VideodersService {
   }
 
   // Onay işlemleri
-  icerikOnayinaSun(id: number): Observable<VideoDersResponse> {
-    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-onaya-sun`, {});
+  baslatmaOnayinaSun(id: number): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/baslatma-onaya-sun`, {});
   }
 
-  icerikOnayla(id: number, onayNotu?: string): Observable<VideoDersResponse> {
-    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, onayNotu || null);
+  baslatmaOnayla(id: number, onayNotu?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/baslatma-onayla`, onayNotu || null);
   }
 
-  icerikReddet(id: number, redNedeni?: string): Observable<VideoDersResponse> {
-    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, redNedeni || null);
+  baslatmaReddet(id: number, redNedeni?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/baslatma-reddet`, redNedeni || null);
   }
 
   getById(id: number): Observable<VideoDersResponse> {
