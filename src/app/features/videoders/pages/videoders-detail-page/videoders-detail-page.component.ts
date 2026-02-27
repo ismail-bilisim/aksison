@@ -12,6 +12,7 @@ import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstr
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
+import { DersDurumu } from '../../../../core/models/ders-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { VideodersKategoriService } from '../../../../core/services/api/videoders-kategori.service';
@@ -79,6 +80,7 @@ export class VideodersDetailPageComponent implements OnInit {
   
   // Enum for template
   readonly OnayDurumu = OnayDurumu;
+  readonly DersDurumu = DersDurumu;
   
   kategoriler = signal<KategoriOzet[]>([]);
   kategoriLoading = signal(false);
@@ -760,5 +762,636 @@ export class VideodersDetailPageComponent implements OnInit {
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
         }
       });
+  }
+
+  // ==================== Workflow İşlemleri ====================
+
+  /**
+   * Generic workflow işlemi helper metodu.
+   * ApprovalDialog açar, kullanıcıdan onay/not alır, ardından servis çağrısı yapar.
+   */
+  private workflowIslemYap(
+    serviceFn: (id: number, not?: string) => import('rxjs').Observable<VideoDersResponse>,
+    dialogData: ApprovalDialogData,
+    basariMesaji: string,
+    islemAdi: string
+  ): void {
+    if (!this.videoders?.id || this.submitting) return;
+
+    const ref = this.dialog.open<string | null>(ApprovalDialogComponent, { data: dialogData });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result !== null && result !== undefined) {
+        this.submitting = true;
+        serviceFn(this.videoders!.id, result || undefined)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (updated) => {
+              this.videoders = updated;
+              this.submitting = false;
+              this.toastService.success(basariMesaji);
+            },
+            error: (error) => {
+              ErrorHandler.logError(error, islemAdi);
+              this.submitting = false;
+              this.toastService.error(ErrorHandler.extractErrorMessage(error));
+            }
+          });
+      }
+    });
+  }
+
+  // --- İçerik İşlemleri ---
+
+  icerigiOnayaSun(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.icerigiOnayaSun(id, not),
+      {
+        title: 'İçeriği Onaya Sun',
+        message: 'isimli dersin içeriğini onaya sunmak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onaya Sun',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İçerik başarıyla onaya sunuldu.',
+      'icerigiOnayaSun'
+    );
+  }
+
+  icerikOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.icerikOnayla(id, not),
+      {
+        title: 'İçerik Onayı',
+        message: 'isimli dersin içeriğini onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İçerik başarıyla onaylandı.',
+      'icerikOnayla'
+    );
+  }
+
+  icerikReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.icerikReddet(id, not),
+      {
+        title: 'İçerik Reddi',
+        message: 'isimli dersin içeriğini reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'İçerik reddedildi.',
+      'icerikReddet'
+    );
+  }
+
+  // --- Örnek Video İşlemleri ---
+
+  ornekVideoIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.ornekVideoIste(id, not),
+      {
+        title: 'Örnek Video İste',
+        message: 'isimli ders için eğitmenden örnek video istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Örnek Video İste',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Eğitmenden örnek video istendi.',
+      'ornekVideoIste'
+    );
+  }
+
+  ornekVideoGonder(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.ornekVideoGonder(id, not),
+      {
+        title: 'Örnek Video Gönder',
+        message: 'isimli ders için örnek videoyu göndermek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Gönder',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Örnek video başarıyla gönderildi.',
+      'ornekVideoGonder'
+    );
+  }
+
+  ornekVideoOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.ornekVideoOnayla(id, not),
+      {
+        title: 'Örnek Video Onayı',
+        message: 'isimli dersin örnek videosunu onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Örnek video başarıyla onaylandı.',
+      'ornekVideoOnayla'
+    );
+  }
+
+  ornekVideoRevizeIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.ornekVideoRevizeIste(id, not),
+      {
+        title: 'Örnek Video Revize',
+        message: 'isimli dersin örnek videosu için revize istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Revize Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Revize İste',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Örnek video için revize istendi.',
+      'ornekVideoRevizeIste'
+    );
+  }
+
+  ornekVideoReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.ornekVideoReddet(id, not),
+      {
+        title: 'Örnek Video Reddi',
+        message: 'isimli dersin örnek videosunu reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Örnek video reddedildi.',
+      'ornekVideoReddet'
+    );
+  }
+
+  // --- İzlence İşlemleri ---
+
+  izlenceEgitmeneGonder(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.izlenceEgitmeneGonder(id, not),
+      {
+        title: 'İzlence İçin Eğitmene Gönder',
+        message: 'isimli ders için izlenceyi eğitmene göndermek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Eğitmene Gönder',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İzlence eğitmene başarıyla gönderildi.',
+      'izlenceEgitmeneGonder'
+    );
+  }
+
+  izlenceOnayaSun(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.izlenceOnayaSun(id, not),
+      {
+        title: 'İzlenceyi Onaya Sun',
+        message: 'isimli dersin izlencesini onaya sunmak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onaya Sun',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İzlence başarıyla onaya sunuldu.',
+      'izlenceOnayaSun'
+    );
+  }
+
+  izlenceOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.izlenceOnayla(id, not),
+      {
+        title: 'İzlence Onayı',
+        message: 'isimli dersin izlencesini onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İzlence başarıyla onaylandı.',
+      'izlenceOnayla'
+    );
+  }
+
+  izlenceReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.izlenceReddet(id, not),
+      {
+        title: 'İzlence Reddi',
+        message: 'isimli dersin izlencesini reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'İzlence reddedildi.',
+      'izlenceReddet'
+    );
+  }
+
+  // --- Sözleşme İşlemleri ---
+
+  sozlesmeReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.sozlesmeReddet(id, not),
+      {
+        title: 'Sözleşme Reddi',
+        message: 'isimli dersin sözleşmesini reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Sözleşme reddedildi.',
+      'sozlesmeReddet'
+    );
+  }
+
+  // --- Çekim İşlemleri ---
+
+  cekimTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.cekimTamamla(id, not),
+      {
+        title: 'Çekimi Tamamla',
+        message: 'isimli dersin çekimini tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Çekim başarıyla tamamlandı.',
+      'cekimTamamla'
+    );
+  }
+
+  cekimOnOnayVer(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.cekimOnOnayVer(id, not),
+      {
+        title: 'Çekime Ön Onay',
+        message: 'isimli dersin çekimine ön onay vermek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Ön Onay Ver',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Çekime ön onay verildi.',
+      'cekimOnOnayVer'
+    );
+  }
+
+  cekimRevizeIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.cekimRevizeIste(id, not),
+      {
+        title: 'Çekim Revize',
+        message: 'isimli dersin çekimi için revize istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Revize Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Revize İste',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Çekim için revize istendi.',
+      'cekimRevizeIste'
+    );
+  }
+
+  cekimReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.cekimReddet(id, not),
+      {
+        title: 'Çekim Reddi',
+        message: 'isimli dersin çekimini reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Çekim reddedildi.',
+      'cekimReddet'
+    );
+  }
+
+  // --- Detaylı Kontrol İşlemleri ---
+
+  detayliKontrolOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.detayliKontrolOnayla(id, not),
+      {
+        title: 'Detaylı Kontrol Onayı',
+        message: 'isimli dersin detaylı kontrolünü onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Detaylı kontrol başarıyla onaylandı.',
+      'detayliKontrolOnayla'
+    );
+  }
+
+  detayliRevizeIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.detayliRevizeIste(id, not),
+      {
+        title: 'Detaylı Revize',
+        message: 'isimli ders için detaylı revize istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Revize Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Revize İste',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Detaylı revize istendi.',
+      'detayliRevizeIste'
+    );
+  }
+
+  // --- Soru Kontrol İşlemleri ---
+
+  soruOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.soruOnayla(id, not),
+      {
+        title: 'Soru Onayı',
+        message: 'isimli dersin sorularını onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Sorular başarıyla onaylandı.',
+      'soruOnayla'
+    );
+  }
+
+  soruRevizeIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.soruRevizeIste(id, not),
+      {
+        title: 'Soru Revize',
+        message: 'isimli dersin soruları için revize istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Revize Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Revize İste',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Sorular için revize istendi.',
+      'soruRevizeIste'
+    );
+  }
+
+  // --- Post-Prodüksiyon İşlemleri ---
+
+  montajTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.montajTamamla(id, not),
+      {
+        title: 'Montaj Tamamla',
+        message: 'isimli dersin montajını tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Montaj başarıyla tamamlandı.',
+      'montajTamamla'
+    );
+  }
+
+  grafikTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.grafikTamamla(id, not),
+      {
+        title: 'Grafik Tamamla',
+        message: 'isimli dersin grafiklerini tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Grafik başarıyla tamamlandı.',
+      'grafikTamamla'
+    );
+  }
+
+  tanitimVideosuTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.tanitimVideosuTamamla(id, not),
+      {
+        title: 'Tanıtım Videosu Tamamla',
+        message: 'isimli dersin tanıtım videosunu tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Tanıtım videosu başarıyla tamamlandı.',
+      'tanitimVideosuTamamla'
+    );
+  }
+
+  altYaziTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.altYaziTamamla(id, not),
+      {
+        title: 'Alt Yazı Tamamla',
+        message: 'isimli dersin alt yazılarını tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Alt yazı başarıyla tamamlandı.',
+      'altYaziTamamla'
+    );
+  }
+
+  storyboardTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.storyboardTamamla(id, not),
+      {
+        title: 'Storyboard Tamamla',
+        message: 'isimli dersin storyboard\'unu tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Storyboard başarıyla tamamlandı.',
+      'storyboardTamamla'
+    );
+  }
+
+  // --- Yayın İşlemleri ---
+
+  lmsYukle(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.lmsYukle(id, not),
+      {
+        title: 'LMS\'e Yükle',
+        message: 'isimli dersi LMS\'e yüklemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'LMS\'e Yükle',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Ders başarıyla LMS\'e yüklendi.',
+      'lmsYukle'
+    );
+  }
+
+  yayinOncesiOnayaSun(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.yayinOncesiOnayaSun(id, not),
+      {
+        title: 'Yayın Öncesi Onaya Sun',
+        message: 'isimli dersi yayın öncesi onaya sunmak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onaya Sun',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Ders yayın öncesi onaya sunuldu.',
+      'yayinOncesiOnayaSun'
+    );
+  }
+
+  yayinlamaOnayla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.yayinlamaOnayla(id, not),
+      {
+        title: 'Yayınlama Onayı',
+        message: 'isimli dersin yayınlanmasını onaylamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Onay Notu (opsiyonel)',
+        placeholder: 'İsteğe bağlı onay notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Onayla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Yayınlama başarıyla onaylandı.',
+      'yayinlamaOnayla'
+    );
+  }
+
+  yayinaAl(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.yayinaAl(id, not),
+      {
+        title: 'Yayına Al',
+        message: 'isimli dersi yayına almak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Yayına Al',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Ders başarıyla yayına alındı.',
+      'yayinaAl'
+    );
+  }
+
+  sosyalMedyaDuyur(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.sosyalMedyaDuyur(id, not),
+      {
+        title: 'Sosyal Medyada Duyur',
+        message: 'isimli dersi sosyal medyada duyurmak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Duyur',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Ders sosyal medyada duyuruldu.',
+      'sosyalMedyaDuyur'
+    );
+  }
+
+  yayindanKaldir(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.yayindanKaldir(id, not),
+      {
+        title: 'Yayından Kaldır',
+        message: 'isimli dersi yayından kaldırmak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Kaldırma Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı nedeninizi buraya yazabilirsiniz...',
+        additionalInfo: 'Yayından kaldırılan ders artık portal üzerinden erişilemeyecektir.',
+        confirmText: 'Yayından Kaldır',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Ders yayından kaldırıldı.',
+      'yayindanKaldir'
+    );
   }
 }

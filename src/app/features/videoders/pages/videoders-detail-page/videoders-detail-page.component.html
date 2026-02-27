@@ -36,6 +36,188 @@
               </button>
             }
 
+            <!-- ==================== Workflow İşlem Butonları ==================== -->
+
+            <!-- İçerik İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.EGITMEN_ATANDI || videoders.dersDurumu?.kodu === DersDurumu.ICERIK_REDDEDILDI) {
+              <button class="btn btn-primary me-2" (click)="icerigiOnayaSun()" [disabled]="submitting">
+                <i class="bi bi-send me-1"></i> İçeriği Onaya Sun
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYA_SUNULDU) {
+              <button class="btn btn-success me-2" (click)="icerikOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> İçerik Onayla
+              </button>
+              <button class="btn btn-danger me-2" (click)="icerikReddet()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> İçerik Reddet
+              </button>
+            }
+
+            <!-- Örnek Video İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYLANDI) {
+              <button class="btn btn-primary me-2" (click)="ornekVideoIste()" [disabled]="submitting">
+                <i class="bi bi-camera-video me-1"></i> Örnek Video İste
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ORNEK_VIDEO_ISTENDI || videoders.dersDurumu?.kodu === DersDurumu.ORNEK_VIDEO_REVIZE_ISTENDI) {
+              <button class="btn btn-primary me-2" (click)="ornekVideoGonder()" [disabled]="submitting">
+                <i class="bi bi-send me-1"></i> Örnek Video Gönder
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ORNEK_VIDEO_GONDERILDI) {
+              <button class="btn btn-success me-2" (click)="ornekVideoOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> Örnek Video Onayla
+              </button>
+              <button class="btn btn-warning me-2" (click)="ornekVideoRevizeIste()" [disabled]="submitting">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Örnek Video Revize İste
+              </button>
+              <button class="btn btn-danger me-2" (click)="ornekVideoReddet()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> Örnek Video Reddet
+              </button>
+            }
+
+            <!-- İzlence İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ORNEK_VIDEO_ONAYLANDI) {
+              <button class="btn btn-primary me-2" (click)="izlenceEgitmeneGonder()" [disabled]="submitting">
+                <i class="bi bi-box-arrow-right me-1"></i> İzlence İçin Eğitmene Gönder
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ORNEK_VIDEO_ONAY_EGITMENE_GONDERILDI || videoders.dersDurumu?.kodu === DersDurumu.IZLENCE_REDDEDILDI) {
+              <button class="btn btn-primary me-2" (click)="izlenceOnayaSun()" [disabled]="submitting">
+                <i class="bi bi-send me-1"></i> İzlenceyi Onaya Sun
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.IZLENCE_ONAYA_SUNULDU) {
+              <button class="btn btn-success me-2" (click)="izlenceOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> İzlence Onayla
+              </button>
+              <button class="btn btn-danger me-2" (click)="izlenceReddet()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> İzlence Reddet
+              </button>
+            }
+
+            <!-- Sözleşme İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.IZLENCE_ONAYLANDI) {
+              <button class="btn btn-danger me-2" (click)="sozlesmeReddet()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> Sözleşmeyi Reddet
+              </button>
+            }
+
+            <!-- Çekim İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.IZLENCE_ONAYLANDI || videoders.dersDurumu?.kodu === DersDurumu.CEKIM_REVIZE_ISTENDI) {
+              <button class="btn btn-primary me-2" (click)="cekimTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Çekimi Tamamla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.CEKIM_TAMAMLANDI) {
+              <button class="btn btn-success me-2" (click)="cekimOnOnayVer()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> Çekime Ön Onay Ver
+              </button>
+              <button class="btn btn-warning me-2" (click)="cekimRevizeIste()" [disabled]="submitting">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Çekime Revize İste
+              </button>
+              <button class="btn btn-danger me-2" (click)="cekimReddet()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> Çekimi Reddet
+              </button>
+            }
+
+            <!-- Detaylı Kontrol İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.CEKIM_ON_ONAY_VERILDI) {
+              <button class="btn btn-success me-2" (click)="detayliKontrolOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> Detaylı Kontrolü Onayla
+              </button>
+              <button class="btn btn-warning me-2" (click)="detayliRevizeIste()" [disabled]="submitting">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Detaylı Revize İste
+              </button>
+            }
+
+            <!-- Soru Kontrol İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.DETAYLI_KONTROL_ONAYLANDI) {
+              <button class="btn btn-success me-2" (click)="soruOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> Soruları Onayla
+              </button>
+              <button class="btn btn-warning me-2" (click)="soruRevizeIste()" [disabled]="submitting">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Sorulara Revize İste
+              </button>
+            }
+
+            <!-- Post-Prodüksiyon İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.SORU_KONTROL_ONAYLANDI) {
+              <button class="btn btn-primary me-2" (click)="montajTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Montaj Tamamla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.VIDEO_MONTAJI_TAMAMLANDI) {
+              <button class="btn btn-primary me-2" (click)="grafikTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Grafik Tamamla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.GRAFIK_TAMAMLANDI) {
+              <button class="btn btn-primary me-2" (click)="tanitimVideosuTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Tanıtım Videosu Tamamla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.TANITIM_VIDEOSU_TAMAMLANDI) {
+              <button class="btn btn-primary me-2" (click)="altYaziTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Alt Yazı Tamamla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.ALT_YAZI_TAMAMLANDI) {
+              <button class="btn btn-primary me-2" (click)="storyboardTamamla()" [disabled]="submitting">
+                <i class="bi bi-check2-circle me-1"></i> Storyboard Tamamla
+              </button>
+            }
+
+            <!-- Yayın İşlemleri -->
+            @if (videoders.dersDurumu?.kodu === DersDurumu.STORYBOARD_TAMAMLANDI) {
+              <button class="btn btn-primary me-2" (click)="lmsYukle()" [disabled]="submitting">
+                <i class="bi bi-cloud-upload me-1"></i> LMS'e Yükle
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.LMS_YUKLENDI) {
+              <button class="btn btn-primary me-2" (click)="yayinOncesiOnayaSun()" [disabled]="submitting">
+                <i class="bi bi-send me-1"></i> Yayın Öncesi Onaya Sun
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.YAYIN_ONCESI_ONAYA_SUNULDU) {
+              <button class="btn btn-success me-2" (click)="yayinlamaOnayla()" [disabled]="submitting">
+                <i class="bi bi-check-circle me-1"></i> Yayınlamayı Onayla
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.YAYINLAMA_ONAYLANDI) {
+              <button class="btn btn-success me-2" (click)="yayinaAl()" [disabled]="submitting">
+                <i class="bi bi-broadcast me-1"></i> Yayına Al
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.YAYINA_ALINDI) {
+              <button class="btn btn-primary me-2" (click)="sosyalMedyaDuyur()" [disabled]="submitting">
+                <i class="bi bi-megaphone me-1"></i> Sosyal Medyada Duyur
+              </button>
+              <button class="btn btn-danger me-2" (click)="yayindanKaldir()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> Yayından Kaldır
+              </button>
+            }
+
+            @if (videoders.dersDurumu?.kodu === DersDurumu.SOSYAL_MEDYADA_DUYURULDU) {
+              <button class="btn btn-danger me-2" (click)="yayindanKaldir()" [disabled]="submitting">
+                <i class="bi bi-x-circle me-1"></i> Yayından Kaldır
+              </button>
+            }
+
           </div>
         </div>
 

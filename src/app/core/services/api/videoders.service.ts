@@ -175,5 +175,153 @@ export class VideodersService {
   getByEgitmenId(egitmenId: number): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-egitmen/${egitmenId}`);
   }
+
+  // ==================== Workflow İşlemleri ====================
+
+  // --- İçerik İşlemleri ---
+
+  icerigiOnayaSun(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerigi-onaya-sun`, not || null);
+  }
+
+  icerikOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-onayla`, not || null);
+  }
+
+  icerikReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerik-reddet`, not || null);
+  }
+
+  // --- Örnek Video İşlemleri ---
+
+  ornekVideoIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-iste`, not || null);
+  }
+
+  ornekVideoGonder(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-gonder`, not || null);
+  }
+
+  ornekVideoOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-onayla`, not || null);
+  }
+
+  ornekVideoRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-revize-iste`, not || null);
+  }
+
+  ornekVideoReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-reddet`, not || null);
+  }
+
+  // --- İzlence İşlemleri ---
+
+  izlenceEgitmeneGonder(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-egitmene-gonder`, not || null);
+  }
+
+  izlenceOnayaSun(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-onaya-sun`, not || null);
+  }
+
+  izlenceOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-onayla`, not || null);
+  }
+
+  izlenceReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-reddet`, not || null);
+  }
+
+  // --- Sözleşme İşlemleri ---
+
+  sozlesmeReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/sozlesme-reddet`, not || null);
+  }
+
+  // --- Çekim İşlemleri ---
+
+  cekimTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/cekim-tamamla`, not || null);
+  }
+
+  cekimOnOnayVer(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/cekim-on-onay`, not || null);
+  }
+
+  cekimRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/cekim-revize-iste`, not || null);
+  }
+
+  cekimReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/cekim-reddet`, not || null);
+  }
+
+  // --- Detaylı Kontrol İşlemleri ---
+
+  detayliKontrolOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/detayli-kontrol-onayla`, not || null);
+  }
+
+  detayliRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/detayli-revize-iste`, not || null);
+  }
+
+  // --- Soru Kontrol İşlemleri ---
+
+  soruOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/soru-onayla`, not || null);
+  }
+
+  soruRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/soru-revize-iste`, not || null);
+  }
+
+  // --- Post-Prodüksiyon İşlemleri ---
+
+  montajTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/montaj-tamamla`, not || null);
+  }
+
+  grafikTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/grafik-tamamla`, not || null);
+  }
+
+  tanitimVideosuTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/tanitim-videosu-tamamla`, not || null);
+  }
+
+  altYaziTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/alt-yazi-tamamla`, not || null);
+  }
+
+  storyboardTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/storyboard-tamamla`, not || null);
+  }
+
+  // --- Yayın İşlemleri ---
+
+  lmsYukle(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/lms-yukle`, not || null);
+  }
+
+  yayinOncesiOnayaSun(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayin-oncesi-onaya-sun`, not || null);
+  }
+
+  yayinlamaOnayla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayinlama-onayla`, not || null);
+  }
+
+  yayinaAl(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayina-al`, not || null);
+  }
+
+  sosyalMedyaDuyur(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/sosyal-medya-duyur`, not || null);
+  }
+
+  yayindanKaldir(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayindan-kaldir`, not || null);
+  }
   
 }
