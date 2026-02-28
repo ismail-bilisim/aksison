@@ -10,6 +10,7 @@ import { LookupService } from 'src/app/core/services/api/lookup.service';
 import { VideodersLookupData } from 'src/app/core/models/videoders-lookup-data';
 import { DersService } from 'src/app/core/services/api/ders.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
+import { ErrorHandler } from 'src/app/core/utils/error-handler';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -78,8 +79,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
           console.log('Lookup verileri yüklendi:', data);
         },
         error: (error) => {
-          console.error('Lookup verileri yüklenirken hata oluştu:', error);
-          this.toastService.error('Lookup verileri yüklenirken hata oluştu.');
+          ErrorHandler.logError(error, 'Lookup verileri yükleme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.isLoadingLookups.set(false);
         }
       });
@@ -121,8 +122,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
           this.isLoadingDersDetay.set(false);
         },
         error: (error) => {
-          console.error('Ders detayı yüklenirken hata oluştu:', error);
-          this.toastService.error('Ders detayı yüklenirken hata oluştu.');
+          ErrorHandler.logError(error, 'Ders detayı yükleme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.isLoadingDersDetay.set(false);
         }
       });
@@ -146,8 +147,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
             this.router.navigate(['/videoders', this.currentId]);
           },
           error: (error) => {
-            console.error('Video ders güncellenirken hata oluştu:', error);
-            this.toastService.error('Video ders güncellenirken hata oluştu.');
+            ErrorHandler.logError(error, 'Video ders güncelleme');
+            this.toastService.error(ErrorHandler.extractErrorMessage(error));
           }
         });
     } else {
@@ -159,8 +160,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
             this.router.navigate(['/videoders', response.id]);
           },
           error: (error) => {
-            console.error('Video ders oluşturulurken hata oluştu:', error);
-            this.toastService.error('Video ders oluşturulurken hata oluştu.');
+            ErrorHandler.logError(error, 'Video ders oluşturma');
+            this.toastService.error(ErrorHandler.extractErrorMessage(error));
           }
         });
     }
@@ -177,8 +178,8 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
           console.log('Dönüştürülen VideoDersRequest:', this.videodersRequest());
         },
         error: (error) => {
-          console.error('Video ders yüklenirken hata oluştu:', error);
-          this.toastService.error('Video ders yüklenirken hata oluştu.');
+          ErrorHandler.logError(error, 'Video ders yükleme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.router.navigate(['/videoders']);
         }
       });
@@ -202,7 +203,6 @@ export class VideodersEditPageComponent implements OnInit, OnDestroy {
       sikcaSorulanSorular: response.sikcaSorulanSorular ?? undefined,
       dersOzeti: response.dersOzeti ?? undefined,
       dersCekimYontemKodu: response.dersCekimYontemi?.kodu ?? undefined,
-      onayDurumu: response.onayDurumu ?? undefined,
       // durumKodu removed
       dersId: response.ders?.id ?? undefined
     };

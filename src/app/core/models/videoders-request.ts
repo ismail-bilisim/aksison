@@ -15,7 +15,6 @@ export interface VideoDersRequest {
   sikcaSorulanSorular?: string;
   dersOzeti?: string;
   dersCekimYontemKodu?: string;
-  onayDurumu?: string;
   paydasId?: number;
   dersId?: number;
 }

@@ -13,7 +13,7 @@
       </h5>
       <div class="d-flex gap-2">
         <!-- Düzenle butonu - Sadece onaylı olmayan dersler için -->
-        @if (yuzyuzeders.onayDurumu !== OnayDurumu.ONAYLI) {
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS || yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI) {
           <button 
             class="btn btn-primary" 
             (click)="onEdit(yuzyuzeders.id)"
@@ -23,7 +23,7 @@
         }
         
         <!-- Başlatma Onayına Sun butonu - Sadece Taslak veya Red durumunda -->
-        @if (yuzyuzeders.onayDurumu === OnayDurumu.TASLAK || yuzyuzeders.onayDurumu === OnayDurumu.RED) {
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS || yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI) {
           <button 
             class="btn btn-warning" 
             (click)="baslatmaOnayinaSun()"
@@ -33,7 +33,7 @@
         }
         
         <!-- Başlatmayı Onayla/Reddet butonları - Sadece Onaya Sunuldu durumunda -->
-        @if (yuzyuzeders.onayDurumu === OnayDurumu.ONAYA_SUNULDU) {
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYINA_SUNULDU) {
           <button 
             class="btn btn-success" 
             (click)="baslatmaOnayla()"
@@ -201,7 +201,7 @@
                   #egitmenList
                   [items]="egitmenler()"
                   [loading]="egitmenLoading()"
-                  [canAssign]="yuzyuzeders.onayDurumu === OnayDurumu.ONAYLI"
+                  [canAssign]="yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI"
                   [modalLoading]="egitmenModalLoading()"
                   [assigning]="egitmenAssigning()"
                   [availableEgitmenler]="availableEgitmenler()"

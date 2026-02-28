@@ -38,10 +38,6 @@ export class YuzyuzedersService {
     return this.http.get<YuzyuzeDersResponse[]>(`${this.apiUrl}/by-durum/${durum}`);
   }
 
-  getAllByOnayKodu(onayKodu: string): Observable<YuzyuzeDersResponse[]> {
-    return this.http.get<YuzyuzeDersResponse[]>(`${this.apiUrl}/by-onay/${onayKodu}`);
-  }
-
   getAllOzet(): Observable<YuzyuzeDersResponse[]> {
     return this.http.get<YuzyuzeDersResponse[]>(`${this.apiUrl}/all-ozet`);
   }

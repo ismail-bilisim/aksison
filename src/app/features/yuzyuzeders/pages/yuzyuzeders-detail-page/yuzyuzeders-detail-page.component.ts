@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { NgbNavChangeEvent, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
+import { DersDurumu } from '../../../../core/models/ders-durumu.enum';
 import { YuzyuzeDersResponse } from '../../../../core/models/yuzyuzeders-response';
 import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
 import { ToastService } from '../../../../core/services/api/toast.service';
@@ -68,7 +68,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   submitting = false;
   
   // Enum for template
-  readonly OnayDurumu = OnayDurumu;
+  readonly DersDurumu = DersDurumu;
 
   kategoriler = signal<KategoriOzet[]>([]);
   kategoriLoading = signal(false);

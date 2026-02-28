@@ -33,7 +33,7 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
       this.durum = params.get('durum') || undefined;
       
       if (this.durum) {
-        // this.setPageTitle(this.durum);
+        this.setPageTitle(this.durum);
         this.loadByDurum(this.durum);
       } else {
         this.pageTitle = 'Tüm Video Dersler';
@@ -49,37 +49,52 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
   }
 
   private setPageTitle(durum: string) {
-    switch (durum) {
-      case 'aktif':
-        this.pageTitle = 'Aktif Video Dersler';
-        break;
-      case 'plann':
-        this.pageTitle = 'Planlanan Video Dersler';
-        break;
-      case 'anlas':
-        this.pageTitle = 'Anlaşılan Video Dersler';
-        break;
-      case 'cekim':
-        this.pageTitle = 'Çekimdeki Video Dersler';
-        break;
-      case 'teslim':
-        this.pageTitle = 'Teslim Alınan Video Dersler';
-        break;
-      case 'odeme':
-        this.pageTitle = 'Ödeme Aşamasındaki Video Dersler';
-        break;
-      case 'iptal':
-        this.pageTitle = 'İptal Edilen Video Dersler';
-        break;
-      case 'tamam':
-        this.pageTitle = 'Tamamlanan Video Dersler';
-        break;
-      // case 'hepsi':
-      //   this.pageTitle = 'Tüm Video Dersler';
-      //   break;
-      // default:
-      //   this.pageTitle = 'Video Dersler';
-    }
+    const titleMap: Record<string, string> = {
+      'TASLK': 'Taslak Dersler',
+      'DBONS': 'Başlatma Onayına Sunulanlar',
+      'DBONY': 'Başlatma Onayı Verilenler',
+      'DBRED': 'Başlatma Reddedilenler',
+      'EGATM': 'Eğitmen Atananlar',
+      'EICOS': 'İçerik Onayına Sunulanlar',
+      'ICONY': 'İçerik Onaylananlar',
+      'ICRED': 'İçerik Reddedilenler',
+      'EOVIS': 'Örnek Video İstenenler',
+      'EOVGN': 'Örnek Video Gönderilenler',
+      'OVONY': 'Örnek Video Onaylananlar',
+      'OVREV': 'Örnek Video Revize İstenenler',
+      'OVRED': 'Örnek Video Reddedilenler',
+      'VONEG': 'Örnek Video Onayı Eğitmene Gönderilenler',
+      'EIZOS': 'İzlence Onayına Sunulanlar',
+      'IZONY': 'İzlence Onaylananlar',
+      'IZRED': 'İzlence Reddedilenler',
+      'SOZET': 'Sözleşme Talep Edilenler',
+      'SOZIM': 'Sözleşme İmzalananlar',
+      'SOZRD': 'Sözleşme Reddedilenler',
+      'CKTML': 'Çekim Tamamlananlar',
+      'COONV': 'Çekim Ön Onay Verilenler',
+      'CRVIS': 'Çekim Revize İstenenler',
+      'CKRED': 'Çekim Reddedilenler',
+      'DEKON': 'Detaylı Kontrol Onaylananlar',
+      'DEKRV': 'Detaylı Kontrol Revize İstenenler',
+      'RVZTM': 'Detaylı Revize Tamamlananlar',
+      'SRKNO': 'Soru Kontrol Onaylananlar',
+      'SRKNR': 'Soru Kontrol Revize İstenenler',
+      'SRVTM': 'Soru Revizesi Tamamlananlar',
+      'VMNTM': 'Video Montajı Tamamlananlar',
+      'GRFTM': 'Grafik Tamamlananlar',
+      'TVDTM': 'Tanıtım Videosu Tamamlananlar',
+      'AYZTM': 'Alt Yazı Tamamlananlar',
+      'STBTM': 'Storyboard Tamamlananlar',
+      'LMSYK': 'LMS\'e Yüklenenler',
+      'YOEOS': 'Yayın Öncesi Onaya Sunulanlar',
+      'YAYON': 'Yayınlama Onaylananlar',
+      'YAYRD': 'Yayınlama Reddedilenler',
+      'YAYIN': 'Yayına Alınanlar',
+      'SMEDY': 'Sosyal Medyada Duyurulanlar',
+      'IPTAL': 'İptal Edilenler',
+      'YKLDR': 'Yayından Kaldırılanlar'
+    };
+    this.pageTitle = titleMap[durum] || 'Video Dersler';
   }
 
   private loadAll() {

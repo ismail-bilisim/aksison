@@ -32,7 +32,6 @@ export interface YuzyuzeDersResponse {
   kontenjan: number | null;
   tamamlayanSayisi: number | null;
   basvuruSayisi: number | null;
-  onayDurumu: string | null;
   odemeKaynak: OdemeKaynakOzet | null;
   birimUcret: number | null;
   toplamUcret: number | null;

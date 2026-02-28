@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { DersDurumu } from '../../../../core/models/ders-durumu.enum';
 import { VideoDersResponse} from '../../../../core/models/videoders-response';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
@@ -79,7 +78,6 @@ export class VideodersDetailPageComponent implements OnInit {
   submitting = false;
   
   // Enum for template
-  readonly OnayDurumu = OnayDurumu;
   readonly DersDurumu = DersDurumu;
   
   kategoriler = signal<KategoriOzet[]>([]);
@@ -802,6 +800,24 @@ export class VideodersDetailPageComponent implements OnInit {
 
   // --- İçerik İşlemleri ---
 
+  icerigiEgitmeneGonder(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.icerigiEgitmeneGonder(id, not),
+      {
+        title: 'İçeriği Eğitmene Gönder',
+        message: 'isimli dersin içeriğini eğitmene göndermek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Eğitmene Gönder',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'İçerik başarıyla eğitmene gönderildi.',
+      'icerigiEgitmeneGonder'
+    );
+  }
+
   icerigiOnayaSun(): void {
     this.workflowIslemYap(
       (id, not) => this.videodersService.icerigiOnayaSun(id, not),
@@ -1004,6 +1020,24 @@ export class VideodersDetailPageComponent implements OnInit {
     );
   }
 
+  izlenceyeRevizeIste(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.izlenceyeRevizeIste(id, not),
+      {
+        title: 'İzlenceye Revize İste',
+        message: 'isimli dersin izlencesi için revize istemek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Revize Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Revize İste',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'İzlence için revize istendi.',
+      'izlenceyeRevizeIste'
+    );
+  }
+
   izlenceReddet(): void {
     this.workflowIslemYap(
       (id, not) => this.videodersService.izlenceReddet(id, not),
@@ -1023,6 +1057,24 @@ export class VideodersDetailPageComponent implements OnInit {
   }
 
   // --- Sözleşme İşlemleri ---
+
+  sozlesmeTalepEt(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.sozlesmeTalepEt(id, not),
+      {
+        title: 'Sözleşme Talep Et',
+        message: 'isimli ders için sözleşme talep etmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Talep Et',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Sözleşme başarıyla talep edildi.',
+      'sozlesmeTalepEt'
+    );
+  }
 
   sozlesmeReddet(): void {
     this.workflowIslemYap(
@@ -1154,6 +1206,24 @@ export class VideodersDetailPageComponent implements OnInit {
     );
   }
 
+  detayliRevizeyiTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.detayliRevizeyiTamamla(id, not),
+      {
+        title: 'Detaylı Revizeyi Tamamla',
+        message: 'isimli dersin detaylı revizesini tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Detaylı revize başarıyla tamamlandı.',
+      'detayliRevizeyiTamamla'
+    );
+  }
+
   // --- Soru Kontrol İşlemleri ---
 
   soruOnayla(): void {
@@ -1189,6 +1259,24 @@ export class VideodersDetailPageComponent implements OnInit {
       },
       'Sorular için revize istendi.',
       'soruRevizeIste'
+    );
+  }
+
+  soruRevizesiTamamla(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.soruRevizesiTamamla(id, not),
+      {
+        title: 'Soru Revizesini Tamamla',
+        message: 'isimli dersin soru revizelerini tamamlamak istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Not (opsiyonel)',
+        placeholder: 'İsteğe bağlı notunuzu buraya yazabilirsiniz...',
+        confirmText: 'Tamamla',
+        cancelText: 'İptal',
+        appearance: 'approve'
+      },
+      'Soru revizeleri başarıyla tamamlandı.',
+      'soruRevizesiTamamla'
     );
   }
 
@@ -1340,6 +1428,24 @@ export class VideodersDetailPageComponent implements OnInit {
     );
   }
 
+  yayinlamayiReddet(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.yayinlamayiReddet(id, not),
+      {
+        title: 'Yayınlamayı Reddet',
+        message: 'isimli dersin yayınlanmasını reddetmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'Red Nedeni (opsiyonel)',
+        placeholder: 'İsteğe bağlı red nedeninizi buraya yazabilirsiniz...',
+        confirmText: 'Reddet',
+        cancelText: 'İptal',
+        appearance: 'reject'
+      },
+      'Yayınlama reddedildi.',
+      'yayinlamayiReddet'
+    );
+  }
+
   yayinaAl(): void {
     this.workflowIslemYap(
       (id, not) => this.videodersService.yayinaAl(id, not),
@@ -1392,6 +1498,44 @@ export class VideodersDetailPageComponent implements OnInit {
       },
       'Ders yayından kaldırıldı.',
       'yayindanKaldir'
+    );
+  }
+
+  // --- İptal İşlemi ---
+
+  /**
+   * İptal Et butonunun görünürlüğünü belirler.
+   * baslatmaOnayinaSun sonrası durumlardan YAYINA_ALINDI ve sonrası hariç.
+   */
+  iptalEdilebilirMi(): boolean {
+    if (!this.videoders?.dersDurumu?.kodu) return false;
+    const kodu = this.videoders.dersDurumu.kodu;
+    const excludedStates: string[] = [
+      DersDurumu.PLANLAMA, DersDurumu.ANLASMA, DersDurumu.CEKIM_DURUMU,
+      DersDurumu.TESLIM, DersDurumu.ODEME_DURUMU, DersDurumu.TAMAMLANMA,
+      DersDurumu.TASLAK_DERS,
+      DersDurumu.IPTAL_EDILDI, DersDurumu.YAYINA_ALINDI,
+      DersDurumu.SOSYAL_MEDYADA_DUYURULDU, DersDurumu.YAYINDAN_KALDIRILDI
+    ];
+    return !excludedStates.includes(kodu as DersDurumu);
+  }
+
+  iptalEt(): void {
+    this.workflowIslemYap(
+      (id, not) => this.videodersService.iptalEt(id, not),
+      {
+        title: 'Dersi İptal Et',
+        message: 'isimli dersi iptal etmek istediğinizden emin misiniz?',
+        entityName: this.videoders?.adi,
+        noteLabel: 'İptal Nedeni',
+        placeholder: 'İptal nedeninizi buraya yazınız...',
+        additionalInfo: 'İptal edilen ders geri alınamaz.',
+        confirmText: 'İptal Et',
+        cancelText: 'Vazgeç',
+        appearance: 'reject'
+      },
+      'Ders başarıyla iptal edildi.',
+      'iptalEt'
     );
   }
 }

@@ -29,7 +29,6 @@ export interface VideoDersResponse {
   dersOzeti: string | null;
   dersCekimYontemi: DersCekimYontemiOzet | null;
   portalAdresi: string | null;
-  onayDurumu: string | null;
   odemeKaynak: OdemeKaynakOzet | null;
   birimUcret: number | null;
   toplamUcret: number | null;

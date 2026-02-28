@@ -65,11 +65,6 @@ export class VideodersService {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-durum/${durumKodu}`);
   }
 
-  // GET by Onay Durumu
-  getAllByOnayDurumu(onayDurumu: string): Observable<DersOzet[]> {
-    return this.http.get<DersOzet[]>(`${this.apiUrl}/by-onay/${onayDurumu}`);
-  }
-
   // GET by Turu
   getAllByTuru(turuKodu: string): Observable<DersOzet[]> {
     return this.http.get<DersOzet[]>(`${this.apiUrl}/by-turu/${turuKodu}`);
@@ -180,6 +175,10 @@ export class VideodersService {
 
   // --- İçerik İşlemleri ---
 
+  icerigiEgitmeneGonder(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerigi-egitmene-gonder`, not || null);
+  }
+
   icerigiOnayaSun(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/icerigi-onaya-sun`, not || null);
   }
@@ -228,11 +227,19 @@ export class VideodersService {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-onayla`, not || null);
   }
 
+  izlenceyeRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlenceye-revize-iste`, not || null);
+  }
+
   izlenceReddet(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/izlence-reddet`, not || null);
   }
 
   // --- Sözleşme İşlemleri ---
+
+  sozlesmeTalepEt(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/sozlesme-talep-et`, not || null);
+  }
 
   sozlesmeReddet(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/sozlesme-reddet`, not || null);
@@ -266,6 +273,10 @@ export class VideodersService {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/detayli-revize-iste`, not || null);
   }
 
+  detayliRevizeyiTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/detayli-revizeyi-tamamla`, not || null);
+  }
+
   // --- Soru Kontrol İşlemleri ---
 
   soruOnayla(id: number, not?: string): Observable<VideoDersResponse> {
@@ -274,6 +285,10 @@ export class VideodersService {
 
   soruRevizeIste(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/soru-revize-iste`, not || null);
+  }
+
+  soruRevizesiTamamla(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/soru-revizesi-tamamla`, not || null);
   }
 
   // --- Post-Prodüksiyon İşlemleri ---
@@ -312,6 +327,10 @@ export class VideodersService {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayinlama-onayla`, not || null);
   }
 
+  yayinlamayiReddet(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayinlamayi-reddet`, not || null);
+  }
+
   yayinaAl(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayina-al`, not || null);
   }
@@ -322,6 +341,10 @@ export class VideodersService {
 
   yayindanKaldir(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/yayindan-kaldir`, not || null);
+  }
+
+  iptalEt(id: number, not?: string): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/iptal-et`, not || null);
   }
   
 }
