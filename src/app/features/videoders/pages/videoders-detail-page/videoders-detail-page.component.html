@@ -335,6 +335,9 @@
               <li [ngbNavItem]="'sorular'">
                 <button ngbNavLink>Sorular</button>
               </li>
+              <li [ngbNavItem]="'materyaller'">
+                <button ngbNavLink>Materyaller ({{materyaller().length}})</button>
+              </li>
               <li [ngbNavItem]="'kategoriler'">
                 <button ngbNavLink>Kategoriler ({{kategoriler().length}})</button>
               </li>
@@ -362,6 +365,23 @@
               
               <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
                 <app-soru-list [dersId]="videoders.id"></app-soru-list>
+              </div>
+              
+              <div class="p-3" *ngIf="materyalLoaded" [hidden]="activeTab !== 'materyaller'">
+                <app-materyal-list
+                  #materyalList
+                  [items]="materyaller()"
+                  [isLoading]="materyalLoading()"
+                  [isDeleting]="materyalDeleting()"
+                  [isUploading]="materyalUploading()"
+                  [modalLoading]="materyalModalLoading()"
+                  [availableMedyaTurleri]="availableMedyaTurleri()"
+                  [canModify]="canModifyMateryal()"
+                  (addRequested)="onMateryalAddRequested()"
+                  (uploadConfirmed)="onMateryalUpload($event)"
+                  (delete)="onMateryalDelete($event)"
+                  (download)="onMateryalDownload($event)">
+                </app-materyal-list>
               </div>
               
               <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">

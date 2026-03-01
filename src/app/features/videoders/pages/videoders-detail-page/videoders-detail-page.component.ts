@@ -39,6 +39,10 @@ import { PaydasListComponent } from 'src/app/shared/components/paydas-list/payda
 import { PaydasOzet } from 'src/app/core/models/paydas-ozet';
 import { VideodersPaydasService } from 'src/app/core/services/api/videoders-paydas.service';
 import { PaydasService } from 'src/app/core/services/api/paydas.service';
+import { MateryalListComponent } from 'src/app/shared/components/materyal-list/materyal-list.component';
+import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
+import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
+import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -61,7 +65,8 @@ import { PaydasService } from 'src/app/core/services/api/paydas.service';
     SozlesmeListComponent,
     IslemKayitListComponent,
     SoruListComponent,
-    EgitmenListComponent
+    EgitmenListComponent,
+    MateryalListComponent
 ],
   templateUrl: './videoders-detail-page.component.html',
   styleUrls: ['./videoders-detail-page.component.css']
@@ -71,6 +76,7 @@ export class VideodersDetailPageComponent implements OnInit {
   @ViewChild('paydasList') paydasList?: PaydasListComponent;
   @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
   @ViewChild('projeList') projeList?: ProjeListComponent;
+  @ViewChild('materyalList') materyalList?: MateryalListComponent;
   
   videoders?: VideoDersResponse;
   loading = false;
@@ -111,6 +117,14 @@ export class VideodersDetailPageComponent implements OnInit {
   availableProjeler = signal<ProjeOzet[]>([]);
   projelerLoaded = false;
 
+  materyaller = signal<VideodersMateryalResponse[]>([]);
+  materyalLoading = signal(false);
+  materyalDeleting = signal(false);
+  materyalUploading = signal(false);
+  materyalModalLoading = signal(false);
+  availableMedyaTurleri = signal<MedyaTuruOzet[]>([]);
+  materyalLoaded = false;
+
   // İşlem kayıtları için
   videoDersIslemKayitlar = signal<IslemKayit[]>([]);
   videoDersIslemKayitLoading = signal(false);
@@ -133,6 +147,7 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly videoDersIslemKayitService = inject(VideoDersIslemKayitService);
   private readonly videodersPaydasService = inject(VideodersPaydasService);
   private readonly paydasService = inject(PaydasService);
+  private readonly videodersMateryalService = inject(VideodersMateryalService);
   private readonly dialog = inject(Dialog);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -217,6 +232,12 @@ export class VideodersDetailPageComponent implements OnInit {
         if (!this.paydasLoaded) {
           this.loadPaydaslar();
           this.paydasLoaded = true;
+        }
+        break;
+      case 'materyaller':
+        if (!this.materyalLoaded) {
+          this.loadMateryaller();
+          this.materyalLoaded = true;
         }
         break;
       case 'sozlesmeler':
@@ -1499,6 +1520,129 @@ export class VideodersDetailPageComponent implements OnInit {
       'Ders yayından kaldırıldı.',
       'yayindanKaldir'
     );
+  }
+
+  // ==================== Materyal İşlemleri ====================
+
+  private readonly MATERYAL_IZINLI_DURUMLAR: string[] = [
+    DersDurumu.BASLATMA_ONAYI_VERILDI, DersDurumu.ICERIK_EGITMENE_GONDERILDI,
+    DersDurumu.ICERIK_ONAYA_SUNULDU, DersDurumu.ICERIK_ONAYLANDI, DersDurumu.ICERIK_REDDEDILDI,
+    DersDurumu.ORNEK_VIDEO_ISTENDI, DersDurumu.ORNEK_VIDEO_GONDERILDI,
+    DersDurumu.ORNEK_VIDEO_ONAYLANDI, DersDurumu.ORNEK_VIDEO_REVIZE_ISTENDI, DersDurumu.ORNEK_VIDEO_REDDEDILDI,
+    DersDurumu.IZLENCE_ICIN_EGITMENE_GONDERILDI, DersDurumu.IZLENCE_ONAYA_SUNULDU,
+    DersDurumu.IZLENCE_ONAYLANDI, DersDurumu.IZLENCE_REDDEDILDI, DersDurumu.IZLENCE_REVIZE_ISTENDI,
+    DersDurumu.SOZLESME_TALEP_EDILDI, DersDurumu.SOZLESME_IMZALANDI, DersDurumu.SOZLESME_REDDEDILDI,
+    DersDurumu.CEKIM_TAMAMLANDI, DersDurumu.CEKIM_ON_ONAY_VERILDI,
+    DersDurumu.CEKIM_REVIZE_ISTENDI, DersDurumu.CEKIM_REDDEDILDI,
+    DersDurumu.DETAYLI_KONTROL_ONAYLANDI, DersDurumu.DETAYLI_KONTROL_REVIZE_ISTENDI, DersDurumu.DETAYLI_REVIZE_TAMAMLANDI,
+    DersDurumu.SORU_KONTROL_ONAYLANDI, DersDurumu.SORU_KONTROL_REVIZE_ISTENDI, DersDurumu.SORU_REVIZE_TAMAMLANDI,
+    DersDurumu.VIDEO_MONTAJI_TAMAMLANDI, DersDurumu.GRAFIK_TAMAMLANDI,
+    DersDurumu.TANITIM_VIDEOSU_TAMAMLANDI, DersDurumu.ALT_YAZI_TAMAMLANDI, DersDurumu.STORYBOARD_TAMAMLANDI,
+    DersDurumu.LMS_YUKLENDI, DersDurumu.YAYIN_ONCESI_ONAYA_SUNULDU,
+    DersDurumu.YAYINLAMA_ONAYLANDI, DersDurumu.YAYINLAMA_REDDEDILDI
+  ];
+
+  canModifyMateryal(): boolean {
+    if (!this.videoders?.dersDurumu?.kodu) return false;
+    return this.MATERYAL_IZINLI_DURUMLAR.includes(this.videoders.dersDurumu.kodu);
+  }
+
+  private loadMateryaller(): void {
+    if (!this.videoders?.id) return;
+    this.materyalLoading.set(true);
+    this.videodersMateryalService.getByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.materyaller.set(data);
+          this.materyalLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadMateryaller');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalLoading.set(false);
+        }
+      });
+  }
+
+  onMateryalAddRequested(): void {
+    if (!this.videoders?.id) return;
+    this.materyalModalLoading.set(true);
+    this.videodersMateryalService.getMedyaTurleri()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableMedyaTurleri.set(data);
+          this.materyalModalLoading.set(false);
+          setTimeout(() => this.materyalList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadMedyaTurleri');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalModalLoading.set(false);
+        }
+      });
+  }
+
+  onMateryalUpload(event: { file: File; medyaTuruId: number }): void {
+    if (!this.videoders?.id) return;
+    this.materyalUploading.set(true);
+    this.videodersMateryalService.uploadFile(event.file, this.videoders.id, event.medyaTuruId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Materyal başarıyla yüklendi.');
+          this.loadMateryaller();
+          this.materyalUploading.set(false);
+          this.materyalList?.closeModal();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'uploadMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalUploading.set(false);
+        }
+      });
+  }
+
+  onMateryalDelete(id: number): void {
+    if (!id) return;
+    this.materyalDeleting.set(true);
+    this.videodersMateryalService.deleteFile(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Materyal başarıyla silindi.');
+          this.loadMateryaller();
+          this.materyalDeleting.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalDeleting.set(false);
+        }
+      });
+  }
+
+  onMateryalDownload(id: number): void {
+    if (!id) return;
+    this.videodersMateryalService.downloadFile(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (blob) => {
+          const item = this.materyaller().find(m => m.id === id);
+          const fileName = item?.dosyaAdi || 'dosya';
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'downloadMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
   }
 
   // --- İptal İşlemi ---

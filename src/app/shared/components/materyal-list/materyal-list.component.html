@@ -1,0 +1,143 @@
+<!-- Başlık ve Ekle Butonu -->
+<div class="d-flex justify-content-end align-items-center mb-3">
+    @if (canModify) {
+        <button class="btn btn-outline-primary btn-sm" (click)="onAdd()" [disabled]="isUploading">
+            <span *ngIf="isUploading" class="spinner-border spinner-border-sm me-1" role="status"></span>
+            <i *ngIf="!isUploading" class="bi bi-cloud-upload me-1"></i>
+            Materyal Yükle
+        </button>
+    }
+</div>
+
+<!-- Yükleniyor -->
+<div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+</div>
+
+<!-- Boş Liste -->
+<div *ngIf="!isLoading && items.length === 0" class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Henüz materyal eklenmemiş.
+</div>
+
+<!-- Materyal Tablosu -->
+<div *ngIf="!isLoading && items.length > 0" class="table-responsive">
+    <table class="table table-hover table-sm align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 30px;"></th>
+                <th>Dosya Adı</th>
+                <th>Medya Türü</th>
+                <th>Boyut</th>
+                <th>Tarih</th>
+                <th style="width: 120px;" class="text-center">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of items; track item.id) {
+                <tr>
+                    <td>
+                        <i class="bi {{ getMimeIcon(item.mimeType) }} text-primary"></i>
+                    </td>
+                    <td>
+                        <span class="text-truncate d-inline-block" style="max-width: 300px;" [title]="item.dosyaAdi">
+                            {{ item.dosyaAdi }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">{{ item.medyaTuruAdi }}</span>
+                    </td>
+                    <td>
+                        <small class="text-muted">{{ formatFileSize(item.dosyaBoyutu) }}</small>
+                    </td>
+                    <td>
+                        <small class="text-muted">{{ item.eklemeTarihi | date:'dd.MM.yyyy HH:mm' }}</small>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-primary me-1"
+                                (click)="onDownload(item)"
+                                title="İndir">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        @if (canModify) {
+                            <button class="btn btn-sm btn-outline-danger"
+                                    (click)="onDelete(item)"
+                                    [disabled]="isDeleting"
+                                    title="Sil">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Materyal Yükleme Modal -->
+<ng-template #materyalModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i class="bi bi-cloud-upload me-2"></i>Materyal Yükle
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body">
+        <div *ngIf="modalLoading" class="text-center py-4">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Medya türleri yükleniyor...</span>
+            </div>
+        </div>
+
+        <div *ngIf="!modalLoading">
+            <!-- Medya Türü Seçimi -->
+            <div class="mb-3">
+                <label for="medyaTuru" class="form-label fw-semibold">Medya Türü <span class="text-danger">*</span></label>
+                <select class="form-select" id="medyaTuru" (change)="onMedyaTuruChange($event)">
+                    <option value="" selected>Medya türü seçiniz...</option>
+                    @for (tur of availableMedyaTurleri; track tur.id) {
+                        <option [value]="tur.id">{{ tur.adi }}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Dosya Seçimi -->
+            <div class="mb-3">
+                <label for="fileUpload" class="form-label fw-semibold">Dosya <span class="text-danger">*</span></label>
+                <input class="form-control" type="file" id="fileUpload"
+                    (change)="onFileSelected($event)"
+                    accept=".pdf,.pptx,.ppt,.xlsx,.xls,.jpg,.jpeg">
+                <small class="text-muted">
+                    Desteklenen formatlar: PDF, PPTX, PPT, XLSX, XLS, JPEG (Maks. 13MB)
+                </small>
+            </div>
+
+            <!-- Seçili Dosya Bilgisi -->
+            @if (selectedFile) {
+                <div class="alert alert-light border d-flex align-items-center">
+                    <i class="bi bi-file-earmark me-2 text-primary"></i>
+                    <div>
+                        <strong>{{ selectedFile.name }}</strong>
+                        <small class="text-muted ms-2">({{ formatFileSize(selectedFile.size) }})</small>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+            İptal
+        </button>
+        <button type="button"
+                class="btn btn-primary"
+                (click)="uploadFile()"
+                [disabled]="!isFormValid || isUploading">
+            <span *ngIf="isUploading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            <i *ngIf="!isUploading" class="bi bi-cloud-upload me-1"></i>
+            Yükle
+        </button>
+    </div>
+</ng-template>
