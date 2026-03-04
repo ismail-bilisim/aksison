@@ -12,7 +12,7 @@ import { DersNiteligi } from '../../models/ders-niteligi';
 import { DersOzet } from '../../models/ders-ozet';
 import { HedefKitleEgitimSeviyesiResponse } from '../../models/hedef-kitle-egitim-seviyesi-response';
 import { DersCekimYontemiResponse } from '../../models/ders-cekim-yontemi-response';
-import { OdemeKaynak } from '../../models/odeme-kaynak';
+import { OdemeKaynak } from '../../models/odemekaynak';
 import { VideodersLookupData } from '../../models/videoders-lookup-data';
 import { YuzyuzedersLookupData } from '../../models/yuzyuzeders-lookup-data';
 

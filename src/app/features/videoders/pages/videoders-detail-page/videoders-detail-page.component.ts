@@ -43,6 +43,7 @@ import { MateryalListComponent } from 'src/app/shared/components/materyal-list/m
 import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
 import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
 import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
+import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialogResult } from 'src/app/shared/components/ucret-bilgisi-dialog/ucret-bilgisi-dialog.component';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -983,6 +984,45 @@ export class VideodersDetailPageComponent implements OnInit {
       'Örnek video reddedildi.',
       'ornekVideoReddet'
     );
+  }
+
+  // --- Ücret Bilgisi Girme ---
+
+  ucretBilgisiGir(): void {
+    if (!this.videoders?.id || this.submitting) return;
+
+    const dialogData: UcretBilgisiDialogData = {
+      entityName: this.videoders?.adi,
+      odemeKaynakKodu: this.videoders?.odemeKaynak?.kodu || undefined,
+      birimUcret: this.videoders?.birimUcret,
+      toplamUcret: this.videoders?.toplamUcret
+    };
+
+    const ref = this.dialog.open<UcretBilgisiDialogResult | null>(UcretBilgisiDialogComponent, { data: dialogData });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result) {
+        this.submitting = true;
+        this.videodersService.ucretBilgisiGir(this.videoders!.id, {
+          odemeKaynakKodu: result.odemeKaynakKodu,
+          birimUcret: result.birimUcret,
+          toplamUcret: result.toplamUcret,
+          not: result.not
+        })
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (updated) => {
+              this.videoders = updated;
+              this.submitting = false;
+              this.toastService.success('Ücret bilgisi başarıyla kaydedildi.');
+            },
+            error: (error) => {
+              ErrorHandler.logError(error, 'ucretBilgisiGir');
+              this.submitting = false;
+              this.toastService.error(ErrorHandler.extractErrorMessage(error));
+            }
+          });
+      }
+    });
   }
 
   // --- İzlence İşlemleri ---

@@ -4,7 +4,7 @@ import { DersNiteligi } from './ders-niteligi';
 import { DersOzet } from './ders-ozet';
 import { HedefKitleEgitimSeviyesiResponse } from './hedef-kitle-egitim-seviyesi-response';
 import { DersCekimYontemiResponse } from './ders-cekim-yontemi-response';
-import { OdemeKaynak } from './odeme-kaynak';
+import { OdemeKaynak } from './odemekaynak';
 
 export interface VideodersLookupData {
   dersTurleri: DersTuru[];

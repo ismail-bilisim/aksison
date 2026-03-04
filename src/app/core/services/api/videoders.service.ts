@@ -6,6 +6,7 @@ import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { VideoDersResponse } from '../../models/videoders-response';
 import { VideoDersRequest } from '../../models/videoders-request';
 import { VideodersSorumlular } from '../../models/videoders-sorumlular';
+import { UcretBilgisiGirRequest } from '../../models/ucret-bilgisi-gir-request';
 
 @Injectable({ providedIn: 'root' })
 export class VideodersService {
@@ -211,6 +212,12 @@ export class VideodersService {
 
   ornekVideoReddet(id: number, not?: string): Observable<VideoDersResponse> {
     return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ornek-video-reddet`, not || null);
+  }
+
+  // --- Ücret Bilgisi Girme ---
+
+  ucretBilgisiGir(id: number, request: UcretBilgisiGirRequest): Observable<VideoDersResponse> {
+    return this.http.put<VideoDersResponse>(`${this.apiUrl}/${id}/ucret-bilgisi-gir`, request);
   }
 
   // --- İzlence İşlemleri ---

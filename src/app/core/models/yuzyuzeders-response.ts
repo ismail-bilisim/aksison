@@ -6,7 +6,7 @@ import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet
 import { DersDurumuOzet } from './ders-durumu-ozet';
 import { SehirOzet } from './sehir-ozet';
 import { KullaniciOzet } from './kullanici-ozet';
-import { OdemeKaynakOzet } from './odeme-kaynak-ozet';
+import { OdemeKaynakOzet } from './odemekaynak-ozet';
 
 export interface YuzyuzeDersResponse {
   id: number;

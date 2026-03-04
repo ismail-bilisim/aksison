@@ -2,7 +2,7 @@ import { DersNiteligiOzet } from './ders-niteligi-ozet';
 import { DersSeviyesiOzet } from './ders-seviyesi-ozet';
 import { DersTuruOzet } from './ders-turu-ozet';
 import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet';
-import { OdemeKaynakOzet } from './odeme-kaynak-ozet';
+import { OdemeKaynakOzet } from './odemekaynak-ozet';
 
 // Response - API'den dönen tam veri
 export interface DersResponse {

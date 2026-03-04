@@ -5,7 +5,7 @@ import { DersNiteligiOzet } from './ders-niteligi-ozet';
 import { DersDurumuOzet } from './ders-durumu-ozet';
 import { DersCekimYontemiOzet } from './ders-cekim-yontemi-ozet';
 import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet';
-import { OdemeKaynakOzet } from './odeme-kaynak-ozet';
+import { OdemeKaynakOzet } from './odemekaynak-ozet';
 
 export interface VideoDersResponse {
   id: number;
