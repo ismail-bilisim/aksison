@@ -1,0 +1,251 @@
+.degerlendirme-list {
+  padding: 20px 0;
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.empty-text {
+  color: #6c757d;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.empty-kriter-state {
+  padding: 20px;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+/* Add Item Container */
+.add-item-container {
+  text-align: right;
+}
+
+/* Degerlendirme Container */
+.degerlendirme-container {
+  margin-bottom: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.degerlendirme-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 10px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border-radius: 4px 4px 0 0;
+}
+
+.degerlendirme-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.degerlendirme-number {
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.degerlendirme-title {
+  flex: 1;
+}
+
+.degerlendirme-title strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.degerlendirme-description {
+  display: block;
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.degerlendirme-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.degerlendirme-actions .btn-outline-light {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.degerlendirme-actions .btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.degerlendirme-actions .btn-outline-danger-light {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.degerlendirme-actions .btn-outline-danger-light:hover {
+  background: rgba(220, 53, 69, 0.3);
+  border-color: rgba(220, 53, 69, 0.5);
+  color: white;
+}
+
+/* Kriterler Section */
+.kriterler-section {
+  padding: 2px 10px 20px 50px;
+}
+
+.kriter-item-wrapper {
+  margin-bottom: 8px;
+}
+
+.kriter-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 5px 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #11998e;
+  transition: all 0.2s;
+}
+
+.kriter-item:hover {
+  background: #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kriter-number {
+  font-weight: 600;
+  color: #11998e;
+  min-width: 40px;
+}
+
+.kriter-content {
+  flex: 1;
+}
+
+.kriter-title {
+  font-weight: 500;
+  color: #212529;
+  margin-bottom: 4px;
+}
+
+.kriter-description {
+  font-size: 14px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.kriter-puan {
+  display: flex;
+  align-items: center;
+}
+
+.kriter-puan .badge {
+  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.kriter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Modal Styling */
+.modal-header {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+/* Puan Options */
+.puan-options {
+  padding: 10px 0;
+}
+
+.puan-label {
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.puan-kotu {
+  color: #dc3545;
+}
+
+.puan-orta {
+  color: #ffc107;
+}
+
+.puan-iyi {
+  color: #28a745;
+}
+
+.form-check-input:checked + .puan-kotu {
+  background: rgba(220, 53, 69, 0.15);
+}
+
+.form-check-input:checked + .puan-orta {
+  background: rgba(255, 193, 7, 0.15);
+}
+
+.form-check-input:checked + .puan-iyi {
+  background: rgba(40, 167, 69, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .degerlendirme-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .degerlendirme-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .kriter-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .kriter-actions {
+    align-self: flex-end;
+  }
+}

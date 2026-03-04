@@ -1,0 +1,179 @@
+<div class="degerlendirme-list">
+  <!-- Empty State -->
+  <div *ngIf="degerlendirmeler.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="bi bi-clipboard-check"></i>
+    </div>
+    <p class="empty-text">Bu derse henüz değerlendirme eklenmemiş</p>
+    <button *ngIf="canModify" class="btn btn-primary" (click)="openDegerlendirmeModal()">
+      <i class="bi bi-plus-circle me-2"></i>Değerlendirme Ekle
+    </button>
+  </div>
+
+  <!-- Degerlendirmeler List -->
+  <div *ngIf="degerlendirmeler.length > 0">
+    <!-- Add Button -->
+    <div *ngIf="canModify" class="add-item-container mb-3">
+      <button class="btn btn-primary" (click)="openDegerlendirmeModal()">
+        <i class="bi bi-plus-circle me-2"></i>Değerlendirme Ekle
+      </button>
+    </div>
+
+    <!-- Iterate Through Degerlendirmeler -->
+    <div *ngFor="let degerlendirme of degerlendirmeler; let i = index" class="degerlendirme-container">
+      <!-- Degerlendirme Header -->
+      <div class="degerlendirme-header">
+        <div class="degerlendirme-info">
+          <div class="degerlendirme-number">{{i + 1}}</div>
+          <div class="degerlendirme-title">
+            <strong>{{degerlendirme.adi}}</strong>
+            <span *ngIf="degerlendirme.aciklama" class="degerlendirme-description">
+              {{degerlendirme.aciklama}}
+            </span>
+          </div>
+        </div>
+        <div class="degerlendirme-actions">
+          <button *ngIf="canModify" class="btn btn-sm btn-outline-light" 
+                  (click)="openKriterModal(degerlendirme.id)"
+                  title="Kriter ekle">
+            <i class="bi bi-plus-circle"></i> Kriter
+          </button>
+          <button *ngIf="canModify" class="btn btn-sm btn-outline-danger-light" 
+                  (click)="deleteDegerlendirme(degerlendirme.id)"
+                  title="Değerlendirmeyi sil">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kriterler Section -->
+      <div class="kriterler-section">
+        <!-- Empty State: No Kriterler -->
+        <div *ngIf="!hasKriterler(degerlendirme)" class="empty-kriter-state">
+          <p class="text-muted small mb-2">Bu değerlendirmede henüz kriter yok</p>
+          <button *ngIf="canModify" class="btn btn-sm btn-primary" (click)="openKriterModal(degerlendirme.id)">
+            <i class="bi bi-plus-circle me-1"></i>Kriter Ekle
+          </button>
+        </div>
+
+        <!-- Kriterler List -->
+        <div *ngIf="hasKriterler(degerlendirme)">
+          <div *ngFor="let dk of degerlendirme.kriterler; let j = index" class="kriter-item-wrapper">
+            <div class="kriter-item">
+              <div class="kriter-number">{{i+1}}.{{j + 1}}</div>
+              <div class="kriter-content">
+                <div class="kriter-title">{{dk.kriter.adi}}</div>
+                <div *ngIf="dk.aciklama" class="kriter-description">
+                  {{dk.aciklama}}
+                </div>
+              </div>
+              <div class="kriter-puan">
+                <span class="badge" [ngClass]="getPuanInfo(dk.kriterPuan).badge">
+                  {{getPuanInfo(dk.kriterPuan).emoji}} {{getPuanInfo(dk.kriterPuan).label}}
+                </span>
+              </div>
+              <div class="kriter-actions">
+                <button *ngIf="canModify" class="btn btn-sm btn-outline-danger" 
+                        (click)="deleteKriter(dk.id, degerlendirme.id)"
+                        title="Kriteri sil">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Degerlendirme Modal -->
+<ng-template #degerlendirmeModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Değerlendirme Ekle</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="degerlendirmeForm">
+      <div class="mb-3">
+        <label for="degAdi" class="form-label">Adı <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="degAdi" formControlName="adi"
+               [class.is-invalid]="degerlendirmeForm.get('adi')?.invalid && degerlendirmeForm.get('adi')?.touched">
+        <div class="invalid-feedback" *ngIf="degerlendirmeForm.get('adi')?.errors?.['required']">
+          Ad zorunludur
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="degAciklama" class="form-label">Açıklama</label>
+        <textarea class="form-control" id="degAciklama" formControlName="aciklama" rows="3"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-primary" (click)="saveDegerlendirme()" [disabled]="degerlendirmeForm.invalid">
+      Kaydet
+    </button>
+  </div>
+</ng-template>
+
+<!-- Kriter Modal -->
+<ng-template #kriterModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Kriter Ekle</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="kriterForm">
+      <div class="mb-3">
+        <label for="kriterKodu" class="form-label">Kriter <span class="text-danger">*</span></label>
+        <select class="form-select" id="kriterKodu" formControlName="kriterKodu"
+                [class.is-invalid]="kriterForm.get('kriterKodu')?.invalid && kriterForm.get('kriterKodu')?.touched">
+          <option value="" disabled selected>Kriter seçiniz...</option>
+          <option *ngFor="let k of availableKriterler" [value]="k.kodu">
+            {{k.adi}}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="kriterForm.get('kriterKodu')?.errors?.['required']">
+          Kriter seçimi zorunludur
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Puan <span class="text-danger">*</span></label>
+        <div class="puan-options">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="kriterPuan" id="puan1" [value]="1">
+            <label class="form-check-label puan-label puan-kotu" for="puan1">
+              🔴 Kötü
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="kriterPuan" id="puan2" [value]="2">
+            <label class="form-check-label puan-label puan-orta" for="puan2">
+              🟡 Orta
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="kriterPuan" id="puan3" [value]="3">
+            <label class="form-check-label puan-label puan-iyi" for="puan3">
+              🟢 İyi
+            </label>
+          </div>
+        </div>
+        <div class="text-danger small" *ngIf="kriterForm.get('kriterPuan')?.invalid && kriterForm.get('kriterPuan')?.touched">
+          Puan seçimi zorunludur
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="kriterAciklama" class="form-label">Açıklama</label>
+        <textarea class="form-control" id="kriterAciklama" formControlName="aciklama" rows="3"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">İptal</button>
+    <button type="button" class="btn btn-success" (click)="saveKriter()" [disabled]="kriterForm.invalid">
+      Kaydet
+    </button>
+  </div>
+</ng-template>

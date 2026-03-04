@@ -40,6 +40,7 @@ import { PaydasOzet } from 'src/app/core/models/paydas-ozet';
 import { VideodersPaydasService } from 'src/app/core/services/api/videoders-paydas.service';
 import { PaydasService } from 'src/app/core/services/api/paydas.service';
 import { MateryalListComponent } from 'src/app/shared/components/materyal-list/materyal-list.component';
+import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
 import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
 import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
 import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
@@ -67,7 +68,8 @@ import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialog
     IslemKayitListComponent,
     SoruListComponent,
     EgitmenListComponent,
-    MateryalListComponent
+    MateryalListComponent,
+    DegerlendirmeListComponent
 ],
   templateUrl: './videoders-detail-page.component.html',
   styleUrls: ['./videoders-detail-page.component.css']
@@ -133,6 +135,7 @@ export class VideodersDetailPageComponent implements OnInit {
   // Diğer sekmeler için lazy load bayrakları
   konularLoaded = true; // varsayılan sekme
   sorularLoaded = false;
+  degerlendirmelerLoaded = false;
   sozlesmelerLoaded = false;
   islemlerLoaded = false;
 
@@ -218,6 +221,9 @@ export class VideodersDetailPageComponent implements OnInit {
         break;
       case 'sorular':
         this.sorularLoaded = true;
+        break;
+      case 'degerlendirmeler':
+        this.degerlendirmelerLoaded = true;
         break;
       case 'egitmenler':
         if (!this.egitmenLoaded) {

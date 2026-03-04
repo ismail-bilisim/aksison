@@ -9,7 +9,7 @@
         </div>
       } @else if (videoders) {
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5 class="mb-0">Video Ders Detayı</h5>
+          <h5 class="mb-0"></h5>
           <div>
 
             @if( videoders && videoders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS 
@@ -343,6 +343,9 @@
               <li [ngbNavItem]="'sorular'">
                 <button ngbNavLink>Sorular</button>
               </li>
+              <li [ngbNavItem]="'degerlendirmeler'">
+                <button ngbNavLink>Değerlendirmeler</button>
+              </li>
               <li [ngbNavItem]="'materyaller'">
                 <button ngbNavLink>Materyaller ({{materyaller().length}})</button>
               </li>
@@ -373,6 +376,13 @@
               
               <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
                 <app-soru-list [dersId]="videoders.id"></app-soru-list>
+              </div>
+              
+              <div class="p-3" *ngIf="degerlendirmelerLoaded" [hidden]="activeTab !== 'degerlendirmeler'">
+                <app-degerlendirme-list
+                  [dersId]="videoders.id!"
+                  [canModify]="canModifyMateryal()">
+                </app-degerlendirme-list>
               </div>
               
               <div class="p-3" *ngIf="materyalLoaded" [hidden]="activeTab !== 'materyaller'">
