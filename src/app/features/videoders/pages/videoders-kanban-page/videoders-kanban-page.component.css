@@ -1,0 +1,15 @@
+h5 {
+  color: #212529;
+  font-weight: 600;
+}
+
+.container-fluid {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  h5 {
+    font-size: 1.1rem;
+  }
+}

@@ -4,4 +4,5 @@ export interface DersOzet {
   id?: number;
   kodu?: number;
   adi?: string;
+  durumKodu?: string;
 }

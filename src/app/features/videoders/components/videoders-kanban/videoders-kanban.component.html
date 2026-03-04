@@ -1,0 +1,43 @@
+<div class="kanban-board">
+  <div class="kanban-container">
+    @for (column of columns(); track column.id) {
+      <div class="kanban-column">
+        <!-- Column Header -->
+        <div class="kanban-column-header" [style.border-bottom-color]="column.colorAccent">
+          <div class="header-content">
+            <div class="header-title">
+              <i [class]="'bi ' + column.icon + ' me-2'" [style.color]="column.colorAccent"></i>
+              <h6 class="mb-0">{{ column.title }}</h6>
+            </div>
+            <span class="badge" [style.background-color]="column.colorAccent">{{ column.dersler.length }}</span>
+          </div>
+        </div>
+
+        <!-- Card List -->
+        <div class="kanban-card-list">
+          @for (ders of column.dersler; track ders.id) {
+            <div class="kanban-card"
+                 [style.border-left-color]="column.colorAccent"
+                 (click)="onViewDetail(ders.id!)">
+              <div class="card-content">
+                <div class="card-header-info">
+                  <span class="ders-kodu">#{{ ders.kodu }}</span>
+                  <span class="ders-durum-badge">{{ getDurumLabel(ders.durumKodu || '') }}</span>
+                </div>
+                <p class="ders-adi mb-0">{{ ders.adi }}</p>
+              </div>
+            </div>
+          }
+
+          <!-- Empty State -->
+          @if (column.dersler.length === 0) {
+            <div class="empty-column">
+              <i [class]="'bi ' + column.icon"></i>
+              <p class="mb-0">Bu aşamada ders yok</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

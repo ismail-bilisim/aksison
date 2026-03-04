@@ -1,0 +1,29 @@
+<div class="container-fluid mt-4">
+  <!-- Page Header -->
+  <div class="row mb-3">
+    <div class="col">
+      <h5 class="mb-0">
+        <i class="bi bi-kanban me-2"></i>
+        Video Ders Kanban Panosu
+      </h5>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+      <p class="text-muted mt-2">Kanban verileri yükleniyor...</p>
+    </div>
+  }
+
+  <!-- Kanban Board -->
+  @if (!isLoading) {
+    <app-videoders-kanban
+      [columns]="columns"
+      (viewDetail)="onViewDetail($event)">
+    </app-videoders-kanban>
+  }
+</div>
