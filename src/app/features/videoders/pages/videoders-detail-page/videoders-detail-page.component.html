@@ -422,13 +422,15 @@
                   #egitmenList
                   [items]="egitmenler()"
                   [loading]="egitmenLoading()"
-                  [canAssign]="videoders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI || videoders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI"
+                  [canAssign]="videoders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI || videoders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI || videoders.dersDurumu?.kodu === DersDurumu.SOZLESME_TALEP_EDILDI"
                   [modalLoading]="egitmenModalLoading()"
                   [assigning]="egitmenAssigning()"
                   [availableEgitmenler]="availableEgitmenler()"
+                  [dersId]="videoders.id"
                   (addRequested)="onEgitmenAddRequested($event)"
                   (addConfirmed)="onEgitmenAddConfirm($event)"
-                  (delete)="onEgitmenDelete($event)">
+                  (delete)="onEgitmenDelete($event)"
+                  (sozlesmeCreated)="onSozlesmeCreated()">
                 </app-egitmen-list>
               </div>
               
@@ -463,7 +465,7 @@
               </div>
               
               <div class="p-3" *ngIf="sozlesmelerLoaded" [hidden]="activeTab !== 'sozlesmeler'">
-                <app-sozlesme-list [dersId]="videoders.id!"></app-sozlesme-list>
+                <app-sozlesme-list #sozlesmeList [dersId]="videoders.id!" (select)="onSozlesmeSelect($event)"></app-sozlesme-list>
               </div>
               
               <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'islemler'">

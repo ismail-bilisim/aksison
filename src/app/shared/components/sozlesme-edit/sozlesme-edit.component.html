@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <i class="bi bi-file-earmark-plus me-2"></i>Sözleşme Oluştur
+  </h5>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()" [disabled]="submitting"></button>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+    <label for="baslangicTarihi" class="form-label">Başlangıç Tarihi</label>
+    <input type="date" class="form-control" id="baslangicTarihi"
+           [(ngModel)]="baslangicTarihi" (ngModelChange)="onBaslangicTarihiChange()">
+  </div>
+
+  <div *ngIf="loading" class="text-center p-3">
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class="visually-hidden">Şablon yükleniyor...</span>
+    </div>
+  </div>
+
+  <div class="mb-3" *ngIf="sablonLoaded">
+    <label for="sozlesmeDetails" class="form-label">Sözleşme Metni</label>
+    <textarea class="form-control" id="sozlesmeDetails" rows="15"
+              [(ngModel)]="sozlesmeDetails"></textarea>
+    <small class="text-muted">
+      <i class="bi bi-info-circle me-1"></i>Adres ve diğer bilgileri düzenleyebilirsiniz. 
+      İmza tarihi, imzalama sırasında otomatik doldurulacaktır.
+    </small>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()" [disabled]="submitting">
+    <i class="bi bi-x-lg me-1"></i>İptal
+  </button>
+  <button type="button" class="btn btn-primary" (click)="create()"
+          [disabled]="submitting || !baslangicTarihi || !sozlesmeDetails">
+    <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+    <i class="bi bi-check-lg me-1" *ngIf="!submitting"></i>
+    Sözleşme Oluştur
+  </button>
+</div>

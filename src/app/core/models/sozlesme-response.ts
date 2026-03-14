@@ -6,5 +6,8 @@ export interface SozlesmeResponse {
   imzaTarihi: string;
   sozlesmeDetails: string;
   dosyaAdi: string;
-  pdfDosya?: Uint8Array;
+  dosyaBoyutu: number;
+  mimeType: string;
+  ekleyenKullaniciId: number;
+  eklemeTarihi: string;
 }

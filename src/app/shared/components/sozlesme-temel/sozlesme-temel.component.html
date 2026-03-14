@@ -1,0 +1,68 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <i class="bi bi-file-earmark-text me-2"></i>Sözleşme Detayı
+  </h5>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Eğitmen</label>
+      <p>{{ sozlesme.egitmen.kullanici?.ad }} {{ sozlesme.egitmen.kullanici?.soyad }}</p>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Ders</label>
+      <p>{{ sozlesme.ders.adi }}</p>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Başlangıç Tarihi</label>
+      <p>{{ sozlesme.baslangicTarihi }}</p>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">İmza Tarihi</label>
+      <p>
+        <span *ngIf="sozlesme.imzaTarihi">{{ sozlesme.imzaTarihi }}</span>
+        <span *ngIf="!sozlesme.imzaTarihi" class="badge bg-warning text-dark">İmza Bekliyor</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label fw-semibold">Sözleşme Metni</label>
+    <div class="border rounded p-3 bg-light" style="white-space: pre-wrap; max-height: 400px; overflow-y: auto;">
+      {{ sozlesme.sozlesmeDetails }}
+    </div>
+  </div>
+
+  <div class="row mb-3" *ngIf="sozlesme.dosyaAdi">
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">PDF Dosyası</label>
+      <p>
+        <i class="bi bi-file-pdf text-danger me-1"></i>{{ sozlesme.dosyaAdi }}
+        <small class="text-muted ms-2" *ngIf="sozlesme.dosyaBoyutu">
+          ({{ (sozlesme.dosyaBoyutu! / 1024).toFixed(1) }} KB)
+        </small>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button *ngIf="sozlesme.dosyaAdi" type="button" class="btn btn-outline-primary"
+          (click)="downloadPdf()" [disabled]="downloading">
+    <span *ngIf="downloading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+    <i class="bi bi-download me-1" *ngIf="!downloading"></i>
+    PDF İndir
+  </button>
+  <button *ngIf="!sozlesme.imzaTarihi" type="button" class="btn btn-success"
+          (click)="imzala()" [disabled]="signing">
+    <span *ngIf="signing" class="spinner-border spinner-border-sm me-2" role="status"></span>
+    <i class="bi bi-pen me-1" *ngIf="!signing"></i>
+    Kabul Et ve İmzala
+  </button>
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">
+    <i class="bi bi-x-lg me-1"></i>Kapat
+  </button>
+</div>

@@ -27,6 +27,9 @@
             </h6>
             <small class="text-muted">TC: {{ egitmen.kullanici?.tcKimlikNo }}</small>
           </div>
+          <button class="btn btn-sm btn-outline-success me-1" (click)="openSozlesmeModal(egitmen); $event.stopPropagation()" title="Sözleşme Ekle">
+            <i class="bi bi-file-earmark-plus"></i>
+          </button>
           <button class="btn btn-sm btn-outline-danger" (click)="delete.emit(egitmen.id!); $event.stopPropagation()" title="Kaldır">
             <i class="bi bi-trash"></i>
           </button>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { EgitmenOzet } from 'src/app/core/models/egitmen-ozet';
+import { SozlesmeEditComponent } from '../sozlesme-edit/sozlesme-edit.component';
 
 @Component({
   selector: 'app-egitmen-list',
@@ -19,11 +20,13 @@ export class EgitmenListComponent {
   @Input() modalLoading = false;
   @Input() assigning = false;
   @Input() availableEgitmenler: EgitmenOzet[] = [];
+  @Input() dersId?: number;
 
   @Output() addRequested = new EventEmitter<string>();
   @Output() addConfirmed = new EventEmitter<number[]>();
   @Output() delete = new EventEmitter<number>();
   @Output() egitmenSelected = new EventEmitter<number>();
+  @Output() sozlesmeCreated = new EventEmitter<any>();
 
   @ViewChild('egitmenModal') egitmenModalTemplate!: TemplateRef<any>;
 
@@ -66,5 +69,20 @@ export class EgitmenListComponent {
     if (egitmen.id) {
       this.egitmenSelected.emit(egitmen.id);
     }
+  }
+
+  openSozlesmeModal(egitmen: EgitmenOzet): void {
+    if (!this.dersId || !egitmen.id) return;
+    const modalRef = this.modalService.open(SozlesmeEditComponent, { centered: true, size: 'lg' });
+    modalRef.componentInstance.dersId = this.dersId;
+    modalRef.componentInstance.egitmenId = egitmen.id;
+    modalRef.result.then(
+      (result) => {
+        if (result) {
+          this.sozlesmeCreated.emit(result);
+        }
+      },
+      () => {} // dismissed
+    );
   }
 }

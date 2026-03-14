@@ -8,7 +8,7 @@ import { Component, OnInit, inject, ViewChild, signal, DestroyRef } from '@angul
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbAccordionModule, NgbNavChangeEvent, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { DersDurumu } from '../../../../core/models/ders-durumu.enum';
@@ -40,6 +40,8 @@ import { PaydasOzet } from 'src/app/core/models/paydas-ozet';
 import { VideodersPaydasService } from 'src/app/core/services/api/videoders-paydas.service';
 import { PaydasService } from 'src/app/core/services/api/paydas.service';
 import { MateryalListComponent } from 'src/app/shared/components/materyal-list/materyal-list.component';
+import { SozlesmeTemelComponent } from 'src/app/shared/components/sozlesme-temel/sozlesme-temel.component';
+import { SozlesmeVideoDersResponse } from 'src/app/core/models/sozlesme-videoders-response';
 import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
 import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
 import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
@@ -80,6 +82,7 @@ export class VideodersDetailPageComponent implements OnInit {
   @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
   @ViewChild('projeList') projeList?: ProjeListComponent;
   @ViewChild('materyalList') materyalList?: MateryalListComponent;
+  @ViewChild('sozlesmeList') sozlesmeList?: SozlesmeListComponent;
   
   videoders?: VideoDersResponse;
   loading = false;
@@ -153,6 +156,7 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly paydasService = inject(PaydasService);
   private readonly videodersMateryalService = inject(VideodersMateryalService);
   private readonly dialog = inject(Dialog);
+  private readonly modalService = inject(NgbModal);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -1726,6 +1730,24 @@ export class VideodersDetailPageComponent implements OnInit {
       },
       'Ders başarıyla iptal edildi.',
       'iptalEt'
+    );
+  }
+
+  onSozlesmeCreated(): void {
+    this.sozlesmeList?.reload();
+  }
+
+  onSozlesmeSelect(sozlesme: SozlesmeVideoDersResponse): void {
+    const modalRef = this.modalService.open(SozlesmeTemelComponent, { centered: true, size: 'lg' });
+    modalRef.componentInstance.sozlesme = sozlesme;
+    modalRef.result.then(
+      (result) => {
+        if (result === 'imzalandi') {
+          this.sozlesmeList?.reload();
+          this.toastService.success('Sözleşme başarıyla imzalandı.');
+        }
+      },
+      () => {} // dismissed
     );
   }
 }
