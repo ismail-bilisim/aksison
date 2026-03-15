@@ -31,7 +31,7 @@
             <i class="bi bi-card-text me-2"></i>Temel Bilgiler
         </h6>
         <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-12">
                 <label class="form-label">Adı *</label>
                   <input formControlName="adi" class="form-control" 
                       [class.is-invalid]="form.get('adi')?.invalid && form.get('adi')?.touched" />
@@ -43,11 +43,6 @@
                 <label class="form-label">Amacı</label>
                 <textarea formControlName="amaci" class="form-control" rows="3"
                           [class.is-invalid]="form.get('amaci')?.invalid && form.get('amaci')?.touched"></textarea>
-            </div>
-            <div class="col-12">
-                <label class="form-label">Özeti</label>
-                <textarea formControlName="dersOzeti" class="form-control" rows="4"
-                          [class.is-invalid]="form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched"></textarea>
             </div>
         </div>
     </div>
@@ -136,7 +131,12 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Ders Süresi (dk)</label>
-                <input type="number" formControlName="dersSuresi" class="form-control" />
+                <div class="input-group">
+                    <input type="number" formControlName="dersSuresi" class="form-control" />
+                    @if (dersSuresiFormatli) {
+                        <span class="input-group-text">{{ dersSuresiFormatli }}</span>
+                    }
+                </div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Kontenjan</label>
@@ -185,35 +185,20 @@
         </div>
     </div>
 
-    <!-- Finansal Bilgiler -->
+    <!-- Ders Özet Bilgileri -->
     <div class="info-section mb-4">
         <h6 class="section-title">
-            <i class="bi bi-cash-stack me-2"></i>Finansal Bilgiler
+            <i class="bi bi-card-text me-2"></i>Ders Özet Bilgileri
         </h6>
         <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Ödeme Kaynak</label>
-                <select formControlName="odemeKaynakKodu" class="form-select"
-                    [class.is-invalid]="form.get('odemeKaynakKodu')?.invalid && form.get('odemeKaynakKodu')?.touched">
-                    <option value="">Seçiniz</option>
-                    @if (!lookupData) {
-                        <option disabled>Yükleniyor...</option>
-                    }
-                    @for (kaynak of lookupData?.odemeKaynaklari ?? []; track kaynak.kodu) {
-                        <option [value]="kaynak.kodu">{{ kaynak.adi }}</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Birim Ücret</label>
-                <input type="number" step="0.01" formControlName="birimUcret" class="form-control" />
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Toplam Ücret</label>
-                <input type="number" step="0.01" formControlName="toplamUcret" class="form-control" />
+            <div class="col-12">
+                <label class="form-label">Özet</label>
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"
+                    [class.is-invalid]="form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched"></textarea>
             </div>
         </div>
     </div>
+
 
     <!-- Form Actions -->
     <div class="form-actions text-end">

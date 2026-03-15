@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { NgbNavChangeEvent, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavChangeEvent, NgbNavModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DersDurumu } from '../../../../core/models/ders-durumu.enum';
 import { YuzyuzeDersResponse } from '../../../../core/models/yuzyuzeders-response';
 import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
@@ -35,6 +35,18 @@ import { YuzyuzedersEgitmenService } from 'src/app/core/services/api/yuzyuzeders
 import { EgitmenService } from 'src/app/core/services/api/egitmen.service';
 import { YuzyuzedersProjeService } from 'src/app/core/services/api/yuzyuzeders-proje.service';
 import { ProjeService } from 'src/app/core/services/api/proje.service';
+import { YuzyuzeDersBolumService } from 'src/app/core/services/api/yuzyuzeders-bolum.service';
+import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
+import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
+import { SoruYuzyuzedersService } from 'src/app/core/services/api/soru-yuzyuzeders.service';
+import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
+import { SozlesmeYuzyuzeDersService } from 'src/app/core/services/api/sozlesme-yuzyuzeders.service';
+import { SozlesmeDersResponse } from 'src/app/core/models/sozlesme-ders-response';
+import { SozlesmeTemelComponent } from 'src/app/shared/components/sozlesme-temel/sozlesme-temel.component';
+import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
+import { YuzyuzeDersDegerlendirmeService } from 'src/app/core/services/api/yuzyuzeders-degerlendirme.service';
+import { YuzyuzeDersDegerlendirmeKriterService} from 'src/app/core/services/api/yuzyuzeders-degerlendirme-kriter.service';
+import { DersDegerlendirmeResponse, DersDegerlendirmeRequest, DegerlendirmeKriterRequest, KriterOzet, DegerlendirmeTuruOzet } from 'src/app/core/models/degerlendirme';
 
 @Component({
   selector: 'app-yuzyuzeders-detail-page',
@@ -52,7 +64,8 @@ import { ProjeService } from 'src/app/core/services/api/proje.service';
     SoruListComponent,
     SozlesmeListComponent,
     EgitmenListComponent,
-    ProjeListComponent
+    ProjeListComponent,
+    DegerlendirmeListComponent
   ],
   templateUrl: './yuzyuzeders-detail-page.component.html',
   styleUrls: ['./yuzyuzeders-detail-page.component.css']
@@ -105,9 +118,28 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   availableProjeler = signal<ProjeOzet[]>([]);
   projelerLoaded = false;
 
-  konularLoaded = true;
+  konularLoaded = false;
   sorularLoaded = false;
   sozlesmelerLoaded = false;
+  degerlendirmelerLoaded = false;
+
+  // Bolum/Konu state
+  bolumlar = signal<DersBolumResponse[]>([]);
+  bolumLoading = signal(false);
+
+  // Soru state
+  sorular = signal<SoruVideoDersKonuResponse[]>([]);
+  soruLoading = signal(false);
+
+  // Sozlesme state
+  sozlesmeler = signal<SozlesmeDersResponse[]>([]);
+  sozlesmeLoading = signal(false);
+
+  // Degerlendirme state
+  degerlendirmeler = signal<DersDegerlendirmeResponse[]>([]);
+  degerlendirmeLoading = signal(false);
+  availableKriterler = signal<KriterOzet[]>([]);
+  availableTurler = signal<DegerlendirmeTuruOzet[]>([]);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -124,6 +156,13 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   private readonly dialog = inject(Dialog);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly yuzyuzeDersBolumService = inject(YuzyuzeDersBolumService);
+  private readonly bolumKonuService = inject(BolumKonuService);
+  private readonly soruYuzyuzeDersService = inject(SoruYuzyuzedersService);
+  private readonly sozlesmeYuzyuzeDersService = inject(SozlesmeYuzyuzeDersService);
+  private readonly modalService = inject(NgbModal);
+  private readonly yuzyuzeDersDegerlendirmeService = inject(YuzyuzeDersDegerlendirmeService);
+  private readonly yuzyuzeDersKriterService = inject(YuzyuzeDersDegerlendirmeKriterService);
 
   // Modal input değerleri
   onayNotu: string = '';
@@ -146,6 +185,9 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
         next: (data) => {
           this.yuzyuzeders = data;
           this.loading = false;
+          // Konular is default tab, load bolumlar immediately
+          this.loadBolumlar();
+          this.konularLoaded = true;
         },
         error: (error) => {
           ErrorHandler.logError(error, 'loadYuzyuzeders');
@@ -158,10 +200,14 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   onTabChange(event: NgbNavChangeEvent): void {
     switch (event.nextId) {
       case 'konular':
-        this.konularLoaded = true;
+        if (!this.konularLoaded) {
+          this.loadBolumlar();
+          this.konularLoaded = true;
+        }
         break;
       case 'sorular':
         if (!this.sorularLoaded) {
+          this.loadSorular();
           this.sorularLoaded = true;
         }
         break;
@@ -190,7 +236,16 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
         }
         break;
       case 'sozlesmeler':
-        this.sozlesmelerLoaded = true;
+        if (!this.sozlesmelerLoaded) {
+          this.loadSozlesmeler();
+          this.sozlesmelerLoaded = true;
+        }
+        break;
+      case 'degerlendirmeler':
+        if (!this.degerlendirmelerLoaded) {
+          this.loadDegerlendirmeler();
+          this.degerlendirmelerLoaded = true;
+        }
         break;
       case 'islemler':
         if (!this.islemlerLoaded) {
@@ -593,11 +648,311 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
       });
   }
 
+  // ========== BOLUM/KONU METHODS ==========
+
+  private loadBolumlar(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.bolumLoading.set(true);
+    this.yuzyuzeDersBolumService.getAllByDersIdOrdered(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          data.forEach(bolum => {
+            this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (konular) => {
+                  bolum.bolum.bolumKonular = konular;
+                }
+              });
+          });
+          this.bolumlar.set(data);
+          this.bolumLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadBolumlar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.bolumLoading.set(false);
+        }
+      });
+  }
+
+  onBolumAdd(request: DersBolumRequest): void {
+    this.yuzyuzeDersBolumService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Bölüm başarıyla eklendi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addBolum');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onBolumDelete(dersBolumId: number): void {
+    this.yuzyuzeDersBolumService.delete(dersBolumId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Bölüm başarıyla silindi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteBolum');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKonuAdd(request: BolumKonuRequest): void {
+    this.bolumKonuService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Konu başarıyla eklendi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addKonu');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKonuDelete(bolumKonuId: number): void {
+    this.bolumKonuService.delete(bolumKonuId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Konu başarıyla silindi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteKonu');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  // ========== SORU METHODS ==========
+
+  onSoruSaveRequested(request: SoruVideoDersKonuRequest): void {
+    this.soruYuzyuzeDersService.createRelation(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Soru başarıyla eklendi');
+          this.loadSorular();
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'createSoru');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  private loadSorular(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.soruLoading.set(true);
+    this.soruYuzyuzeDersService.getAllByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.sorular.set(data);
+          this.soruLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadSorular');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.soruLoading.set(false);
+        }
+      });
+  }
+
+  onSoruDelete(dersSoru: SoruVideoDersKonuResponse): void {
+    this.soruYuzyuzeDersService.deleteDersSoru(dersSoru.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Soru başarıyla silindi.');
+          this.loadSorular();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteSoru');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onSoruNavigateDetail(soruId: number): void {
+    this.router.navigate(['/soru/detail', soruId]);
+  }
+
+  onSoruNavigateEdit(soruId: number): void {
+    this.router.navigate(['/soru/edit', soruId]);
+  }
+
+  // ========== SOZLESME METHODS ==========
+
+  private loadSozlesmeler(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.sozlesmeLoading.set(true);
+    this.sozlesmeYuzyuzeDersService.getAllByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.sozlesmeler.set(data);
+          this.sozlesmeLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadSozlesmeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.sozlesmeLoading.set(false);
+        }
+      });
+  }
+
+  onSozlesmeSelect(sozlesme: SozlesmeDersResponse): void {
+    const modalRef = this.modalService.open(SozlesmeTemelComponent, { centered: true, size: 'lg' });
+    modalRef.componentInstance.sozlesme = sozlesme;
+    modalRef.componentInstance.dersType = 'yuzyuzeders';
+    modalRef.result.then(
+      (result) => {
+        if (result === 'imzalandi') {
+          this.loadSozlesmeler();
+          this.toastService.success('Sözleşme başarıyla imzalandı.');
+        }
+      },
+      () => {} // dismissed
+    );
+  }
+
+  onSozlesmeCreated(): void {
+    this.loadSozlesmeler();
+  }
+
   onEdit(id?: number): void {
     const dersId = id || this.yuzyuzeders?.id;
     if (dersId) {
       this.router.navigate(['/yuzyuzeders/edit', dersId]);
     }
+  }
+
+  // ========== DEGERLENDIRME METHODS ==========
+
+  canModifyDegerlendirme(): boolean {
+    return true;
+  }
+
+  private loadDegerlendirmeler(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.degerlendirmeLoading.set(true);
+    this.yuzyuzeDersDegerlendirmeService.getAllByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.degerlendirmeler.set(data);
+          this.degerlendirmeLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadDegerlendirmeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.degerlendirmeLoading.set(false);
+        }
+      });
+  }
+
+  onDegerlendirmeAdd(request: DersDegerlendirmeRequest): void {
+    this.yuzyuzeDersDegerlendirmeService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Değerlendirme başarıyla eklendi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addDegerlendirme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onDegerlendirmeDelete(degerlendirmeId: number): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.yuzyuzeDersDegerlendirmeService.delete(degerlendirmeId, this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Değerlendirme başarıyla silindi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteDegerlendirme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterAdd(request: DegerlendirmeKriterRequest): void {
+    this.yuzyuzeDersKriterService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Kriter başarıyla eklendi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addKriter');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterDelete(event: { kriterId: number; degerlendirmeId: number }): void {
+    this.yuzyuzeDersKriterService.delete(event.kriterId, event.degerlendirmeId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Kriter başarıyla silindi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteKriter');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterLoadRequested(): void {
+    this.yuzyuzeDersKriterService.getAllKriterler()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableKriterler.set(data);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadKriterler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onTuruLoadRequested(): void {
+    this.yuzyuzeDersDegerlendirmeService.getAllTurler()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableTurler.set(data);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadTurler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
   }
 
   baslatmaOnayinaSun(): void {

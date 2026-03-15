@@ -30,7 +30,6 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       dersId: ['', Validators.required],
       adi: ['', Validators.required],
       amaci: ['', Validators.required],
-      dersOzeti: ['', Validators.required],
       turuKodu: ['', Validators.required],
       seviyesiKodu: ['', Validators.required],
       niteligiKodu: ['', Validators.required],
@@ -45,9 +44,7 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       egitimYeri: ['', Validators.required],
       sehirKodu: ['', Validators.required],
       kontenjan: [''],
-      odemeKaynakKodu: ['', Validators.required],
-      birimUcret: [''],
-      toplamUcret: ['']
+      dersOzeti: ['', Validators.required]
     });
   }
 
@@ -67,6 +64,14 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       console.log('ngOnChanges initialData:', changes['initialData'].currentValue);
       this.patchForm(changes['initialData'].currentValue);
     }
+  }
+
+  get dersSuresiFormatli(): string {
+    const dak = Number(this.form.get('dersSuresi')?.value);
+    if (!dak || isNaN(dak) || dak < 0) return '';
+    const saat = Math.floor(dak / 60);
+    const dakika = dak % 60;
+    return `${String(saat).padStart(2, '0')}:${String(dakika).padStart(2, '0')}`;
   }
 
   onSubmit(): void {

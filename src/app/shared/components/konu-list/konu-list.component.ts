@@ -1,11 +1,9 @@
-import { Component, Input, OnInit, ViewChild, TemplateRef, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, TemplateRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum.service';
-import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
 import { DersBolumRequest, DersBolumResponse, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
-import { ToastService } from 'src/app/core/services/api/toast.service';
+import { SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
 import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
@@ -17,18 +15,22 @@ import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-mo
 })
 export class KonuListComponent implements OnInit {
   @Input() dersId!: number;
+  @Input() bolumlar: DersBolumResponse[] = [];
+  @Input() loading = false;
+
+  @Output() bolumAdd = new EventEmitter<DersBolumRequest>();
+  @Output() bolumDelete = new EventEmitter<number>();
+  @Output() konuAdd = new EventEmitter<BolumKonuRequest>();
+  @Output() konuDelete = new EventEmitter<number>();
+  @Output() soruSaveRequested = new EventEmitter<SoruVideoDersKonuRequest>();
 
   @ViewChild('bolumModal') bolumModal!: TemplateRef<any>;
   @ViewChild('konuModal') konuModal!: TemplateRef<any>;
   @ViewChild(SoruModalComponent) soruModal!: SoruModalComponent;
 
-  private readonly videodersBolumService = inject(VideodersBolumService);
-  private readonly bolumKonuService = inject(BolumKonuService);
   private readonly modalService = inject(NgbModal);
   private readonly fb = inject(FormBuilder);
-  private readonly toastService = inject(ToastService);
 
-  bolumlar: DersBolumResponse[] = [];
   bolumForm!: FormGroup;
   konuForm!: FormGroup;
   
@@ -38,7 +40,6 @@ export class KonuListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForms();
-    this.loadBolumlar();
   }
 
   private initializeForms(): void {
@@ -53,30 +54,6 @@ export class KonuListComponent implements OnInit {
     });
   }
 
-  private loadBolumlar(): void {
-    this.videodersBolumService.getAllByDersIdOrdered(this.dersId).subscribe({
-      next: (data) => {
-        console.log("Ders Bölümleri Yüklendi:", data);
-        this.bolumlar = data;
-        this.bolumlar.forEach(bolum => {
-
-          this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id).subscribe({
-            next: (konular) => {
-              bolum.bolum.bolumKonular = konular;
-              console.log("Bölüm Konuları Yüklendi:", konular);
-            }
-          });
-
-        });      },
-      error: (error) => {
-        console.error('Error loading bolumlar:', error);
-        this.toastService.error('Bölümler yüklenirken hata oluştu');
-      }
-    });
-
-
-  }
-
   // BOLUM OPERATIONS
 
   openBolumModal(after: number | null = null, before: number | null = null): void {
@@ -86,10 +63,7 @@ export class KonuListComponent implements OnInit {
   }
 
   saveBolum(): void {
-    if (this.bolumForm.invalid) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
+    if (this.bolumForm.invalid) return;
 
     const request: DersBolumRequest = {
       dersId: this.dersId,
@@ -98,34 +72,15 @@ export class KonuListComponent implements OnInit {
       sonrakiSiraNo: this.currentBolumInsertPosition.before
     };
 
-    this.videodersBolumService.create(request).subscribe({
-      next: () => {
-        this.toastService.success('Bölüm başarıyla eklendi.');
-        this.loadBolumlar();
-        this.modalService.dismissAll();
-      },
-      error: (error) => {
-        this.toastService.error('Bölüm eklenirken hata oluştu.');
-        console.error('Error creating bolum:', error);
-      }
-    });
+    this.bolumAdd.emit(request);
+    this.modalService.dismissAll();
   }
 
   deleteBolum(dersBolumId: number): void {
     if (!confirm('Bu bölümü silmek istediğinizden emin misiniz? Bölüme ait tüm konular da silinecektir.')) {
       return;
     }
-
-    this.videodersBolumService.delete(dersBolumId).subscribe({
-      next: () => {
-        this.toastService.success('Bölüm başarıyla silindi.');
-        this.loadBolumlar();
-      },
-      error: (error) => {
-        this.toastService.error('Bölüm silinirken hata oluştu.');
-        console.error('Error deleting bolum:', error);
-      }
-    });
+    this.bolumDelete.emit(dersBolumId);
   }
 
   // KONU OPERATIONS
@@ -137,10 +92,7 @@ export class KonuListComponent implements OnInit {
   }
 
   saveKonu(): void {
-    if (this.konuForm.invalid || !this.currentKonuInsertPosition) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
+    if (this.konuForm.invalid || !this.currentKonuInsertPosition) return;
 
     const request: BolumKonuRequest = {
       bolumId: this.currentKonuInsertPosition.bolumId,
@@ -149,34 +101,15 @@ export class KonuListComponent implements OnInit {
       sonrakiSiraNo: this.currentKonuInsertPosition.before
     };
 
-    this.bolumKonuService.create(request).subscribe({
-      next: () => {
-        this.toastService.success('Konu başarıyla eklendi.');
-        this.loadBolumlar();
-        this.modalService.dismissAll();
-      },
-      error: (error) => {
-        this.toastService.error('Konu eklenirken hata oluştu.');
-        console.error('Error creating konu:', error);
-      }
-    });
+    this.konuAdd.emit(request);
+    this.modalService.dismissAll();
   }
 
   deleteKonu(bolumKonuId: number): void {
     if (!confirm('Bu konuyu silmek istediğinizden emin misiniz?')) {
       return;
     }
-
-    this.bolumKonuService.delete(bolumKonuId).subscribe({
-      next: () => {
-        this.toastService.success('Konu başarıyla silindi.');
-        this.loadBolumlar();
-      },
-      error: (error) => {
-        this.toastService.error('Konu silinirken hata oluştu.');
-        console.error('Error deleting konu:', error);
-      }
-    });
+    this.konuDelete.emit(bolumKonuId);
   }
 
   // HELPER METHODS
@@ -196,10 +129,5 @@ export class KonuListComponent implements OnInit {
   // SORU OPERATIONS
   openSoruModalForKonu(konuId: number): void {
     this.soruModal.open(konuId);
-  }
-
-  onSoruSaved(): void {
-    // Reload bolumlar to refresh konu sorulari if needed
-    this.loadBolumlar();
   }
 }

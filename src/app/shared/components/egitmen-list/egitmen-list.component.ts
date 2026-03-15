@@ -21,6 +21,7 @@ export class EgitmenListComponent {
   @Input() assigning = false;
   @Input() availableEgitmenler: EgitmenOzet[] = [];
   @Input() dersId?: number;
+  @Input() dersType: 'videoders' | 'yuzyuzeders' = 'videoders';
 
   @Output() addRequested = new EventEmitter<string>();
   @Output() addConfirmed = new EventEmitter<number[]>();
@@ -76,6 +77,7 @@ export class EgitmenListComponent {
     const modalRef = this.modalService.open(SozlesmeEditComponent, { centered: true, size: 'lg' });
     modalRef.componentInstance.dersId = this.dersId;
     modalRef.componentInstance.egitmenId = egitmen.id;
+    modalRef.componentInstance.dersType = this.dersType;
     modalRef.result.then(
       (result) => {
         if (result) {

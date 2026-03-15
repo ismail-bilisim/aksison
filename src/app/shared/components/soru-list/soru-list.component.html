@@ -13,7 +13,7 @@
   <!-- Sorular List -->
   <div *ngIf="sorular.length > 0">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="mb-0">Sorular ({{sorular.length}})</h6>
+      <h6 class="mb-0">Sayı: {{sorular.length}}</h6>
       <button class="btn btn-sm btn-primary" (click)="openSoruModal()">
         <i class="bi bi-plus-circle me-1"></i>Soru Ekle
       </button>
@@ -52,5 +52,5 @@
 <!-- Soru Modal Component -->
 <app-soru-modal 
   [dersId]="dersId"
-  (soruSaved)="onSoruSaved()">
+  (saveRequested)="soruSaveRequested.emit($event)">
 </app-soru-modal>

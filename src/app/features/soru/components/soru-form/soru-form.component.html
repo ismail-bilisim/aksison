@@ -31,7 +31,7 @@
               [class.is-invalid]="soruForm.get('dogruSecenek')?.invalid && soruForm.get('dogruSecenek')?.touched">
         <option *ngFor="let i of [1, 2, 3, 4]" 
                 [value]="i" 
-                [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI' ? 4 : 2)">
+                [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKSC' ? 4 : 2)">
           {{i}}
         </option>
       </select>

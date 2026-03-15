@@ -210,10 +210,7 @@ export class YuzyuzedersEditPageComponent implements OnInit, OnDestroy {
       bitisTarihi: response.bitisTarihi ?? undefined,
       egitimYeri: response.egitimYeri ?? undefined,
       sehirKodu: response.sehir?.kodu ?? undefined,
-      kontenjan: response.kontenjan ?? undefined,
-      odemeKaynakKodu: response.odemeKaynak?.kodu ?? undefined,
-      birimUcret: response.birimUcret ?? undefined,
-      toplamUcret: response.toplamUcret ?? undefined
+      kontenjan: response.kontenjan ?? undefined
     };
   }
 }

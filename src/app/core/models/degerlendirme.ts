@@ -5,6 +5,13 @@ export interface KriterOzet {
   aciklama: string;
 }
 
+export interface DegerlendirmeTuruOzet {
+  id: number;
+  kodu: string;
+  adi: string;
+  aciklama: string;
+}
+
 export interface DegerlendirmeKriterResponse {
   id: number;
   version: number;
@@ -27,7 +34,7 @@ export interface DersDegerlendirmeResponse {
   id: number;
   version: number;
   dersId: number;
-  adi: string;
+  turu: DegerlendirmeTuruOzet;
   aciklama: string;
   ekleyenKullaniciId?: number;
   eklemeTarihi?: string;
@@ -36,6 +43,6 @@ export interface DersDegerlendirmeResponse {
 
 export interface DersDegerlendirmeRequest {
   dersId: number;
-  adi: string;
+  turuKodu: string;
   aciklama?: string;
 }

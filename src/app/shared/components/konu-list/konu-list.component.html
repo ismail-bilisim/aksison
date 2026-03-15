@@ -174,5 +174,5 @@
 <!-- Soru Modal Component -->
 <app-soru-modal 
   [dersId]="dersId"
-  (soruSaved)="onSoruSaved()">
+  (saveRequested)="soruSaveRequested.emit($event)">
 </app-soru-modal>

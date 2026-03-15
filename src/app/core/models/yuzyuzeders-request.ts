@@ -23,9 +23,6 @@ export interface YuzyuzeDersRequest {
   tamamlayanSayisi?: number;
   basvuruSayisi?: number;
   paydasId?: number;
-  odemeKaynakKodu?: string;
-  birimUcret?: number; // BigDecimal -> number
-  toplamUcret?: number; // BigDecimal -> number
   durumKodu?: string;
   icerikYoneticisiId?: number;
   projeYoneticisiId?: number;

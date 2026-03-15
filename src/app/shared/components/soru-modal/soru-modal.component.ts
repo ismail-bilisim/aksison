@@ -2,9 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, inject, ViewChild, Temp
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { SoruService } from 'src/app/core/services/api/soru-videoders.service';
 import { SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
-import { ToastService } from 'src/app/core/services/api/toast.service';
 import { debounceTime } from 'rxjs';
 
 @Component({
@@ -16,22 +14,20 @@ import { debounceTime } from 'rxjs';
 })
 export class SoruModalComponent implements OnInit {
   @Input() dersId!: number;
-  @Output() soruSaved = new EventEmitter<void>();
+  @Output() saveRequested = new EventEmitter<SoruVideoDersKonuRequest>();
 
   @ViewChild('soruModal') soruModal!: TemplateRef<any>;
 
-  private readonly soruService = inject(SoruService);
   private readonly modalService = inject(NgbModal);
   private readonly fb = inject(FormBuilder);
-  private readonly toastService = inject(ToastService);
 
   soruForm!: FormGroup;
   currentKonuId: number | null = null;
 
   // Dropdown options
   soruTipleri = [
-    { kod: 'COKTAN_SECMELI', label: 'Çoktan Seçmeli' },
-    { kod: 'DOGRU_YANLIS', label: 'Doğru-Yanlış' }    
+    { kod: 'COKSC', label: 'Çoktan Seçmeli' },
+    { kod: 'DOGYN', label: 'Doğru-Yanlış' }    
   ];
 
   zorlukDereceleri = [
@@ -68,7 +64,7 @@ export class SoruModalComponent implements OnInit {
         const secenek4Control = this.soruForm.get('secenek4');
         const dogruSecenekControl = this.soruForm.get('dogruSecenek');
 
-        if (soruTipi === 'COKTAN_SECMELI') {
+        if (soruTipi === 'COKSC') {
           // Çoktan Seçmeli: 4 seçenek
           secenek3Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
           secenek4Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
@@ -81,7 +77,7 @@ export class SoruModalComponent implements OnInit {
           if (dogruSecenekControl?.value > 4) {
             dogruSecenekControl?.setValue(1);
           }
-        } else if (soruTipi === 'DOGRU_YANLIS') {
+        } else if (soruTipi === 'DOGYN') {
           // Doğru-Yanlış: 2 seçenek
           secenek3Control?.clearValidators();
           secenek4Control?.clearValidators();
@@ -102,7 +98,7 @@ export class SoruModalComponent implements OnInit {
   open(konuId: number | null = null): void {
     this.currentKonuId = konuId;
     this.soruForm.reset({
-      soruTipi:'COKTAN_SECMELI',
+      soruTipi:'COKSC',
       zorlukDerecesi: 'ORTA',
       dogruSecenek: 1
     });
@@ -110,13 +106,10 @@ export class SoruModalComponent implements OnInit {
   }
 
   saveSoru(): void {
-    if (this.soruForm.invalid) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
+    if (this.soruForm.invalid) return;
 
     const soruTipi = this.soruForm.value.soruTipi;
-    const secenekSayisi = soruTipi === 'COKTAN_SECMELI' ? 4 : 2;
+    const secenekSayisi = soruTipi === 'COKSC' ? 4 : 2;
     
     const request: SoruVideoDersKonuRequest = {
       dersId: this.dersId,
@@ -130,21 +123,12 @@ export class SoruModalComponent implements OnInit {
         secenek2: this.soruForm.value.secenek2,
         secenek3: this.soruForm.value.secenek3 || undefined,
         secenek4: this.soruForm.value.secenek4 || undefined,
-        dogruSecenek: soruTipi === 'DOGRU_YANLIS' ? 1 : this.soruForm.value.dogruSecenek,
+        dogruSecenek: soruTipi === 'DOGYN' ? 1 : this.soruForm.value.dogruSecenek,
       }
     };
 
-    this.soruService.createRelation(request).subscribe({
-      next: () => {
-        this.toastService.success('Soru başarıyla eklendi');
-        this.modalService.dismissAll();
-        this.soruSaved.emit();
-      },
-      error: (error) => {
-        console.error('Error saving soru:', error);
-        this.toastService.error('Soru eklenirken hata oluştu');
-      }
-    });
+    this.saveRequested.emit(request);
+    this.modalService.dismissAll();
   }
 
   close(): void {

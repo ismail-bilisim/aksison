@@ -1,16 +1,14 @@
-import { Component, Input, OnInit, ViewChild, TemplateRef, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, TemplateRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideodersDegerlendirmeService } from 'src/app/core/services/api/videoders-degerlendirme.service';
-import { DegerlendirmeKriterService } from 'src/app/core/services/api/degerlendirme-kriter.service';
 import {
   DersDegerlendirmeRequest,
   DersDegerlendirmeResponse,
   DegerlendirmeKriterRequest,
-  KriterOzet
+  KriterOzet,
+  DegerlendirmeTuruOzet
 } from 'src/app/core/models/degerlendirme';
-import { ToastService } from 'src/app/core/services/api/toast.service';
 
 @Component({
   selector: 'app-degerlendirme-list',
@@ -21,19 +19,25 @@ import { ToastService } from 'src/app/core/services/api/toast.service';
 })
 export class DegerlendirmeListComponent implements OnInit {
   @Input() dersId!: number;
+  @Input() degerlendirmeler: DersDegerlendirmeResponse[] = [];
+  @Input() availableKriterler: KriterOzet[] = [];
+  @Input() availableTurler: DegerlendirmeTuruOzet[] = [];
+  @Input() loading = false;
   @Input() canModify: boolean = false;
+
+  @Output() degerlendirmeAdd = new EventEmitter<DersDegerlendirmeRequest>();
+  @Output() degerlendirmeDelete = new EventEmitter<number>();
+  @Output() kriterAdd = new EventEmitter<DegerlendirmeKriterRequest>();
+  @Output() kriterDelete = new EventEmitter<{ kriterId: number; degerlendirmeId: number }>();
+  @Output() kriterLoadRequested = new EventEmitter<void>();
+  @Output() turuLoadRequested = new EventEmitter<void>();
 
   @ViewChild('degerlendirmeModal') degerlendirmeModal!: TemplateRef<any>;
   @ViewChild('kriterModal') kriterModal!: TemplateRef<any>;
 
-  private readonly degerlendirmeService = inject(VideodersDegerlendirmeService);
-  private readonly kriterService = inject(DegerlendirmeKriterService);
   private readonly modalService = inject(NgbModal);
   private readonly fb = inject(FormBuilder);
-  private readonly toastService = inject(ToastService);
 
-  degerlendirmeler: DersDegerlendirmeResponse[] = [];
-  availableKriterler: KriterOzet[] = [];
   degerlendirmeForm!: FormGroup;
   kriterForm!: FormGroup;
 
@@ -49,12 +53,11 @@ export class DegerlendirmeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForms();
-    this.loadDegerlendirmeler();
   }
 
   private initializeForms(): void {
     this.degerlendirmeForm = this.fb.group({
-      adi: ['', [Validators.required, Validators.maxLength(255)]],
+      turuKodu: ['', Validators.required],
       aciklama: ['', Validators.maxLength(1000)]
     });
 
@@ -65,66 +68,34 @@ export class DegerlendirmeListComponent implements OnInit {
     });
   }
 
-  private loadDegerlendirmeler(): void {
-    this.degerlendirmeService.getAllByDersId(this.dersId).subscribe({
-      next: (data) => {
-        console.log('Değerlendirmeler Yüklendi:', data);
-        this.degerlendirmeler = data;
-      },
-      error: (error) => {
-        console.error('Error loading degerlendirmeler:', error);
-        this.toastService.error('Değerlendirmeler yüklenirken hata oluştu');
-      }
-    });
-  }
-
   // DEGERLENDIRME OPERATIONS
 
   openDegerlendirmeModal(): void {
     this.degerlendirmeForm.reset();
+    if (this.availableTurler.length === 0) {
+      this.turuLoadRequested.emit();
+    }
     this.modalService.open(this.degerlendirmeModal, { centered: true });
   }
 
   saveDegerlendirme(): void {
-    if (this.degerlendirmeForm.invalid) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
+    if (this.degerlendirmeForm.invalid) return;
 
     const request: DersDegerlendirmeRequest = {
       dersId: this.dersId,
-      adi: this.degerlendirmeForm.value.adi,
+      turuKodu: this.degerlendirmeForm.value.turuKodu,
       aciklama: this.degerlendirmeForm.value.aciklama
     };
 
-    this.degerlendirmeService.create(request).subscribe({
-      next: () => {
-        this.toastService.success('Değerlendirme başarıyla eklendi.');
-        this.loadDegerlendirmeler();
-        this.modalService.dismissAll();
-      },
-      error: (error) => {
-        this.toastService.error('Değerlendirme eklenirken hata oluştu.');
-        console.error('Error creating degerlendirme:', error);
-      }
-    });
+    this.degerlendirmeAdd.emit(request);
+    this.modalService.dismissAll();
   }
 
   deleteDegerlendirme(degerlendirmeId: number): void {
     if (!confirm('Bu değerlendirmeyi silmek istediğinizden emin misiniz? İlişkili tüm kriterler de silinecektir.')) {
       return;
     }
-
-    this.degerlendirmeService.delete(degerlendirmeId, this.dersId).subscribe({
-      next: () => {
-        this.toastService.success('Değerlendirme başarıyla silindi.');
-        this.loadDegerlendirmeler();
-      },
-      error: (error) => {
-        this.toastService.error('Değerlendirme silinirken hata oluştu.');
-        console.error('Error deleting degerlendirme:', error);
-      }
-    });
+    this.degerlendirmeDelete.emit(degerlendirmeId);
   }
 
   // KRITER OPERATIONS
@@ -133,28 +104,14 @@ export class DegerlendirmeListComponent implements OnInit {
     this.currentDegerlendirmeId = degerlendirmeId;
     this.kriterForm.reset();
 
-    // Kriter listesini yükle
     if (this.availableKriterler.length === 0) {
-      this.kriterService.getAllKriterler().subscribe({
-        next: (data) => {
-          this.availableKriterler = data;
-          this.modalService.open(this.kriterModal, { centered: true });
-        },
-        error: (error) => {
-          this.toastService.error('Kriterler yüklenirken hata oluştu.');
-          console.error('Error loading kriterler:', error);
-        }
-      });
-    } else {
-      this.modalService.open(this.kriterModal, { centered: true });
+      this.kriterLoadRequested.emit();
     }
+    this.modalService.open(this.kriterModal, { centered: true });
   }
 
   saveKriter(): void {
-    if (this.kriterForm.invalid || !this.currentDegerlendirmeId) {
-      this.toastService.warning('Lütfen tüm zorunlu alanları doldurun');
-      return;
-    }
+    if (this.kriterForm.invalid || !this.currentDegerlendirmeId) return;
 
     const request: DegerlendirmeKriterRequest = {
       degerlendirmeId: this.currentDegerlendirmeId,
@@ -163,34 +120,15 @@ export class DegerlendirmeListComponent implements OnInit {
       aciklama: this.kriterForm.value.aciklama
     };
 
-    this.kriterService.create(request).subscribe({
-      next: () => {
-        this.toastService.success('Kriter başarıyla eklendi.');
-        this.loadDegerlendirmeler();
-        this.modalService.dismissAll();
-      },
-      error: (error) => {
-        this.toastService.error('Kriter eklenirken hata oluştu.');
-        console.error('Error creating kriter:', error);
-      }
-    });
+    this.kriterAdd.emit(request);
+    this.modalService.dismissAll();
   }
 
   deleteKriter(kriterId: number, degerlendirmeId: number): void {
     if (!confirm('Bu kriteri silmek istediğinizden emin misiniz?')) {
       return;
     }
-
-    this.kriterService.delete(kriterId, degerlendirmeId).subscribe({
-      next: () => {
-        this.toastService.success('Kriter başarıyla silindi.');
-        this.loadDegerlendirmeler();
-      },
-      error: (error) => {
-        this.toastService.error('Kriter silinirken hata oluştu.');
-        console.error('Error deleting kriter:', error);
-      }
-    });
+    this.kriterDelete.emit({ kriterId, degerlendirmeId });
   }
 
   // HELPER METHODS

@@ -7,9 +7,9 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class DegerlendirmeKriterService {
+export class YuzyuzeDersDegerlendirmeKriterService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/degerlendirme-kriterler`;
+  private apiUrl = `${environment.apiUrl}/yuzyuzeders-degerlendirme-kriterler`;
 
   create(request: DegerlendirmeKriterRequest): Observable<DegerlendirmeKriterResponse> {
     return this.http.post<DegerlendirmeKriterResponse>(this.apiUrl, request);

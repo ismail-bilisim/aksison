@@ -7,9 +7,9 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class VideodersDegerlendirmeService {
+export class YuzyuzeDersDegerlendirmeService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/videoders-degerlendirmeler`;
+  private apiUrl = `${environment.apiUrl}/yuzyuzeders-degerlendirmeler`;
 
   create(request: DersDegerlendirmeRequest): Observable<DersDegerlendirmeResponse> {
     return this.http.post<DersDegerlendirmeResponse>(this.apiUrl, request);

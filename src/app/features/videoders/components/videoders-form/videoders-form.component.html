@@ -41,11 +41,6 @@
                 <textarea formControlName="amaci" class="form-control" rows="3"
                           [class.is-invalid]="form.get('amaci')?.invalid && form.get('amaci')?.touched"></textarea>
             </div>
-            <div class="col-12">
-                <label class="form-label">Özeti</label>
-                <textarea formControlName="dersOzeti" class="form-control" rows="4"
-                          [class.is-invalid]="form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched"></textarea>
-            </div>
         </div>
     </div>
 
@@ -126,7 +121,8 @@
                     }
                 </div>
             </div>
-            <!-- Başlama Tarihi removed -->
+            
+            <!-- Tahmini Teslim Tarihi -->
             <div class="col-md-6">
                 <label class="form-label">Tahmini Teslim Tarihi</label>
                 <input type="date" formControlName="tahminiDersTeslimTarihi" class="form-control" />
@@ -172,6 +168,20 @@
             </div>
         </div>
     </div>
+
+    <div class="info-section mb-4">
+        <h6 class="section-title">
+            <i class="bi bi-card-text me-2"></i>Özet Bilgiler
+        </h6>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label">Özet</label>
+                <textarea formControlName="dersOzeti" class="form-control" rows="4"
+                    [class.is-invalid]="form.get('dersOzeti')?.invalid && form.get('dersOzeti')?.touched"></textarea>
+            </div>
+        </div>
+    </div>
+
 
     <div class="form-actions text-end">
         <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid">

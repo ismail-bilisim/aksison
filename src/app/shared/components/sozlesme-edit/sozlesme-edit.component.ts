@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { SozlesmeVideoDersService, SozlesmeVideoDersRequest } from 'src/app/core/services/api/sozlesme-videoders.service';
+import { SozlesmeVideoDersService } from 'src/app/core/services/api/sozlesme-videoders.service';
+import { SozlesmeYuzyuzeDersService } from 'src/app/core/services/api/sozlesme-yuzyuzeders.service';
+import { SozlesmeDersRequest } from 'src/app/core/models/sozlesme-ders-request';
 
 @Component({
   selector: 'app-sozlesme-edit',
@@ -14,6 +16,7 @@ import { SozlesmeVideoDersService, SozlesmeVideoDersRequest } from 'src/app/core
 export class SozlesmeEditComponent {
   dersId!: number;
   egitmenId!: number;
+  dersType: 'videoders' | 'yuzyuzeders' = 'videoders';
 
   baslangicTarihi = '';
   sozlesmeDetails = '';
@@ -22,7 +25,12 @@ export class SozlesmeEditComponent {
   sablonLoaded = false;
 
   readonly activeModal = inject(NgbActiveModal);
-  private readonly sozlesmeService = inject(SozlesmeVideoDersService);
+  private readonly sozlesmeVideoDersService = inject(SozlesmeVideoDersService);
+  private readonly sozlesmeYuzyuzeDersService = inject(SozlesmeYuzyuzeDersService);
+
+  private get sozlesmeService() {
+    return this.dersType === 'yuzyuzeders' ? this.sozlesmeYuzyuzeDersService : this.sozlesmeVideoDersService;
+  }
 
   onBaslangicTarihiChange(): void {
     if (this.baslangicTarihi && this.egitmenId && this.dersId) {
@@ -48,7 +56,7 @@ export class SozlesmeEditComponent {
     if (!this.baslangicTarihi || !this.sozlesmeDetails) return;
 
     this.submitting = true;
-    const request: SozlesmeVideoDersRequest = {
+    const request: SozlesmeDersRequest = {
       dersId: this.dersId,
       egitmenId: this.egitmenId,
       baslangicTarihi: this.baslangicTarihi,

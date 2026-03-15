@@ -28,7 +28,7 @@
           <select class="form-select form-select-sm" formControlName="dogruSecenek">
             <option *ngFor="let i of [1, 2, 3, 4]" 
                     [value]="i" 
-                    [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI' ? 4 : 2)">
+                    [disabled]="i > (soruForm.get('soruTipi')?.value === 'COKSC' ? 4 : 2)">
               {{i}}
             </option>
           </select>
@@ -62,7 +62,7 @@
                placeholder="İkinci seçenek">
       </div>
 
-      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI'">
+      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKSC'">
         <label class="form-label form-label-sm">Seçenek 3 <span class="text-danger">*</span></label>
         <input type="text" 
                class="form-control form-control-sm" 
@@ -71,7 +71,7 @@
                placeholder="Üçüncü seçenek">
       </div>
 
-      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKTAN_SECMELI'">
+      <div class="mb-2" *ngIf="soruForm.get('soruTipi')?.value === 'COKSC'">
         <label class="form-label form-label-sm">Seçenek 4 <span class="text-danger">*</span></label>
         <input type="text" 
                class="form-control form-control-sm" 
@@ -80,7 +80,7 @@
                placeholder="Dördüncü seçenek">
       </div>
 
-      <small class="form-text text-muted d-block mt-2" *ngIf="soruForm.get('soruTipi')?.value === 'DOGRU_YANLIS'">
+      <small class="form-text text-muted d-block mt-2" *ngIf="soruForm.get('soruTipi')?.value === 'DOGYN'">
         <i class="bi bi-info-circle me-1"></i>Doğru-Yanlış sorularında doğru cevap Seçenek 1'dir.
       </small>
     </form>

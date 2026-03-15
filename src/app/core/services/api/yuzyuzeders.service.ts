@@ -47,11 +47,11 @@ export class YuzyuzedersService {
   }
 
   baslatmaOnayla(id: number, onayNotu?: string): Observable<YuzyuzeDersResponse> {
-    return this.http.put<YuzyuzeDersResponse>(`${this.apiUrl}/${id}/baslatma-onayla`, { onayNotu });
+    return this.http.put<YuzyuzeDersResponse>(`${this.apiUrl}/${id}/baslatma-onayla`, onayNotu );
   }
 
   baslatmaReddet(id: number, redNedeni?: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/baslatma-reddet`, { redNedeni });
+    return this.http.put<void>(`${this.apiUrl}/${id}/baslatma-reddet`, redNedeni );
   }
 
   // GET by Ders ID - for listing video lessons related to a parent course

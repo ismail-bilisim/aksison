@@ -41,12 +41,21 @@ import { VideodersPaydasService } from 'src/app/core/services/api/videoders-payd
 import { PaydasService } from 'src/app/core/services/api/paydas.service';
 import { MateryalListComponent } from 'src/app/shared/components/materyal-list/materyal-list.component';
 import { SozlesmeTemelComponent } from 'src/app/shared/components/sozlesme-temel/sozlesme-temel.component';
-import { SozlesmeVideoDersResponse } from 'src/app/core/models/sozlesme-videoders-response';
+import { SozlesmeDersResponse } from 'src/app/core/models/sozlesme-ders-response';
 import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
 import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
 import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
 import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
 import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialogResult } from 'src/app/shared/components/ucret-bilgisi-dialog/ucret-bilgisi-dialog.component';
+import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum.service';
+import { BolumKonuService } from 'src/app/core/services/api/bolum-konu.service';
+import { DersBolumResponse, DersBolumRequest, BolumKonuRequest } from 'src/app/core/models/ders-bolum';
+import { SoruVideodersService as SoruVideoDersService } from 'src/app/core/services/api/soru-videoders.service';
+import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
+import { VideodersDegerlendirmeService } from 'src/app/core/services/api/videoders-degerlendirme.service';
+import { VideoDersDegerlendirmeKriterService } from 'src/app/core/services/api/videoders-degerlendirme-kriter.service';
+import { DersDegerlendirmeResponse, DersDegerlendirmeRequest, DegerlendirmeKriterRequest, KriterOzet, DegerlendirmeTuruOzet } from 'src/app/core/models/degerlendirme';
+import { SozlesmeVideoDersService } from 'src/app/core/services/api/sozlesme-videoders.service';
 
 @Component({
   selector: 'app-videoders-detail-page',
@@ -60,8 +69,6 @@ import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialog
     VideodersTemelComponent,
     KonuListComponent,
     VideodersSorumlularComponent,
-    VideodersUcretComponent,
-    VideodersOzetComponent,
     VideodersOnkosulListComponent,
     KategoriListComponent,
     ProjeListComponent,
@@ -82,7 +89,6 @@ export class VideodersDetailPageComponent implements OnInit {
   @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
   @ViewChild('projeList') projeList?: ProjeListComponent;
   @ViewChild('materyalList') materyalList?: MateryalListComponent;
-  @ViewChild('sozlesmeList') sozlesmeList?: SozlesmeListComponent;
   
   videoders?: VideoDersResponse;
   loading = false;
@@ -136,11 +142,29 @@ export class VideodersDetailPageComponent implements OnInit {
   videoDersIslemKayitLoading = signal(false);
 
   // Diğer sekmeler için lazy load bayrakları
-  konularLoaded = true; // varsayılan sekme
+  konularLoaded = false;
   sorularLoaded = false;
   degerlendirmelerLoaded = false;
   sozlesmelerLoaded = false;
   islemlerLoaded = false;
+
+  // Bolum/Konu state
+  bolumlar = signal<DersBolumResponse[]>([]);
+  bolumLoading = signal(false);
+
+  // Soru state
+  sorular = signal<SoruVideoDersKonuResponse[]>([]);
+  soruLoading = signal(false);
+
+  // Degerlendirme state
+  degerlendirmeler = signal<DersDegerlendirmeResponse[]>([]);
+  degerlendirmeLoading = signal(false);
+  availableKriterler = signal<KriterOzet[]>([]);
+  availableTurler = signal<DegerlendirmeTuruOzet[]>([]);
+
+  // Sozlesme state
+  sozlesmeler = signal<SozlesmeDersResponse[]>([]);
+  sozlesmeLoading = signal(false);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -159,6 +183,12 @@ export class VideodersDetailPageComponent implements OnInit {
   private readonly modalService = inject(NgbModal);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly videodersBolumService = inject(VideodersBolumService);
+  private readonly bolumKonuService = inject(BolumKonuService);
+  private readonly soruVideoDersService = inject(SoruVideoDersService);
+  private readonly videodersDegerlendirmeService = inject(VideodersDegerlendirmeService);
+  private readonly degerlendirmeKriterService = inject(VideoDersDegerlendirmeKriterService);
+  private readonly sozlesmeVideoDersService = inject(SozlesmeVideoDersService);
 
   // Modal input değerleri
   onayNotu: string = '';
@@ -200,7 +230,9 @@ export class VideodersDetailPageComponent implements OnInit {
           this.videoders = data;
           this.loading = false;
           
-          // Kategoriler tab'a tıklanınca yüklenecek, burada yüklenmiyor
+          // Konular is default tab, load bolumlar immediately
+          this.loadBolumlar();
+          this.konularLoaded = true;
         },
         error: (error) => {
           ErrorHandler.logError(error, 'loadVideoders');
@@ -221,13 +253,22 @@ export class VideodersDetailPageComponent implements OnInit {
         }
         break;
       case 'konular':
-        this.konularLoaded = true;
+        if (!this.konularLoaded) {
+          this.loadBolumlar();
+          this.konularLoaded = true;
+        }
         break;
       case 'sorular':
-        this.sorularLoaded = true;
+        if (!this.sorularLoaded) {
+          this.loadSorular();
+          this.sorularLoaded = true;
+        }
         break;
       case 'degerlendirmeler':
-        this.degerlendirmelerLoaded = true;
+        if (!this.degerlendirmelerLoaded) {
+          this.loadDegerlendirmeler();
+          this.degerlendirmelerLoaded = true;
+        }
         break;
       case 'egitmenler':
         if (!this.egitmenLoaded) {
@@ -252,7 +293,10 @@ export class VideodersDetailPageComponent implements OnInit {
         }
         break;
       case 'sozlesmeler':
-        this.sozlesmelerLoaded = true;
+        if (!this.sozlesmelerLoaded) {
+          this.loadSozlesmeler();
+          this.sozlesmelerLoaded = true;
+        }
         break;
       case 'islemler':
         this.islemlerLoaded = true;
@@ -671,6 +715,284 @@ export class VideodersDetailPageComponent implements OnInit {
           ErrorHandler.logError(error, 'loadVideoDersIslemKayitlar');
           this.toastService.error(ErrorHandler.extractErrorMessage(error));
           this.videoDersIslemKayitLoading.set(false);
+        }
+      });
+  }
+
+  // ========== BOLUM/KONU METHODS ==========
+
+  private loadBolumlar(): void {
+    if (!this.videoders?.id) return;
+    this.bolumLoading.set(true);
+    this.videodersBolumService.getAllByDersIdOrdered(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          // Load konular for each bolum
+          data.forEach(bolum => {
+            this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (konular) => {
+                  bolum.bolum.bolumKonular = konular;
+                }
+              });
+          });
+          this.bolumlar.set(data);
+          this.bolumLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadBolumlar');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.bolumLoading.set(false);
+        }
+      });
+  }
+
+  onBolumAdd(request: DersBolumRequest): void {
+    this.videodersBolumService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Bölüm başarıyla eklendi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addBolum');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onBolumDelete(dersBolumId: number): void {
+    this.videodersBolumService.delete(dersBolumId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Bölüm başarıyla silindi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteBolum');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKonuAdd(request: BolumKonuRequest): void {
+    this.bolumKonuService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Konu başarıyla eklendi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addKonu');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKonuDelete(bolumKonuId: number): void {
+    this.bolumKonuService.delete(bolumKonuId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Konu başarıyla silindi.');
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteKonu');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  // ========== SORU METHODS ==========
+
+  onSoruSaveRequested(request: SoruVideoDersKonuRequest): void {
+    this.soruVideoDersService.createRelation(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Soru başarıyla eklendi');
+          this.loadSorular();
+          this.loadBolumlar();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'createSoru');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  private loadSorular(): void {
+    if (!this.videoders?.id) return;
+    this.soruLoading.set(true);
+    this.soruVideoDersService.getAllByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.sorular.set(data);
+          this.soruLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadSorular');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.soruLoading.set(false);
+        }
+      });
+  }
+
+  onSoruDelete(dersSoru: SoruVideoDersKonuResponse): void {
+    this.soruVideoDersService.deleteDersSoru(dersSoru.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Soru başarıyla silindi.');
+          this.loadSorular();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteSoru');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onSoruNavigateDetail(soruId: number): void {
+    this.router.navigate(['/soru/detail', soruId]);
+  }
+
+  onSoruNavigateEdit(soruId: number): void {
+    this.router.navigate(['/soru/edit', soruId]);
+  }
+
+  // ========== DEGERLENDIRME METHODS ==========
+
+  private loadDegerlendirmeler(): void {
+    if (!this.videoders?.id) return;
+    this.degerlendirmeLoading.set(true);
+    this.videodersDegerlendirmeService.getAllByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.degerlendirmeler.set(data);
+          this.degerlendirmeLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadDegerlendirmeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.degerlendirmeLoading.set(false);
+        }
+      });
+  }
+
+  onDegerlendirmeAdd(request: DersDegerlendirmeRequest): void {
+    this.videodersDegerlendirmeService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Değerlendirme başarıyla eklendi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addDegerlendirme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onDegerlendirmeDelete(degerlendirmeId: number): void {
+    if (!this.videoders?.id) return;
+    this.videodersDegerlendirmeService.delete(degerlendirmeId, this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Değerlendirme başarıyla silindi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteDegerlendirme');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterAdd(request: DegerlendirmeKriterRequest): void {
+    this.degerlendirmeKriterService.create(request)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Kriter başarıyla eklendi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'addKriter');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterDelete(event: { kriterId: number; degerlendirmeId: number }): void {
+    this.degerlendirmeKriterService.delete(event.kriterId, event.degerlendirmeId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Kriter başarıyla silindi.');
+          this.loadDegerlendirmeler();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteKriter');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onKriterLoadRequested(): void {
+    this.degerlendirmeKriterService.getAllKriterler()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableKriterler.set(data);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadKriterler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  onTuruLoadRequested(): void {
+    this.videodersDegerlendirmeService.getAllTurler()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableTurler.set(data);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadTurler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+  // ========== SOZLESME METHODS ==========
+
+  private loadSozlesmeler(): void {
+    if (!this.videoders?.id) return;
+    this.sozlesmeLoading.set(true);
+    this.sozlesmeVideoDersService.getAllByDersId(this.videoders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.sozlesmeler.set(data);
+          this.sozlesmeLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadSozlesmeler');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.sozlesmeLoading.set(false);
         }
       });
   }
@@ -1734,16 +2056,16 @@ export class VideodersDetailPageComponent implements OnInit {
   }
 
   onSozlesmeCreated(): void {
-    this.sozlesmeList?.reload();
+    this.loadSozlesmeler();
   }
 
-  onSozlesmeSelect(sozlesme: SozlesmeVideoDersResponse): void {
+  onSozlesmeSelect(sozlesme: SozlesmeDersResponse): void {
     const modalRef = this.modalService.open(SozlesmeTemelComponent, { centered: true, size: 'lg' });
     modalRef.componentInstance.sozlesme = sozlesme;
     modalRef.result.then(
       (result) => {
         if (result === 'imzalandi') {
-          this.sozlesmeList?.reload();
+          this.loadSozlesmeler();
           this.toastService.success('Sözleşme başarıyla imzalandı.');
         }
       },

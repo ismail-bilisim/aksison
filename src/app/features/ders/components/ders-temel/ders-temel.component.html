@@ -42,6 +42,9 @@
         <dd>
           <i class="bi bi-clock me-1"></i>
           {{ ders.tahminiDersSuresi ? ders.tahminiDersSuresi + ' dakika' : 'Belirtilmemiş' }}
+          @if (tahminiDersSuresiFormatli) {
+            <span class="text-muted ms-1">({{ tahminiDersSuresiFormatli }})</span>
+          }
         </dd>
       </div>
       <div class="info-item">

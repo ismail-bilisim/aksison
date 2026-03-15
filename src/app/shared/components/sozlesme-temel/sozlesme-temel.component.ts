@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SozlesmeVideoDersService } from 'src/app/core/services/api/sozlesme-videoders.service';
-import { SozlesmeVideoDersResponse } from 'src/app/core/models/sozlesme-videoders-response';
+import { SozlesmeYuzyuzeDersService } from 'src/app/core/services/api/sozlesme-yuzyuzeders.service';
+import { SozlesmeDersResponse as SozlesmeDersResponse } from 'src/app/core/models/sozlesme-ders-response';
 
 @Component({
   selector: 'app-sozlesme-temel',
@@ -13,12 +14,18 @@ import { SozlesmeVideoDersResponse } from 'src/app/core/models/sozlesme-videoder
   styleUrls: ['./sozlesme-temel.component.css']
 })
 export class SozlesmeTemelComponent {
-  sozlesme!: SozlesmeVideoDersResponse;
+  sozlesme!: SozlesmeDersResponse;
+  dersType: 'videoders' | 'yuzyuzeders' = 'videoders';
   signing = false;
   downloading = false;
 
   readonly activeModal = inject(NgbActiveModal);
-  private readonly sozlesmeService = inject(SozlesmeVideoDersService);
+  private readonly sozlesmeVideoDersService = inject(SozlesmeVideoDersService);
+  private readonly sozlesmeYuzyuzeDersService = inject(SozlesmeYuzyuzeDersService);
+
+  private get sozlesmeService() {
+    return this.dersType === 'yuzyuzeders' ? this.sozlesmeYuzyuzeDersService : this.sozlesmeVideoDersService;
+  }
 
   imzala(): void {
     if (!this.sozlesme?.id || this.signing) return;

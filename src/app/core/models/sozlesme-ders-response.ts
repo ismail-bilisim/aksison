@@ -1,7 +1,7 @@
 import { EgitmenOzet } from './egitmen-ozet';
 import { DersOzet } from './ders-ozet';
 
-export interface SozlesmeVideoDersResponse {
+export interface SozlesmeDersResponse {
   id: number;
   version: number;
   egitmen: EgitmenOzet;

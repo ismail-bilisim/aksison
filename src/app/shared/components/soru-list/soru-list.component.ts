@@ -1,9 +1,6 @@
-import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { SoruService } from 'src/app/core/services/api/soru-videoders.service';
-import { SoruVideoDersKonuResponse } from 'src/app/core/models/soru-ders-konu';
-import { ToastService } from 'src/app/core/services/api/toast.service';
+import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
 import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-modal.component';
 
 @Component({
@@ -13,40 +10,20 @@ import { SoruModalComponent } from 'src/app/shared/components/soru-modal/soru-mo
   templateUrl: './soru-list.component.html',
   styleUrl: './soru-list.component.css'
 })
-export class SoruListComponent implements OnInit {
+export class SoruListComponent {
   @Input() dersId!: number;
+  @Input() sorular: SoruVideoDersKonuResponse[] = [];
+  @Input() loading = false;
+
+  @Output() delete = new EventEmitter<SoruVideoDersKonuResponse>();
+  @Output() soruSaveRequested = new EventEmitter<SoruVideoDersKonuRequest>();
+  @Output() navigateDetail = new EventEmitter<number>();
+  @Output() navigateEdit = new EventEmitter<number>();
 
   @ViewChild(SoruModalComponent) soruModal!: SoruModalComponent;
 
-  private readonly soruService = inject(SoruService);
-  private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
-
-  sorular: SoruVideoDersKonuResponse[] = [];
-
-  ngOnInit(): void {
-    this.loadSorular();
-  }
-
-  private loadSorular(): void {
-    this.soruService.getAllByDersId(this.dersId).subscribe({
-      next: (data) => {
-        console.log('Sorular yüklendi:', data);
-        this.sorular = data;
-      },
-      error: (error) => {
-        console.error('Error loading sorular:', error);
-        this.toastService.error('Sorular yüklenirken hata oluştu');
-      }
-    });
-  }
-
   openSoruModal(): void {
-    this.soruModal.open(null); // Konu secilmeden ders bazında soru ekleme.
-  }
-
-  onSoruSaved(): void {
-    this.loadSorular();
+    this.soruModal.open(null);
   }
 
   deleteDersSoru(dersSoru: SoruVideoDersKonuResponse): void {
@@ -55,36 +32,26 @@ export class SoruListComponent implements OnInit {
       : dersSoru.soru.soruMetni;
       
     if (confirm(`"${soruMetniKisa}" sorusunu dersten silmek istediğinize emin misiniz?`)) {
-      this.soruService.deleteDersSoru(dersSoru.id).subscribe({
-        next: () => {
-          this.toastService.success('Soru bu dersten başarıyla silindi');
-          this.loadSorular();
-        },
-        error: (error) => {
-          console.error('Error deleting soru:', error);
-          this.toastService.error('Soru silinirken hata oluştu');
-        }
-      });
+      this.delete.emit(dersSoru);
     }
   }
+
   getSoruTipiLabel(soruTipi: any): string {
     if (typeof soruTipi === 'string') {
       return soruTipi;
     }
-    // Enum nesnesinden kod çekmek için
     return soruTipi?.kod || soruTipi || '-';
   }
 
   navigateToSoruDetail(soruId: number): void {
     if (soruId) {
-      this.router.navigate(['/soru/detail', soruId]);
+      this.navigateDetail.emit(soruId);
     }
   }
 
   navigateToSoruEdit(soruId: number): void {
     if (soruId) {
-      this.router.navigate(['/soru/edit', soruId]);
+      this.navigateEdit.emit(soruId);
     }
   }
-
 } 

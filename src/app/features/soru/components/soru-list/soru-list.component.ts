@@ -35,8 +35,8 @@ export class SoruListComponent {
 
   getSoruTipiLabel(kod: string): string {
     const tipler: {[key: string]: string} = {
-      'COKTAN_SECMELI': 'Çoktan Seçmeli',
-      'DOGRU_YANLIS': 'Doğru-Yanlış'
+      'COKSC': 'Çoktan Seçmeli',
+      'DOGYN': 'Doğru-Yanlış'
     };
     return tipler[kod] || kod;
   }

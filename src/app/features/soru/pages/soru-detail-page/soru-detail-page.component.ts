@@ -9,6 +9,7 @@ import { SoruResponse } from 'src/app/core/models/soru-response';
 import { SoruTemelComponent } from '../../components/soru-temel/soru-temel.component';
 import { SoruVideodersListComponent } from '../../components/soru-videoders-list/soru-videoders-list.component';
 import { SoruKonuListComponent } from '../../components/soru-konu-list/soru-konu-list.component';
+import { SoruYuzyuzedersListComponent } from '../../components/soru-yuzyuzeders-list/soru-yuzyuzeders-list.component';
 
 @Component({
   selector: 'app-soru-detail-page',
@@ -18,6 +19,7 @@ import { SoruKonuListComponent } from '../../components/soru-konu-list/soru-konu
     NgbNavModule,
     SoruTemelComponent,
     SoruVideodersListComponent,
+    SoruYuzyuzedersListComponent,
     SoruKonuListComponent
   ],
   templateUrl: './soru-detail-page.component.html',

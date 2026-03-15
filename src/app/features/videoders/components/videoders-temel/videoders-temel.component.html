@@ -83,7 +83,7 @@
     <div class="info-grid">
       <div class="info-item">
         <dt>İlgi Alanına Göre Hedef Kitle</dt>
-        <dd>{{ videoders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</dd>
+        <dd class="text-content text-pre-wrap">{{ videoders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</dd>
       </div>
       <div class="info-item">
         <dt>Hedef Kitle Eğitim Seviyesi</dt>
@@ -103,7 +103,11 @@
         <dt>
           <i class="bi bi-clock-history text-primary me-1"></i>Tahmini Ders Süresi
         </dt>
-        <dd>{{ videoders.tahminiDersSuresi ? videoders.tahminiDersSuresi + ' dakika' : 'Belirtilmemiş' }}</dd>
+        <dd>{{ videoders.tahminiDersSuresi ? videoders.tahminiDersSuresi + ' dakika' : 'Belirtilmemiş' }}
+          @if (tahminiDersSuresiFormatli) {
+            <span class="text-muted ms-1">({{ tahminiDersSuresiFormatli }})</span>
+          }
+        </dd>
       </div>
       @if (videoders.tahminiDersTeslimTarihi) {
         <div class="info-item">
@@ -113,15 +117,16 @@
           <dd>{{ videoders.tahminiDersTeslimTarihi | date:'dd/MM/yyyy' }}</dd>
         </div>
       }
-      <!-- Başlama Tarihi removed -->
-      @if (videoders.dersTeslimTarihi) {
+      <!-- Ders Teslim Tarihi -->
         <div class="info-item">
           <dt>
             <i class="bi bi-check-circle text-success me-1"></i>Ders Teslim Tarihi
           </dt>
-          <dd>{{ videoders.dersTeslimTarihi | date:'dd/MM/yyyy' }}</dd>
-        </div>
-      }
+          @if (videoders.dersTeslimTarihi) {
+            <dd>{{ videoders.dersTeslimTarihi | date:'dd/MM/yyyy' }}</dd>
+          }  
+      </div>
+        
     </div>
   </div>
 
@@ -134,11 +139,11 @@
     <div class="info-grid">
       <div class="info-item">
         <dt>Kazanımlar</dt>
-        <dd>{{ videoders.kazanimlar  || 'Belirtilmemiş' }}</dd>
+        <dd class="text-content text-pre-wrap">{{ videoders.kazanimlar  || 'Belirtilmemiş' }}</dd>
       </div>
       <div class="info-item">
         <dt>Kullanılacak Araçlar</dt>
-        <dd>{{ videoders.kullanilacakProgramlar || 'Belirtilmemiş' }}</dd>
+        <dd class="text-content text-pre-wrap">{{ videoders.kullanilacakProgramlar || 'Belirtilmemiş' }}</dd>
       </div>
     </div>
   </div>
@@ -154,7 +159,44 @@
     </div>
   }
 
-    <div class="info-item">
+    <!-- Ders Özeti -->
+    @if (videoders.dersOzeti) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-file-text me-2"></i>Ders Özeti
+      </h6>
+      <p class="text-content text-pre-wrap">{{ videoders.dersOzeti }}</p>
+    </div>
+    }
+
+    <!-- Ücret Bilgisi -->
+    @if (videoders.birimUcret || videoders.toplamUcret || 1===1) {
+      <div class="info-section mb-4">
+        <h6 class="section-title">
+          <i class="bi bi-people me-2"></i>Ücret Bilgisi
+        </h6>
+        <div class="info-grid">
+          <div class="info-item">
+            <dt>Birim Ücret</dt>
+            <dd>{{ videoders.birimUcret }} ₺</dd>
+          </div>
+          <div class="info-item">
+            <dt>Toplam Ücret</dt>
+            <dd class="fw-bold">{{ videoders.toplamUcret }} ₺</dd>
+          </div>
+          @if (videoders.odemeKaynak) {
+          <div class="info-item">
+            <dt>Ödeme Kaynağı</dt>
+            <dd>{{ videoders.odemeKaynak.adi || 'Belirtilmemiş' }}</dd>
+          </div>
+          }
+        </div>
+      </div>
+    }
+
+
+
+  <div class="info-item">
         <dt>Portal Adresi</dt>
         <dd>
         @if (videoders.portalAdresi) {

@@ -66,7 +66,7 @@ export class SoruFormComponent implements OnInit {
         const secenek4Control = this.soruForm.get('secenek4');
         const dogruSecenekControl = this.soruForm.get('dogruSecenek');
 
-        if (soruTipi === 'COKTAN_SECMELI') {
+        if (soruTipi === 'COKSC') {
           secenek3Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
           secenek4Control?.setValidators([Validators.required, Validators.maxLength(1000)]);
           dogruSecenekControl?.enable();
@@ -75,7 +75,7 @@ export class SoruFormComponent implements OnInit {
           if (dogruSecenekControl?.value > 4 || !dogruSecenekControl?.value) {
             dogruSecenekControl?.setValue(1);
           }
-        } else if (soruTipi === 'DOGRU_YANLIS') {
+        } else if (soruTipi === 'DOGYN') {
           secenek3Control?.clearValidators();
           secenek4Control?.clearValidators();
           // Sadece dolu değilse temizle
@@ -125,7 +125,7 @@ export class SoruFormComponent implements OnInit {
       kontrolAciklama: this.initialData.kontrolAciklama || ''
     }, { emitEvent: false });
 
-    // DOGRU_YANLIS tipindeki sorular için dogruSecenek'i disable et
+    // DOGYN tipindeki sorular için dogruSecenek'i disable et
     if (this.initialData.soruTipi.kodu === 'COK') {
       this.soruForm.get('dogruSecenek')?.disable({ emitEvent: false });
     }

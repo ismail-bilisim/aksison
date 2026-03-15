@@ -1,4 +1,4 @@
-export interface SozlesmeVideoDersRequest {
+export interface SozlesmeDersRequest {
   dersId: number;
   egitmenId: number;
   baslangicTarihi: string;

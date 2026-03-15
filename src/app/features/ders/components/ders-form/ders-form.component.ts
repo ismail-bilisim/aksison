@@ -153,6 +153,14 @@ export class DersFormComponent implements OnInit {
     });
   }
 
+  get tahminiDersSuresiFormatli(): string {
+    const dak = Number(this.form.get('tahminiDersSuresi')?.value);
+    if (!dak || isNaN(dak) || dak < 0) return '';
+    const saat = Math.floor(dak / 60);
+    const dakika = dak % 60;
+    return `${String(saat).padStart(2, '0')}:${String(dakika).padStart(2, '0')}`;
+  }
+
   onSubmit() {
     if (this.form.valid) {
       this.save.emit(this.form.value as DersRequest);

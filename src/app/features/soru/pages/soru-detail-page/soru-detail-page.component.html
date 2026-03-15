@@ -58,6 +58,17 @@
             </ng-template>
           </li>
 
+          <!-- Yüzyüze Dersler Tab -->
+          <li [ngbNavItem]="'yuzyuzeders'">
+            <button ngbNavLink>
+              <i class="bi bi-people me-1"></i>
+              Yüzyüze Dersler
+            </button>
+            <ng-template ngbNavContent>
+              <app-soru-yuzyuzeders-list [soruId]="soru.id"></app-soru-yuzyuzeders-list>
+            </ng-template>
+          </li>
+
           <!-- Konular Tab -->
           <li [ngbNavItem]="'konular'">
             <button ngbNavLink>

@@ -267,20 +267,6 @@
           </div>
         </div>
 
-        <!-- Ders Özeti -->
-        @if (videoders.dersOzeti) {
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">
-                <i class="bi bi-file-text me-2"></i>Ders Özeti
-              </h6>
-            </div>
-            <div class="card-body">
-              <app-videoders-ozet [videoders]="videoders"></app-videoders-ozet>
-            </div>
-          </div>
-        }
-
         <!-- Sorumlular -->
         <div class="card shadow-sm mb-4">
           <div class="card-header bg-light">
@@ -293,17 +279,6 @@
           </div>
         </div>
 
-        <!-- Ücret Bilgisi -->
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-light">
-            <h6 class="mb-0">
-              <i class="bi bi-currency-dollar me-2"></i>Ücret Bilgisi
-            </h6>
-          </div>
-          <div class="card-body">
-            <app-videoders-ucret [videoders]="videoders"></app-videoders-ucret>
-          </div>
-        </div>
 
         <!-- Ön Koşullar -->
         <div class="card shadow-sm mb-4">
@@ -371,17 +346,44 @@
             
             <div class="mt-3">
               <div class="p-3" *ngIf="konularLoaded" [hidden]="activeTab !== 'konular'">
-                <app-konu-list [dersId]="videoders.id!"></app-konu-list>
+                <app-konu-list
+                  [dersId]="videoders.id!"
+                  [bolumlar]="bolumlar()"
+                  [loading]="bolumLoading()"
+                  (bolumAdd)="onBolumAdd($event)"
+                  (bolumDelete)="onBolumDelete($event)"
+                  (konuAdd)="onKonuAdd($event)"
+                  (konuDelete)="onKonuDelete($event)"
+                  (soruSaveRequested)="onSoruSaveRequested($event)">
+                </app-konu-list>
               </div>
               
               <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
-                <app-soru-list [dersId]="videoders.id"></app-soru-list>
+                <app-soru-list
+                  [dersId]="videoders.id!"
+                  [sorular]="sorular()"
+                  [loading]="soruLoading()"
+                  (delete)="onSoruDelete($event)"
+                  (soruSaveRequested)="onSoruSaveRequested($event)"
+                  (navigateDetail)="onSoruNavigateDetail($event)"
+                  (navigateEdit)="onSoruNavigateEdit($event)">
+                </app-soru-list>
               </div>
               
               <div class="p-3" *ngIf="degerlendirmelerLoaded" [hidden]="activeTab !== 'degerlendirmeler'">
                 <app-degerlendirme-list
                   [dersId]="videoders.id!"
-                  [canModify]="canModifyMateryal()">
+                  [degerlendirmeler]="degerlendirmeler()"
+                  [availableKriterler]="availableKriterler()"
+                  [availableTurler]="availableTurler()"
+                  [loading]="degerlendirmeLoading()"
+                  [canModify]="canModifyMateryal()"
+                  (degerlendirmeAdd)="onDegerlendirmeAdd($event)"
+                  (degerlendirmeDelete)="onDegerlendirmeDelete($event)"
+                  (kriterAdd)="onKriterAdd($event)"
+                  (kriterDelete)="onKriterDelete($event)"
+                  (kriterLoadRequested)="onKriterLoadRequested()"
+                  (turuLoadRequested)="onTuruLoadRequested()">
                 </app-degerlendirme-list>
               </div>
               
@@ -427,6 +429,7 @@
                   [assigning]="egitmenAssigning()"
                   [availableEgitmenler]="availableEgitmenler()"
                   [dersId]="videoders.id"
+                  [dersType]="'videoders'"
                   (addRequested)="onEgitmenAddRequested($event)"
                   (addConfirmed)="onEgitmenAddConfirm($event)"
                   (delete)="onEgitmenDelete($event)"
@@ -465,7 +468,11 @@
               </div>
               
               <div class="p-3" *ngIf="sozlesmelerLoaded" [hidden]="activeTab !== 'sozlesmeler'">
-                <app-sozlesme-list #sozlesmeList [dersId]="videoders.id!" (select)="onSozlesmeSelect($event)"></app-sozlesme-list>
+                <app-sozlesme-list
+                  [items]="sozlesmeler()"
+                  [loading]="sozlesmeLoading()"
+                  (select)="onSozlesmeSelect($event)">
+                </app-sozlesme-list>
               </div>
               
               <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'islemler'">

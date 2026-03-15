@@ -7,8 +7,8 @@ import { SozlesmeDersRequest } from '../../models/sozlesme-ders-request';
 
 
 @Injectable({ providedIn: 'root' })
-export class SozlesmeVideoDersService {
-  private apiUrl = `${environment.apiUrl}/sozlesmevideoders`;
+export class SozlesmeYuzyuzeDersService {
+  private apiUrl = `${environment.apiUrl}/sozlesmeyuzyuzeders`;
 
   constructor(private http: HttpClient) {}
 

@@ -24,9 +24,8 @@
       <!-- Degerlendirme Header -->
       <div class="degerlendirme-header">
         <div class="degerlendirme-info">
-          <div class="degerlendirme-number">{{i + 1}}</div>
           <div class="degerlendirme-title">
-            <strong>{{degerlendirme.adi}}</strong>
+            <strong>{{degerlendirme.turu.adi}}</strong>
             <span *ngIf="degerlendirme.aciklama" class="degerlendirme-description">
               {{degerlendirme.aciklama}}
             </span>
@@ -60,7 +59,7 @@
         <div *ngIf="hasKriterler(degerlendirme)">
           <div *ngFor="let dk of degerlendirme.kriterler; let j = index" class="kriter-item-wrapper">
             <div class="kriter-item">
-              <div class="kriter-number">{{i+1}}.{{j + 1}}</div>
+              <div class="kriter-number">{{j + 1}}.</div>
               <div class="kriter-content">
                 <div class="kriter-title">{{dk.kriter.adi}}</div>
                 <div *ngIf="dk.aciklama" class="kriter-description">
@@ -96,11 +95,16 @@
   <div class="modal-body">
     <form [formGroup]="degerlendirmeForm">
       <div class="mb-3">
-        <label for="degAdi" class="form-label">Adı <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="degAdi" formControlName="adi"
-               [class.is-invalid]="degerlendirmeForm.get('adi')?.invalid && degerlendirmeForm.get('adi')?.touched">
-        <div class="invalid-feedback" *ngIf="degerlendirmeForm.get('adi')?.errors?.['required']">
-          Ad zorunludur
+        <label for="degTuruKodu" class="form-label">Türü <span class="text-danger">*</span></label>
+        <select class="form-select" id="degTuruKodu" formControlName="turuKodu"
+                [class.is-invalid]="degerlendirmeForm.get('turuKodu')?.invalid && degerlendirmeForm.get('turuKodu')?.touched">
+          <option value="" disabled selected>Tür seçiniz...</option>
+          <option *ngFor="let t of availableTurler" [value]="t.kodu">
+            {{t.adi}}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="degerlendirmeForm.get('turuKodu')?.errors?.['required']">
+          Tür seçimi zorunludur
         </div>
       </div>
       <div class="mb-3">

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SoruService } from 'src/app/core/services/api/soru-videoders.service';
+import { SoruVideodersService } from 'src/app/core/services/api/soru-videoders.service';
 import { ToastService } from 'src/app/core/services/api/toast.service';
 import { KonuOzet } from 'src/app/core/models/konu-ozet';
 
@@ -14,7 +14,7 @@ import { KonuOzet } from 'src/app/core/models/konu-ozet';
 export class SoruKonuListComponent implements OnInit {
   @Input() soruId!: number;
 
-  private readonly soruService = inject(SoruService);
+  private readonly soruService = inject(SoruVideodersService);
   private readonly toastService = inject(ToastService);
 
   konuList: KonuOzet[] = [];

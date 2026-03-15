@@ -13,6 +13,14 @@ import { OnayDurumuHelper } from 'src/app/core/models/onay-durumu.enum';
 export class DersTemelComponent {
   @Input() ders?: DersResponse;
 
+  get tahminiDersSuresiFormatli(): string {
+    const dak = this.ders?.tahminiDersSuresi;
+    if (!dak || isNaN(dak) || dak < 0) return '';
+    const saat = Math.floor(dak / 60);
+    const dakika = dak % 60;
+    return `${String(saat).padStart(2, '0')}:${String(dakika).padStart(2, '0')}`;
+  }
+
   /**
    * Get OnayDurumu description for display
    */
