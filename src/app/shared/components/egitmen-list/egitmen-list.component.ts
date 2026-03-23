@@ -21,7 +21,7 @@ export class EgitmenListComponent {
   @Input() assigning = false;
   @Input() availableEgitmenler: EgitmenOzet[] = [];
   @Input() dersId?: number;
-  @Input() dersType: 'videoders' | 'yuzyuzeders' = 'videoders';
+  @Input() dersType: 'canliders' | 'videoders' | 'yuzyuzeders' = 'videoders';
 
   @Output() addRequested = new EventEmitter<string>();
   @Output() addConfirmed = new EventEmitter<number[]>();

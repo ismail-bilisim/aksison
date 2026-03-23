@@ -1,0 +1,48 @@
+import { DersOzet } from './ders-ozet';
+import { DersTuruOzet } from './ders-turu-ozet';
+import { DersSeviyesiOzet } from './ders-seviyesi-ozet';
+import { DersNiteligiOzet } from './ders-niteligi-ozet';
+import { HedefKitleEgitimSeviyesiOzet } from './hedef-kitle-egitim-seviyesi-ozet';
+import { DersDurumuOzet } from './ders-durumu-ozet';
+import { KullaniciOzet } from './kullanici-ozet';
+import { OdemeKaynakOzet } from './odemekaynak-ozet';
+
+export interface CanliDersResponse {
+  id: number;
+  version: number;
+  kodu: number;
+  ders: DersOzet | null;
+  adi: string;
+  amaci: string | null;
+  turu: DersTuruOzet | null;
+  seviyesi: DersSeviyesiOzet | null;
+  niteligi: DersNiteligiOzet | null;
+  hedefKitleEgitimSeviye: HedefKitleEgitimSeviyesiOzet | null;
+  ilgiAlaninaGoreHedefKitle: string | null;
+  kullanilacakProgramlar: string | null;
+  kazanimlar: string | null;
+  sikcaSorulanSorular: string | null;
+  sartlar: string | null;
+  dersOzeti: string | null;
+  dersSuresi: number | null;
+  baglantiAdresi: string | null;
+  baslamaTarihi: string | null;
+  bitisTarihi: string | null;
+  kontenjan: number | null;
+  katilimSayisi: number | null;
+  odemeKaynak: OdemeKaynakOzet | null;
+  birimUcret: number | null;
+  toplamUcret: number | null;
+  dersDurumu: DersDurumuOzet | null;
+  icerikYoneticisi: KullaniciOzet | null;
+  projeYoneticisi: KullaniciOzet | null;
+  materyalGelistirici: KullaniciOzet | null;
+  grafikDuzenleyici: KullaniciOzet | null;
+  moderator: KullaniciOzet | null;
+  lmsSorumlu: KullaniciOzet | null;
+  medyaSorumlu: KullaniciOzet | null;
+  eklemeTarihi: string | null;
+  ekleyenKullanici: KullaniciOzet | null;
+  guncellemeTarihi: string | null;
+  guncelleyenKullanici: KullaniciOzet | null;
+}

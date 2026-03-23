@@ -1,0 +1,39 @@
+<div class="list-container">
+  @if (canlidersler && canlidersler.length > 0) {
+    <div class="list-header">
+      <span class="list-count">
+        <i class="bi bi-camera-video me-1"></i>
+        {{ canlidersler.length }} canlı ders
+      </span>
+    </div>
+    <div class="list-items">
+      @for (c of canlidersler; track c.id) {
+        <div class="list-item" 
+             role="button"
+             tabindex="0"
+             (click)="onViewDetail(c.id!)"
+             (keydown.enter)="onViewDetail(c.id!)">
+          <div class="item-icon">
+            <i class="bi bi-camera-video"></i>
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              @if (c.kodu) {
+                <span class="item-code">{{ c.kodu }}</span>
+              }
+              {{ c.adi }}
+            </div>
+          </div>
+          <div class="item-action">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="bi bi-camera-video"></i>
+      <p>Canlı ders bulunamadı.</p>
+    </div>
+  }
+</div>

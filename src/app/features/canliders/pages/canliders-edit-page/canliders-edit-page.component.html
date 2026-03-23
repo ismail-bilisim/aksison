@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    @if (isEditMode) {
+    <h5 class="mb-3">Canlı Dersi Düzenle</h5>
+    } @else {
+    <h5 class="mb-3">Yeni Canlı Ders Ekle</h5>
+    }
+
+    @if (isLoadingLookups()) {
+        <div class="alert alert-info">
+            <i class="bi bi-hourglass-split me-2"></i>Lookup verileri yükleniyor...
+        </div>
+    }
+
+    @if (isLoadingDersDetay()) {
+        <div class="alert alert-info">
+            <i class="bi bi-hourglass-split me-2"></i>Ders detayı yükleniyor...
+        </div>
+    }
+
+    <section class="card p-4 shadow-sm border-0">
+        <app-canliders-form 
+            [initialData]="canlidersRequest()" 
+            [lookupData]="lookupData()"
+            [isEditMode]="isEditMode"
+            (save)="onSave($event)"
+            (dersSelected)="onDersSelected($event)">
+        </app-canliders-form>
+    </section>
+
+    <div class="mt-4 d-flex justify-content-end">
+        <a routerLink="/canliders" class="btn btn-outline-secondary">
+            ← Listeye Dön
+        </a>
+    </div>
+</div>

@@ -1,0 +1,191 @@
+@if (canliders) {
+  <!-- Canlı Ders Başlık ve Durum -->
+  <div class="ders-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-2">
+          @if (canliders.kodu) {
+            {{ canliders.kodu }} -
+          }
+          <span class="text-muted ">{{ canliders.adi }}</span>
+        </h5>
+        <div class="text-muted mb-2">
+        @if (canliders.dersDurumu) {
+          <span class="badge bg-info text-dark badge-md">
+            <i class="bi bi-flag me-1"></i>
+            {{ canliders.dersDurumu.adi }}
+          </span>
+        }
+        </div>
+
+        @if (canliders.ders) {
+          <div class="text-muted small">
+            <i class="bi bi-book me-1"></i>
+            <span class="fw-medium">Ana Ders:</span> 
+            <a [routerLink]="['/ders/detail', canliders.ders.id]" class="text-decoration-none">
+              {{ canliders.ders.adi }} <span class="text-muted">({{ canliders.ders.kodu }})</span>
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Amaç -->
+  @if (canliders.amaci) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-bullseye me-2"></i>Ders Amacı
+      </h6>
+      <p class="text-content">{{ canliders.amaci }}</p>
+    </div>
+  }
+
+  <!-- Sınıflandırma ve Temel Bilgiler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-diagram-3 me-2"></i>Sınıflandırma ve Özellikler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Ders Türü</dt>
+        <dd>{{ canliders.turu?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Seviye</dt>
+        <dd>{{ canliders.seviyesi?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Nitelik</dt>
+        <dd>{{ canliders.niteligi?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hedef Kitle -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-people me-2"></i>Hedef Kitle
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>İlgi Alanına Göre Hedef Kitle</dt>
+        <dd class="text-content text-pre-wrap">{{ canliders.ilgiAlaninaGoreHedefKitle || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Hedef Kitle Eğitim Seviyesi</dt>
+        <dd>{{ canliders.hedefKitleEgitimSeviye?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bağlantı Adresi ve Tarihler -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-camera-video me-2"></i>Bağlantı ve Tarihler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>
+          <i class="bi bi-link-45deg text-primary me-1"></i>Bağlantı Adresi
+        </dt>
+        <dd>{{ canliders.baglantiAdresi || 'Belirtilmemiş' }}</dd>
+      </div>
+      @if (canliders.baslamaTarihi) {
+        <div class="info-item">
+          <dt>
+            <i class="bi bi-calendar-event text-success me-1"></i>Başlama Tarihi
+          </dt>
+          <dd>{{ canliders.baslamaTarihi | date:'dd/MM/yyyy' }}</dd>
+        </div>
+      }
+      @if (canliders.bitisTarihi) {
+        <div class="info-item">
+          <dt>
+            <i class="bi bi-calendar-check text-warning me-1"></i>Bitiş Tarihi
+          </dt>
+          <dd>{{ canliders.bitisTarihi | date:'dd/MM/yyyy' }}</dd>
+        </div>
+      }
+      <div class="info-item">
+        <dt>
+          <i class="bi bi-clock-history text-primary me-1"></i>Ders Süresi
+        </dt>
+        <dd>{{ canliders.dersSuresi ? canliders.dersSuresi + ' dakika' : 'Belirtilmemiş' }}
+          @if (dersSuresiFormatli) {
+            <span class="text-muted ms-1">({{ dersSuresiFormatli }})</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kontenjan Bilgileri -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-people-fill me-2"></i>Kontenjan ve Katılım Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kontenjan</dt>
+        <dd>{{ canliders.kontenjan || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Katılım Sayısı</dt>
+        <dd>{{ canliders.katilimSayisi || '0' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kazanim ve Araclar -->
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-trophy me-2"></i>Kazanım ve Araçlar
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kazanımlar</dt>
+        <dd class="text-content text-pre-wrap">{{ canliders.kazanimlar  || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Kullanılacak Araçlar</dt>
+        <dd class="text-content text-pre-wrap">{{ canliders.kullanilacakProgramlar || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sıkça Sorulan Sorular -->
+  @if (canliders.sikcaSorulanSorular) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-question-circle me-2"></i>Sıkça Sorulan Sorular
+      </h6>
+      <p class="text-content text-pre-wrap">{{ canliders.sikcaSorulanSorular }}</p>
+    </div>
+  }
+
+  <!-- Şartlar -->
+  @if (canliders.sartlar) {
+    <div class="info-section mb-4">
+      <h6 class="section-title">
+        <i class="bi bi-list-check me-2"></i>Şartlar
+      </h6>
+      <p class="text-content text-pre-wrap">{{ canliders.sartlar }}</p>
+    </div>
+  }
+
+  <!-- Ders Özeti -->
+  @if (canliders.dersOzeti) {
+  <div class="info-section mb-4">
+    <h6 class="section-title">
+      <i class="bi bi-file-text me-2"></i>Ders Özeti
+    </h6>
+    <p class="text-content text-pre-wrap">{{ canliders.dersOzeti }}</p>
+  </div>
+  }
+
+} @else {
+<div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Ders bilgisi yükleniyor...
+</div>
+}

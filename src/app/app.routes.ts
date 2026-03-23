@@ -27,6 +27,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./features/yuzyuzeders/yuzyuze-route').then(m => m.YUZYUZEDERS_ROUTES)
             },
             { 
+                path: 'canliders', 
+                loadChildren: () => import('./features/canliders/canliders-route').then(m => m.CANLIDERS_ROUTES)
+            },
+            { 
                 path: 'ders', 
                 loadChildren: () => import('./features/ders/ders-route').then(m => m.DERS_ROUTES)
             },

@@ -15,6 +15,7 @@ import { DersCekimYontemiResponse } from '../../models/ders-cekim-yontemi-respon
 import { OdemeKaynak } from '../../models/odemekaynak';
 import { VideodersLookupData } from '../../models/videoders-lookup-data';
 import { YuzyuzedersLookupData } from '../../models/yuzyuzeders-lookup-data';
+import { CanlidersLookupData } from '../../models/canliders-lookup-data';
 
 @Injectable({
   providedIn: 'root'
@@ -132,6 +133,19 @@ export class LookupService {
       hedefKitleEgitimSeviyeleri: this.getHedefKitleEgitimSeviyeleri(),
       odemeKaynaklari: this.getOdemeKaynaklari(),
       sehirler: this.getAllSehirOzet(),
+      dersler: this.getDersler()
+    });
+  }
+
+  // ========== Canliders Aggregate Lookup ==========
+
+  getCanlidersLookups(): Observable<CanlidersLookupData> {
+    return forkJoin({
+      dersTurleri: this.getDersTurleri(),
+      dersSeviyeleri: this.getDersSeviyeleri(),
+      dersNitelikleri: this.getDersNitelikleri(),
+      hedefKitleEgitimSeviyeleri: this.getHedefKitleEgitimSeviyeleri(),
+      odemeKaynaklari: this.getOdemeKaynaklari(),
       dersler: this.getDersler()
     });
   }
