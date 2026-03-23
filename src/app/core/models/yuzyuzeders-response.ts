@@ -23,6 +23,7 @@ export interface YuzyuzeDersResponse {
   kullanilacakProgramlar: string | null;
   kazanimlar: string | null;
   sikcaSorulanSorular: string | null;
+  sartlar: string | null;
   dersOzeti: string | null;
   dersSuresi: number | null;
   baslamaTarihi: string | null; // LocalDateTime -> ISO 8601 string

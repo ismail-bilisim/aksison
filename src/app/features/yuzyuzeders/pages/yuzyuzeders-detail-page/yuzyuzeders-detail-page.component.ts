@@ -42,11 +42,19 @@ import { SoruYuzyuzedersService } from 'src/app/core/services/api/soru-yuzyuzede
 import { SoruVideoDersKonuResponse, SoruVideoDersKonuRequest } from 'src/app/core/models/soru-ders-konu';
 import { SozlesmeYuzyuzeDersService } from 'src/app/core/services/api/sozlesme-yuzyuzeders.service';
 import { SozlesmeDersResponse } from 'src/app/core/models/sozlesme-ders-response';
+import { YuzyuzeDersBasvuruService } from 'src/app/core/services/api/yuzyuzeders-basvuru.service';
+import { YuzyuzeDersBasvuruResponse } from 'src/app/core/models/yuzyuzeders-basvuru-response';
 import { SozlesmeTemelComponent } from 'src/app/shared/components/sozlesme-temel/sozlesme-temel.component';
 import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
+import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
 import { YuzyuzeDersDegerlendirmeService } from 'src/app/core/services/api/yuzyuzeders-degerlendirme.service';
 import { YuzyuzeDersDegerlendirmeKriterService} from 'src/app/core/services/api/yuzyuzeders-degerlendirme-kriter.service';
 import { DersDegerlendirmeResponse, DersDegerlendirmeRequest, DegerlendirmeKriterRequest, KriterOzet, DegerlendirmeTuruOzet } from 'src/app/core/models/degerlendirme';
+import { MateryalListComponent } from 'src/app/shared/components/materyal-list/materyal-list.component';
+import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
+import { DersMateryalResponse } from 'src/app/core/models/ders-materyal-response';
+import { YuzyuzeDersMateryalService } from 'src/app/core/services/api/yuzyuzeders-materyal.service';
+import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialogResult } from 'src/app/shared/components/ucret-bilgisi-dialog/ucret-bilgisi-dialog.component';
 
 @Component({
   selector: 'app-yuzyuzeders-detail-page',
@@ -65,6 +73,7 @@ import { DersDegerlendirmeResponse, DersDegerlendirmeRequest, DegerlendirmeKrite
     SozlesmeListComponent,
     EgitmenListComponent,
     ProjeListComponent,
+    MateryalListComponent,
     DegerlendirmeListComponent
   ],
   templateUrl: './yuzyuzeders-detail-page.component.html',
@@ -75,6 +84,8 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   @ViewChild('kategoriList') kategoriList?: KategoriListComponent;
   @ViewChild('egitmenList') egitmenList?: EgitmenListComponent;
   @ViewChild('projeList') projeList?: ProjeListComponent;
+  @ViewChild('materyalList') materyalList?: MateryalListComponent;
+
   yuzyuzeders?: YuzyuzeDersResponse;
   loading = false;
   activeTab = 'konular';
@@ -99,6 +110,14 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   availablePaydaslar = signal<PaydasOzet[]>([]);
   paydasLoaded = false;
 
+  materyaller = signal<DersMateryalResponse[]>([]);
+  materyalLoading = signal(false);
+  materyalDeleting = signal(false);
+  materyalUploading = signal(false);
+  materyalModalLoading = signal(false);
+  availableMedyaTurleri = signal<MedyaTuruOzet[]>([]);
+  materyalLoaded = false;
+
   islemKayitlar = signal<IslemKayit[]>([]);
   islemKayitLoading = signal(false);
   islemlerLoaded = false;
@@ -122,6 +141,11 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   sorularLoaded = false;
   sozlesmelerLoaded = false;
   degerlendirmelerLoaded = false;
+  basvurularLoaded = false;
+
+  // Basvuru state
+  basvurular = signal<YuzyuzeDersBasvuruResponse[]>([]);
+  basvuruLoading = signal(false);
 
   // Bolum/Konu state
   bolumlar = signal<DersBolumResponse[]>([]);
@@ -148,6 +172,8 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   private readonly kategoriService = inject(KategoriService);
   private readonly yuzyuzedersPaydasService = inject(YuzyuzedersPaydasService);
   private readonly paydasService = inject(PaydasService);
+  private readonly yuzyuzedersMateryalService = inject(YuzyuzeDersMateryalService);
+
   private readonly yuzyuzedersIslemKayitService = inject(YuzyuzedersIslemKayitService);
   private readonly yuzyuzedersEgitmenService = inject(YuzyuzedersEgitmenService);
   private readonly egitmenService = inject(EgitmenService);
@@ -160,6 +186,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
   private readonly bolumKonuService = inject(BolumKonuService);
   private readonly soruYuzyuzeDersService = inject(SoruYuzyuzedersService);
   private readonly sozlesmeYuzyuzeDersService = inject(SozlesmeYuzyuzeDersService);
+  private readonly yuzyuzeDersBasvuruService = inject(YuzyuzeDersBasvuruService);
   private readonly modalService = inject(NgbModal);
   private readonly yuzyuzeDersDegerlendirmeService = inject(YuzyuzeDersDegerlendirmeService);
   private readonly yuzyuzeDersKriterService = inject(YuzyuzeDersDegerlendirmeKriterService);
@@ -223,6 +250,12 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
           this.paydasLoaded = true;
         }
         break;
+      case 'materyaller':
+        if (!this.materyalLoaded) {
+          this.loadMateryaller();
+          this.materyalLoaded = true;
+        }
+        break;
       case 'egitmenler':
         if (!this.egitmenLoaded) {
           this.loadEgitmenler();
@@ -251,6 +284,12 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
         if (!this.islemlerLoaded) {
           this.loadIslemKayitlar();
           this.islemlerLoaded = true;
+        }
+        break;
+      case 'basvurular':
+        if (!this.basvurularLoaded) {
+          this.loadBasvurular();
+          this.basvurularLoaded = true;
         }
         break;
       default:
@@ -835,6 +874,26 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
     this.loadSozlesmeler();
   }
 
+  // ========== BASVURU METHODS ==========
+
+  private loadBasvurular(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.basvuruLoading.set(true);
+    this.yuzyuzeDersBasvuruService.getAllByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.basvurular.set(data);
+          this.basvuruLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadBasvurular');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.basvuruLoading.set(false);
+        }
+      });
+  }
+
   onEdit(id?: number): void {
     const dersId = id || this.yuzyuzeders?.id;
     if (dersId) {
@@ -1052,4 +1111,481 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
         }
       });
   }
+
+  // ==================== Generic Workflow Helper ====================
+
+  private workflowIslemYap(
+    config: ApprovalDialogData,
+    serviceFn: (id: number, not?: string) => import('rxjs').Observable<YuzyuzeDersResponse>,
+    successMessage: string
+  ): void {
+    if (!this.yuzyuzeders?.id) return;
+
+    const dialogRef = this.dialog.open<string>(ApprovalDialogComponent, {
+      data: config,
+      width: '500px',
+    });
+
+    dialogRef.closed
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result !== undefined && result !== null) {
+          this.submitting = true;
+          serviceFn(this.yuzyuzeders!.id, result)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+              next: (updated) => {
+                this.yuzyuzeders = updated;
+                this.submitting = false;
+                this.toastService.success(successMessage);
+              },
+              error: (error) => {
+                ErrorHandler.logError(error, 'workflowIslemYap');
+                this.toastService.error(ErrorHandler.extractErrorMessage(error));
+                this.submitting = false;
+              }
+            });
+        }
+      });
+  }
+
+  // ==================== CSV Workflow Methods (35 adet) ====================
+
+  icerigiEgitmeneGonder(): void {
+    this.workflowIslemYap(
+      { title: 'İçeriği Eğitmene Gönder', message: 'İçeriği eğitmene göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.icerigiEgitmeneGonder(id, not),
+      'İçerik eğitmene gönderildi.'
+    );
+  }
+
+  icerigiOnayaSun(): void {
+    this.workflowIslemYap(
+      { title: 'İçeriği Onaya Sun', message: 'İçeriği onaya sunmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Onaya Sun', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.icerigiOnayaSun(id, not),
+      'İçerik onaya sunuldu.'
+    );
+  }
+
+  icerikOnayla(): void {
+    this.workflowIslemYap(
+      { title: 'İçerik Onayla', message: 'İçeriği onaylamak istediğinize emin misiniz?', noteLabel: 'Onay Notu (İsteğe Bağlı)', confirmText: 'Onayla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.icerikOnayla(id, not),
+      'İçerik onaylandı.'
+    );
+  }
+
+  icerikReddet(): void {
+    this.workflowIslemYap(
+      { title: 'İçerik Reddet', message: 'İçeriği reddetmek istediğinize emin misiniz?', noteLabel: 'Red Nedeni (Zorunlu)', confirmText: 'Reddet', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.icerikReddet(id, not),
+      'İçerik reddedildi.'
+    );
+  }
+
+  izlenceIcinEgitmeneGonder(): void {
+    this.workflowIslemYap(
+      { title: 'İzlence İçin Eğitmene Gönder', message: 'İzlence için eğitmene göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.izlenceIcinEgitmeneGonder(id, not),
+      'İzlence için eğitmene gönderildi.'
+    );
+  }
+
+  // --- Ücret Bilgisi Girme ---
+
+  ucretBilgisiGir(): void {
+    if (!this.yuzyuzeders?.id || this.submitting) return;
+
+    const dialogData: UcretBilgisiDialogData = {
+      entityName: this.yuzyuzeders?.adi,
+      odemeKaynakKodu: this.yuzyuzeders?.odemeKaynak?.kodu || undefined,
+      birimUcret: this.yuzyuzeders?.birimUcret,
+      toplamUcret: this.yuzyuzeders?.toplamUcret
+    };
+
+    const ref = this.dialog.open<UcretBilgisiDialogResult | null>(UcretBilgisiDialogComponent, { data: dialogData });
+    ref.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((result) => {
+      if (result) {
+        this.submitting = true;
+        this.yuzyuzedersService.ucretBilgisiGir(this.yuzyuzeders!.id, {
+          odemeKaynakKodu: result.odemeKaynakKodu,
+          birimUcret: result.birimUcret,
+          toplamUcret: result.toplamUcret,
+          not: result.not
+        })
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (updated) => {
+              this.yuzyuzeders = updated;
+              this.submitting = false;
+              this.toastService.success('Ücret bilgisi başarıyla kaydedildi.');
+            },
+            error: (error) => {
+              ErrorHandler.logError(error, 'ucretBilgisiGir');
+              this.submitting = false;
+              this.toastService.error(ErrorHandler.extractErrorMessage(error));
+            }
+          });
+      }
+    });
+  }
+
+  izlenceyiOnayaSun(): void {
+    this.workflowIslemYap(
+      { title: 'İzlenceyi Onaya Sun', message: 'İzlenceyi onaya sunmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Onaya Sun', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.izlenceyiOnayaSun(id, not),
+      'İzlence onaya sunuldu.'
+    );
+  }
+
+  izlenceOnayla(): void {
+    this.workflowIslemYap(
+      { title: 'İzlence Onayla', message: 'İzlenceyi onaylamak istediğinize emin misiniz?', noteLabel: 'Onay Notu (İsteğe Bağlı)', confirmText: 'Onayla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.izlenceOnayla(id, not),
+      'İzlence onaylandı.'
+    );
+  }
+
+  izlenceReddet(): void {
+    this.workflowIslemYap(
+      { title: 'İzlence Reddet', message: 'İzlenceyi reddetmek istediğinize emin misiniz?', noteLabel: 'Red Nedeni (Zorunlu)', confirmText: 'Reddet', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.izlenceReddet(id, not),
+      'İzlence reddedildi.'
+    );
+  }
+
+  izlenceyeRevizeIste(): void {
+    this.workflowIslemYap(
+      { title: 'İzlenceye Revize İste', message: 'İzlence için revize istemek istediğinize emin misiniz?', noteLabel: 'Revize Notu (Zorunlu)', confirmText: 'Revize İste', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.izlenceyeRevizeIste(id, not),
+      'İzlence için revize istendi.'
+    );
+  }
+
+  egitmendenSunumIste(): void {
+    this.workflowIslemYap(
+      { title: 'Eğitmenden Sunum İste', message: 'Eğitmenden sunum istemek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Sunum İste', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.egitmendenSunumIste(id, not),
+      'Eğitmenden sunum istendi.'
+    );
+  }
+
+  sunumuOnayaSun(): void {
+    this.workflowIslemYap(
+      { title: 'Sunumu Onaya Sun', message: 'Sunumu onaya sunmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Onaya Sun', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sunumuOnayaSun(id, not),
+      'Sunum onaya sunuldu.'
+    );
+  }
+
+  sunumuOnayla(): void {
+    this.workflowIslemYap(
+      { title: 'Sunumu Onayla', message: 'Sunumu onaylamak istediğinize emin misiniz?', noteLabel: 'Onay Notu (İsteğe Bağlı)', confirmText: 'Onayla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sunumuOnayla(id, not),
+      'Sunum onaylandı.'
+    );
+  }
+
+  sunumuReddet(): void {
+    this.workflowIslemYap(
+      { title: 'Sunumu Reddet', message: 'Sunumu reddetmek istediğinize emin misiniz?', noteLabel: 'Red Nedeni (Zorunlu)', confirmText: 'Reddet', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.sunumuReddet(id, not),
+      'Sunum reddedildi.'
+    );
+  }
+
+  sunumaRevizeIste(): void {
+    this.workflowIslemYap(
+      { title: 'Sunuma Revize İste', message: 'Sunum için revize istemek istediğinize emin misiniz?', noteLabel: 'Revize Notu (Zorunlu)', confirmText: 'Revize İste', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.sunumaRevizeIste(id, not),
+      'Sunum için revize istendi.'
+    );
+  }
+
+  grafikTamamla(): void {
+    this.workflowIslemYap(
+      { title: 'Grafik Tamamla', message: 'Grafiği tamamlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Tamamla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.grafikTamamla(id, not),
+      'Grafik tamamlandı.'
+    );
+  }
+
+  statikSayfaHazirla(): void {
+    this.workflowIslemYap(
+      { title: 'Statik Sayfa Hazırla', message: 'Statik sayfayı hazırlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Hazırla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.statikSayfaHazirla(id, not),
+      'Statik sayfa hazırlandı.'
+    );
+  }
+
+  smDuyurusuYap(): void {
+    this.workflowIslemYap(
+      { title: 'SM Duyurusu Yap', message: 'SM duyurusunu yapmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Duyur', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.smDuyurusuYap(id, not),
+      'SM duyurusu yapıldı.'
+    );
+  }
+
+  basvuruListele(): void {
+    this.workflowIslemYap(
+      { title: 'Başvuru Listele', message: 'Başvuruları listelemek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Listele', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.basvuruListele(id, not),
+      'Başvurular listelendi.'
+    );
+  }
+
+  onKosulRaporla(): void {
+    this.workflowIslemYap(
+      { title: 'Ön Koşul Raporla', message: 'Ön koşulları raporlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Raporla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.onKosulRaporla(id, not),
+      'Ön koşullar raporlandı.'
+    );
+  }
+
+  sinavAtamasi(): void {
+    this.workflowIslemYap(
+      { title: 'Sınav Ataması', message: 'Sınav ataması yapmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Ata', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sinavAtamasi(id, not),
+      'Sınav ataması yapıldı.'
+    );
+  }
+
+  sinavMailiGonder(): void {
+    this.workflowIslemYap(
+      { title: 'Sınav Maili Gönder', message: 'Sınav mailini göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sinavMailiGonder(id, not),
+      'Sınav maili gönderildi.'
+    );
+  }
+
+  sinavRaporla(): void {
+    this.workflowIslemYap(
+      { title: 'Sınav Raporla', message: 'Sınavı raporlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Raporla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sinavRaporla(id, not),
+      'Sınav raporlandı.'
+    );
+  }
+
+  basvurulariDegerlendir(): void {
+    this.workflowIslemYap(
+      { title: 'Başvuruları Değerlendir', message: 'Başvuruları değerlendirmek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Değerlendir', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.basvurulariDegerlendir(id, not),
+      'Başvurular değerlendirildi.'
+    );
+  }
+
+  sozlesmeTalepEt(): void {
+    this.workflowIslemYap(
+      { title: 'Sözleşme Talep Et', message: 'Sözleşme talep etmek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Talep Et', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sozlesmeTalepEt(id, not),
+      'Sözleşme talep edildi.'
+    );
+  }
+
+  sozlesmeyiReddet(): void {
+    this.workflowIslemYap(
+      { title: 'Sözleşmeyi Reddet', message: 'Sözleşmeyi reddetmek istediğinize emin misiniz?', noteLabel: 'Red Nedeni (Zorunlu)', confirmText: 'Reddet', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.sozlesmeyiReddet(id, not),
+      'Sözleşme reddedildi.'
+    );
+  }
+
+  kabulMailiGonder(): void {
+    this.workflowIslemYap(
+      { title: 'Kabul Maili Gönder', message: 'Kabul mailini göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.kabulMailiGonder(id, not),
+      'Kabul maili gönderildi.'
+    );
+  }
+
+  wpGrubuOlustur(): void {
+    this.workflowIslemYap(
+      { title: 'WP Grubu Oluştur', message: 'WP grubunu oluşturmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Oluştur', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.wpGrubuOlustur(id, not),
+      'WP grubu oluşturuldu.'
+    );
+  }
+
+  yedeklereMailGonder(): void {
+    this.workflowIslemYap(
+      { title: 'Yedeklere Mail Gönder', message: 'Yedeklere mail göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.yedeklereMailGonder(id, not),
+      'Yedeklere mail gönderildi.'
+    );
+  }
+
+  wpGrubunuTamamla(): void {
+    this.workflowIslemYap(
+      { title: 'WP Grubunu Tamamla', message: 'WP grubunu tamamlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Tamamla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.wpGrubunuTamamla(id, not),
+      'WP grubu tamamlandı.'
+    );
+  }
+
+  redMailiGonder(): void {
+    this.workflowIslemYap(
+      { title: 'Red Maili Gönder', message: 'Red mailini göndermek istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Gönder', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.redMailiGonder(id, not),
+      'Red maili gönderildi.'
+    );
+  }
+
+  dersiBaslat(): void {
+    this.workflowIslemYap(
+      { title: 'Dersi Başlat', message: 'Dersi başlatmak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Başlat', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.dersiBaslat(id, not),
+      'Ders başlatıldı.'
+    );
+  }
+
+  yoklamayiTamamla(): void {
+    this.workflowIslemYap(
+      { title: 'Yoklamayı Tamamla', message: 'Yoklamayı tamamlamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Tamamla', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.yoklamayiTamamla(id, not),
+      'Yoklama tamamlandı.'
+    );
+  }
+
+  anketAta(): void {
+    this.workflowIslemYap(
+      { title: 'Anket Ata', message: 'Anket atamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Ata', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.anketAta(id, not),
+      'Anket atandı.'
+    );
+  }
+
+  sertifikaAta(): void {
+    this.workflowIslemYap(
+      { title: 'Sertifika Ata', message: 'Sertifika atamak istediğinize emin misiniz?', noteLabel: 'Not (İsteğe Bağlı)', confirmText: 'Ata', appearance: 'approve' },
+      (id, not) => this.yuzyuzedersService.sertifikaAta(id, not),
+      'Sertifika atandı.'
+    );
+  }
+
+  iptalEt(): void {
+    this.workflowIslemYap(
+      { title: 'İptal Et', message: 'Dersi iptal etmek istediğinize emin misiniz?', noteLabel: 'İptal Nedeni (Zorunlu)', confirmText: 'İptal Et', appearance: 'reject' },
+      (id, not) => this.yuzyuzedersService.iptalEt(id, not),
+      'Ders iptal edildi.'
+    );
+  }
+
+
+  // ==================== Materyal İşlemleri ====================
+
+  private readonly MATERYAL_IZINLI_DURUMLAR: string[] = [
+    DersDurumu.BASLATMA_ONAYI_VERILDI, DersDurumu.ICERIK_EGITMENE_GONDERILDI,
+    DersDurumu.ICERIK_ONAYA_SUNULDU, DersDurumu.ICERIK_ONAYLANDI, DersDurumu.ICERIK_REDDEDILDI,
+    DersDurumu.EGITMENDEN_SUNUM_ISTENDI, DersDurumu.ORNEK_VIDEO_GONDERILDI,
+    DersDurumu.ORNEK_VIDEO_ONAYLANDI, DersDurumu.SUNUMA_REVIZE_ISTENDI, DersDurumu.SUNUM_REDDEDILDI,
+    DersDurumu.IZLENCE_ICIN_EGITMENE_GONDERILDI, DersDurumu.IZLENCE_ONAYA_SUNULDU,
+    DersDurumu.IZLENCE_ONAYLANDI, DersDurumu.IZLENCE_REDDEDILDI, DersDurumu.IZLENCE_REVIZE_ISTENDI,
+    DersDurumu.SOZLESME_TALEP_EDILDI, DersDurumu.SOZLESME_IMZALANDI, DersDurumu.SOZLESME_REDDEDILDI,
+    DersDurumu.SORU_KONTROL_ONAYLANDI, DersDurumu.SORU_KONTROL_REVIZE_ISTENDI, DersDurumu.SORU_REVIZE_TAMAMLANDI,
+  ];
+
+  canModifyMateryal(): boolean {
+    if (!this.yuzyuzeders?.dersDurumu?.kodu) return false;
+    return this.MATERYAL_IZINLI_DURUMLAR.includes(this.yuzyuzeders.dersDurumu.kodu);
+  }
+
+  private loadMateryaller(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.materyalLoading.set(true);
+    this.yuzyuzedersMateryalService.getByDersId(this.yuzyuzeders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.materyaller.set(data);
+          this.materyalLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadMateryaller');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalLoading.set(false);
+        }
+      });
+  }
+
+  onMateryalAddRequested(): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.materyalModalLoading.set(true);
+    this.yuzyuzedersMateryalService.getMedyaTurleri()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.availableMedyaTurleri.set(data);
+          this.materyalModalLoading.set(false);
+          setTimeout(() => this.materyalList?.openModal(), 0);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadMedyaTurleri');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalModalLoading.set(false);
+        }
+      });
+  }
+
+  onMateryalUpload(event: { file: File; medyaTuruId: number }): void {
+    if (!this.yuzyuzeders?.id) return;
+    this.materyalUploading.set(true);
+    this.yuzyuzedersMateryalService.uploadFile(event.file, this.yuzyuzeders.id, event.medyaTuruId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Materyal başarıyla yüklendi.');
+          this.loadMateryaller();
+          this.materyalUploading.set(false);
+          this.materyalList?.closeModal();
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'uploadMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalUploading.set(false);
+        }
+      });
+  }
+
+  onMateryalDelete(id: number): void {
+    if (!id) return;
+    this.materyalDeleting.set(true);
+    this.yuzyuzedersMateryalService.deleteFile(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Materyal başarıyla silindi.');
+          this.loadMateryaller();
+          this.materyalDeleting.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'deleteMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+          this.materyalDeleting.set(false);
+        }
+      });
+  }
+
+  onMateryalDownload(id: number): void {
+    if (!id) return;
+    this.yuzyuzedersMateryalService.downloadFile(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (blob) => {
+          const item = this.materyaller().find(m => m.id === id);
+          const fileName = item?.dosyaAdi || 'dosya';
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'downloadMateryal');
+          this.toastService.error(ErrorHandler.extractErrorMessage(error));
+        }
+      });
+  }
+
+
 }

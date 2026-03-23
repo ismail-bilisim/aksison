@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { VideodersMateryalResponse } from '../../../core/models/videoders-materyal-response';
+import { DersMateryalResponse } from '../../../core/models/ders-materyal-response';
 import { MedyaTuruOzet } from '../../../core/models/medya-turu-ozet';
 
 @Component({
@@ -13,7 +13,7 @@ import { MedyaTuruOzet } from '../../../core/models/medya-turu-ozet';
   styleUrls: ['./materyal-list.component.css']
 })
 export class MateryalListComponent {
-  @Input() items: VideodersMateryalResponse[] = [];
+  @Input() items: DersMateryalResponse[] = [];
   @Input() isLoading = false;
   @Input() isDeleting = false;
   @Input() isUploading = false;
@@ -69,13 +69,13 @@ export class MateryalListComponent {
     });
   }
 
-  onDelete(item: VideodersMateryalResponse): void {
+  onDelete(item: DersMateryalResponse): void {
     if (!item.id) { return; }
     if (!confirm(`"${item.dosyaAdi}" dosyasını silmek istediğinizden emin misiniz?`)) return;
     this.delete.emit(item.id);
   }
 
-  onDownload(item: VideodersMateryalResponse): void {
+  onDownload(item: DersMateryalResponse): void {
     if (!item.id) { return; }
     this.download.emit(item.id);
   }

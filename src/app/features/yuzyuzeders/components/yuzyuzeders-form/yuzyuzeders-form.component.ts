@@ -38,6 +38,7 @@ export class YuzyuzedersFormComponent implements OnInit, OnChanges {
       kullanilacakProgramlar: ['', Validators.required],
       kazanimlar: ['', Validators.required],
       sikcaSorulanSorular: [''],
+      sartlar: [''],
       dersSuresi: [''],
       baslamaTarihi: ['', Validators.required],
       bitisTarihi: ['', Validators.required],

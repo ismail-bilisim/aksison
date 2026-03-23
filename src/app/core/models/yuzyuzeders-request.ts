@@ -13,6 +13,7 @@ export interface YuzyuzeDersRequest {
   kullanilacakProgramlar?: string;
   kazanimlar?: string;
   sikcaSorulanSorular?: string;
+  sartlar?: string;
   dersOzeti?: string;
   dersSuresi?: number;
   baslamaTarihi?: string; // LocalDateTime -> ISO 8601 string

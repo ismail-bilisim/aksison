@@ -8,16 +8,19 @@
           </div>
         </div>
       } @else if (videoders) {
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5 class="mb-0"></h5>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6>
+            <i class="bi bi-person-video me-2"></i>Video Ders Detayı
+          </h6>
           <div>
 
             @if( videoders && videoders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS 
             || videoders && videoders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYINA_SUNULDU
             || videoders && videoders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI
             || videoders && videoders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI
-            || videoders && videoders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI ){
-              <button class="btn btn-primary" (click)="onEdit(videoders.id)">
+            || videoders && videoders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI 
+            || videoders && videoders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYA_SUNULDU ){
+              <button class="btn btn-primary me-2" (click)="onEdit(videoders.id)">
                 <i class="bi bi-pencil me-1"></i> Düzenle
               </button>
             } 
@@ -292,43 +295,38 @@
           </div>
         </div>
 
-        <div class="d-flex justify-content-end align-items-center mb-4">
+        <div class="d-flex justify-content-end align-items-center mb-1">
           <div>
           <!-- İptal İşlemi -->
           @if (iptalEdilebilirMi()) {
-                    <button class="btn btn-outline-danger me-2" (click)="iptalEt()" [disabled]="submitting">
+                    <button class="btn btn-outline-danger me-0" (click)="iptalEt()" [disabled]="submitting">
                       <i class="bi bi-x-octagon me-1"></i> İptal Et
                     </button>
-        }
-            </div>
-            </div>
+          }
+          </div>
+        </div>
 
         <!-- İlişkili Varlıklar -->
         <div class="card shadow-sm">
-          <div class="card-header bg-light">
-            <h6 class="mb-0">
-              <i class="bi bi-diagram-3 me-2"></i>İlişkili Varlıklar
-            </h6>
-          </div>
           <div class="card-body">
             <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
               <li [ngbNavItem]="'konular'">
                 <button ngbNavLink>Konular</button>
               </li>
-              <li [ngbNavItem]="'sorular'">
-                <button ngbNavLink>Sorular</button>
+              <li [ngbNavItem]="'materyaller'">
+                <button ngbNavLink>Materyaller</button>
               </li>
               <li [ngbNavItem]="'degerlendirmeler'">
                 <button ngbNavLink>Değerlendirmeler</button>
               </li>
-              <li [ngbNavItem]="'materyaller'">
-                <button ngbNavLink>Materyaller ({{materyaller().length}})</button>
-              </li>
               <li [ngbNavItem]="'kategoriler'">
-                <button ngbNavLink>Kategoriler ({{kategoriler().length}})</button>
+                <button ngbNavLink>Kategoriler</button>
               </li>
               <li [ngbNavItem]="'egitmenler'">
                 <button ngbNavLink>Eğitmenler</button>
+              </li>
+              <li [ngbNavItem]="'sorular'">
+                <button ngbNavLink>Sorular</button>
               </li>
               <li [ngbNavItem]="'projeler'">
                 <button ngbNavLink>Projeler</button>
@@ -358,16 +356,21 @@
                 </app-konu-list>
               </div>
               
-              <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
-                <app-soru-list
-                  [dersId]="videoders.id!"
-                  [sorular]="sorular()"
-                  [loading]="soruLoading()"
-                  (delete)="onSoruDelete($event)"
-                  (soruSaveRequested)="onSoruSaveRequested($event)"
-                  (navigateDetail)="onSoruNavigateDetail($event)"
-                  (navigateEdit)="onSoruNavigateEdit($event)">
-                </app-soru-list>
+              <div class="p-3" *ngIf="materyalLoaded" [hidden]="activeTab !== 'materyaller'">
+                <app-materyal-list
+                  #materyalList
+                  [items]="materyaller()"
+                  [isLoading]="materyalLoading()"
+                  [isDeleting]="materyalDeleting()"
+                  [isUploading]="materyalUploading()"
+                  [modalLoading]="materyalModalLoading()"
+                  [availableMedyaTurleri]="availableMedyaTurleri()"
+                  [canModify]="canModifyMateryal()"
+                  (addRequested)="onMateryalAddRequested()"
+                  (uploadConfirmed)="onMateryalUpload($event)"
+                  (delete)="onMateryalDelete($event)"
+                  (download)="onMateryalDownload($event)">
+                </app-materyal-list>
               </div>
               
               <div class="p-3" *ngIf="degerlendirmelerLoaded" [hidden]="activeTab !== 'degerlendirmeler'">
@@ -385,23 +388,6 @@
                   (kriterLoadRequested)="onKriterLoadRequested()"
                   (turuLoadRequested)="onTuruLoadRequested()">
                 </app-degerlendirme-list>
-              </div>
-              
-              <div class="p-3" *ngIf="materyalLoaded" [hidden]="activeTab !== 'materyaller'">
-                <app-materyal-list
-                  #materyalList
-                  [items]="materyaller()"
-                  [isLoading]="materyalLoading()"
-                  [isDeleting]="materyalDeleting()"
-                  [isUploading]="materyalUploading()"
-                  [modalLoading]="materyalModalLoading()"
-                  [availableMedyaTurleri]="availableMedyaTurleri()"
-                  [canModify]="canModifyMateryal()"
-                  (addRequested)="onMateryalAddRequested()"
-                  (uploadConfirmed)="onMateryalUpload($event)"
-                  (delete)="onMateryalDelete($event)"
-                  (download)="onMateryalDownload($event)">
-                </app-materyal-list>
               </div>
               
               <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
@@ -435,6 +421,18 @@
                   (delete)="onEgitmenDelete($event)"
                   (sozlesmeCreated)="onSozlesmeCreated()">
                 </app-egitmen-list>
+              </div>
+              
+              <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
+                <app-soru-list
+                  [dersId]="videoders.id!"
+                  [sorular]="sorular()"
+                  [loading]="soruLoading()"
+                  (delete)="onSoruDelete($event)"
+                  (soruSaveRequested)="onSoruSaveRequested($event)"
+                  (navigateDetail)="onSoruNavigateDetail($event)"
+                  (navigateEdit)="onSoruNavigateEdit($event)">
+                </app-soru-list>
               </div>
               
               <div class="p-3" *ngIf="projelerLoaded" [hidden]="activeTab !== 'projeler'">

@@ -54,7 +54,7 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
       'DBONS': 'Başlatma Onayına Sunulanlar',
       'DBONY': 'Başlatma Onayı Verilenler',
       'DBRED': 'Başlatma Reddedilenler',
-      'EGATM': 'Eğitmen Atananlar',
+      'ICEGN': 'İçeriği Eğitmene Gönderilenler',
       'EICOS': 'İçerik Onayına Sunulanlar',
       'ICONY': 'İçerik Onaylananlar',
       'ICRED': 'İçerik Reddedilenler',

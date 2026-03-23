@@ -1,4 +1,4 @@
-export interface VideodersMateryalResponse {
+export interface DersMateryalResponse {
     id: number;
     version: number;
     dersId: number;

@@ -8,8 +8,8 @@ import { MedyaTuruOzet } from '../../models/medya-turu-ozet';
 @Injectable({
   providedIn: 'root'
 })
-export class VideodersMateryalService {
-  private apiUrl = `${environment.apiUrl}/videodersmateryaller`;
+export class YuzyuzeDersMateryalService {
+  private apiUrl = `${environment.apiUrl}/yuzyuzedersmateryaller`;
 
   constructor(private http: HttpClient) { }
 

@@ -44,7 +44,7 @@ import { SozlesmeTemelComponent } from 'src/app/shared/components/sozlesme-temel
 import { SozlesmeDersResponse } from 'src/app/core/models/sozlesme-ders-response';
 import { DegerlendirmeListComponent } from 'src/app/shared/components/degerlendirme-list/degerlendirme-list.component';
 import { VideodersMateryalService } from 'src/app/core/services/api/videoders-materyal.service';
-import { VideodersMateryalResponse } from 'src/app/core/models/videoders-materyal-response';
+import { DersMateryalResponse } from 'src/app/core/models/ders-materyal-response';
 import { MedyaTuruOzet } from 'src/app/core/models/medya-turu-ozet';
 import { UcretBilgisiDialogComponent, UcretBilgisiDialogData, UcretBilgisiDialogResult } from 'src/app/shared/components/ucret-bilgisi-dialog/ucret-bilgisi-dialog.component';
 import { VideodersBolumService } from 'src/app/core/services/api/videoders-bolum.service';
@@ -129,7 +129,7 @@ export class VideodersDetailPageComponent implements OnInit {
   availableProjeler = signal<ProjeOzet[]>([]);
   projelerLoaded = false;
 
-  materyaller = signal<VideodersMateryalResponse[]>([]);
+  materyaller = signal<DersMateryalResponse[]>([]);
   materyalLoading = signal(false);
   materyalDeleting = signal(false);
   materyalUploading = signal(false);

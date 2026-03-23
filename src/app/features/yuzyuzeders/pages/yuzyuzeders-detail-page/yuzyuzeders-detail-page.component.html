@@ -7,15 +7,20 @@
 } @else if (yuzyuzeders) {
   <div class="container-fluid py-4">
     <!-- Başlık ve Aksiyon Butonları -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h5>
-        <i class="bi bi-person-video me-2"></i>Yüzyüze Ders Detayı
-      </h5>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6>
+        <i class="bi bi-person-video"></i>Yüzyüze Ders Detayı
+      </h6>
       <div class="d-flex gap-2">
         <!-- Düzenle butonu - Sadece onaylı olmayan dersler için -->
-        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS || yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI) {
+            @if( yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS 
+            || yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYINA_SUNULDU
+            || yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI
+            || yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI
+            || yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI
+            || yuzyuzeders && yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYA_SUNULDU ){
           <button 
-            class="btn btn-primary" 
+            class="btn btn-primary me-2" 
             (click)="onEdit(yuzyuzeders.id)"
             [disabled]="submitting">
             <i class="bi bi-pencil me-1"></i>Düzenle
@@ -25,7 +30,7 @@
         <!-- Başlatma Onayına Sun butonu - Sadece Taslak veya Red durumunda -->
         @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.TASLAK_DERS || yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_REDDEDILDI) {
           <button 
-            class="btn btn-warning" 
+            class="btn btn-warning me-2" 
             (click)="baslatmaOnayinaSun()"
             [disabled]="submitting">
             <i class="bi bi-send me-1"></i>Başlatma Onayına Sun
@@ -35,49 +40,280 @@
         <!-- Başlatmayı Onayla/Reddet butonları - Sadece Onaya Sunuldu durumunda -->
         @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYINA_SUNULDU) {
           <button 
-            class="btn btn-success" 
+            class="btn btn-success me-2" 
             (click)="baslatmaOnayla()"
             [disabled]="submitting">
             <i class="bi bi-check-circle me-1"></i>Başlatmayı Onayla
           </button>
           <button 
-            class="btn btn-danger" 
+            class="btn btn-danger me-2" 
             (click)="baslatmaReddet()"
             [disabled]="submitting">
             <i class="bi bi-x-circle me-1"></i>Başlatmayı Reddet
           </button>
         }
+
+        <!-- İçeriği Eğitmene Gönder - DBONY veya ICRED durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASLATMA_ONAYI_VERILDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_REDDEDILDI) {
+          <button class="btn btn-primary me-2" (click)="icerigiEgitmeneGonder()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>İçeriği Eğitmene Gönder
+          </button>
+        }
+
+        <!-- İçeriği Onaya Sun - ICEGN durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_EGITMENE_GONDERILDI) {
+          <button class="btn btn-warning me-2" (click)="icerigiOnayaSun()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>İçeriği Onaya Sun
+          </button>
+        }
+
+        <!-- İçerik Onayla / Reddet - EICOS durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYA_SUNULDU) {
+          <button class="btn btn-success me-2" (click)="icerikOnayla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>İçerik Onayla
+          </button>
+          <button class="btn btn-danger me-2" (click)="icerikReddet()" [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>İçerik Reddet
+          </button>
+        }
+
+        <!-- Ücret Bilgisi Gir + İzlence İçin Eğitmene Gönder - ICONY veya IZRED durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.ICERIK_ONAYLANDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.IZLENCE_REDDEDILDI) {
+          <button class="btn btn-success me-2" (click)="ucretBilgisiGir()" [disabled]="submitting">
+            <i class="me-1"></i> ₺Ücret Bilgisi Gir
+          </button>
+          <button class="btn btn-primary me-2" (click)="izlenceIcinEgitmeneGonder()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>İzlence İçin Eğitmene Gönder
+          </button>
+        }
+
+        <!-- İzlenceyi Onaya Sun - IZEGN veya IZREV durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.IZLENCE_ICIN_EGITMENE_GONDERILDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.IZLENCE_REVIZE_ISTENDI) {
+          <button class="btn btn-warning me-2" (click)="izlenceyiOnayaSun()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>İzlenceyi Onaya Sun
+          </button>
+        }
+
+        <!-- İzlence Onayla / Reddet / Revize - EIZOS durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.IZLENCE_ONAYA_SUNULDU) {
+          <button class="btn btn-success me-2" (click)="izlenceOnayla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>İzlence Onayla
+          </button>
+          <button class="btn btn-danger me-2" (click)="izlenceReddet()" [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>İzlence Reddet
+          </button>
+          <button class="btn btn-warning me-2" (click)="izlenceyeRevizeIste()" [disabled]="submitting">
+            <i class="bi bi-arrow-repeat me-1"></i>İzlenceye Revize İste
+          </button>
+        }
+
+        <!-- Eğitmenden Sunum İste - IZONY veya SNRED durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.IZLENCE_ONAYLANDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.SUNUM_REDDEDILDI) {
+          <button class="btn btn-primary me-2" (click)="egitmendenSunumIste()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>Eğitmenden Sunum İste
+          </button>
+        }
+
+        <!-- Sunumu Onaya Sun - ESNIS veya SNREV durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.EGITMENDEN_SUNUM_ISTENDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.SUNUMA_REVIZE_ISTENDI) {
+          <button class="btn btn-warning me-2" (click)="sunumuOnayaSun()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>Sunumu Onaya Sun
+          </button>
+        }
+
+        <!-- Sunumu Onayla / Reddet / Revize - ESNOS durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SUNUMU_ONAYA_SUNULDU) {
+          <button class="btn btn-success me-2" (click)="sunumuOnayla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>Sunumu Onayla
+          </button>
+          <button class="btn btn-danger me-2" (click)="sunumuReddet()" [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>Sunumu Reddet
+          </button>
+          <button class="btn btn-warning me-2" (click)="sunumaRevizeIste()" [disabled]="submitting">
+            <i class="bi bi-arrow-repeat me-1"></i>Sunuma Revize İste
+          </button>
+        }
+
+        <!-- Grafik Tamamla - SNONY durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SUNUM_ONAYLANDI) {
+          <button class="btn btn-primary me-2" (click)="grafikTamamla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>Grafik Tamamla
+          </button>
+        }
+
+        <!-- Statik Sayfa Hazırla - GRFTM durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.GRAFIK_TAMAMLANDI) {
+          <button class="btn btn-primary me-2" (click)="statikSayfaHazirla()" [disabled]="submitting">
+            <i class="bi bi-file-earmark-text me-1"></i>Statik Sayfa Hazırla
+          </button>
+        }
+
+        <!-- SM Duyurusu Yap - STSHZ durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.STATIK_SAYFA_HAZIRLANDI) {
+          <button class="btn btn-primary me-2" (click)="smDuyurusuYap()" [disabled]="submitting">
+            <i class="bi bi-megaphone me-1"></i>SM Duyurusu Yap
+          </button>
+        }
+
+        <!-- Başvuru Listele - SMDYP durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SM_DUYURUSU_YAPILDI) {
+          <button class="btn btn-primary me-2" (click)="basvuruListele()" [disabled]="submitting">
+            <i class="bi bi-list-ul me-1"></i>Başvuru Listele
+          </button>
+        }
+
+        <!-- Ön Koşul Raporla - BSVLS durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASVURU_LISTELENDI) {
+          <button class="btn btn-primary me-2" (click)="onKosulRaporla()" [disabled]="submitting">
+            <i class="bi bi-file-earmark-bar-graph me-1"></i>Ön Koşul Raporla
+          </button>
+        }
+
+        <!-- Sınav Ataması - ONKRP durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.ON_KOSUL_RAPORLANDI) {
+          <button class="btn btn-primary me-2" (click)="sinavAtamasi()" [disabled]="submitting">
+            <i class="bi bi-clipboard-check me-1"></i>Sınav Ataması
+          </button>
+        }
+
+        <!-- Sınav Maili Gönder - SNVAT durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SINAV_ATANDI) {
+          <button class="btn btn-primary me-2" (click)="sinavMailiGonder()" [disabled]="submitting">
+            <i class="bi bi-envelope me-1"></i>Sınav Maili Gönder
+          </button>
+        }
+
+        <!-- Sınav Raporla - SNVMG durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SINAV_MAILI_GONDERILDI) {
+          <button class="btn btn-primary me-2" (click)="sinavRaporla()" [disabled]="submitting">
+            <i class="bi bi-file-earmark-bar-graph me-1"></i>Sınav Raporla
+          </button>
+        }
+
+        <!-- Başvuruları Değerlendir - SNVRP durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SINAV_RAPORLANDI) {
+          <button class="btn btn-primary me-2" (click)="basvurulariDegerlendir()" [disabled]="submitting">
+            <i class="bi bi-person-check me-1"></i>Başvuruları Değerlendir
+          </button>
+        }
+
+        <!-- Sözleşme Talep Et - BSVDG durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.BASVURULARI_DEGERLENDIRILDI) {
+          <button class="btn btn-primary me-2" (click)="sozlesmeTalepEt()" [disabled]="submitting">
+            <i class="bi bi-file-earmark-text me-1"></i>Sözleşme Talep Et
+          </button>
+        }
+
+        <!-- Sözleşmeyi Reddet / Kabul Maili Gönder - SOZET durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.SOZLESME_TALEP_EDILDI) {
+          <button class="btn btn-success me-2" (click)="kabulMailiGonder()" [disabled]="submitting">
+            <i class="bi bi-envelope-check me-1"></i>Kabul Maili Gönder
+          </button>
+          <button class="btn btn-danger me-2" (click)="sozlesmeyiReddet()" [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>Sözleşmeyi Reddet
+          </button>
+        }
+
+        <!-- WP Grubu Oluştur - KBLMG durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.KABUL_MAILI_GONDERILDI) {
+          <button class="btn btn-primary me-2" (click)="wpGrubuOlustur()" [disabled]="submitting">
+            <i class="bi bi-people me-1"></i>WP Grubu Oluştur
+          </button>
+        }
+
+        <!-- Yedeklere Mail Gönder - WPGOL durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.WP_GRUBU_OLUSTURULDU) {
+          <button class="btn btn-primary me-2" (click)="yedeklereMailGonder()" [disabled]="submitting">
+            <i class="bi bi-envelope me-1"></i>Yedeklere Mail Gönder
+          </button>
+        }
+
+        <!-- WP Grubunu Tamamla - YDKMG durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.YEDEKLERE_MAIL_GONDERILDI) {
+          <button class="btn btn-primary me-2" (click)="wpGrubunuTamamla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>WP Grubunu Tamamla
+          </button>
+        }
+
+        <!-- Red Maili Gönder - SOZRD durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.WP_GRUBU_TAMAMLANDI) {
+          <button class="btn btn-danger me-2" (click)="redMailiGonder()" [disabled]="submitting">
+            <i class="bi bi-envelope-x me-1"></i>Red Maili Gönder
+          </button>
+        }
+
+        <!-- Dersi Başlat - WPGTM durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.WP_GRUBU_TAMAMLANDI || yuzyuzeders.dersDurumu?.kodu === DersDurumu.RED_MAILI_GONDERILDI) {
+          <button class="btn btn-success me-2" (click)="dersiBaslat()" [disabled]="submitting">
+            <i class="bi bi-play-circle me-1"></i>Dersi Başlat
+          </button>
+        }
+
+        <!-- Yoklamayı Tamamla - DRSBS durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.DERS_BASLATILDI) {
+          <button class="btn btn-primary me-2" (click)="yoklamayiTamamla()" [disabled]="submitting">
+            <i class="bi bi-clipboard-check me-1"></i>Yoklamayı Tamamla
+          </button>
+        }
+
+        <!-- Anket Ata - YOKTM durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.YOKLAMA_TAMAMLANDI) {
+          <button class="btn btn-primary me-2" (click)="anketAta()" [disabled]="submitting">
+            <i class="bi bi-card-checklist me-1"></i>Anket Ata
+          </button>
+        }
+
+        <!-- Sertifika Ata - ANKAT durumunda -->
+        @if (yuzyuzeders.dersDurumu?.kodu === DersDurumu.ANKET_ATANDI) {
+          <button class="btn btn-primary me-2" (click)="sertifikaAta()" [disabled]="submitting">
+            <i class="bi bi-award me-1"></i>Sertifika Ata
+          </button>
+        }
+
       </div>
     </div>
 
     <!-- Temel Bilgiler -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="mb-0">
-          <i class="bi bi-info-circle me-2"></i>Temel Bilgiler
-        </h5>
-      </div>
+    <div class="card shadow-sm mb-4">
       <div class="card-body">
         <app-yuzyuzeders-temel [yuzyuzeders]="yuzyuzeders"></app-yuzyuzeders-temel>
       </div>
     </div>
 
+    <!-- İptal Et - TASLK, IPTAL ve SRTAT hariç tüm durumlarda -->
+    <div class="d-flex justify-content-end align-items-center mb-1">
+      <div>
+        @if (yuzyuzeders.dersDurumu?.kodu && yuzyuzeders.dersDurumu?.kodu !== DersDurumu.TASLAK_DERS && yuzyuzeders.dersDurumu?.kodu !== DersDurumu.IPTAL_EDILDI && yuzyuzeders.dersDurumu?.kodu !== DersDurumu.SERTIFIKA_ATANDI) {
+            <button class="btn btn-outline-danger me-0" (click)="iptalEt()" [disabled]="submitting">
+              <i class="bi bi-x-octagon me-1"></i> İptal Et
+            </button>        }
+
+      </div>
+    </div>
+
 
             <!-- İlişkili Varlıklar -->
-
-          <div class="">
+        <!-- İlişkili Varlıklar -->
+        <div class="card shadow-sm">
+          <div class="card-body">
             <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
               <li [ngbNavItem]="'konular'">
                 <button ngbNavLink>Konular</button>
               </li>
-              <li [ngbNavItem]="'sorular'">
-                <button ngbNavLink>Sorular</button>
+              <li [ngbNavItem]="'materyaller'">
+                <button ngbNavLink>Materyaller</button>
+              </li>
+              <li [ngbNavItem]="'degerlendirmeler'">
+                <button ngbNavLink>Değerlendirmeler</button>
               </li>
               <li [ngbNavItem]="'kategoriler'">
-                <button ngbNavLink>Kategoriler ({{ kategoriler().length }})</button>
+                <button ngbNavLink>Kategoriler</button>
               </li>
               <li [ngbNavItem]="'egitmenler'">
                 <button ngbNavLink>Eğitmenler</button>
+              </li>
+              <li [ngbNavItem]="'sorular'">
+                <button ngbNavLink>Sorular</button>
               </li>
               <li [ngbNavItem]="'projeler'">
                 <button ngbNavLink>Projeler</button>
@@ -88,11 +324,11 @@
               <li [ngbNavItem]="'sozlesmeler'">
                 <button ngbNavLink>Sözleşmeler</button>
               </li>
-              <li [ngbNavItem]="'degerlendirmeler'">
-                <button ngbNavLink>Değerlendirmeler</button>
-              </li>
               <li [ngbNavItem]="'islemler'">
                 <button ngbNavLink>İşlem Kayıtları</button>
+              </li>
+              <li [ngbNavItem]="'basvurular'">
+                <button ngbNavLink>Başvurular</button>
               </li>
             </ul>
 
@@ -110,16 +346,38 @@
                 </app-konu-list>
               </div>
 
-              <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
-                <app-soru-list
+              <div class="p-3" *ngIf="materyalLoaded" [hidden]="activeTab !== 'materyaller'">
+                <app-materyal-list
+                  #materyalList
+                  [items]="materyaller()"
+                  [isLoading]="materyalLoading()"
+                  [isDeleting]="materyalDeleting()"
+                  [isUploading]="materyalUploading()"
+                  [modalLoading]="materyalModalLoading()"
+                  [availableMedyaTurleri]="availableMedyaTurleri()"
+                  [canModify]="canModifyMateryal()"
+                  (addRequested)="onMateryalAddRequested()"
+                  (uploadConfirmed)="onMateryalUpload($event)"
+                  (delete)="onMateryalDelete($event)"
+                  (download)="onMateryalDownload($event)">
+                </app-materyal-list>
+              </div>
+              
+              <div class="p-3" *ngIf="degerlendirmelerLoaded" [hidden]="activeTab !== 'degerlendirmeler'">
+                <app-degerlendirme-list
                   [dersId]="yuzyuzeders.id!"
-                  [sorular]="sorular()"
-                  [loading]="soruLoading()"
-                  (delete)="onSoruDelete($event)"
-                  (soruSaveRequested)="onSoruSaveRequested($event)"
-                  (navigateDetail)="onSoruNavigateDetail($event)"
-                  (navigateEdit)="onSoruNavigateEdit($event)">
-                </app-soru-list>
+                  [degerlendirmeler]="degerlendirmeler()"
+                  [availableKriterler]="availableKriterler()"
+                  [availableTurler]="availableTurler()"
+                  [loading]="degerlendirmeLoading()"
+                  [canModify]="canModifyDegerlendirme()"
+                  (degerlendirmeAdd)="onDegerlendirmeAdd($event)"
+                  (degerlendirmeDelete)="onDegerlendirmeDelete($event)"
+                  (kriterAdd)="onKriterAdd($event)"
+                  (kriterDelete)="onKriterDelete($event)"
+                  (kriterLoadRequested)="onKriterLoadRequested()"
+                  (turuLoadRequested)="onTuruLoadRequested()">
+                </app-degerlendirme-list>
               </div>
 
               <div class="p-3" *ngIf="kategoriLoaded" [hidden]="activeTab !== 'kategoriler'">
@@ -155,6 +413,18 @@
                   (egitmenSelected)="onEgitmenSelect($event)"
                   (sozlesmeCreated)="onSozlesmeCreated()">
                 </app-egitmen-list>
+              </div>
+
+              <div class="p-3" *ngIf="sorularLoaded" [hidden]="activeTab !== 'sorular'">
+                <app-soru-list
+                  [dersId]="yuzyuzeders.id!"
+                  [sorular]="sorular()"
+                  [loading]="soruLoading()"
+                  (delete)="onSoruDelete($event)"
+                  (soruSaveRequested)="onSoruSaveRequested($event)"
+                  (navigateDetail)="onSoruNavigateDetail($event)"
+                  (navigateEdit)="onSoruNavigateEdit($event)">
+                </app-soru-list>
               </div>
 
               <div class="p-3" *ngIf="projelerLoaded" [hidden]="activeTab !== 'projeler'">
@@ -197,23 +467,6 @@
                 </app-sozlesme-list>
               </div>
 
-              <div class="p-3" *ngIf="degerlendirmelerLoaded" [hidden]="activeTab !== 'degerlendirmeler'">
-                <app-degerlendirme-list
-                  [dersId]="yuzyuzeders.id!"
-                  [degerlendirmeler]="degerlendirmeler()"
-                  [availableKriterler]="availableKriterler()"
-                  [availableTurler]="availableTurler()"
-                  [loading]="degerlendirmeLoading()"
-                  [canModify]="canModifyDegerlendirme()"
-                  (degerlendirmeAdd)="onDegerlendirmeAdd($event)"
-                  (degerlendirmeDelete)="onDegerlendirmeDelete($event)"
-                  (kriterAdd)="onKriterAdd($event)"
-                  (kriterDelete)="onKriterDelete($event)"
-                  (kriterLoadRequested)="onKriterLoadRequested()"
-                  (turuLoadRequested)="onTuruLoadRequested()">
-                </app-degerlendirme-list>
-              </div>
-
               <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'islemler'">
                 <app-islem-kayit-list
                   [items]="islemKayitlar()"
@@ -221,9 +474,70 @@
                   [useStyledVersion]="false">
                 </app-islem-kayit-list>
               </div>
+
+              <div class="p-3" *ngIf="basvurularLoaded" [hidden]="activeTab !== 'basvurular'">
+                @if (basvuruLoading()) {
+                  <div class="d-flex justify-content-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                  </div>
+                } @else if (basvurular().length === 0) {
+                  <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Bu derse henüz başvuru yapılmamıştır.
+                  </div>
+                } @else {
+                  <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>#</th>
+                          <th>Başvuran</th>
+                          <th>TC Kimlik No</th>
+                          <th>Açıklama</th>
+                          <th>Başvuru Sonucu</th>
+                          <th>Mail</th>
+                          <th>Başvuru Tarihi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (basvuru of basvurular(); track basvuru.id; let i = $index) {
+                          <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ basvuru.basvuran.ad }} {{ basvuru.basvuran.soyad }}</td>
+                            <td>{{ basvuru.basvuran.tcKimlikNo }}</td>
+                            <td>{{ basvuru.aciklama || '-' }}</td>
+                            <td>
+                              @if (basvuru.basvuruSonuc === 'KABUL') {
+                                <span class="badge bg-success">Kabul</span>
+                              } @else if (basvuru.basvuruSonuc === 'YEDEK') {
+                                <span class="badge bg-warning text-dark">Yedek</span>
+                              } @else if (basvuru.basvuruSonuc === 'RED') {
+                                <span class="badge bg-danger">Red</span>
+                              } @else if (basvuru.basvuruSonuc === 'BASVR') {
+                                <span class="badge bg-primary">Yeni Başvuru</span>
+                              } @else {
+                                <span class="badge bg-secondary">Beklemede</span>
+                              }
+                            </td>
+                            <td>
+                              @if (basvuru.mailGonderildi) {
+                                <i class="bi bi-check-circle-fill text-success" title="Gönderildi"></i>
+                              } @else {
+                                <i class="bi bi-x-circle text-muted" title="Gönderilmedi"></i>
+                              }
+                            </td>
+                            <td>{{ basvuru.islemTarihi | date:'dd/MM/yyyy HH:mm' }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
             </div>
           </div>
-
+        </div>
     
   </div>
 } @else {

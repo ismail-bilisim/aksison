@@ -194,30 +194,6 @@
   </div>
   }
 
-    <!-- Ücret Bilgisi -->
-  @if (yuzyuzeders.toplamUcret || yuzyuzeders.odemeKaynak || 1===1) {
-    <div class="info-section mb-4">
-      <h6 class="section-title">
-        <i class="bi bi-currency-exchange me-2"></i> Ücret Bilgisi
-      </h6>
-      <div class="info-grid">
-        <div class="info-item">
-          <dt class="mb-2">Birim Ücret</dt>
-          <dd>{{ yuzyuzeders.birimUcret ? (yuzyuzeders.birimUcret | number:'1.2-2') + ' ₺' : 'Belirtilmemiş' }}</dd>
-        </div>
-        <div class="info-item">
-          <dt class="mb-2">Toplam Ücret</dt>
-          <dd>{{ yuzyuzeders.toplamUcret ? (yuzyuzeders.toplamUcret | number:'1.2-2') + ' ₺' : 'Belirtilmemiş' }}</dd>
-                </div>
-        <div class="info-item">
-            <dt class="mb-2">Ödeme Kaynağı</dt>
-            <dd>{{ yuzyuzeders.odemeKaynak?.adi || 'Belirtilmemiş' }}</dd>
-        </div>
-      </div>
-    </div>
-  }
-
-
 } @else {
 <div class="alert alert-info">
     <i class="bi bi-info-circle me-2"></i>Ders bilgisi yükleniyor...
