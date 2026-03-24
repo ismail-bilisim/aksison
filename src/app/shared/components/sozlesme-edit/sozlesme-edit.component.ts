@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SozlesmeVideoDersService } from 'src/app/core/services/api/sozlesme-videoders.service';
 import { SozlesmeYuzyuzeDersService } from 'src/app/core/services/api/sozlesme-yuzyuzeders.service';
+import { SozlesmeCanliDersService } from 'src/app/core/services/api/sozlesme-canliders.service';
 import { SozlesmeDersRequest } from 'src/app/core/models/sozlesme-ders-request';
 
 @Component({
@@ -16,7 +17,7 @@ import { SozlesmeDersRequest } from 'src/app/core/models/sozlesme-ders-request';
 export class SozlesmeEditComponent {
   dersId!: number;
   egitmenId!: number;
-  dersType: 'videoders' | 'yuzyuzeders' = 'videoders';
+  dersType: 'videoders' | 'yuzyuzeders'| 'canliders' = 'videoders';
 
   baslangicTarihi = '';
   sozlesmeDetails = '';
@@ -27,9 +28,19 @@ export class SozlesmeEditComponent {
   readonly activeModal = inject(NgbActiveModal);
   private readonly sozlesmeVideoDersService = inject(SozlesmeVideoDersService);
   private readonly sozlesmeYuzyuzeDersService = inject(SozlesmeYuzyuzeDersService);
+  private readonly sozlesmeCanliDersService = inject(SozlesmeCanliDersService);
 
   private get sozlesmeService() {
-    return this.dersType === 'yuzyuzeders' ? this.sozlesmeYuzyuzeDersService : this.sozlesmeVideoDersService;
+    if (this.dersType === 'videoders') {
+      return  this.sozlesmeVideoDersService;
+    
+    } else if(this.dersType === 'yuzyuzeders') {
+      return  this.sozlesmeYuzyuzeDersService;
+    
+    } else {
+      return  this.sozlesmeCanliDersService;
+    
+    }
   }
 
   onBaslangicTarihiChange(): void {
