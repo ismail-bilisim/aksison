@@ -1,0 +1,133 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Temel Bilgiler -->
+  <h6 class="mb-3"><i class="bi bi-info-circle me-1"></i>Temel Bilgiler</h6>
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="adi" class="form-label">Etkinlik Adı <span class="text-danger">*</span></label>
+      <input id="adi" type="text" class="form-control" formControlName="adi">
+      @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
+        <div class="text-danger small">Etkinlik adı zorunludur.</div>
+      }
+    </div>
+    <div class="col-md-6">
+      <label for="turuKodu" class="form-label">Türü <span class="text-danger">*</span></label>
+      <select id="turuKodu" class="form-select" formControlName="turuKodu">
+        <option value="">Seçiniz</option>
+        @if (lookupData?.turler) {
+          @for (t of lookupData?.turler; track t.kodu) {
+            <option [value]="t.kodu">{{ t.adi }}</option>
+          }
+        }
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="temaKodu" class="form-label">Tema</label>
+      <select id="temaKodu" class="form-select" formControlName="temaKodu">
+        <option value="">Seçiniz</option>
+        @if (lookupData?.temalar) {
+          @for (t of lookupData?.temalar; track t.kodu) {
+            <option [value]="t.kodu">{{ t.adi }}</option>
+          }
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="amaci" class="form-label">Amacı</label>
+      <textarea id="amaci" class="form-control" formControlName="amaci" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="aciklama" class="form-label">Açıklama</label>
+      <textarea id="aciklama" class="form-control" formControlName="aciklama" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- Hedef Kitle & Kazanımlar -->
+  <h6 class="mb-3 mt-4"><i class="bi bi-people me-1"></i>Hedef Kitle & Kazanımlar</h6>
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="hedefKitle" class="form-label">Hedef Kitle</label>
+      <textarea id="hedefKitle" class="form-control" formControlName="hedefKitle" rows="2"></textarea>
+    </div>
+    <div class="col-md-6">
+      <label for="kazanimlar" class="form-label">Kazanımlar</label>
+      <textarea id="kazanimlar" class="form-control" formControlName="kazanimlar" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="sartlarKurallar" class="form-label">Şartlar ve Kurallar</label>
+      <textarea id="sartlarKurallar" class="form-control" formControlName="sartlarKurallar" rows="2"></textarea>
+    </div>
+    <div class="col-md-6">
+      <label for="sikcaSorulanSorular" class="form-label">Sıkça Sorulan Sorular</label>
+      <textarea id="sikcaSorulanSorular" class="form-control" formControlName="sikcaSorulanSorular" rows="2"></textarea>
+    </div>
+  </div>
+
+  <!-- Tarih & Yer -->
+  <h6 class="mb-3 mt-4"><i class="bi bi-calendar me-1"></i>Tarih & Yer</h6>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label for="baslamaTarihi" class="form-label">Başlama Tarihi</label>
+      <input id="baslamaTarihi" type="datetime-local" class="form-control" formControlName="baslamaTarihi">
+    </div>
+    <div class="col-md-3">
+      <label for="bitisTarihi" class="form-label">Bitiş Tarihi</label>
+      <input id="bitisTarihi" type="datetime-local" class="form-control" formControlName="bitisTarihi">
+    </div>
+    <div class="col-md-3">
+      <label for="suresi" class="form-label">Süresi (dk)</label>
+      <input id="suresi" type="number" class="form-control" formControlName="suresi">
+    </div>
+    <div class="col-md-3">
+      <label for="kontenjan" class="form-label">Kontenjan</label>
+      <input id="kontenjan" type="number" class="form-control" formControlName="kontenjan">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="yeri" class="form-label">Yeri</label>
+      <input id="yeri" type="text" class="form-control" formControlName="yeri">
+    </div>
+    <div class="col-md-4">
+      <label for="sehirKodu" class="form-label">Şehir</label>
+      <select id="sehirKodu" class="form-select" formControlName="sehirKodu">
+        <option value="">Seçiniz</option>
+        @if (lookupData?.sehirler) {
+          @for (s of lookupData?.sehirler; track s.kodu) {
+            <option [value]="s.kodu">{{ s.adi }}</option>
+          }
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Başvuru Tarihleri -->
+  <h6 class="mb-3 mt-4"><i class="bi bi-clipboard me-1"></i>Başvuru Bilgileri</h6>
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="basvuruTarihi" class="form-label">Başvuru Başlangıç</label>
+      <input id="basvuruTarihi" type="datetime-local" class="form-control" formControlName="basvuruTarihi">
+    </div>
+    <div class="col-md-4">
+      <label for="basvuruBitisTarihi" class="form-label">Başvuru Bitiş</label>
+      <input id="basvuruBitisTarihi" type="datetime-local" class="form-control" formControlName="basvuruBitisTarihi">
+    </div>
+  </div>
+
+  <!-- Kaydet -->
+  <div class="d-flex justify-content-end mt-4">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      <i class="bi bi-check-lg me-1"></i>
+      @if (isEditMode) { Güncelle } @else { Oluştur }
+    </button>
+  </div>
+</form>

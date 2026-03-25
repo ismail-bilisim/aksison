@@ -1,0 +1,37 @@
+<div class="list-container">
+  @if (etkinlikler && etkinlikler.length > 0) {
+    <div class="list-header mb-2">
+      <span class="text-muted">
+        <i class="bi bi-calendar-event me-1"></i>
+        {{ etkinlikler.length }} etkinlik/organizasyon
+      </span>
+    </div>
+    <div class="list-group">
+      @for (e of etkinlikler; track e.id) {
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+             role="button" tabindex="0"
+             (click)="onViewDetail(e.id)"
+             (keydown.enter)="onViewDetail(e.id)">
+          <div>
+            <div class="fw-semibold">{{ e.adi }}</div>
+            @if (e.baslamaTarihi || e.bitisTarihi) {
+              <small class="text-muted">
+                {{ e.baslamaTarihi | date:'dd.MM.yyyy' }}
+                @if (e.bitisTarihi) { – {{ e.bitisTarihi | date:'dd.MM.yyyy' }} }
+              </small>
+            }
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge {{ getBadgeClass(e.durumuKodu) }}">{{ e.durumuAdi }}</span>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-calendar-event fs-1"></i>
+      <p class="mt-2">Etkinlik/organizasyon bulunamadı.</p>
+    </div>
+  }
+</div>

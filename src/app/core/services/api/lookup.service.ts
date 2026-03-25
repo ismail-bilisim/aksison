@@ -16,6 +16,11 @@ import { OdemeKaynak } from '../../models/odemekaynak';
 import { VideodersLookupData } from '../../models/videoders-lookup-data';
 import { YuzyuzedersLookupData } from '../../models/yuzyuzeders-lookup-data';
 import { CanlidersLookupData } from '../../models/canliders-lookup-data';
+import { EtkinlikOrganizasyonLookupData } from '../../models/etkinlikorganizasyon-lookup-data';
+import { EtkinlikTuruOzet } from '../../models/etkinlik-turu-ozet';
+import { EtkinlikTemaOzet } from '../../models/etkinlik-tema-ozet';
+import { EtkinlikSurecTuruOzet } from '../../models/etkinlik-surec-turu-ozet';
+import { EtkinlikGorevOzet } from '../../models/etkinlik-gorev-ozet';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +39,11 @@ export class LookupService {
     hedefKitleEgitimSeviyesi: `${environment.apiUrl}/hedefkitle-egitimseviyesi`,
     dersCekimYontemi: `${environment.apiUrl}/ders-cekimyontemi`,
     odemeKaynak: `${environment.apiUrl}/odemekaynak`,
-    ders: `${environment.apiUrl}/ders`
+    ders: `${environment.apiUrl}/ders`,
+    etkinlikTuru: `${environment.apiUrl}/etkinlikturu`,
+    etkinlikTema: `${environment.apiUrl}/etkinliktema`,
+    etkinlikSurecTuru: `${environment.apiUrl}/etkinlikturu-surec`,
+    etkinlikGorev: `${environment.apiUrl}/etkinlikgorev`
   };
 
   // endpoint bazlı cache
@@ -147,6 +156,36 @@ export class LookupService {
       hedefKitleEgitimSeviyeleri: this.getHedefKitleEgitimSeviyeleri(),
       odemeKaynaklari: this.getOdemeKaynaklari(),
       dersler: this.getDersler()
+    });
+  }
+
+  // ========== Etkinlik Organizasyon Lookup Metodları ==========
+
+  getEtkinlikTurleri(): Observable<EtkinlikTuruOzet[]> {
+    return this.cachedGet<EtkinlikTuruOzet[]>(this.apiUrls.etkinlikTuru);
+  }
+
+  getEtkinlikTemalari(): Observable<EtkinlikTemaOzet[]> {
+    return this.cachedGet<EtkinlikTemaOzet[]>(this.apiUrls.etkinlikTema);
+  }
+
+  getEtkinlikSurecTurleri(): Observable<EtkinlikSurecTuruOzet[]> {
+    return this.cachedGet<EtkinlikSurecTuruOzet[]>(this.apiUrls.etkinlikSurecTuru);
+  }
+
+  getEtkinlikGorevler(): Observable<EtkinlikGorevOzet[]> {
+    return this.cachedGet<EtkinlikGorevOzet[]>(this.apiUrls.etkinlikGorev);
+  }
+
+  // ========== Etkinlik Organizasyon Aggregate Lookup ==========
+
+  getEtkinlikOrganizasyonLookups(): Observable<EtkinlikOrganizasyonLookupData> {
+    return forkJoin({
+      turler: this.getEtkinlikTurleri(),
+      temalar: this.getEtkinlikTemalari(),
+      surecTurleri: this.getEtkinlikSurecTurleri(),
+      gorevler: this.getEtkinlikGorevler(),
+      sehirler: this.getAllSehirOzet()
     });
   }
 
