@@ -18,6 +18,8 @@ import { EgitmenTemelComponent } from '../../components/egitmen-temel/egitmen-te
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { VideodersListComponent } from 'src/app/shared/components/videoders-list/videoders-list.component';
 import { YuzyuzedersListComponent } from 'src/app/shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { CanlidersListComponent } from 'src/app/shared/components/canliders-list/canliders-list.component';
+import { CanlidersService } from 'src/app/core/services/api/canliders.service';
 import { KategoriOzet } from 'src/app/core/models/kategori-ozet';
 import { Kategori } from 'src/app/core/models/kategori';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
@@ -25,7 +27,7 @@ import { ErrorHandler } from 'src/app/core/utils/error-handler';
 
 @Component({
   selector: 'app-egitmen-detail-page',
-  imports: [CommonModule, RouterModule, FormsModule, NgbNavModule, NgbModalModule, EgitmenTemelComponent, KategoriListComponent, VideodersListComponent, YuzyuzedersListComponent],
+  imports: [CommonModule, RouterModule, FormsModule, NgbNavModule, NgbModalModule, EgitmenTemelComponent, KategoriListComponent, VideodersListComponent, YuzyuzedersListComponent, CanlidersListComponent],
   templateUrl: './egitmen-detail-page.component.html',
   styleUrl: './egitmen-detail-page.component.css'
 })
@@ -38,6 +40,7 @@ export class EgitmenDetailPageComponent implements OnInit {
   private readonly kategoriService = inject(KategoriService);
   private readonly videodersService = inject(VideodersService);
   private readonly yuzyuzedersService = inject(YuzyuzedersService);
+  private readonly canlidersService = inject(CanlidersService);
   private readonly toastService = inject(ToastService);
   protected readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
@@ -66,6 +69,12 @@ export class EgitmenDetailPageComponent implements OnInit {
   yuzyuzedersLoading = signal(false);
   yuzyuzedersError = signal('');
   yuzyuzedersLoaded = false;
+
+  // Canlı dersler
+  canlidersler = signal<DersOzet[]>([]);
+  canlidersLoading = signal(false);
+  canlidersError = signal('');
+  canlidersLoaded = false;
   activeTab = signal<number>(1);
 
   showApprovalModal = signal(false);
@@ -103,6 +112,10 @@ export class EgitmenDetailPageComponent implements OnInit {
     if (tabId === 5 && !this.yuzyuzedersLoaded) {
       this.yuzyuzedersLoaded = true;
       this.loadYuzyuzedersler();
+    }
+    if (tabId === 6 && !this.canlidersLoaded) {
+      this.canlidersLoaded = true;
+      this.loadCanlidersler();
     }
   }
 
@@ -356,6 +369,33 @@ export class EgitmenDetailPageComponent implements OnInit {
   onYuzyuzedersSelect(id: number): void {
     if (id) {
       this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
+
+  private loadCanlidersler(): void {
+    if (!this.egitmenId) return;
+    this.canlidersLoading.set(true);
+    this.canlidersError.set('');
+    this.canlidersService.getByEgitmenId(this.egitmenId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.canlidersler.set(data);
+          this.canlidersLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadCanlidersler');
+          const msg = ErrorHandler.extractErrorMessage(error);
+          this.canlidersError.set(msg);
+          this.toastService.error(msg);
+          this.canlidersLoading.set(false);
+        }
+      });
+  }
+
+  onCanlidersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/canliders/detail', id]);
     }
   }
 

@@ -38,6 +38,7 @@ export class EtkinlikOrganizasyonFormComponent implements OnInit, OnChanges {
       hedefKitle: [''],
       kazanimlar: [''],
       sikcaSorulanSorular: [''],
+      davetliler: [''],
       sartlarKurallar: [''],
       suresi: [null],
       baslamaTarihi: [''],

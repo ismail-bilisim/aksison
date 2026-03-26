@@ -11,7 +11,9 @@ import { ToastService } from '../../../../core/services/api/toast.service';
 import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { CanlidersListComponent } from '../../../../shared/components/canliders-list/canliders-list.component';
 import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
+import { CanlidersService } from '../../../../core/services/api/canliders.service';
 import { PaydasTemelComponent } from '../../components/paydas-temel/paydas-temel.component';
 import { OnayDurumu, OnayDurumuHelper } from '../../../../core/models/onay-durumu.enum';
 import { DersOzet } from '../../../../core/models/ders-ozet';
@@ -19,7 +21,7 @@ import { DersOzet } from '../../../../core/models/ders-ozet';
 @Component({
   selector: 'app-paydas-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, VideodersListComponent, YuzyuzedersListComponent, PaydasTemelComponent],
+  imports: [CommonModule, FormsModule, NgbModalModule, NgbNavModule, VideodersListComponent, YuzyuzedersListComponent, CanlidersListComponent, PaydasTemelComponent],
   templateUrl: './paydas-detail-page.component.html',
   styleUrls: ['./paydas-detail-page.component.css']
 })
@@ -30,6 +32,7 @@ export class PaydasDetailPageComponent implements OnInit {
   private readonly paydasService = inject(PaydasService);
   private readonly videodersService = inject(VideodersService);
   private readonly yuzyuzedersService = inject(YuzyuzedersService);
+  private readonly canlidersService = inject(CanlidersService);
   private readonly modalService = inject(NgbModal);
 
   paydas?: PaydasResponse;
@@ -54,6 +57,12 @@ export class PaydasDetailPageComponent implements OnInit {
   yuzyuzedersLoading = signal(false);
   yuzyuzedersError = signal('');
   yuzyuzedersLoaded = false;
+
+  // Canlı dersler
+  canlidersler = signal<DersOzet[]>([]);
+  canlidersLoading = signal(false);
+  canlidersError = signal('');
+  canlidersLoaded = false;
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
@@ -196,6 +205,10 @@ export class PaydasDetailPageComponent implements OnInit {
       this.yuzyuzedersLoaded = true;
       this.loadYuzyuzedersler();
     }
+    if (tabId === 'canlidersler' && !this.canlidersLoaded) {
+      this.canlidersLoaded = true;
+      this.loadCanlidersler();
+    }
   }
 
   private loadVideodersler(): void {
@@ -245,6 +258,31 @@ export class PaydasDetailPageComponent implements OnInit {
   onYuzyuzedersSelect(id: number): void {
     if (id) {
       this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
+
+  private loadCanlidersler(): void {
+    if (!this.paydas?.id) return;
+    this.canlidersLoading.set(true);
+    this.canlidersError.set('');
+    this.canlidersService.getAllByPaydas(this.paydas.id).subscribe({
+      next: (data) => {
+        this.canlidersler.set(data);
+        this.canlidersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadCanlidersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.canlidersError.set(msg);
+        this.toastService.error(msg);
+        this.canlidersLoading.set(false);
+      }
+    });
+  }
+
+  onCanlidersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/canliders/detail', id]);
     }
   }
 }

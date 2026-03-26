@@ -125,6 +125,30 @@
             </div>
           </ng-template>
         </li>
+        <li [ngbNavItem]="'canliders'">
+          <button ngbNavLink>
+            <i class="bi bi-broadcast me-1"></i>Canlı Dersler
+            @if (counts.canliders > 0) {
+              <span class="badge rounded-pill bg-primary ms-2">{{ counts.canliders }}</span>
+            }
+          </button>
+          <ng-template ngbNavContent>
+            <div class="tab-content-wrapper p-3">
+              @if (loadingStates.canliders) {
+                <div class="d-flex justify-content-center align-items-center p-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Canlı dersler yükleniyor...</span>
+                  </div>
+                </div>
+              } @else {
+                <app-canliders-list 
+                  [canlidersler]="getCanliDersler()" 
+                  (canlidersSelected)="onCanlidersView($event)">
+                </app-canliders-list>
+              }
+            </div>
+          </ng-template>
+        </li>
         <li [ngbNavItem]="'egitmen'">
           <button ngbNavLink>
             <i class="bi bi-person-badge me-1"></i>Eğitmenler

@@ -15,6 +15,7 @@ export interface EtkinlikOrganizasyonResponse {
   hedefKitle: string | null;
   kazanimlar: string | null;
   sikcaSorulanSorular: string | null;
+  davetliler: string | null;
   sartlarKurallar: string | null;
   suresi: number | null;
   baslamaTarihi: string | null;

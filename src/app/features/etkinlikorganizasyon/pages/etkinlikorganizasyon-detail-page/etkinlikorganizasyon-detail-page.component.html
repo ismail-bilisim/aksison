@@ -51,384 +51,50 @@
       </div>
     </div>
 
-    <!-- Temel Bilgiler Card -->
-    <div class="card mb-3 shadow-sm border-0">
-      <div class="card-body">
-        <h6 class="card-title mb-3"><i class="bi bi-info-circle me-1"></i>Temel Bilgiler</h6>
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Türü</small>
-            <strong>{{ etkinlik.turu?.adi || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Tema</small>
-            <strong>{{ etkinlik.tema?.adi || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Şehir</small>
-            <strong>{{ etkinlik.sehir?.adi || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Yeri</small>
-            <strong>{{ etkinlik.yeri || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Süresi (dk)</small>
-            <strong>{{ etkinlik.suresi || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Kontenjan</small>
-            <strong>{{ etkinlik.kontenjan || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Başlama Tarihi</small>
-            <strong>{{ formatTarih(etkinlik.baslamaTarihi) }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Bitiş Tarihi</small>
-            <strong>{{ formatTarih(etkinlik.bitisTarihi) }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Başvuru Sayısı</small>
-            <strong>{{ etkinlik.basvuruSayisi || 0 }}</strong>
-          </div>
-        </div>
-
-        @if (etkinlik.amaci) {
-          <div class="mt-2">
-            <small class="text-muted d-block">Amacı</small>
-            <p class="mb-1">{{ etkinlik.amaci }}</p>
-          </div>
-        }
-        @if (etkinlik.aciklama) {
-          <div class="mt-2">
-            <small class="text-muted d-block">Açıklama</small>
-            <p class="mb-1">{{ etkinlik.aciklama }}</p>
-          </div>
-        }
-
-        <!-- Sorumlular -->
-        <h6 class="mt-3 mb-2"><i class="bi bi-people me-1"></i>Sorumlular</h6>
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Etkinlik Yöneticisi</small>
-            <strong>{{ etkinlik.etkinlikYoneticisi?.ad || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Grafik Düzenleyici</small>
-            <strong>{{ etkinlik.grafikDuzenleyici?.ad || '-' }}</strong>
-          </div>
-          <div class="col-md-4 mb-2">
-            <small class="text-muted d-block">Medya Sorumlu</small>
-            <strong>{{ etkinlik.medyaSorumlu?.ad || '-' }}</strong>
-          </div>
-        </div>
-
-        <!-- Audit -->
-        <div class="row mt-2">
-          <div class="col-md-6 mb-2">
-            <small class="text-muted d-block">Ekleyen</small>
-            <strong>{{ etkinlik.ekleyenKullanici?.ad || '-' }}</strong>
-            <small class="text-muted ms-2">{{ formatTarih(etkinlik.eklemeTarihi) }}</small>
-          </div>
-          <div class="col-md-6 mb-2">
-            <small class="text-muted d-block">Güncelleyen</small>
-            <strong>{{ etkinlik.guncelleyenKullanici?.ad || '-' }}</strong>
-            <small class="text-muted ms-2">{{ formatTarih(etkinlik.guncellemeTarihi) }}</small>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Temel Bilgiler -->
+    <app-etkinlikorganizasyon-temel [etkinlik]="etkinlik" />
 
     <!-- Tabs -->
     <div class="card shadow-sm border-0">
       <div class="card-body">
-        <nav ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
+        <nav ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs">
           <ng-container ngbNavItem="surecler">
             <button ngbNavLink>
               <i class="bi bi-diagram-3 me-1"></i>Süreçler & Görevler
-              <span class="badge bg-secondary ms-1">{{ surecler().length }}</span>
             </button>
             <ng-template ngbNavContent>
-              <!-- Süreç Ekleme -->
-              <div class="mt-3 mb-3 p-3 bg-light rounded">
-                <h6><i class="bi bi-plus-circle me-1"></i>Yeni Süreç Ekle</h6>
-                <div class="row g-2 align-items-end">
-                  <div class="col-md-4">
-                    <label class="form-label">Süreç Türü</label>
-                    <select class="form-select form-select-sm" [(ngModel)]="yeniSurecTuruKodu">
-                      <option value="">Seçiniz</option>
-                      @for (st of surecTurleri(); track st.kodu) {
-                        <option [value]="st.kodu">{{ st.adi }}</option>
-                      }
-                    </select>
-                  </div>
-                  <div class="col-md-5">
-                    <label class="form-label">Açıklama</label>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="yeniSurecAciklama" placeholder="İsteğe bağlı">
-                  </div>
-                  <div class="col-md-3">
-                    <button class="btn btn-sm btn-primary w-100" (click)="onSurecEkle()" [disabled]="!yeniSurecTuruKodu">
-                      <i class="bi bi-plus me-1"></i>Ekle
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Süreçler Listesi -->
-              @if (surecler().length === 0) {
-                <div class="text-muted text-center py-3">Henüz süreç eklenmemiş.</div>
-              }
-              @for (surec of surecler(); track surec.id) {
-                <div class="card mb-3">
-                  <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                    <div>
-                      <i class="bi bi-diagram-3 me-1"></i>
-                      <strong>{{ surec.turu?.adi || 'Süreç' }}</strong>
-                      @if (surec.aciklama) {
-                        <span class="text-muted ms-2">- {{ surec.aciklama }}</span>
-                      }
-                    </div>
-                    <button class="btn btn-sm btn-outline-danger" (click)="onSurecSil(surec.id)">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                  <div class="card-body">
-                    <!-- Görev Ekleme -->
-                    @if (gorevEklemeSurecId === surec.id) {
-                      <div class="mb-3 p-2 bg-light rounded">
-                        <div class="row g-2 align-items-end">
-                          <div class="col-md-4">
-                            <select class="form-select form-select-sm" [(ngModel)]="yeniGorevKodu">
-                              <option value="">Görev Seçiniz</option>
-                              @for (g of gorevler(); track g.kodu) {
-                                <option [value]="g.kodu">{{ g.adi }}</option>
-                              }
-                            </select>
-                          </div>
-                          <div class="col-md-4">
-                            <input type="text" class="form-control form-control-sm" [(ngModel)]="yeniGorevAciklama" placeholder="Açıklama">
-                          </div>
-                          <div class="col-md-2">
-                            <button class="btn btn-sm btn-primary w-100" (click)="onGorevEkle(surec.id)" [disabled]="!yeniGorevKodu">Ekle</button>
-                          </div>
-                          <div class="col-md-2">
-                            <button class="btn btn-sm btn-outline-secondary w-100" (click)="gorevEklemeSurecId = undefined">İptal</button>
-                          </div>
-                        </div>
-                      </div>
-                    } @else {
-                      <button class="btn btn-sm btn-outline-primary mb-2" (click)="gorevEklemeSurecId = surec.id">
-                        <i class="bi bi-plus me-1"></i>Görev Ekle
-                      </button>
-                    }
-
-                    <!-- Görevler Tablosu -->
-                    @if (gorevlerMap().get(surec.id)?.length) {
-                      <div class="table-responsive">
-                        <table class="table table-sm table-hover mb-0">
-                          <thead class="table-light">
-                            <tr>
-                              <th>Görev</th>
-                              <th>Görevli</th>
-                              <th>Durum</th>
-                              <th>Açıklama</th>
-                              <th style="width: 120px">İşlem</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @for (gorev of gorevlerMap().get(surec.id)!; track gorev.id) {
-                              <tr>
-                                <td>{{ gorev.gorev?.adi || '-' }}</td>
-                                <td>{{ gorev.etkinlikGorevlisi?.ad || '-' }}</td>
-                                <td>
-                                  <span class="badge {{ getGorevDurumuBadge(gorev.gorevDurumu) }}">
-                                    {{ getGorevDurumuLabel(gorev.gorevDurumu) }}
-                                  </span>
-                                </td>
-                                <td>{{ gorev.aciklama || '-' }}</td>
-                                <td>
-                                  @if (gorev.gorevDurumu === '0') {
-                                    <button class="btn btn-sm btn-outline-info" (click)="onGorevDurumuGuncelle(gorev.id, '1', surec.id)" title="Başlat">
-                                      <i class="bi bi-play"></i>
-                                    </button>
-                                  }
-                                  @if (gorev.gorevDurumu === '1') {
-                                    <button class="btn btn-sm btn-outline-warning" (click)="onGorevDurumuGuncelle(gorev.id, '2', surec.id)" title="Devam Et">
-                                      <i class="bi bi-arrow-right"></i>
-                                    </button>
-                                  }
-                                  @if (gorev.gorevDurumu === '2') {
-                                    <button class="btn btn-sm btn-outline-success" (click)="onGorevDurumuGuncelle(gorev.id, '3', surec.id)" title="Tamamla">
-                                      <i class="bi bi-check"></i>
-                                    </button>
-                                  }
-                                  @if (gorev.gorevDurumu === '0' || gorev.gorevDurumu === '1') {
-                                    <button class="btn btn-sm btn-outline-dark ms-1" (click)="onGorevDurumuGuncelle(gorev.id, '4', surec.id)" title="İptal">
-                                      <i class="bi bi-x"></i>
-                                    </button>
-                                  }
-                                </td>
-                              </tr>
-                            }
-                          </tbody>
-                        </table>
-                      </div>
-                    } @else {
-                      <div class="text-muted small">Bu süreçte henüz görev yok.</div>
-                    }
-                  </div>
-                </div>
-              }
+              <app-etkinlikorganizasyon-surecler
+                [etkinlikId]="etkinlik.id"
+                [surecTurleri]="surecTurleri()"
+                [gorevTurleri]="gorevTurleri()"
+                [etkinlikGorevlileri]="etkinlikGorevlileri()" />
             </ng-template>
           </ng-container>
 
           <ng-container ngbNavItem="materyaller">
             <button ngbNavLink>
               <i class="bi bi-file-earmark me-1"></i>Materyaller
-              <span class="badge bg-secondary ms-1">{{ materyaller().length }}</span>
             </button>
             <ng-template ngbNavContent>
-              <div class="mt-3">
-                <!-- Materyal Upload -->
-                <div class="mb-3 p-3 bg-light rounded">
-                  <h6><i class="bi bi-upload me-1"></i>Materyal Yükle</h6>
-                  <div class="row g-2 align-items-end">
-                    <div class="col-md-4">
-                      <label class="form-label">Medya Türü</label>
-                      <select class="form-select form-select-sm" [(ngModel)]="selectedMedyaTuruId">
-                        <option [ngValue]="undefined">Seçiniz</option>
-                        @for (m of medyaTurleri(); track m.id) {
-                          <option [ngValue]="m.id">{{ m.adi }}</option>
-                        }
-                      </select>
-                    </div>
-                    <div class="col-md-5">
-                      <label class="form-label">Dosya</label>
-                      <input type="file" class="form-control form-control-sm" (change)="onFileSelected($event)">
-                    </div>
-                    <div class="col-md-3">
-                      <button class="btn btn-sm btn-primary w-100" (click)="onMateryalUpload()" [disabled]="!selectedFile || !selectedMedyaTuruId">
-                        <i class="bi bi-upload me-1"></i>Yükle
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                @if (materyaller().length === 0) {
-                  <div class="text-muted text-center py-3">Henüz materyal yüklenmemiş.</div>
-                } @else {
-                  <div class="table-responsive">
-                    <table class="table table-sm table-hover">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Dosya Adı</th>
-                          <th>Medya Türü</th>
-                          <th>Boyut</th>
-                          <th>Ekleyen</th>
-                          <th>Tarih</th>
-                          <th style="width: 100px">İşlem</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (m of materyaller(); track m.id) {
-                          <tr>
-                            <td>{{ m.dosyaAdi }}</td>
-                            <td>{{ m.medyaTuru?.adi || '-' }}</td>
-                            <td>{{ m.dosyaBoyutu ? (m.dosyaBoyutu / 1024 | number:'1.0-0') + ' KB' : '-' }}</td>
-                            <td>{{ m.ekleyenKullanici?.ad || '-' }}</td>
-                            <td>{{ formatTarih(m.eklemeTarihi) }}</td>
-                            <td>
-                              <button class="btn btn-sm btn-outline-primary me-1" (click)="onMateryalIndir(m.id, m.dosyaAdi)" title="İndir">
-                                <i class="bi bi-download"></i>
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger" (click)="onMateryalSil(m.id)" title="Sil">
-                                <i class="bi bi-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              </div>
+              <app-etkinlikorganizasyon-materyaller [etkinlikId]="etkinlik.id" />
             </ng-template>
           </ng-container>
 
           <ng-container ngbNavItem="islemkayitlari">
             <button ngbNavLink>
               <i class="bi bi-clock-history me-1"></i>İşlem Kayıtları
-              <span class="badge bg-secondary ms-1">{{ islemKayitlari().length }}</span>
             </button>
             <ng-template ngbNavContent>
-              <div class="mt-3">
-                @if (islemKayitlari().length === 0) {
-                  <div class="text-muted text-center py-3">Henüz işlem kaydı yok.</div>
-                } @else {
-                  <div class="table-responsive">
-                    <table class="table table-sm table-hover">
-                      <thead class="table-light">
-                        <tr>
-                          <th>İşlem Türü</th>
-                          <th>Açıklama</th>
-                          <th>İşlem Yapan</th>
-                          <th>Tarih</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (ik of islemKayitlari(); track ik.id) {
-                          <tr>
-                            <td>{{ ik.islemTuru?.adi || '-' }}</td>
-                            <td>{{ ik.aciklama || '-' }}</td>
-                            <td>{{ ik.islemYapanKullanici?.ad || '-' }}</td>
-                            <td>{{ formatTarih(ik.islemTarihi) }}</td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              </div>
+              <app-etkinlikorganizasyon-islemkayitlari [etkinlikId]="etkinlik.id" />
             </ng-template>
           </ng-container>
 
           <ng-container ngbNavItem="basvurular">
             <button ngbNavLink>
               <i class="bi bi-person-plus me-1"></i>Başvurular
-              <span class="badge bg-secondary ms-1">{{ basvurular().length }}</span>
             </button>
             <ng-template ngbNavContent>
-              <div class="mt-3">
-                @if (basvurular().length === 0) {
-                  <div class="text-muted text-center py-3">Henüz başvuru yok.</div>
-                } @else {
-                  <div class="table-responsive">
-                    <table class="table table-sm table-hover">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Başvuran</th>
-                          <th>Açıklama</th>
-                          <th>Sonuç</th>
-                          <th>İşlem Yapan</th>
-                          <th>Tarih</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (b of basvurular(); track b.id) {
-                          <tr>
-                            <td>{{ b.basvuran?.ad || '-' }}</td>
-                            <td>{{ b.aciklama || '-' }}</td>
-                            <td>{{ b.basvuruSonuc || '-' }}</td>
-                            <td>{{ b.islemYapanKullanici?.ad || '-' }}</td>
-                            <td>{{ formatTarih(b.islemTarihi) }}</td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              </div>
+              <app-etkinlikorganizasyon-basvurular [etkinlikId]="etkinlik.id" />
             </ng-template>
           </ng-container>
         </nav>

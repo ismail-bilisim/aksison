@@ -12,7 +12,9 @@ import { KategoriDersListComponent } from '../../components/kategori-ders-list/k
 import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { CanlidersListComponent } from '../../../../shared/components/canliders-list/canliders-list.component';
 import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
+import { CanlidersService } from '../../../../core/services/api/canliders.service';
 import { KategoriEgitmenListComponent } from '../../components/kategori-egitmen-list/kategori-egitmen-list.component';
 import { DersOzet } from '../../../../core/models/ders-ozet';
 
@@ -28,6 +30,7 @@ import { DersOzet } from '../../../../core/models/ders-ozet';
     KategoriDersListComponent,
     VideodersListComponent,
     YuzyuzedersListComponent,
+    CanlidersListComponent,
     KategoriEgitmenListComponent
   ],
   templateUrl: './kategori-detail-page.component.html',
@@ -40,6 +43,7 @@ export class KategoriDetailPageComponent implements OnInit {
   private kategoriService = inject(KategoriService);
   private videodersService = inject(VideodersService);
   private yuzyuzedersService = inject(YuzyuzedersService);
+  private canlidersService = inject(CanlidersService);
 
   kategori?: Kategori;
   loading = false;
@@ -56,6 +60,12 @@ export class KategoriDetailPageComponent implements OnInit {
   yuzyuzedersLoading = signal(false);
   yuzyuzedersError = signal('');
   yuzyuzedersLoaded = false;
+
+  // Canlı dersler
+  canlidersler = signal<DersOzet[]>([]);
+  canlidersLoading = signal(false);
+  canlidersError = signal('');
+  canlidersLoaded = false;
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -104,6 +114,10 @@ export class KategoriDetailPageComponent implements OnInit {
     if (tabId === 'yuzyuzedersler' && !this.yuzyuzedersLoaded) {
       this.yuzyuzedersLoaded = true;
       this.loadYuzyuzedersler();
+    }
+    if (tabId === 'canlidersler' && !this.canlidersLoaded) {
+      this.canlidersLoaded = true;
+      this.loadCanlidersler();
     }
   }
 
@@ -154,6 +168,31 @@ export class KategoriDetailPageComponent implements OnInit {
   onYuzyuzedersSelect(id: number): void {
     if (id) {
       this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
+
+  private loadCanlidersler(): void {
+    if (!this.kategori?.id) return;
+    this.canlidersLoading.set(true);
+    this.canlidersError.set('');
+    this.canlidersService.getAllOzetByKategori(this.kategori.id).subscribe({
+      next: (data) => {
+        this.canlidersler.set(data);
+        this.canlidersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadCanlidersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.canlidersError.set(msg);
+        this.toastService.error(msg);
+        this.canlidersLoading.set(false);
+      }
+    });
+  }
+
+  onCanlidersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/canliders/detail', id]);
     }
   }
 }

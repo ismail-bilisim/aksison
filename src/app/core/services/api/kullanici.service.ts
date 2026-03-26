@@ -119,5 +119,14 @@ export class KullaniciService {
     const params = new HttpParams().set('q', searchTerm.trim());
     return this.http.get<KullaniciOzet[]>(`${this.apiUrl}/search`, { params });
   }
+
+  /**
+   * Get users by role codes
+   * GET /api/kullanici/by-rol?rolKodlari=ETGRV,ETYON
+   */
+  getByRolKodlari(rolKodlari: string[]): Observable<KullaniciOzet[]> {
+    const params = new HttpParams().set('rolKodlari', rolKodlari.join(','));
+    return this.http.get<KullaniciOzet[]>(`${this.apiUrl}/by-rol`, { params });
+  }
 }
 

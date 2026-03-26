@@ -1,0 +1,30 @@
+<div class="mt-3">
+  @if (basvurular().length === 0) {
+    <div class="text-muted text-center py-3">Henüz başvuru yok.</div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-sm table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Başvuran</th>
+            <th>Açıklama</th>
+            <th>Sonuç</th>
+            <th>İşlem Yapan</th>
+            <th>Tarih</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of basvurular(); track b.id) {
+            <tr>
+              <td>{{ b.basvuran?.ad || '-' }}</td>
+              <td>{{ b.aciklama || '-' }}</td>
+              <td>{{ b.basvuruSonuc || '-' }}</td>
+              <td>{{ b.islemYapanKullanici?.ad || '-' }}</td>
+              <td>{{ formatTarih(b.islemTarihi) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

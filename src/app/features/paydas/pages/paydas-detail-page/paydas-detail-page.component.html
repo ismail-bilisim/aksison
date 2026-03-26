@@ -63,6 +63,17 @@
                 </app-yuzyuzeders-list>
               </ng-template>
             </li>
+            <li [ngbNavItem]="'canlidersler'">
+              <button ngbNavLink>Canlı Dersler</button>
+              <ng-template ngbNavContent>
+                <app-canliders-list 
+                  [canlidersler]="canlidersler()"
+                  [isLoading]="canlidersLoading()"
+                  [errorMessage]="canlidersError()"
+                  (canlidersSelected)="onCanlidersSelect($event)">
+                </app-canliders-list>
+              </ng-template>
+            </li>
           </ul>
 
           <div [ngbNavOutlet]="nav" class="mt-3"></div>

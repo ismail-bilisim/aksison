@@ -1,0 +1,28 @@
+<div class="mt-3">
+  @if (islemKayitlari().length === 0) {
+    <div class="text-muted text-center py-3">Henüz işlem kaydı yok.</div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-sm table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>İşlem Türü</th>
+            <th>Açıklama</th>
+            <th>İşlem Yapan</th>
+            <th>Tarih</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ik of islemKayitlari(); track ik.id) {
+            <tr>
+              <td>{{ ik.islemTuru?.adi || '-' }}</td>
+              <td>{{ ik.aciklama || '-' }}</td>
+              <td>{{ ik.islemYapanKullanici?.ad || '-' }}</td>
+              <td>{{ formatTarih(ik.islemTarihi) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

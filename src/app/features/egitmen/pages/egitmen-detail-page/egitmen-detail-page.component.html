@@ -39,8 +39,11 @@
 				<button ngbNavLink>
 					<i class="bi bi-people me-2"></i>Yüzyüze Dersler
 				</button>
-			</li>
-		</ul>
+			</li>			<li [ngbNavItem]="6">
+				<button ngbNavLink>
+					<i class="bi bi-broadcast me-2"></i>Canlı Dersler
+				</button>
+			</li>		</ul>
 
 		<div class="mt-3">
 			<div class="p-3" [hidden]="activeTab() !== 1">
@@ -78,6 +81,14 @@
 					[errorMessage]="yuzyuzedersError()"
 					(videoSelected)="onYuzyuzedersSelect($event)">
 				</app-yuzyuzeders-list>
+			</div>
+			<div class="p-3" [hidden]="activeTab() !== 6">
+				<app-canliders-list
+					[canlidersler]="canlidersler()"
+					[isLoading]="canlidersLoading()"
+					[errorMessage]="canlidersError()"
+					(canlidersSelected)="onCanlidersSelect($event)">
+				</app-canliders-list>
 			</div>
 		</div>
 	</section>

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { EtkinlikOrganizasyonMateryalResponse } from '../../models/etkinlik-organizasyon-materyal-response';
-import { MedyaTuruOzet } from '../../models/medya-turu-ozet';
+import { EtkinlikMateryalTuruOzet } from '../../models/etkinlik-materyal-turu-ozet';
 
 @Injectable({ providedIn: 'root' })
 export class EtkinlikOrganizasyonMateryalService {
@@ -11,11 +11,11 @@ export class EtkinlikOrganizasyonMateryalService {
 
   constructor(private readonly http: HttpClient) {}
 
-  upload(etkinlikOrganizasyonId: number, medyaTuruId: number, file: File): Observable<EtkinlikOrganizasyonMateryalResponse> {
+  upload(etkinlikOrganizasyonId: number, materyalTuruId: number, file: File): Observable<EtkinlikOrganizasyonMateryalResponse> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('etkinlikOrganizasyonId', etkinlikOrganizasyonId.toString());
-    formData.append('medyaTuruId', medyaTuruId.toString());
+    formData.append('materyalTuruId', materyalTuruId.toString());
     return this.http.post<EtkinlikOrganizasyonMateryalResponse>(`${this.apiUrl}/upload`, formData);
   }
 
@@ -31,7 +31,7 @@ export class EtkinlikOrganizasyonMateryalService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getMedyaTurleri(): Observable<MedyaTuruOzet[]> {
-    return this.http.get<MedyaTuruOzet[]>(`${this.apiUrl}/medya-turleri`);
+  getMateryalTurleri(): Observable<EtkinlikMateryalTuruOzet[]> {
+    return this.http.get<EtkinlikMateryalTuruOzet[]>(`${this.apiUrl}/materyal-turleri`);
   }
 }

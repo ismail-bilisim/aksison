@@ -1,0 +1,223 @@
+@if (etkinlik) {
+
+  <!-- Etkinlik Başlık ve Durum -->
+  <div class="etkinlik-header mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ etkinlik.adi }}</h5>
+        @if (etkinlik.turu) {
+          <div class="text-muted small">
+            <i class="bi bi-tag me-1"></i>
+            <span class="fw-medium">Tür:</span> {{ etkinlik.turu.adi }}
+          </div>
+        }
+      </div>
+      @if (etkinlik.durumu) {
+        <div>
+          <span class="badge bg-secondary badge-lg">
+            <i class="bi bi-flag me-1"></i>
+            {{ etkinlik.durumu.adi }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Temel Bilgiler -->
+  <div class="info-section mb-2">
+    <h6 class="section-title">
+      <i class="bi bi-calendar-event me-2"></i>Temel Bilgiler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Tema</dt>
+        <dd>{{ etkinlik.tema?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Şehir</dt>
+        <dd>{{ etkinlik.sehir?.adi || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Yeri</dt>
+        <dd>{{ etkinlik.yeri || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Süresi</dt>
+        <dd>{{ etkinlik.suresi ? etkinlik.suresi + ' dakika' : 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Amaç -->
+  @if (etkinlik.amaci) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-bullseye me-2"></i>Amaç
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.amaci }}</p>
+    </div>
+  }
+
+  <!-- Tarihler -->
+  <div class="info-section mb-2">
+    <h6 class="section-title">
+      <i class="bi bi-calendar-range me-2"></i>Tarihler
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt><i class="bi bi-play-circle text-success me-1"></i>Başlama Tarihi</dt>
+        <dd>{{ formatTarih(etkinlik.baslamaTarihi) }}</dd>
+      </div>
+      <div class="info-item">
+        <dt><i class="bi bi-stop-circle text-danger me-1"></i>Bitiş Tarihi</dt>
+        <dd>{{ formatTarih(etkinlik.bitisTarihi) }}</dd>
+      </div>
+      @if (etkinlik.basvuruTarihi) {
+        <div class="info-item">
+          <dt><i class="bi bi-pencil-square text-primary me-1"></i>Başvuru Başlangıcı</dt>
+          <dd>{{ formatTarih(etkinlik.basvuruTarihi) }}</dd>
+        </div>
+      }
+      @if (etkinlik.basvuruBitisTarihi) {
+        <div class="info-item">
+          <dt><i class="bi bi-x-circle text-warning me-1"></i>Başvuru Bitiş</dt>
+          <dd>{{ formatTarih(etkinlik.basvuruBitisTarihi) }}</dd>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Katılım Bilgileri -->
+  <div class="info-section mb-2">
+    <h6 class="section-title">
+      <i class="bi bi-people me-2"></i>Katılım Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Kontenjan</dt>
+        <dd>{{ etkinlik.kontenjan ?? 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Başvuru Sayısı</dt>
+        <dd>{{ etkinlik.basvuruSayisi ?? 0 }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Katılım Sayısı</dt>
+        <dd>{{ etkinlik.katilimSayisi ?? 0 }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Açıklama / Hakkında -->
+  @if (etkinlik.aciklama) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-file-text me-2"></i>Açıklama / Hakkında
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.aciklama }}</p>
+    </div>
+  }
+
+  <!-- Hedef Kitle -->
+  @if (etkinlik.hedefKitle) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-person-check me-2"></i>Hedef Kitle
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.hedefKitle }}</p>
+    </div>
+  }
+
+  <!-- Kazanımlar -->
+  @if (etkinlik.kazanimlar) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-award me-2"></i>Kazanımlar
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.kazanimlar }}</p>
+    </div>
+  }
+
+  <!-- Davetliler -->
+  @if (etkinlik.davetliler) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-envelope me-2"></i>Davetliler
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.davetliler }}</p>
+    </div>
+  }
+
+  <!-- Sıkça Sorulan Sorular -->
+  @if (etkinlik.sikcaSorulanSorular) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-question-circle me-2"></i>Sıkça Sorulan Sorular
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.sikcaSorulanSorular }}</p>
+    </div>
+  }
+
+  <!-- Şartlar ve Kurallar -->
+  @if (etkinlik.sartlarKurallar) {
+    <div class="info-section mb-2">
+      <h6 class="section-title">
+        <i class="bi bi-shield-check me-2"></i>Şartlar ve Kurallar
+      </h6>
+      <p class="text-content text-pre-wrap">{{ etkinlik.sartlarKurallar }}</p>
+    </div>
+  }
+
+  <!-- Sorumlular -->
+  <div class="info-section mb-2">
+    <h6 class="section-title">
+      <i class="bi bi-person-badge me-2"></i>Sorumlular
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt>Etkinlik Yöneticisi</dt>
+        <dd>{{ etkinlik.etkinlikYoneticisi?.ad || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Grafik Düzenleyici</dt>
+        <dd>{{ etkinlik.grafikDuzenleyici?.ad || 'Belirtilmemiş' }}</dd>
+      </div>
+      <div class="info-item">
+        <dt>Medya Sorumlu</dt>
+        <dd>{{ etkinlik.medyaSorumlu?.ad || 'Belirtilmemiş' }}</dd>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kayıt Bilgileri -->
+  <div class="info-section mb-2">
+    <h6 class="section-title">
+      <i class="bi bi-clock-history me-2"></i>Kayıt Bilgileri
+    </h6>
+    <div class="info-grid">
+      <div class="info-item">
+        <dt><i class="bi bi-person-plus text-success me-1"></i>Ekleyen</dt>
+        <dd>
+          {{ etkinlik.ekleyenKullanici?.ad || '-' }}
+          @if (etkinlik.eklemeTarihi) {
+            <span class="text-muted ms-2 small">{{ formatTarih(etkinlik.eklemeTarihi) }}</span>
+          }
+        </dd>
+      </div>
+      <div class="info-item">
+        <dt><i class="bi bi-pencil text-warning me-1"></i>Güncelleyen</dt>
+        <dd>
+          {{ etkinlik.guncelleyenKullanici?.ad || '-' }}
+          @if (etkinlik.guncellemeTarihi) {
+            <span class="text-muted ms-2 small">{{ formatTarih(etkinlik.guncellemeTarihi) }}</span>
+          }
+        </dd>
+      </div>
+    </div>
+  </div>
+
+} @else {
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Etkinlik bilgisi yükleniyor...
+  </div>
+}

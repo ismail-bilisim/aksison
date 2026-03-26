@@ -1,0 +1,45 @@
+<div class="canli-ders-list-container">
+  @if (isLoading) {
+    <div class="text-center p-4">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>
+  }
+  @if (!isLoading && errorMessage) {
+    <div class="alert alert-danger mb-0" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ errorMessage }}
+    </div>
+  }
+  @if (!isLoading && !errorMessage && canlidersler.length === 0) {
+    <div class="alert alert-info mb-0">
+      @if (useStyledVersion) {
+        <i class="bi bi-info-circle me-2"></i>
+      }
+      {{ emptyMessage }}
+    </div>
+  }
+  @if (!isLoading && !errorMessage && canlidersler.length > 0) {
+    <div class="table-responsive">
+      <table class="table small table-hover align-middle mb-0" [class.table-striped]="!useStyledVersion">
+        <thead [class.table-light]="useStyledVersion">
+          <tr>
+            <th>Kodu</th>
+            <th>Adı</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of canlidersler; track trackById($index, item)) {
+            <tr class="table-row-hover clickable-row" role="button" tabindex="0"
+              (click)="onRowClick(item.id)" (keydown.enter)="onRowClick(item.id)"
+              title="Detayları görüntülemek için tıklayın">
+              <td><strong>{{ item.kodu }}</strong></td>
+              <td><small [class.text-muted]="useStyledVersion">{{ item.adi }}</small></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

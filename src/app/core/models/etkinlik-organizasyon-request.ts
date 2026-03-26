@@ -8,6 +8,7 @@ export interface EtkinlikOrganizasyonRequest {
   hedefKitle?: string;
   kazanimlar?: string;
   sikcaSorulanSorular?: string;
+  davetliler?: string;
   sartlarKurallar?: string;
   suresi?: number;
   baslamaTarihi?: string;

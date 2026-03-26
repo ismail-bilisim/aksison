@@ -10,7 +10,9 @@ import { ToastService } from '../../../../core/services/api/toast.service';
 import { VideodersListComponent } from '../../../../shared/components/videoders-list/videoders-list.component';
 import { VideodersService } from '../../../../core/services/api/videoders.service';
 import { YuzyuzedersListComponent } from '../../../../shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { CanlidersListComponent } from '../../../../shared/components/canliders-list/canliders-list.component';
 import { YuzyuzedersService } from '../../../../core/services/api/yuzyuzeders.service';
+import { CanlidersService } from '../../../../core/services/api/canliders.service';
 import { ProjeTemelComponent } from '../../components/proje-temel/proje-temel.component';
 import { OnayDurumu } from '../../../../core/models/onay-durumu.enum';
 import { DersOzet } from '../../../../core/models/ders-ozet';
@@ -18,7 +20,7 @@ import { DersOzet } from '../../../../core/models/ders-ozet';
 @Component({
   selector: 'app-proje-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbNavModule, NgbModalModule, VideodersListComponent, YuzyuzedersListComponent, ProjeTemelComponent],
+  imports: [CommonModule, FormsModule, NgbNavModule, NgbModalModule, VideodersListComponent, YuzyuzedersListComponent, CanlidersListComponent, ProjeTemelComponent],
   templateUrl: './proje-detail-page.component.html',
   styleUrls: ['./proje-detail-page.component.css']
 })
@@ -29,6 +31,7 @@ export class ProjeDetailPageComponent implements OnInit {
   private readonly projeService = inject(ProjeService);
   private readonly videodersService = inject(VideodersService);
   private readonly yuzyuzedersService = inject(YuzyuzedersService);
+  private readonly canlidersService = inject(CanlidersService);
   private readonly modalService = inject(NgbModal);
 
   proje?: ProjeResponse;
@@ -50,6 +53,12 @@ export class ProjeDetailPageComponent implements OnInit {
   yuzyuzedersLoading = signal(false);
   yuzyuzedersError = signal('');
   yuzyuzedersLoaded = false;
+
+  // Canlı dersler
+  canlidersler = signal<DersOzet[]>([]);
+  canlidersLoading = signal(false);
+  canlidersError = signal('');
+  canlidersLoaded = false;
 
   // Modal referansları
   @ViewChild('onayModal') onayModalTemplate!: TemplateRef<any>;
@@ -156,6 +165,10 @@ export class ProjeDetailPageComponent implements OnInit {
       this.yuzyuzedersLoaded = true;
       this.loadYuzyuzedersler();
     }
+    if (tabId === 'canlidersler' && !this.canlidersLoaded) {
+      this.canlidersLoaded = true;
+      this.loadCanlidersler();
+    }
   }
 
   private loadVideodersler(): void {
@@ -205,6 +218,31 @@ export class ProjeDetailPageComponent implements OnInit {
   onYuzyuzedersSelect(id: number): void {
     if (id) {
       this.router.navigate(['/yuzyuzeders/detail', id]);
+    }
+  }
+
+  private loadCanlidersler(): void {
+    if (!this.proje?.id) return;
+    this.canlidersLoading.set(true);
+    this.canlidersError.set('');
+    this.canlidersService.getByProjeId(this.proje.id).subscribe({
+      next: (data) => {
+        this.canlidersler.set(data);
+        this.canlidersLoading.set(false);
+      },
+      error: (error) => {
+        ErrorHandler.logError(error, 'loadCanlidersler');
+        const msg = ErrorHandler.extractErrorMessage(error);
+        this.canlidersError.set(msg);
+        this.toastService.error(msg);
+        this.canlidersLoading.set(false);
+      }
+    });
+  }
+
+  onCanlidersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/canliders/detail', id]);
     }
   }
 }

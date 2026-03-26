@@ -17,6 +17,8 @@ import { DersTemelComponent } from '../../components/ders-temel/ders-temel.compo
 import { DersKonuListComponent } from '../../components/ders-konu-list/ders-konu-list.component';
 import { VideodersListComponent } from 'src/app/shared/components/videoders-list/videoders-list.component';
 import { YuzyuzedersListComponent } from 'src/app/shared/components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { CanlidersListComponent } from 'src/app/shared/components/canliders-list/canliders-list.component';
+import { CanlidersService } from 'src/app/core/services/api/canliders.service';
 import { KategoriListComponent } from 'src/app/shared/components/kategori-list/kategori-list.component';
 import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { DersResponse } from 'src/app/core/models/ders-response';
@@ -43,6 +45,7 @@ import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.servic
     DersKonuListComponent,
     VideodersListComponent,
     YuzyuzedersListComponent,
+    CanlidersListComponent,
     KategoriListComponent,
     IslemKayitListComponent,
   ],
@@ -62,6 +65,7 @@ export class DersDetailPageComponent implements OnInit {
   private readonly bolumKonuService = inject(BolumKonuService);
   private readonly videodersService = inject(VideodersService);
   private readonly yuzyuzedersService = inject(YuzyuzedersService);
+  private readonly canlidersService = inject(CanlidersService);
   private readonly dersIslemKayitService = inject(DersIslemKayitService);
   private readonly dialog = inject(Dialog);
   private readonly destroyRef = inject(DestroyRef);
@@ -91,10 +95,15 @@ export class DersDetailPageComponent implements OnInit {
   videodersLoading = signal(false);
   videodersError = signal('');
 
-  // Video dersler
+  // Yüzyüze dersler
   yuzyuzedersler = signal<DersOzet[]>([]);
   yuzyuzedersLoading = signal(false);
   yuzyuzedersError = signal('');
+
+  // Canlı dersler
+  canlidersler = signal<DersOzet[]>([]);
+  canlidersLoading = signal(false);
+  canlidersError = signal('');
 
   // İşlem kayıtları
   islemKayitlar = signal<IslemKayit[]>([]);
@@ -106,6 +115,7 @@ export class DersDetailPageComponent implements OnInit {
 
   videoderslerLoaded = false;
   yuzyuzederslerLoaded = false;
+  canliderslerLoaded = false;
   islemlerLoaded = false;
   paydasLoaded = false;
   egitmenLoaded = false;
@@ -330,6 +340,33 @@ export class DersDetailPageComponent implements OnInit {
     }
   }
 
+  private loadCanlidersler(): void {
+    if (!this.ders?.id) return;
+    this.canlidersLoading.set(true);
+    this.canlidersError.set('');
+    this.canlidersService.getByDersId(this.ders.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.canlidersler.set(data);
+          this.canlidersLoading.set(false);
+        },
+        error: (error) => {
+          ErrorHandler.logError(error, 'loadCanlidersler');
+          const msg = ErrorHandler.extractErrorMessage(error);
+          this.canlidersError.set(msg);
+          this.toastService.error(msg);
+          this.canlidersLoading.set(false);
+        }
+      });
+  }
+
+  onCanlidersSelect(id: number): void {
+    if (id) {
+      this.router.navigate(['/canliders/detail', id]);
+    }
+  }
+
 
   private loadIslemKayitlar(): void {
     if (!this.ders?.id) return;
@@ -486,6 +523,9 @@ export class DersDetailPageComponent implements OnInit {
     } else if(tabId==="yuzyuzedersler") {
       this.yuzyuzederslerLoaded = true;
       this.loadYuzyuzedersler();
+    } else if (tabId === 'canlidersler') {
+      this.canliderslerLoaded = true;
+      this.loadCanlidersler();
     }
     
     else if (tabId === 'dersislemkayitlar') {

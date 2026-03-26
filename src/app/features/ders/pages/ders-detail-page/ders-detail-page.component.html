@@ -65,8 +65,9 @@
             </li>
             <li [ngbNavItem]="'yuzyuzedersler'">
               <button ngbNavLink>Yüzyüze Dersler</button>
-            </li>
-            <li [ngbNavItem]="'dersislemkayitlar'">
+            </li>            <li [ngbNavItem]="'canlidersler'">
+              <button ngbNavLink>Canlı Dersler</button>
+            </li>            <li [ngbNavItem]="'dersislemkayitlar'">
               <button ngbNavLink>İşlem Kayıtları</button>
             </li>
           </ul>
@@ -115,6 +116,15 @@
                 [errorMessage]="yuzyuzedersError()"
                 (videoSelected)="onYuzyuzedersSelect($event)">
               </app-yuzyuzeders-list>
+            </div>
+
+            <div class="p-3" *ngIf="canliderslerLoaded" [hidden]="activeTab !== 'canlidersler'">
+              <app-canliders-list
+                [canlidersler]="canlidersler()"
+                [isLoading]="canlidersLoading()"
+                [errorMessage]="canlidersError()"
+                (canlidersSelected)="onCanlidersSelect($event)">
+              </app-canliders-list>
             </div>
             
             <div class="p-3" *ngIf="islemlerLoaded" [hidden]="activeTab !== 'dersislemkayitlar'">
