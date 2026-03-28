@@ -1482,6 +1482,7 @@ export class YuzyuzedersDetailPageComponent implements OnInit {
     DersDurumu.IZLENCE_ONAYLANDI, DersDurumu.IZLENCE_REDDEDILDI, DersDurumu.IZLENCE_REVIZE_ISTENDI,
     DersDurumu.SOZLESME_TALEP_EDILDI, DersDurumu.SOZLESME_IMZALANDI, DersDurumu.SOZLESME_REDDEDILDI,
     DersDurumu.SORU_KONTROL_ONAYLANDI, DersDurumu.SORU_KONTROL_REVIZE_ISTENDI, DersDurumu.SORU_REVIZE_TAMAMLANDI,
+    DersDurumu.SUNUM_ONAYLANDI
   ];
 
   canModifyMateryal(): boolean {
