@@ -2,7 +2,7 @@ export enum EtkinlikDurumu {
   TASLAK = 'TASLK',
   ONAY_BEKLIYOR = 'ONYBK',
   ONAYLANDI = 'ONAYL',
-  TAMAMLANDI = 'TMMLN',
+  TAMAMLANDI = 'TAMAM',
   REDDEDILDI = 'REDDI',
   IPTAL = 'IPTAL'
 }

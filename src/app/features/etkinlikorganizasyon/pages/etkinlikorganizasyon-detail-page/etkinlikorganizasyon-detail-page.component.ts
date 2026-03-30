@@ -3,15 +3,17 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { EtkinlikDurumu, ETKINLIK_DURUM_LABELS, ETKINLIK_DURUM_BADGE_CLASS } from '../../../../core/models/etkinlik-durumu.enum';
 import { EtkinlikOrganizasyonResponse } from '../../../../core/models/etkinlik-organizasyon-response';
 import { EtkinlikSurecTuruOzet } from '../../../../core/models/etkinlik-surec-turu-ozet';
 import { EtkinlikGorevOzet } from '../../../../core/models/etkinlik-gorev-ozet';
 import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
+import { IslemKayit } from '../../../../core/models/islem-kayit';
 
 import { EtkinlikOrganizasyonService } from '../../../../core/services/api/etkinlik-organizasyon.service';
+import { EtkinlikOrganizasyonIslemKayitService } from '../../../../core/services/api/etkinlik-organizasyon-islem-kayit.service';
 import { LookupService } from '../../../../core/services/api/lookup.service';
 import { KullaniciService } from '../../../../core/services/api/kullanici.service';
 import { ToastService } from '../../../../core/services/api/toast.service';
@@ -21,7 +23,7 @@ import { ApprovalDialogComponent, ApprovalDialogData } from 'src/app/shared/comp
 import { EtkinlikOrganizasyonTemelComponent } from '../../components/etkinlikorganizasyon-temel/etkinlikorganizasyon-temel.component';
 import { EtkinlikOrganizasyonSureclerComponent } from '../../components/etkinlikorganizasyon-surecler/etkinlikorganizasyon-surecler.component';
 import { EtkinlikOrganizasyonMateryallerComponent } from '../../components/etkinlikorganizasyon-materyaller/etkinlikorganizasyon-materyaller.component';
-import { EtkinlikOrganizasyonIslemKayitlariComponent } from '../../components/etkinlikorganizasyon-islemkayitlari/etkinlikorganizasyon-islemkayitlari.component';
+import { IslemKayitListComponent } from 'src/app/shared/components/islem-kayit-list/islem-kayit-list.component';
 import { EtkinlikOrganizasyonBasvurularComponent } from '../../components/etkinlikorganizasyon-basvurular/etkinlikorganizasyon-basvurular.component';
 
 @Component({
@@ -32,7 +34,7 @@ import { EtkinlikOrganizasyonBasvurularComponent } from '../../components/etkinl
     EtkinlikOrganizasyonTemelComponent,
     EtkinlikOrganizasyonSureclerComponent,
     EtkinlikOrganizasyonMateryallerComponent,
-    EtkinlikOrganizasyonIslemKayitlariComponent,
+    IslemKayitListComponent,
     EtkinlikOrganizasyonBasvurularComponent
   ],
   templateUrl: './etkinlikorganizasyon-detail-page.component.html',
@@ -50,11 +52,17 @@ export class EtkinlikOrganizasyonDetailPageComponent implements OnInit {
   gorevTurleri = signal<EtkinlikGorevOzet[]>([]);
   etkinlikGorevlileri = signal<KullaniciOzet[]>([]);
 
+  // İşlem Kayıtları — lazy loaded
+  islemKayitlari = signal<IslemKayit[]>([]);
+  islemKayitLoading = signal(false);
+  private islemlerLoaded = false;
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialog = inject(Dialog);
   private readonly etkinlikService = inject(EtkinlikOrganizasyonService);
+  private readonly islemKayitService = inject(EtkinlikOrganizasyonIslemKayitService);
   private readonly lookupService = inject(LookupService);
   private readonly kullaniciService = inject(KullaniciService);
   private readonly toastService = inject(ToastService);
@@ -106,6 +114,30 @@ export class EtkinlikOrganizasyonDetailPageComponent implements OnInit {
         next: (data) => this.etkinlikGorevlileri.set(data),
         error: (error) => console.error('Etkinlik görevlileri yüklenemedi:', error)
       });
+  }
+
+  private loadIslemKayitlari(): void {
+    if (!this.etkinlik?.id) return;
+    this.islemKayitLoading.set(true);
+    this.islemKayitService.getByEtkinlikOrganizasyonId(this.etkinlik.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.islemKayitlari.set(data as IslemKayit[]);
+          this.islemKayitLoading.set(false);
+          this.islemlerLoaded = true;
+        },
+        error: (error) => {
+          console.error('İşlem kayıtları yüklenemedi:', error);
+          this.islemKayitLoading.set(false);
+        }
+      });
+  }
+
+  onTabChange(event: NgbNavChangeEvent): void {
+    if (event.nextId === 'islemkayitlari' && !this.islemlerLoaded) {
+      this.loadIslemKayitlari();
+    }
   }
 
   // ==================== Workflow ====================

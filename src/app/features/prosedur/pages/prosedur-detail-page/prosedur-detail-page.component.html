@@ -1,0 +1,160 @@
+@if (loading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+    <p class="mt-3 text-muted">Yükleniyor...</p>
+  </div>
+}
+
+@if (!loading && prosedur) {
+  <div class="container-fluid mt-3">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <h6 class="mb-1">Prosedür Detayı</h6>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+
+        <!-- TASLAK: Onaya Sun-->
+        @if (prosedur.durumu === ProsedurDurumu.TASLAK) {
+          <button class="btn btn-sm btn-warning" (click)="onayaSun()" [disabled]="submitting">
+            <i class="bi bi-send me-1"></i>Onaya Sun
+          </button>
+        }
+        <!-- Düzenle (sayfa)-->
+        @if (prosedur.durumu === ProsedurDurumu.TASLAK || prosedur.durumu === ProsedurDurumu.YURURLUKTE || prosedur.durumu === ProsedurDurumu.ONAY_BEKLIYOR ) {
+        <a routerLink="/prosedur/edit/{{ prosedur.id }}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-pencil me-1"></i>Düzenle
+        </a>
+        }
+
+        <!-- ONAY_BEKLIYOR: Onayla, Reddet, İptal Et -->
+        @if (prosedur.durumu === ProsedurDurumu.ONAY_BEKLIYOR) {
+          <button class="btn btn-sm btn-success" (click)="onayla()" [disabled]="submitting">
+            <i class="bi bi-check-circle me-1"></i>Onayla
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="reddet()" [disabled]="submitting">
+            <i class="bi bi-x-circle me-1"></i>Reddet
+          </button>
+        }
+
+        <!-- YURURLUKTE: Mülga Yap -->
+        @if (prosedur.durumu === ProsedurDurumu.YURURLUKTE) {
+          <button class="btn btn-sm btn-dark" (click)="mulgaYap()" [disabled]="submitting">
+            <i class="bi bi-archive me-1"></i>Mülga Yap
+          </button>
+        }
+
+        <!-- TASLAK / ONAY_BEKLIYOR: İptal Et -->
+        @if (prosedur.durumu === ProsedurDurumu.TASLAK || prosedur.durumu === ProsedurDurumu.ONAY_BEKLIYOR) {
+          <button class="btn btn-sm btn-outline-danger" (click)="iptalEt()" [disabled]="submitting">
+            <i class="bi bi-slash-circle me-1"></i>İptal Et
+          </button>
+        }
+
+        <!-- Prensip / Standart Ekle (only in TASLAK) -->
+        @if (prosedur.durumu !== ProsedurDurumu.MULGA ) {
+          <button class="btn btn-sm btn-outline-info" (click)="openPrensipEkleDialog()" [disabled]="submitting">
+            <i class="bi bi-bookmark-plus me-1"></i>Prensip Ekle
+          </button>
+          <button class="btn btn-sm btn-outline-info" (click)="openStandartEkleDialog()" [disabled]="submitting">
+            <i class="bi bi-shield-plus me-1"></i>Standart Ekle
+          </button>
+          <button class="btn btn-sm btn-outline-info" (click)="openSurecAdimEkleDialog()" [disabled]="submitting">
+            <i class="bi bi-list-ol me-1"></i>Süreç Adımı Ekle
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Prosedür Detay -->
+    <div class="card shadow-sm border-0 mb-3">
+      <div class="card-body">
+        <app-prosedur-temel
+          [prosedur]="prosedur"
+          (prensipUpdate)="onPrensipUpdate($event)"
+          (standartUpdate)="onStandartUpdate($event)"
+          (prensipDelete)="onPrensipDelete($event)"
+          (standartDelete)="onStandartDelete($event)"
+          (prensipMulga)="onPrensipMulga($event)"
+          (standartMulga)="onStandartMulga($event)"
+          (surecAdimUpdate)="onSurecAdimUpdate($event)"
+          (surecAdimDelete)="onSurecAdimDelete($event)"
+          (surecAdimMulga)="onSurecAdimMulga($event)" />
+      </div>
+    </div>
+
+    <!-- İşlem Kayıtları & Tarihçe -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <nav ngbNav #nav="ngbNav" [(activeId)]="activeTab" (navChange)="onTabChange($event)" class="nav-tabs">
+          <ng-container ngbNavItem="islemkayitlari">
+            <button ngbNavLink>
+              <i class="bi bi-clock-history me-1"></i>İşlem Kayıtları
+            </button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-islem-kayit-list
+                  [items]="prosedurIslemKayitlar()"
+                  [isLoading]="prosedurIslemKayitLoading()"
+                  emptyMessage="Henüz işlem kaydı bulunmamaktadır." />
+              </div>
+            </ng-template>
+          </ng-container>
+
+          <ng-container ngbNavItem="prensip-tarihce">
+            <button ngbNavLink>
+              <i class="bi bi-bookmark me-1"></i>Prensip Tarihçe
+            </button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-tarihce-list
+                  [items]="prensipLogs()"
+                  [isLoading]="prensipLogsLoading()"
+                  emptyMessage="Henüz prensip tarihçe kaydı bulunmamaktadır." />
+              </div>
+            </ng-template>
+          </ng-container>
+
+          <ng-container ngbNavItem="standart-tarihce">
+            <button ngbNavLink>
+              <i class="bi bi-shield me-1"></i>Standart Tarihçe
+            </button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-tarihce-list
+                  [items]="standartLogs()"
+                  [isLoading]="standartLogsLoading()"
+                  emptyMessage="Henüz standart tarihçe kaydı bulunmamaktadır." />
+              </div>
+            </ng-template>
+          </ng-container>
+
+          <ng-container ngbNavItem="surec-adim-tarihce">
+            <button ngbNavLink>
+              <i class="bi bi-list-ol me-1"></i>Süreç Adımları Tarihçe
+            </button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-tarihce-list
+                  [items]="surecAdimLogs()"
+                  [isLoading]="surecAdimLogsLoading()"
+                  emptyMessage="Henüz süreç adımları tarihçe kaydı bulunmamaktadır." />
+              </div>
+            </ng-template>
+          </ng-container>
+        </nav>
+
+        <div [ngbNavOutlet]="nav" class="mt-0"></div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (!loading && !prosedur) {
+  <div class="alert alert-warning mt-3">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    Prosedür bulunamadı.
+  </div>
+}

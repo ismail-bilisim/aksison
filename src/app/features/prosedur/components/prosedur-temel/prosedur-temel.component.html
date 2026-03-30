@@ -1,0 +1,333 @@
+@if (prosedur) {
+  <div class="">
+
+    <!-- Başlık ve Meta Bilgiler -->
+    <div class="document-header mb-4 p-3 bg-light rounded">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1">
+          <h5 class="mb-1">{{ prosedur.adi }} <span class="small"> (v{{ prosedur.icerikSurum }} )</span> </h5>
+          @if (prosedur.surecTuru) {
+            <div class="text-muted small">
+              <i class="bi bi-diagram-3 me-1"></i>
+              <span class="fw-medium">Süreç Türü:</span> {{ prosedur.surecTuru.adi }}
+            </div>
+          }
+        </div>
+        <div class="text-end">
+          <div class="mb-1">
+            
+          </div>
+            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>{{ prosedur.yururlukteMi ? 'Yürürlükte' : 'Yürürlükte Değil' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Amaç -->
+    @if (prosedur.amac) {
+      <div class="info-section mb-3">
+        <h6 class="section-title">1. Amaç</h6>
+        <p class="text-content text-pre-wrap">{{ prosedur.amac }}</p>
+      </div>
+    }
+
+    <!-- Kapsam -->
+    @if (prosedur.kapsam) {
+      <div class="info-section mb-3">
+        <h6 class="section-title">2. Kapsam</h6>
+        <p class="text-content text-pre-wrap">{{ prosedur.kapsam }}</p>
+      </div>
+    }
+
+    <!-- Prensipler -->
+    <div class="info-section mb-3">
+      <h6 class="section-title">3. Prensipler </h6>
+      @if (prosedur.prensipler && prosedur.prensipler.length > 0) {
+        <div class="list-group list-group-flush">
+          @for (p of prosedur.prensipler; track p.id) {
+
+            @if (editingPrensipId() === p.id) {
+              <!-- Inline Edit Mode -->
+              <div class="list-group-item bg-warning-subtle border-start border-warning border-3 py-3">
+                <div class="row g-2 align-items-end">
+                  <div class="col-auto">
+                    <label class="form-label small mb-1">Madde No</label>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="editPrensipForm.maddeNo" style="width:70px">
+                  </div>
+                  <div class="col">
+                    <label class="form-label small mb-1">Madde Adı</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editPrensipForm.maddeAdi">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small mb-1">İçerik</label>
+                    <textarea class="form-control form-control-sm" [(ngModel)]="editPrensipForm.icerik" rows="2"></textarea>
+                  </div>
+                  <div class="col-12 text-end">
+                    <button class="btn btn-sm btn-success me-1" (click)="saveEditPrensip(p)">
+                      <i class="bi bi-check-lg me-1"></i>Kaydet
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="cancelEditPrensip()">
+                      <i class="bi bi-x-lg me-1"></i>Vazgeç
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            } @else {
+              <!-- Display Mode -->
+              <div class="list-group-item py-3" [class.opacity-75]="p.durumu === 'MULGA'">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <span class="fw-semibold">3. {{ p.maddeNo }}. </span>
+                      <span class="fw-semibold">{{ p.maddeAdi }}</span>
+                      @if (p.durumu === 'MULGA') {
+                        <span class="small text-muted">* (Mülga)</span>
+                      }
+                      @if (p.durumu === 'TASLK') {
+                        <span class="small text-muted">* (Taslak)</span>
+                      }
+                    </div>
+                    @if (p.icerik) {
+                      <p class="mb-0 ms-4 text-pre-wrap">{{ p.icerik }}</p>
+                    }
+                  </div>
+                    <div class="d-flex gap-1 ms-2 flex-shrink-0 item-actions">
+                      @if (p.durumu === 'TASLK') {
+                        <button class="btn btn-action btn-outline-primary" (click)="startEditPrensip(p)" title="Düzenle">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-action btn-outline-danger" (click)="onDeletePrensip(p.id)" title="Sil">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      }
+                      @if (p.durumu === 'YURUL') {
+                        <button class="btn btn-action btn-outline-primary" (click)="startEditPrensip(p)" title="Düzenle">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-action btn-outline-dark" (click)="onMulgaPrensip(p.id)" title="Mülga Yap">
+                          <i class="bi bi-archive"></i>
+                        </button>
+                      }
+                    </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      } @else {
+        <div class="text-muted text-center py-3">
+          <i class="bi bi-bookmark me-2"></i>Henüz prensip eklenmemiş.
+        </div>
+      }
+    </div>
+
+    <!-- Standartlar -->
+    <div class="info-section mb-3">
+      <h6 class="section-title">4. Standartlar </h6>
+      @if (prosedur.standartlar && prosedur.standartlar.length > 0) {
+        <div class="list-group list-group-flush">
+          @for (s of prosedur.standartlar; track s.id) {
+
+            @if (editingStandartId() === s.id) {
+              <!-- Inline Edit Mode -->
+              <div class="list-group-item bg-warning-subtle border-start border-warning border-3 py-3">
+                <div class="row g-2 align-items-end">
+                  <div class="col-auto">
+                    <label class="form-label small mb-1">Madde No</label>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="editStandartForm.maddeNo" style="width:70px">
+                  </div>
+                  <div class="col">
+                    <label class="form-label small mb-1">Madde Adı</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editStandartForm.maddeAdi">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small mb-1">İçerik</label>
+                    <textarea class="form-control form-control-sm" [(ngModel)]="editStandartForm.icerik" rows="2"></textarea>
+                  </div>
+                  <div class="col-12 text-end">
+                    <button class="btn btn-sm btn-success me-1" (click)="saveEditStandart(s)">
+                      <i class="bi bi-check-lg me-1"></i>Kaydet
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="cancelEditStandart()">
+                      <i class="bi bi-x-lg me-1"></i>Vazgeç
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            } @else {
+              <!-- Display Mode -->
+              <div class="list-group-item py-3" [class.opacity-75]="s.durumu === 'MULGA'">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <span class="fw-semibold">4. {{ s.maddeNo }}. </span>
+                      <span class="fw-semibold">{{ s.maddeAdi }}</span>
+                      @if (s.durumu === 'MULGA') {
+                      <span class="small text-muted">* (Mülga)</span>
+                      }
+                      @if (s.durumu === 'TASLK') {
+                      <span class="small text-muted">* (Taslak)</span>
+                      }
+                    </div>
+                    @if (s.icerik) {
+                      <p class="mb-0 ms-4 text-pre-wrap">{{ s.icerik }}</p>
+                    }
+                  </div>
+                    <div class="d-flex gap-1 ms-2 flex-shrink-0 item-actions">
+                      @if (s.durumu === 'TASLK') {
+                        <button class="btn btn-action btn-outline-primary" (click)="startEditStandart(s)" title="Düzenle">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-action btn-outline-danger" (click)="onDeleteStandart(s.id)" title="Sil">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      }
+                      @if (s.durumu === 'YURUL') {
+                        <button class="btn btn-action btn-outline-primary" (click)="startEditStandart(s)" title="Düzenle">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-action btn-outline-dark" (click)="onMulgaStandart(s.id)" title="Mülga Yap">
+                          <i class="bi bi-archive"></i>
+                        </button>
+                      }
+                    </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      } @else {
+        <div class="text-muted text-center py-3">
+          <i class="bi bi-shield-check me-2"></i>Henüz standart eklenmemiş.
+        </div>
+      }
+    </div>
+
+    <!-- Süreç Adımları -->
+    <div class="info-section mb-3">
+      <h6 class="section-title">5. Süreç Adımları </h6>
+      @if (prosedur.surecAdimlar && prosedur.surecAdimlar.length > 0) {
+        <div class="list-group list-group-flush">
+          @for (a of prosedur.surecAdimlar; track a.id) {
+            @if (editingSurecAdimId() === a.id) {
+              <!-- Inline Edit Mode -->
+              <div class="list-group-item bg-warning-subtle border-start border-warning border-3 py-3">
+                <div class="row g-2 align-items-end">
+                  <div class="col-auto">
+                    <label class="form-label small mb-1">Madde No</label>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="editSurecAdimForm.maddeNo" style="width:70px">
+                  </div>
+                  <div class="col">
+                    <label class="form-label small mb-1">Madde Adı</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="editSurecAdimForm.maddeAdi">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small mb-1">İçerik</label>
+                    <textarea class="form-control form-control-sm" [(ngModel)]="editSurecAdimForm.icerik" rows="2"></textarea>
+                  </div>
+                  <div class="col-12 text-end">
+                    <button class="btn btn-sm btn-success me-1" (click)="saveEditSurecAdim(a)">
+                      <i class="bi bi-check-lg me-1"></i>Kaydet
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="cancelEditSurecAdim()">
+                      <i class="bi bi-x-lg me-1"></i>Vazgeç
+                    </button>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <!-- Display Mode -->
+              <div class="list-group-item py-3" [class.opacity-75]="a.durumu === 'MULGA'">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <span class="fw-semibold">5. {{ a.maddeNo }}. </span>
+                      <span class="fw-semibold">{{ a.maddeAdi }}</span>
+                      <span class="small"></span>
+                      @if (a.durumu === 'MULGA') {
+                      <span class="small text-muted">* (Mülga)</span>
+                      }
+                      @if (a.durumu === 'TASLK') {
+                      <span class="small text-muted">* (Taslak)</span>
+                      }
+                    </div>
+                    @if (a.icerik) {
+                      <p class="mb-0 ms-4 text-pre-wrap">{{ a.icerik }}</p>
+                    }
+                  </div>
+                  <div class="d-flex gap-1 ms-2 flex-shrink-0 item-actions">
+                    @if (a.durumu === 'TASLK') {
+                      <button class="btn btn-action btn-outline-primary" (click)="startEditSurecAdim(a)" title="Düzenle">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-action btn-outline-danger" (click)="onDeleteSurecAdim(a.id)" title="Sil">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    }
+                    @if (a.durumu === 'YURUL') {
+                      <button class="btn btn-action btn-outline-primary" (click)="startEditSurecAdim(a)" title="Düzenle">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-action btn-outline-dark" (click)="onMulgaSurecAdim(a.id)" title="Mülga Yap">
+                        <i class="bi bi-archive"></i>
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      } @else {
+        <div class="text-muted text-center py-3">
+          <i class="bi bi-list-ol me-2"></i>Henüz süreç adımı eklenmemiş.
+        </div>
+      }
+    </div>
+
+    <!-- Kayıt Bilgileri Footer -->
+    <div class="info-section mb-2">
+      <hr/>
+      <div class="row">
+        <div class="col-md-3">
+          <dt>Oluşturan <i class="bi bi-person-plus text-success me-1"></i></dt>
+          <dd>
+            {{ prosedur.ekleyenKullanici?.ad || '-' }}
+            @if (prosedur.eklemeTarihi) {
+              <span class="text-muted ms-2 small">{{ formatTarih(prosedur.eklemeTarihi) }}</span>
+            }
+          </dd>
+        </div>
+        <div class="col-md-3">
+          <dt>Değiştiren <i class="bi bi-pencil text-warning me-1"></i></dt>
+          <dd>
+            {{ prosedur.degistireKullanici?.ad || '-' }}
+            @if (prosedur.degistirmeTarihi) {
+              <span class="text-muted ms-2 small">{{ formatTarih(prosedur.degistirmeTarihi) }}</span>
+            }
+          </dd>
+        </div>
+        <div class="col-md-3">
+          <dt>Onaylayan <i class="bi bi-check-circle text-primary me-1"></i></dt>
+          <dd>
+            {{ prosedur.onaylayan?.ad || '-' }}
+            @if (prosedur.onayTarihi) {
+              <span class="text-muted ms-2 small">{{ formatTarih(prosedur.onayTarihi) }}</span>
+            }
+          </dd>
+        </div>
+      @if (prosedur.onayTarihi) {
+      <div class="col-md-3">
+        <dt>Sürüm Tarihi<i class="bi bi-calendar-check text-success ms-1"></i> </dt>
+        <dd>{{ prosedur.onayTarihi | date:'dd.MM.yyyy' }}</dd>
+      </div>
+      }
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle me-2"></i>Prosedür bilgisi yükleniyor...
+  </div>
+}

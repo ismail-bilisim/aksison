@@ -62,6 +62,10 @@ export const routes: Routes = [
                 path: 'etkinlikorganizasyon',
                 loadChildren: () => import('./features/etkinlikorganizasyon/etkinlikorganizasyon-route').then(m => m.ETKINLIKORGANIZASYON_ROUTES)
             },
+            {
+                path: 'prosedur',
+                loadChildren: () => import('./features/prosedur/prosedur-route').then(m => m.PROSEDUR_ROUTES)
+            },
             // { path: 'about', loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent) }
         ],
     },

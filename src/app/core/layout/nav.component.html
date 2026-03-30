@@ -146,6 +146,105 @@
           </div>
         </li> <!-- Talepler Sonu -->
 
+    <!-- Prosedürler -->
+    <li class="nav-item mb-1">
+      <div>
+        <a (click)="toggleSubmenu('Prosedurler')"
+          class="nav-link text-white d-flex align-items-center justify-content-between py-2 px-3 rounded cursor-pointer">
+          <span>
+            <i class="bi bi-file-earmark-ruled me-2"></i>
+            Prosedürler
+          </span>
+          <i [class]="'bi ' + (isExpanded('Prosedurler') ? 'bi-chevron-up' : 'bi-chevron-down')"></i>
+        </a>
+        <!-- Submenu -->
+        @if (isExpanded('Prosedurler')) {
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-durum/TASLK" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-file-earmark me-2"></i>
+              Taslak
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-durum/ONYBK" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-hourglass-split me-2"></i>
+              Onay Bekleyen
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-durum/YURUL" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-check-circle me-2"></i>
+              Yürürlükte
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-durum/MULGA" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-archive me-2"></i>
+              Mülga
+            </a>
+          </li>
+    
+          <hr class="w-75 ms-5" />
+    
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-tur/VDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-play-circle me-2"></i>
+              Video Ders Prosedürleri
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-tur/YDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-person-video me-2"></i>
+              Yüzyüze Ders Prosedürleri
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-tur/CDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-camera-video me-2"></i>
+              Canlı Ders Prosedürleri
+            </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-tur/EGTMN" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-person-badge me-2"></i>
+              Eğitmen Prosedürleri
+            </a>
+          </li>
+    
+          <hr class="w-75 ms-5" />
+    
+          <li class="nav-item">
+            <a routerLink="/prosedur" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-list-ul me-2"></i>
+              Tüm Prosedürler
+            </a>
+          </li>
+    
+          <hr class="w-75 ms-5" />
+    
+          <li class="nav-item">
+            <a routerLink="/prosedur/new" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-plus-circle me-2"></i>
+              Yeni Prosedür
+            </a>
+          </li>
+    
+        </ul>
+        }
+      </div>
+    </li>
+
 
     <!-- Dersler -->
     <li class="nav-item mb-1">
@@ -614,6 +713,16 @@
               </a>
             </li>            
             
+            <hr class="w-75 ms-5"/>
+
+            <li class="nav-item">
+              <a routerLink="/prosedur/by-tur/VDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark-ruled me-2"></i>
+                Video Ders Prosedürleri
+              </a>
+            </li>
+
           </ul>
         }
       </div>
@@ -971,6 +1080,16 @@
               </a>
             </li>
 
+            <hr class="w-75 ms-5"/>
+
+            <li class="nav-item">
+              <a routerLink="/prosedur/by-tur/YDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark-ruled me-2"></i>
+                Yüzyüze Ders Prosedürleri
+              </a>
+            </li>
+
           </ul>
         }
       </div>
@@ -1091,6 +1210,16 @@
                 (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
                 <i class="bi bi-plus-circle me-2"></i>
                 Yeni Canlı Ders
+              </a>
+            </li>
+
+            <hr class="w-75 ms-5"/>
+
+            <li class="nav-item">
+              <a routerLink="/prosedur/by-tur/CDERS" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+                <i class="bi bi-file-earmark-ruled me-2"></i>
+                Canlı Ders Prosedürleri
               </a>
             </li>
 
@@ -1464,6 +1593,16 @@
               class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
               <i class="bi bi-plus-circle me-2"></i>
               Yeni Eğitmen
+            </a>
+          </li>
+
+          <hr class="w-75 ms-5"/>
+
+          <li class="nav-item">
+            <a routerLink="/prosedur/by-tur/EGTMN" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="closeSidebar()" class="nav-link text-white d-flex align-items-center py-2 px-3 rounded">
+              <i class="bi bi-file-earmark-ruled me-2"></i>
+              Eğitmen Prosedürleri
             </a>
           </li>
 

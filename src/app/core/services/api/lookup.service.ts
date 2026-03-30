@@ -21,6 +21,8 @@ import { EtkinlikTuruOzet } from '../../models/etkinlik-turu-ozet';
 import { EtkinlikTemaOzet } from '../../models/etkinlik-tema-ozet';
 import { EtkinlikSurecTuruOzet } from '../../models/etkinlik-surec-turu-ozet';
 import { EtkinlikGorevOzet } from '../../models/etkinlik-gorev-ozet';
+import { SurecTuruOzet } from '../../models/surec-turu-ozet';
+import { ProsedurLookupData } from '../../models/prosedur-lookup-data';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +45,8 @@ export class LookupService {
     etkinlikTuru: `${environment.apiUrl}/etkinlikturu`,
     etkinlikTema: `${environment.apiUrl}/etkinliktema`,
     etkinlikSurecTuru: `${environment.apiUrl}/etkinlikturu-surec`,
-    etkinlikGorev: `${environment.apiUrl}/etkinlikgorev`
+    etkinlikGorev: `${environment.apiUrl}/etkinlikgorev`,
+    surecTuru: `${environment.apiUrl}/surec-turu`
   };
 
   // endpoint bazlı cache
@@ -186,6 +189,18 @@ export class LookupService {
       surecTurleri: this.getEtkinlikSurecTurleri(),
       gorevler: this.getEtkinlikGorevler(),
       sehirler: this.getAllSehirOzet()
+    });
+  }
+
+  // ========== Prosedür Lookup Metodları ==========
+
+  getSurecTurleri(): Observable<SurecTuruOzet[]> {
+    return this.cachedGet<SurecTuruOzet[]>(this.apiUrls.surecTuru);
+  }
+
+  getProsedurLookups(): Observable<ProsedurLookupData> {
+    return forkJoin({
+      surecTurleri: this.getSurecTurleri()
     });
   }
 

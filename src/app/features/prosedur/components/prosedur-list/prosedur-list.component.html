@@ -1,0 +1,36 @@
+<div class="list-container">
+  @if (prosedurler && prosedurler.length > 0) {
+    <div class="list-header mb-2">
+      <span class="text-muted">
+        <i class="bi bi-file-earmark-text me-1"></i>
+        {{ prosedurler.length }} prosedür
+      </span>
+    </div>
+    <div class="list-group">
+      @for (p of prosedurler; track p.id) {
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+             role="button" tabindex="0"
+             (click)="onViewDetail(p.id)"
+             (keydown.enter)="onViewDetail(p.id)">
+          <div>
+            <div class="fw-semibold">{{ p.adi }}</div>
+            @if (p.surecTuruAdi) {
+              <small class="text-muted">
+                <i class="bi bi-diagram-3 me-1"></i>{{ p.surecTuruAdi }}
+              </small>
+            }
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge {{ getBadgeClass(p.durumu) }}">{{ p.durumuAdi }}</span>
+            <i class="bi bi-chevron-right text-muted"></i>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-file-earmark-text fs-1"></i>
+      <p class="mt-2">Prosedür bulunamadı.</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,51 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Temel Bilgiler -->
+  <h6 class="mb-3"><i class="bi bi-info-circle me-1"></i>Temel Bilgiler</h6>
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="adi" class="form-label">Prosedür Adı <span class="text-danger">*</span></label>
+      <input id="adi" type="text" class="form-control" formControlName="adi">
+      @if (form.get('adi')?.invalid && form.get('adi')?.touched) {
+        <div class="text-danger small">Prosedür adı zorunludur.</div>
+      }
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="surecTuruKodu" class="form-label">Süreç Türü</label>
+      <select id="surecTuruKodu" class="form-select" formControlName="surecTuruKodu">
+        <option value="">Seçiniz</option>
+        @if (lookupData?.surecTurleri) {
+          @for (st of lookupData?.surecTurleri; track st.kodu) {
+            <option [value]="st.kodu">{{ st.adi }}</option>
+          }
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- İçerik -->
+  <h6 class="mb-3 mt-4"><i class="bi bi-file-text me-1"></i>İçerik</h6>
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="amac" class="form-label">Amaç</label>
+      <textarea id="amac" class="form-control" formControlName="amac" rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <label for="kapsam" class="form-label">Kapsam</label>
+      <textarea id="kapsam" class="form-control" formControlName="kapsam" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- Kaydet -->
+  <div class="d-flex justify-content-end mt-4">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      <i class="bi bi-check-lg me-1"></i>
+      @if (isEditMode) { Güncelle } @else { Oluştur }
+    </button>
+  </div>
+</form>
