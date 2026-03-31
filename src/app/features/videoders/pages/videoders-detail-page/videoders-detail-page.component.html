@@ -461,7 +461,8 @@
                   [availablePaydaslar]="availablePaydaslar()"
                   (addRequested)="onPaydasAddRequested()"
                   (addConfirmed)="onPaydasAddConfirm($event)"
-                  (delete)="onPaydasDelete($event)">
+                  (delete)="onPaydasDelete($event)"
+                  (paydasSelected)="onPaydasSelect($event)">
                 </app-paydas-list>
               </div>
               
