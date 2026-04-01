@@ -1,0 +1,251 @@
+/* ══════════════════════════════════════════
+   Süreçler & Görevler — Modern Admin Style
+   Purple accent (#6f42c1) matching etkinlik theme
+   ══════════════════════════════════════════ */
+
+/* ── Süreç Ekleme Formu ── */
+.surec-add-section {
+  background: #f8f9fa;
+  border: 1px dashed #ced4da;
+  border-radius: 10px;
+  padding: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.surec-add-section:hover {
+  border-color: #6f42c1;
+}
+
+.surec-add-section .section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.surec-add-section .section-title i {
+  color: #6f42c1;
+}
+
+/* ── Boş Durum ── */
+.empty-state {
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state-icon i {
+  font-size: 1.5rem;
+  color: #adb5bd;
+}
+
+.empty-state p {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ── Süreç Kartları ── */
+.surec-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.surec-card:hover {
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.surec-card-header {
+  background: linear-gradient(135deg, #f8f9fa, #fff);
+  border-bottom: 2px solid #6f42c1;
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.surec-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.surec-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6f42c1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.surec-icon i {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.surec-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+.surec-desc {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+/* ── İlerleme Göstergesi ── */
+.surec-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.surec-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #6c757d;
+  white-space: nowrap;
+}
+
+.surec-stats .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.surec-stats .stat-item i {
+  font-size: 0.75rem;
+}
+
+.surec-stats .stat-divider {
+  color: #dee2e6;
+}
+
+/* ── Görev Ekleme Formu ── */
+.gorev-add-section {
+  background: #faf8ff;
+  border: 1px solid #e9e0f7;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.gorev-add-section .form-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Görevler Tablosu ── */
+.gorev-table {
+  font-size: 0.875rem;
+}
+
+.gorev-table thead th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #495057;
+  border-bottom-width: 2px;
+  padding: 0.65rem 0.75rem;
+}
+
+.gorev-table tbody td {
+  vertical-align: middle;
+  padding: 0.6rem 0.75rem;
+}
+
+.gorev-table tbody tr {
+  transition: background 0.15s;
+}
+
+.gorev-table tbody tr:hover {
+  background: #faf8ff;
+}
+
+/* ── İşlem Butonları Grubu ── */
+.action-btn-group {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.action-btn-group .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.action-btn-group .btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ── Badge Düzenlemeleri ── */
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  border-radius: 6px;
+}
+
+/* ── Loading Overlay ── */
+.loading-overlay {
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.loading-overlay .spinner-border {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 0.2em;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767.98px) {
+  .surec-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .surec-progress-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .gorev-add-section .row > div {
+    margin-bottom: 0.5rem;
+  }
+}

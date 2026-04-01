@@ -1,4 +1,35 @@
-footer {
-  font-size: 0.9rem;
-  color: #6c757d;
+/* ══════════════════════════════════════════
+   Footer — Modern Admin Dashboard
+   ══════════════════════════════════════════ */
+
+.app-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.75rem 1.5rem;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.footer-credit {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 575.98px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
 }

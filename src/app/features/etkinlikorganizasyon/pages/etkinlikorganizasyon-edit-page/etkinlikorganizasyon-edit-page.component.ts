@@ -145,6 +145,7 @@ export class EtkinlikOrganizasyonEditPageComponent implements OnInit {
       hedefKitle: response.hedefKitle ?? undefined,
       kazanimlar: response.kazanimlar ?? undefined,
       sikcaSorulanSorular: response.sikcaSorulanSorular ?? undefined,
+      davetliler: response.davetliler ?? undefined,
       sartlarKurallar: response.sartlarKurallar ?? undefined,
       suresi: response.suresi ?? undefined,
       baslamaTarihi: response.baslamaTarihi ?? undefined,

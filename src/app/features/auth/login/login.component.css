@@ -1,0 +1,76 @@
+/* Login Page */
+
+.login-page {
+  background: linear-gradient(180deg, #0f2137 0%, #1a3550 50%, #2c5282 100%);
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-brand-icon {
+  font-size: 2rem;
+  color: #2c5282;
+}
+
+.login-brand-text {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1e3a5f;
+  letter-spacing: 0.5px;
+}
+
+.login-title {
+  text-align: center;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.login-subtitle {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 1.75rem;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #1e3a5f, #2c5282);
+  border: none;
+  padding: 0.65rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: opacity 0.2s;
+}
+
+.login-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Override footer colors for dark background */
+:host ::ng-deep .app-footer {
+  background: transparent;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+:host ::ng-deep .footer-text {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+:host ::ng-deep .footer-credit {
+  background-color: #2c5282;
+  color: #2c5282;
+}

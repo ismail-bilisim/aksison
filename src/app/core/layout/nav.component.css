@@ -1,14 +1,174 @@
-/* Navigation Component Styles */
+/* ══════════════════════════════════════════
+   Sidebar — Modern Admin Dashboard
+   ══════════════════════════════════════════ */
 
-/* Active nav link styling */
-.nav-link.active {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border-left: 3px solid #0d6efd;
+/* Sidebar Container */
+:host ::ng-deep nav.sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  background: linear-gradient(180deg, #0f2137 0%, #1a3550 50%, #2c5282 100%);
+  z-index: 1020;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
 }
 
-/* Hover effect for nav links */
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+/* Desktop: always visible */
+@media (min-width: 992px) {
+  :host ::ng-deep nav.sidebar {
+    transform: translateX(0) !important;
+    display: flex !important;
+  }
+}
+
+/* Mobile: slide in/out */
+@media (max-width: 991.98px) {
+  :host ::ng-deep nav.sidebar {
+    transform: translateX(-100%);
+  }
+  :host ::ng-deep nav.sidebar.open {
+    transform: translateX(0);
+    display: flex !important;
+  }
+}
+
+/* Sidebar Scrollable Area */
+.sidebar-menu {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+}
+
+/* Custom Scrollbar */
+.sidebar-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Nav Items */
+.nav {
+  list-style: none;
+  padding: 0 0.5rem;
+  margin: 0;
+}
+
+.nav .nav-item {
+  margin-bottom: 2px;
+}
+
+/* Nav Link Base */
+.nav .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nav .nav-link i {
+  font-size: 1.05rem;
+  width: 22px;
+  text-align: center;
+  margin-right: 0.65rem;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.nav .nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff !important;
+}
+
+.nav .nav-link:hover i {
+  opacity: 1;
+}
+
+/* Active State */
+.nav .nav-link.active {
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.2), rgba(66, 153, 225, 0.15)) !important;
+  color: #63b3ed !important;
+  font-weight: 600;
+}
+
+.nav .nav-link.active i {
+  color: #63b3ed;
+  opacity: 1;
+}
+
+/* Submenu */
+.nav .ms-3 {
+  padding: 0 0 0 0.75rem;
+  margin: 0;
+}
+
+.nav .ms-3 .nav-link {
+  padding: 0.4rem 0.75rem 0.4rem 1.5rem !important;
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  border-left: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0 8px 8px 0;
+  margin-left: 0.5rem;
+}
+
+.nav .ms-3 .nav-link:hover {
+  color: #fff !important;
+  border-left-color: rgba(99, 179, 237, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav .ms-3 .nav-link.active {
+  border-left-color: #63b3ed !important;
+  background: rgba(99, 179, 237, 0.1) !important;
+  color: #63b3ed !important;
+}
+
+.nav .ms-3 .nav-link i {
+  font-size: 0.85rem;
+  width: 18px;
+  margin-right: 0.5rem;
+}
+
+/* Submenu Divider */
+.nav .ms-3 hr {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 0.35rem 1rem 0.35rem 2rem;
+  opacity: 1;
+  width: auto;
+}
+
+/* Parent Link Chevron */
+.nav-link .bi-chevron-down,
+.nav-link .bi-chevron-up {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  transition: transform 0.25s ease;
 }
 
 /* Cursor pointer for clickable items */
@@ -16,15 +176,34 @@
   cursor: pointer;
 }
 
-/* Submenu styling */
-.nav .ms-3 .nav-link {
-  font-size: 0.9rem;
-  padding-left: 2.5rem !important;
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
 }
 
-/* Ensure sidebar is properly positioned on mobile */
-@media (max-width: 991.98px) {
-  nav {
-    top: 56px; /* Height of header/navbar */
-  }
+.sidebar-footer small {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.7rem;
+}
+
+/* Mobile Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1019;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.sidebar-overlay.visible {
+  opacity: 1;
+  visibility: visible;
 }

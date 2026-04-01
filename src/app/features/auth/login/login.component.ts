@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { FooterComponent } from 'src/app/core/layout/footer.component';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FooterComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -21,10 +21,10 @@ export class LoginComponent {
   error?: string;
 
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private auth: AuthService,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly http: HttpClient,
+    private readonly auth: AuthService,
+    private readonly router: Router
   ) {
     this.form = this.fb.group({
       username: ['', Validators.required],

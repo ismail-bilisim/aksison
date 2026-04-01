@@ -143,8 +143,8 @@
         <div class="row g-3">
             <div class="col-lg-6">
                 <label class="form-label">Hedef Kitle Eğitim Seviyesi</label>
-                <select formControlName="hedefKitleEgitimSeviye" class="form-select"
-                    [class.is-invalid]="form.get('hedefKitleEgitimSeviye')?.invalid && form.get('hedefKitleEgitimSeviye')?.touched">
+                <select formControlName="hedefKitleEgitimSeviyeKodu" class="form-select"
+                    [class.is-invalid]="form.get('hedefKitleEgitimSeviyeKodu')?.invalid && form.get('hedefKitleEgitimSeviyeKodu')?.touched">
                     <option value="">Seçiniz</option>
                     @if (!lookupData) {
                         <option disabled>Yükleniyor...</option>

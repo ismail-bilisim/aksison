@@ -1,9 +1,3 @@
-@if (isEditMode) {
-<h5 class="mb-3">Talep Düzenle</h5>
-} @else {
-<h5 class="mb-3">Yeni Talep Oluştur</h5>
-}
-
 <app-talep-form 
   [initialValue]="talepRequest()" 
   [talepKonusu]="talepKonusu$ | async"

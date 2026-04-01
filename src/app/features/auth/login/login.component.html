@@ -1,23 +1,50 @@
-<div class="container mt-5" style="max-width:400px;">
-    <h3 class="text-center mb-4">🔐 Giriş Yap</h3>
+<div class="login-page d-flex flex-column min-vh-100">
 
-    @if (error) {
-    <div class="alert alert-danger">{{ error }}</div>
-    }
+  <!-- Login Card -->
+  <div class="flex-grow-1 d-flex align-items-center justify-content-center">
+    <div class="login-card">
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Brand -->
+      <div class="login-brand">
+        <i class="bi bi-mortarboard-fill login-brand-icon"></i>
+        <span class="login-brand-text">Aksis</span>
+      </div>
+
+      <p class="login-subtitle">BTK Akademi Otomasyon Sistemi</p>
+      <h5 class="login-title">Giriş Ekranı</h5>
+
+      @if (error) {
+        <div class="alert alert-danger py-2 small">{{ error }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="mb-3">
-            <label class="form-label">Kullanıcı Adı</label>
-            <input class="form-control" formControlName="username" />
+          <label class="form-label fw-medium" for="login-username">Kullanıcı Adı</label>
+          <input id="login-username" class="form-control" formControlName="username" />
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Şifre</label>
-            <input type="password" class="form-control" formControlName="password" />
+        <div class="mb-4">
+          <label class="form-label fw-medium" for="login-password">Şifre</label>
+          <input id="login-password" type="password" class="form-control" formControlName="password" />
         </div>
 
-        <button class="btn btn-primary w-100" type="submit" [disabled]="loading || form.invalid">
-            @if (loading) { Giriş devam eden... } @else { Giriş Yap }
+        <button class="btn btn-primary w-100 login-btn" type="submit" [disabled]="loading || form.invalid">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm me-2"></span>Giriş yapılıyor...
+          } @else {
+            <i class="bi bi-box-arrow-in-right me-2"></i>Giriş Yap
+          }
         </button>
-    </form>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<footer class="">
+  <div class="text-center">
+    <h6 class="footer-text">Aksis — BTK Akademi Otomasyon Sistemi © 2025</h6>
+    <h6 class="footer-credit">Powered by !5ma!l !LTER (Bilişim Uzmanı)</h6>
+  </div>
+</footer>
+
 </div>

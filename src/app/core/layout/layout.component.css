@@ -1,24 +1,40 @@
-/* Layout Component Styles */
+/* ══════════════════════════════════════════
+   Layout — Modern Admin Dashboard
+   ══════════════════════════════════════════ */
 
-.app-shell__content {
-  padding: 1.5rem 0;
+/* Content Area */
+.content-area {
+  padding: 1.5rem;
+  background: #f1f5f9;
+  min-height: calc(100vh - 60px);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Ensure main content adjusts for sidebar on large screens */
+.content-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  min-height: calc(100vh - 60px - 3rem - 52px);
+}
+
+/* Desktop: offset content for sidebar */
 @media (min-width: 992px) {
-  main {
-    margin-left: 250px !important;
+  .content-area {
+    margin-left: 260px;
   }
 }
 
-/* Ensure proper spacing for fixed header */
-.d-flex.flex-grow-1 {
-  margin-top: 0;
+/* Mobile: no offset */
+@media (max-width: 991.98px) {
+  .content-area {
+    margin-left: 0;
+  }
 }
 
-/* Mobile responsiveness */
-@media (max-width: 991.98px) {
-  main {
-    margin-left: 0 !important;
+/* Footer offset for sidebar */
+@media (min-width: 992px) {
+  :host ::ng-deep app-footer {
+    margin-left: 260px;
   }
 }

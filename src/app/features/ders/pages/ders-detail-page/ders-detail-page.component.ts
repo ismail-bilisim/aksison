@@ -187,17 +187,19 @@ export class DersDetailPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (bolumler) => {
-          // Her bölümün konularını getir
-          const enriched = bolumler.map(b => ({ ...b, bolum: { ...b.bolum, bolumKonular: [] }}));
+          const enriched = bolumler.map(b => ({ ...b, bolum: { ...b.bolum, bolumKonular: [] as any[] }}));
           this.bolumlar.set(enriched);
 
-          bolumler.forEach((bolum, index) => {
-            this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id)
+          const bolumIds = bolumler.map(b => b.bolum.id);
+          if (bolumIds.length > 0) {
+            this.bolumKonuService.getAllByBolumIdsOrdered(bolumIds)
               .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe({
-                next: (konular) => {
+                next: (konularMap) => {
                   const current = this.bolumlar();
-                  current[index] = { ...current[index], bolum: { ...current[index].bolum, bolumKonular: konular } } as DersBolumResponse;
+                  bolumler.forEach((bolum, index) => {
+                    current[index] = { ...current[index], bolum: { ...current[index].bolum, bolumKonular: konularMap[bolum.bolum.id] || [] } } as DersBolumResponse;
+                  });
                   this.bolumlar.set([...current]);
                 },
                 error: (error) => {
@@ -205,7 +207,7 @@ export class DersDetailPageComponent implements OnInit {
                   this.toastService.error(ErrorHandler.extractErrorMessage(error));
                 }
               });
-          });
+          }
 
           this.bolumLoading.set(false);
         },

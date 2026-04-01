@@ -23,6 +23,11 @@ export class BolumKonuService {
     return this.http.get<BolumKonuResponse[]>(`${this.apiUrl}/by-bolum/${bolumId}/ordered`);
   }
 
+  getAllByBolumIdsOrdered(bolumIds: number[]): Observable<Record<number, BolumKonuResponse[]>> {
+    const params = new HttpParams().set('bolumIds', bolumIds.join(','));
+    return this.http.get<Record<number, BolumKonuResponse[]>>(`${this.apiUrl}/by-bolumlar`, { params });
+  }
+
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

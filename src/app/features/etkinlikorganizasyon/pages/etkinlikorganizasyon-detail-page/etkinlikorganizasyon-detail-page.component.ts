@@ -12,6 +12,8 @@ import { EtkinlikGorevOzet } from '../../../../core/models/etkinlik-gorev-ozet';
 import { KullaniciOzet } from '../../../../core/models/kullanici-ozet';
 import { IslemKayit } from '../../../../core/models/islem-kayit';
 
+import { forkJoin } from 'rxjs';
+
 import { EtkinlikOrganizasyonService } from '../../../../core/services/api/etkinlik-organizasyon.service';
 import { EtkinlikOrganizasyonIslemKayitService } from '../../../../core/services/api/etkinlik-organizasyon-islem-kayit.service';
 import { LookupService } from '../../../../core/services/api/lookup.service';
@@ -96,7 +98,10 @@ export class EtkinlikOrganizasyonDetailPageComponent implements OnInit {
   }
 
   private loadLookups(): void {
-    this.lookupService.getEtkinlikOrganizasyonLookups()
+    forkJoin({
+      surecTurleri: this.lookupService.getEtkinlikSurecTurleri(),
+      gorevler: this.lookupService.getEtkinlikGorevler()
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

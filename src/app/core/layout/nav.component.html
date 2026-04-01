@@ -1,12 +1,9 @@
 <!-- Sidebar Navigation -->
-<nav class="d-flex flex-column bg-dark text-white p-0 position-fixed position-lg-static h-100 overflow-auto"
-     [ngClass]="{'d-none': !isOpen, 'd-block': isOpen, 'd-lg-flex': true}"
-     style="width: 250px; z-index: 1000;">
-  
-  <!-- Brand -->
-  <div class="p-3 border-bottom border-secondary">
-    <h5 class="mb-0 text-center fw-bold">NemoSis</h5>
-  </div>
+<nav class="sidebar text-white"
+     [ngClass]="{'open': isOpen}">
+
+  <!-- Scrollable Menu Area -->
+  <div class="sidebar-menu">
 
   <!-- Navigation Menu -->
   <ul class="nav nav-pills flex-column p-2">
@@ -1656,15 +1653,17 @@
 
   </ul>
 
+  </div> <!-- /sidebar-menu -->
+
   <!-- Footer Info -->
-  <div class="mt-auto p-3 border-top border-secondary text-center">
-    <small class="text-muted">© 2025 AksisOn</small>
+  <div class="sidebar-footer">
+    <small>© 2025 Aksis</small>
   </div>
 </nav>
 
 <!-- Mobile Overlay -->
-<div class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-lg-none"
-     [ngClass]="{'d-block': isOpen, 'd-none': !isOpen}"
-     style="z-index: 999;"
-     (click)="closeSidebar()">
+<div class="sidebar-overlay"
+     [ngClass]="{'visible': isOpen}"
+     (click)="closeSidebar()"
+     (keydown.escape)="closeSidebar()">
 </div>

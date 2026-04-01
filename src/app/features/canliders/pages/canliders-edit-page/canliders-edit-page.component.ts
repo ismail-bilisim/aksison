@@ -192,6 +192,7 @@ export class CanlidersEditPageComponent implements OnInit, OnDestroy {
       kullanilacakProgramlar: response.kullanilacakProgramlar ?? undefined,
       kazanimlar: response.kazanimlar ?? undefined,
       sikcaSorulanSorular: response.sikcaSorulanSorular ?? undefined,
+      sartlar: response.sartlar ?? undefined,
       ozeti: response.dersOzeti ?? undefined,
       suresi: response.dersSuresi ?? undefined,
       baglantiAdresi: response.baglantiAdresi ?? undefined,

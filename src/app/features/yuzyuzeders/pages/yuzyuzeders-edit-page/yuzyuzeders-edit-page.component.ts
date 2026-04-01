@@ -204,6 +204,7 @@ export class YuzyuzedersEditPageComponent implements OnInit, OnDestroy {
       kullanilacakProgramlar: response.kullanilacakProgramlar ?? undefined,
       kazanimlar: response.kazanimlar ?? undefined,
       sikcaSorulanSorular: response.sikcaSorulanSorular ?? undefined,
+      sartlar: response.sartlar ?? undefined,
       dersOzeti: response.dersOzeti ?? undefined,
       dersSuresi: response.dersSuresi ?? undefined,
       baslamaTarihi: response.baslamaTarihi ?? undefined,

@@ -680,15 +680,19 @@ export class CanlidersDetailPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          data.forEach(bolum => {
-            this.bolumKonuService.getAllByBolumIdOrdered(bolum.bolum.id)
+          const bolumIds = data.map(b => b.bolum.id);
+          if (bolumIds.length > 0) {
+            this.bolumKonuService.getAllByBolumIdsOrdered(bolumIds)
               .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe({
-                next: (konular) => {
-                  bolum.bolum.bolumKonular = konular;
+                next: (konularMap) => {
+                  data.forEach(bolum => {
+                    bolum.bolum.bolumKonular = konularMap[bolum.bolum.id] || [];
+                  });
+                  this.bolumlar.set([...data]);
                 }
               });
-          });
+          }
           this.bolumlar.set(data);
           this.bolumLoading.set(false);
         },

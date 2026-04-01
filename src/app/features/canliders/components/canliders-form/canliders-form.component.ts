@@ -33,7 +33,7 @@ export class CanlidersFormComponent implements OnInit, OnChanges {
       turuKodu: ['', Validators.required],
       seviyesiKodu: ['', Validators.required],
       niteligiKodu: ['', Validators.required],
-      hedefKitleEgitimSeviye: ['', Validators.required],
+      hedefKitleEgitimSeviyeKodu: ['', Validators.required],
       ilgiAlaninaGoreHedefKitle: [''],
       kullanilacakProgramlar: ['', Validators.required],
       kazanimlar: ['', Validators.required],

@@ -18,7 +18,8 @@ import { ToastService } from '../../../../core/services/api/toast.service';
   selector: 'app-etkinlikorganizasyon-surecler',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './etkinlikorganizasyon-surecler.component.html'
+  templateUrl: './etkinlikorganizasyon-surecler.component.html',
+  styleUrls: ['./etkinlikorganizasyon-surecler.component.css']
 })
 export class EtkinlikOrganizasyonSureclerComponent implements OnInit {
   @Input({ required: true }) etkinlikId!: number;
@@ -28,6 +29,7 @@ export class EtkinlikOrganizasyonSureclerComponent implements OnInit {
 
   readonly GorevDurumu = GorevDurumu;
 
+  loading = signal(false);
   surecler = signal<EtkinlikOrganizasyonSurecResponse[]>([]);
   gorevlerMap = signal<Map<number, EtkinlikOrganizasyonSurecGorevResponse[]>>(new Map());
 
@@ -53,16 +55,35 @@ export class EtkinlikOrganizasyonSureclerComponent implements OnInit {
   // ==================== Süreçler ====================
 
   loadSurecler(): void {
+    this.loading.set(true);
     this.surecService.getByEtkinlikOrganizasyonId(this.etkinlikId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
           this.surecler.set(data);
-          data.forEach(s => this.loadGorevlerBySurec(s.id));
+          const surecIds = data.map(s => s.id);
+          if (surecIds.length > 0) {
+            this.gorevService.getBySurecIds(surecIds)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (gorevlerMap) => {
+                  const map = new Map<number, EtkinlikOrganizasyonSurecGorevResponse[]>();
+                  for (const [key, value] of Object.entries(gorevlerMap)) {
+                    map.set(Number(key), value);
+                  }
+                  this.gorevlerMap.set(map);
+                  this.loading.set(false);
+                },
+                error: () => this.loading.set(false)
+              });
+          } else {
+            this.loading.set(false);
+          }
         },
         error: (error) => {
           console.error('Süreçler yüklenemedi:', error);
           this.toastService.error('Süreçler yüklenirken hata oluştu.');
+          this.loading.set(false);
         }
       });
   }
@@ -183,5 +204,19 @@ export class EtkinlikOrganizasyonSureclerComponent implements OnInit {
 
   getGorevDurumuBadge(durum: string | null): string {
     return GOREV_DURUM_BADGE_CLASS[durum ?? ''] || 'bg-secondary';
+  }
+
+  getOnaylananGorevSayisi(surecId: number): number {
+    const gorevler = this.gorevlerMap().get(surecId) || [];
+    return gorevler.filter(g => g.gorevDurumu === GorevDurumu.ONAYLANDI).length;
+  }
+
+  getDevamEdenGorevSayisi(surecId: number): number {
+    const gorevler = this.gorevlerMap().get(surecId) || [];
+    return gorevler.filter(g =>
+      g.gorevDurumu === GorevDurumu.ATANMADI ||
+      g.gorevDurumu === GorevDurumu.ATANDI ||
+      g.gorevDurumu === GorevDurumu.TAMAMLANDI
+    ).length;
   }
 }

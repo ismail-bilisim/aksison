@@ -1,156 +1,222 @@
+<!-- Loading -->
+@if (loading()) {
+  <div class="loading-overlay">
+    <div class="spinner-border text-primary">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+    <span class="ms-2 text-muted">Yükleniyor...</span>
+  </div>
+}
+
 <!-- Süreç Ekleme -->
-<div class="mt-3 mb-3 p-3 bg-light rounded">
-  <h6><i class="bi bi-plus-circle me-1"></i>Yeni Süreç Ekle</h6>
-  <div class="row g-2 align-items-end">
-    <div class="col-md-3">
-      <label class="form-label">Süreç Türü</label>
-      <select class="form-select form-select-sm" [(ngModel)]="yeniSurecTuruKodu">
-        <option value="">Seçiniz</option>
-        @for (st of surecTurleri; track st.kodu) {
-          <option [value]="st.kodu">{{ st.adi }}</option>
-        }
-      </select>
+@if (!loading()) {
+  <div class="surec-add-section mt-3 mb-3">
+    <div class="section-title">
+      <i class="bi bi-plus-circle me-2"></i>Yeni Süreç Ekle
     </div>
-    <div class="col-md-8">
-      <label class="form-label">Açıklama</label>
-      <input type="text" class="form-control form-control-sm" [(ngModel)]="yeniSurecAciklama" placeholder="İsteğe bağlı">
-    </div>
-    <div class="col-md-1">
-      <button class="btn btn-sm btn-primary w-100" (click)="onSurecEkle()" [disabled]="!yeniSurecTuruKodu">
-        <i class="bi bi-plus me-1"></i>Ekle
-      </button>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-3">
+        <label for="surecTuru" class="form-label">Süreç Türü</label>
+        <select id="surecTuru" class="form-select form-select-sm" [(ngModel)]="yeniSurecTuruKodu">
+          <option value="">Seçiniz</option>
+          @for (st of surecTurleri; track st.kodu) {
+            <option [value]="st.kodu">{{ st.adi }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-md-7">
+        <label for="surecAciklama" class="form-label">Açıklama</label>
+        <input id="surecAciklama" type="text" class="form-control form-control-sm" [(ngModel)]="yeniSurecAciklama" placeholder="İsteğe bağlı açıklama">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-sm btn-primary w-100" (click)="onSurecEkle()" [disabled]="!yeniSurecTuruKodu">
+          <i class="bi bi-plus-lg me-1"></i>Ekle
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Süreçler Listesi -->
-@if (surecler().length === 0) {
-  <div class="text-muted text-center py-3">Henüz süreç eklenmemiş.</div>
-}
-@for (surec of surecler(); track surec.id) {
-  <div class="card mb-3">
-    <div class="card-header d-flex justify-content-between align-items-center bg-light">
-      <div>
-        <i class="bi bi-diagram-3 me-1"></i>
-        <strong>{{ surec.turu?.adi || 'Süreç' }}</strong>
-        @if (surec.aciklama) {
-          <span class="text-muted ms-2">- {{ surec.aciklama }}</span>
-        }
+  <!-- Boş Durum -->
+  @if (surecler().length === 0) {
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-diagram-3"></i>
       </div>
-      <button class="btn btn-sm btn-outline-danger" (click)="onSurecSil(surec.id)">
-        <i class="bi bi-trash"></i>
-      </button>
+      <p>Henüz süreç eklenmemiş.<br><small>Yukarıdaki formu kullanarak ilk süreci ekleyin.</small></p>
     </div>
-    <div class="card-body">
-      <!-- Görev Ekleme -->
-      @if (gorevEklemeSurecId === surec.id) {
-        <div class="mb-3 p-2 bg-light rounded">
-          <div class="row g-2 align-items-end">
-            <div class="col-md-3">
-              <label class="form-label">Görev</label>
-              <select class="form-select form-select-sm" [(ngModel)]="yeniGorevKodu">
-                <option value="">Görev Seçiniz</option>
-                @for (g of gorevTurleri; track g.kodu) {
-                  <option [value]="g.kodu">{{ g.adi }}</option>
-                }
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Görevli (İsteğe Bağlı)</label>
-              <select class="form-select form-select-sm" [(ngModel)]="yeniGorevliId">
-                <option [ngValue]="undefined">Seçiniz</option>
-                @for (k of etkinlikGorevlileri; track k.id) {
-                  <option [ngValue]="k.id">{{ k.ad }} {{ k.soyad }}</option>
-                }
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Açıklama</label>
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="yeniGorevAciklama" placeholder="Açıklama">
-            </div>
-            <div class="col-md-1">
-              <button class="btn btn-sm btn-primary w-100" (click)="onGorevEkle(surec.id)" [disabled]="!yeniGorevKodu">Ekle</button>
-            </div>
-            <div class="col-md-1">
-              <button class="btn btn-sm btn-outline-secondary w-100" (click)="gorevEklemeSurecId = undefined">İptal</button>
-            </div>
+  }
+
+  <!-- Süreçler Listesi -->
+  @for (surec of surecler(); track surec.id; let idx = $index) {
+    <div class="surec-card card mb-3">
+      <!-- Süreç Başlık -->
+      <div class="surec-card-header">
+        <div class="surec-info">
+          <div class="surec-icon">
+            <i class="bi bi-diagram-3"></i>
+          </div>
+          <div>
+            <div class="surec-title">{{ surec.turu?.adi || 'Süreç' }}</div>
+            @if (surec.aciklama) {
+              <div class="surec-desc">{{ surec.aciklama }}</div>
+            }
           </div>
         </div>
-      } @else {
-        <button class="btn btn-sm btn-outline-primary mb-2" (click)="gorevEklemeSurecId = surec.id">
-          <i class="bi bi-plus me-1"></i>Görev Ekle
-        </button>
-      }
-
-      <!-- Görevler Tablosu -->
-      @if (gorevlerMap().get(surec.id)?.length) {
-        <div class="table-responsive">
-          <table class="table table-sm table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th style="width: 200px">Görev</th>
-                <th style="width: 260px">Görevli</th>
-                <th style="width: 150px">Durum</th>
-                <th>Açıklama</th>
-                <th style="width: 120px">İşlem</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (gorev of gorevlerMap().get(surec.id)!; track gorev.id) {
-                <tr>
-                  <td>{{ gorev.gorev?.adi || '-' }}</td>
-                  <td>
-                    @if (gorev.gorevDurumu === GorevDurumu.ATANMADI || gorev.gorevDurumu === GorevDurumu.ATANDI) {
-                      <select class="form-select form-select-sm"
-                              [ngModel]="gorev.etkinlikGorevlisi?.id"
-                              (ngModelChange)="onGorevliAta(gorev.id, $event, surec.id)">
-                        <option [ngValue]="undefined">Görevli Seç</option>
-                        @for (k of etkinlikGorevlileri; track k.id) {
-                          <option [ngValue]="k.id">{{ k.ad }} {{ k.soyad }}</option>
-                        }
-                      </select>
-                    } @else {
-                      {{ gorev.etkinlikGorevlisi ? (gorev.etkinlikGorevlisi.ad + ' ' + gorev.etkinlikGorevlisi.soyad) : '-' }}
-                    }
-                  </td>
-                  <td>
-                    <span class="badge {{ getGorevDurumuBadge(gorev.gorevDurumu) }}">
-                      {{ getGorevDurumuLabel(gorev.gorevDurumu) }}
-                    </span>
-                  </td>
-                  <td>{{ gorev.aciklama || '-' }}</td>
-                  <td>
-                    <!-- ATNMD: Sadece İptal -->
-                    @if (gorev.gorevDurumu === GorevDurumu.ATANMADI) {
-                      <button class="btn btn-sm btn-outline-dark" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.IPTAL, surec.id)" title="İptal Et">
-                        <i class="bi bi-x"></i>
-                      </button>
-                    }
-                    <!-- ATNDI: Tamamla + İptal -->
-                    @if (gorev.gorevDurumu === GorevDurumu.ATANDI) {
-                      <button class="btn btn-sm btn-outline-warning" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.TAMAMLANDI, surec.id)" title="Tamamla">
-                        <i class="bi bi-check2"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-dark ms-1" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.IPTAL, surec.id)" title="İptal Et">
-                        <i class="bi bi-x"></i>
-                      </button>
-                    }
-                    <!-- TAMAM: Onayla (İptal yok) -->
-                    @if (gorev.gorevDurumu === GorevDurumu.TAMAMLANDI) {
-                      <button class="btn btn-sm btn-outline-success" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.ONAYLANDI, surec.id)" title="Onayla">
-                        <i class="bi bi-check-circle"></i>
-                      </button>
-                    }
-                    <!-- ONYLI / IPTAL: Hiçbir buton yok -->
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
+        <div class="surec-progress-wrap">
+          <!-- İstatistikler -->
+          @if (gorevlerMap().get(surec.id)?.length) {
+            <div class="surec-stats">
+              <span class="stat-item" title="Toplam görev">
+                <i class="bi bi-list-task"></i>
+                {{ gorevlerMap().get(surec.id)!.length }}
+              </span>
+              <span class="stat-divider">|</span>
+              <span class="stat-item text-success" title="Onaylanan">
+                <i class="bi bi-check-circle-fill"></i>
+                {{ getOnaylananGorevSayisi(surec.id) }}
+              </span>
+              <span class="stat-divider">|</span>
+              <span class="stat-item text-warning" title="Devam eden">
+                <i class="bi bi-hourglass-split"></i>
+                {{ getDevamEdenGorevSayisi(surec.id) }}
+              </span>
+            </div>
+          }
+          <button class="btn btn-sm btn-outline-danger" (click)="onSurecSil(surec.id)" title="Süreci Sil">
+            <i class="bi bi-trash"></i>
+          </button>
         </div>
-      } @else {
-        <div class="text-muted small">Bu süreçte henüz görev yok.</div>
-      }
+      </div>
+
+      <!-- Süreç İçerik -->
+      <div class="card-body">
+        <!-- Görev Ekleme Formu -->
+        @if (gorevEklemeSurecId === surec.id) {
+          <div class="gorev-add-section mb-3">
+            <div class="row g-2 align-items-end">
+              <div class="col-md-3">
+                <label for="gorevTuru" class="form-label">Görev</label>
+                <select id="gorevTuru" class="form-select form-select-sm" [(ngModel)]="yeniGorevKodu">
+                  <option value="">Görev Seçiniz</option>
+                  @for (g of gorevTurleri; track g.kodu) {
+                    <option [value]="g.kodu">{{ g.adi }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="gorevli" class="form-label">Görevli (İsteğe Bağlı)</label>
+                <select id="gorevli" class="form-select form-select-sm" [(ngModel)]="yeniGorevliId">
+                  <option [ngValue]="undefined">Seçiniz</option>
+                  @for (k of etkinlikGorevlileri; track k.id) {
+                    <option [ngValue]="k.id">{{ k.ad }} {{ k.soyad }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="gorevAciklama" class="form-label">Açıklama</label>
+                <input id="gorevAciklama" type="text" class="form-control form-control-sm" [(ngModel)]="yeniGorevAciklama" placeholder="Açıklama">
+              </div>
+              <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm btn-primary flex-grow-1" (click)="onGorevEkle(surec.id)" [disabled]="!yeniGorevKodu">
+                  <i class="bi bi-plus-lg me-1"></i>Ekle
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" (click)="gorevEklemeSurecId = undefined" title="İptal">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <button class="btn btn-sm btn-outline-primary mb-2" (click)="gorevEklemeSurecId = surec.id">
+            <i class="bi bi-plus me-1"></i>Görev Ekle
+          </button>
+        }
+
+        <!-- Görevler Tablosu -->
+        @if (gorevlerMap().get(surec.id)?.length) {
+          <div class="table-responsive">
+            <table class="table table-sm table-hover gorev-table mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 180px">Görev</th>
+                  <th style="width: 240px">Görevli</th>
+                  <th style="width: 130px">Durum</th>
+                  <th>Açıklama</th>
+                  <th style="width: 110px" class="text-center">İşlem</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (gorev of gorevlerMap().get(surec.id)!; track gorev.id) {
+                  <tr>
+                    <td>
+                      <span class="fw-medium">{{ gorev.gorev?.adi || '-' }}</span>
+                    </td>
+                    <td>
+                      @if (gorev.gorevDurumu === GorevDurumu.ATANMADI || gorev.gorevDurumu === GorevDurumu.ATANDI) {
+                        <select class="form-select form-select-sm"
+                                [ngModel]="gorev.etkinlikGorevlisi?.id"
+                                (ngModelChange)="onGorevliAta(gorev.id, $event, surec.id)">
+                          <option [ngValue]="undefined">Görevli Seç</option>
+                          @for (k of etkinlikGorevlileri; track k.id) {
+                            <option [ngValue]="k.id">{{ k.ad }} {{ k.soyad }}</option>
+                          }
+                        </select>
+                      } @else {
+                        <span class="d-flex align-items-center gap-1">
+                          <i class="bi bi-person-fill text-muted" style="font-size: 0.85rem"></i>
+                          {{ gorev.etkinlikGorevlisi ? (gorev.etkinlikGorevlisi.ad + ' ' + gorev.etkinlikGorevlisi.soyad) : '-' }}
+                        </span>
+                      }
+                    </td>
+                    <td>
+                      <span class="badge {{ getGorevDurumuBadge(gorev.gorevDurumu) }}">
+                        {{ getGorevDurumuLabel(gorev.gorevDurumu) }}
+                      </span>
+                    </td>
+                    <td class="text-muted">{{ gorev.aciklama || '-' }}</td>
+                    <td>
+                      <div class="action-btn-group justify-content-center">
+                        <!-- ATNMD: Sadece İptal -->
+                        @if (gorev.gorevDurumu === GorevDurumu.ATANMADI) {
+                          <button class="btn btn-sm btn-outline-dark" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.IPTAL, surec.id)" title="İptal Et">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        }
+                        <!-- ATNDI: Tamamla + İptal -->
+                        @if (gorev.gorevDurumu === GorevDurumu.ATANDI) {
+                          <button class="btn btn-sm btn-outline-warning" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.TAMAMLANDI, surec.id)" title="Tamamla">
+                            <i class="bi bi-check2"></i>
+                          </button>
+                          <button class="btn btn-sm btn-outline-dark" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.IPTAL, surec.id)" title="İptal Et">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        }
+                        <!-- TAMAM: Onayla -->
+                        @if (gorev.gorevDurumu === GorevDurumu.TAMAMLANDI) {
+                          <button class="btn btn-sm btn-outline-success" (click)="onGorevDurumuGuncelle(gorev.id, GorevDurumu.ONAYLANDI, surec.id)" title="Onayla">
+                            <i class="bi bi-check-circle"></i>
+                          </button>
+                        }
+                        <!-- ONYLI / IPTAL: Gösterge -->
+                        @if (gorev.gorevDurumu === GorevDurumu.ONAYLANDI) {
+                          <i class="bi bi-check-circle-fill text-success" title="Onaylandı"></i>
+                        }
+                        @if (gorev.gorevDurumu === GorevDurumu.IPTAL) {
+                          <i class="bi bi-slash-circle text-muted" title="İptal Edildi"></i>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="text-center text-muted small py-3">
+            <i class="bi bi-inbox me-1"></i>Bu süreçte henüz görev yok.
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
 }

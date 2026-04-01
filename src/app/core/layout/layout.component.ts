@@ -17,4 +17,8 @@ export class LayoutComponent {
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
+  }
 }

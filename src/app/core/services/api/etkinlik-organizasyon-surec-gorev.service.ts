@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { EtkinlikOrganizasyonSurecGorevRequest } from '../../models/etkinlik-organizasyon-surec-gorev-request';
@@ -25,6 +25,11 @@ export class EtkinlikOrganizasyonSurecGorevService {
 
   getBySurecId(surecId: number): Observable<EtkinlikOrganizasyonSurecGorevResponse[]> {
     return this.http.get<EtkinlikOrganizasyonSurecGorevResponse[]>(`${this.apiUrl}/by-surec/${surecId}`);
+  }
+
+  getBySurecIds(surecIds: number[]): Observable<Record<number, EtkinlikOrganizasyonSurecGorevResponse[]>> {
+    const params = new HttpParams().set('surecIds', surecIds.join(','));
+    return this.http.get<Record<number, EtkinlikOrganizasyonSurecGorevResponse[]>>(`${this.apiUrl}/by-surecler`, { params });
   }
 
   getById(id: number): Observable<EtkinlikOrganizasyonSurecGorevResponse> {
