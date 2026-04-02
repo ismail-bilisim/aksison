@@ -1,0 +1,39 @@
+/* YuzyuzeDers Detail Page Styles */
+
+/* Action Buttons Group */
+.d-flex.gap-2 .btn {
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.d-flex.gap-2 .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.d-flex.gap-2 .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Cards — scoped to this component only (no ::ng-deep, so shared child components keep Bootstrap defaults) */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.card-header h6 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e3a5f;
+}

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
-export type ApprovalDialogMode = 'approve' | 'reject';
+export type ApprovalDialogMode = 'approve' | 'reject' | 'revise';
 
 export interface ApprovalDialogData {
   title: string;
@@ -34,10 +34,33 @@ export class ApprovalDialogComponent {
   ) {}
 
   get headerClass(): string {
-    return this.data.appearance === 'approve'
-      ? 'bg-success text-white'
-      : 'bg-danger text-white';
+
+    if (this.data.appearance === 'approve') {
+      return 'header-approve';
+    } else if (this.data.appearance === 'reject') {
+      return 'header-reject';
+    } else if (this.data.appearance === 'revise') {
+      return 'header-revise';
+    } else {
+      return '';
+    }
+
   }
+
+    get btnClass(): string {
+
+    if (this.data.appearance === 'approve') {
+      return 'btn-success';
+    } else if (this.data.appearance === 'reject') {
+      return 'btn-danger';
+    } else if (this.data.appearance === 'revise') {
+      return 'btn-warning';
+    } else {
+      return '';
+    }
+
+  }
+
 
   get iconClass(): string {
     return this.data.appearance === 'approve'

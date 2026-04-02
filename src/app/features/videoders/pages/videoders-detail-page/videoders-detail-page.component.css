@@ -1,1 +1,79 @@
-/* Component specific styles can be added here */
+/* ══════════════════════════════════════════
+   VideoDers Detail Page — Modern Admin Style
+   ══════════════════════════════════════════ */
+
+/* Action Buttons Group */
+.action-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.action-btn-group .btn {
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.action-btn-group .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.action-btn-group .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Theme Button — matches layout gradient */
+.action-btn-group .btn-theme {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(30, 58, 95, 0.25);
+}
+
+.action-btn-group .btn-theme:hover:not(:disabled) {
+  background: linear-gradient(135deg, #24456e 0%, #3568a1 100%);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(30, 58, 95, 0.35);
+}
+
+.action-btn-group .btn-theme:active:not(:disabled) {
+  background: linear-gradient(135deg, #162d4a 0%, #1e3a5f 100%);
+}
+
+/* Theme Outline Button */
+.action-btn-group .btn-outline-theme {
+  color: #1e3a5f;
+  border: 1px solid #2c5282;
+  background: transparent;
+}
+
+.action-btn-group .btn-outline-theme:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* Cards — scoped to this component only (no ::ng-deep, so shared child components keep Bootstrap defaults) */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.card-header h6 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e3a5f;
+}

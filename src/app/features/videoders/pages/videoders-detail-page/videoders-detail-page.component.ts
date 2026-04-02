@@ -1297,7 +1297,7 @@ export class VideodersDetailPageComponent implements OnInit {
         placeholder: 'İsteğe bağlı revize nedeninizi buraya yazabilirsiniz...',
         confirmText: 'Revize İste',
         cancelText: 'İptal',
-        appearance: 'reject'
+        appearance: 'revise'
       },
       'Örnek video için revize istendi.',
       'ornekVideoRevizeIste'

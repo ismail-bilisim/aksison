@@ -81,7 +81,7 @@
   align-items: center;
   padding: 0.55rem 0.85rem;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
   font-size: 0.85rem;
   font-weight: 500;
   text-decoration: none;
@@ -95,7 +95,7 @@
   width: 22px;
   text-align: center;
   margin-right: 0.65rem;
-  opacity: 0.7;
+  opacity: 0.85;
   flex-shrink: 0;
 }
 
@@ -129,16 +129,16 @@
 .nav .ms-3 .nav-link {
   padding: 0.4rem 0.75rem 0.4rem 1.5rem !important;
   font-size: 0.8rem !important;
-  color: rgba(255, 255, 255, 0.55) !important;
-  border-left: 2px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 0 8px 8px 0;
   margin-left: 0.5rem;
 }
 
 .nav .ms-3 .nav-link:hover {
   color: #fff !important;
-  border-left-color: rgba(99, 179, 237, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  border-left-color: rgba(99, 179, 237, 0.5);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .nav .ms-3 .nav-link.active {
@@ -157,10 +157,23 @@
 .nav .ms-3 hr {
   border: none;
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.12);
   margin: 0.35rem 1rem 0.35rem 2rem;
   opacity: 1;
   width: auto;
+}
+
+/* Section Label */
+.nav-section-label {
+  padding: 0.5rem 0.75rem 0.2rem 2rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgb(99, 179, 237);
+  list-style: none;
+  margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
 /* Parent Link Chevron */
