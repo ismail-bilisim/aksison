@@ -51,7 +51,7 @@ export class EtkinlikOrganizasyonListPageComponent implements OnInit, OnDestroy 
       'TASLK': 'Taslak Etkinlikler',
       'ONYBK': 'Onay Bekleyen Etkinlikler',
       'ONAYL': 'Onaylanan Etkinlikler',
-      'TMMLN': 'Tamamlanan Etkinlikler',
+      'TAMAM': 'Tamamlanan Etkinlikler',
       'REDDI': 'Reddedilen Etkinlikler',
       'IPTAL': 'İptal Edilen Etkinlikler'
     };

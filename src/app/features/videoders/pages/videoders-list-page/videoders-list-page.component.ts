@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { VideodersService } from 'src/app/core/services/api/videoders.service';
 import { DersOzet } from 'src/app/core/models/ders-ozet';
 import { VideodersListComponent } from '../../components/videoders-list/videoders-list.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ErrorHandler } from 'src/app/core/utils/error-handler';
 
 @Component({
   selector: 'app-videoders-list-page',
@@ -107,9 +109,9 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
         this.videodersler = videodersler;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Video dersler yüklenemedi:', err);
-        this.error = 'Video dersler yüklenirken bir hata oluştu.';
+        this.error = ErrorHandler.extractErrorMessage(err);
         this.videodersler = [];
         this.loading = false;
       }
@@ -126,9 +128,9 @@ export class VideodersListPageComponent implements OnInit, OnDestroy {
         this.videodersler = videodersler;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Video dersler yüklenemedi:', err);
-        this.error = 'Video dersler yüklenirken bir hata oluştu.';
+        this.error = ErrorHandler.extractErrorMessage(err);
         this.videodersler = [];
         this.loading = false;
       }
