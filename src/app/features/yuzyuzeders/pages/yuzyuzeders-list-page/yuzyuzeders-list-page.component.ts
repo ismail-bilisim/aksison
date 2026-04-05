@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { YuzyuzedersService } from 'src/app/core/services/api/yuzyuzeders.service';
 import { YuzyuzeDersResponse } from 'src/app/core/models/yuzyuzeders-response';
 import { YuzyuzedersListComponent } from '../../components/yuzyuzeders-list/yuzyuzeders-list.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorHandler } from 'src/app/core/utils/error-handler';
 
 @Component({
   selector: 'app-yuzyuzeders-list-page',
@@ -106,9 +108,9 @@ export class YuzyuzedersListPageComponent implements OnInit, OnDestroy {
         this.yuzyuzedersler = yuzyuzedersler;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Yüz yüze dersler yüklenemedi:', err);
-        this.error = 'Yüz yüze dersler yüklenirken bir hata oluştu.';
+        this.error = ErrorHandler.extractErrorMessage(err);
         this.yuzyuzedersler = [];
         this.loading = false;
       }
@@ -125,9 +127,9 @@ export class YuzyuzedersListPageComponent implements OnInit, OnDestroy {
         this.yuzyuzedersler = yuzyuzedersler;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Yüz yüze dersler yüklenemedi:', err);
-        this.error = 'Yüz yüze dersler yüklenirken bir hata oluştu.';
+        this.error = ErrorHandler.extractErrorMessage(err);
         this.yuzyuzedersler = [];
         this.loading = false;
       }
