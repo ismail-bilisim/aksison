@@ -1,0 +1,72 @@
+<!-- ── Header: Search Trigger Button ─────────────────────── -->
+<button class="search-trigger" type="button" (click)="openSearch()" title="Ara (Ctrl+K)">
+  <i class="bi bi-search search-trigger-icon"></i>
+  <span class="search-trigger-text">Posedür, Ders veya Etkinlik Ara...</span>
+  <kbd class="search-trigger-kbd">Ctrl K</kbd>
+</button>
+
+<!-- ── Modal Template ─────────────────────────────────────── -->
+<ng-template #searchModalTpl>
+  <div class="search-palette" (keydown)="onModalKeydown($event)">
+
+    <!-- Input row -->
+    <div class="search-input-row">
+      <i class="bi bi-search search-input-icon"></i>
+      <input #searchInput
+             class="search-input"
+             [formControl]="searchControl"
+             placeholder="Ders, prosedür, etkinlik adını veya kodunu yazınız."
+             autocomplete="off"
+             spellcheck="false">
+      @if (isLoading) {
+        <span class="spinner-border spinner-border-sm search-spinner" role="status"></span>
+      }
+      @if (searchControl.value && !isLoading) {
+        <button class="search-clear-btn" type="button" (click)="clearSearch()" title="Temizle">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      }
+    </div>
+
+    <!-- Results or status -->
+    @if (hasSearched || isLoading) {
+      <div class="search-divider"></div>
+    }
+
+    @if (!isLoading && hasSearched && results.length === 0) {
+      <div class="search-empty">
+        <i class="bi bi-search search-empty-icon"></i>
+        <span>Sonuç bulunamadı</span>
+      </div>
+    }
+
+    @if (!isLoading && results.length > 0) {
+      <ul class="search-results-list">
+        @for (result of results; track result.entityType + result.id; let i = $index) {
+          <li>
+            <button
+              class="search-result-btn"
+              [class.is-focused]="focusedIndex === i"
+              type="button"
+              (click)="onResultSelected(result)"
+              (mouseenter)="focusedIndex = i">
+              <span class="result-name">{{ getDisplayText(result) }}</span>
+              <span class="entity-badge small" [attr.data-type]="result.entityType">
+                {{ getEntityLabel(result.entityType) }}
+              </span>
+              <i class="bi bi-arrow-right result-arrow"></i>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    <!-- Footer hints -->
+    <div class="search-footer">
+      <!-- <span><kbd>↑↓</kbd> gezin</span>
+      <span><kbd>↵</kbd> seç</span>
+      <span><kbd>Esc</kbd> kapat</span> -->
+    </div>
+
+  </div>
+</ng-template>

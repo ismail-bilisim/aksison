@@ -2,12 +2,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { GlobalSearchComponent } from './global-search/global-search.component';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem],
+  imports: [RouterLink, NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem, GlobalSearchComponent],
   templateUrl: './header.component.html',   //harici HTML dosyası
   styleUrls: ['./header.component.css']
 })
@@ -15,7 +16,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class HeaderComponent {
   @Output() sidebarToggle = new EventEmitter<void>();
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private readonly auth: AuthService, private readonly router: Router) { }
 
   toggleSidebar() {
     this.sidebarToggle.emit();
