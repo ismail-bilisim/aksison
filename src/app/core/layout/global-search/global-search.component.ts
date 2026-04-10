@@ -86,14 +86,14 @@ export class GlobalSearchComponent implements OnDestroy {
       debounceTime(500),
       distinctUntilChanged(),
       tap(value => {
-        if (!value || value.trim().length < 2) {
+        if (!value || value.trim().length < 3) {
           this.results = [];
           this.hasSearched = false;
           this.isLoading = false;
           this.focusedIndex = -1;
         }
       }),
-      filter((value): value is string => !!value && value.trim().length >= 2),
+      filter((value): value is string => !!value && value.trim().length >= 3),
       tap(() => { this.isLoading = true; this.focusedIndex = -1; }),
       switchMap(value => this.globalSearchService.search(value)),
       takeUntil(this.destroy$)
